@@ -16,15 +16,12 @@ ModelLoader::~ModelLoader()
 
 Model * ModelLoader::CreateSphere(float radius, int segments)
 {
-	int segments = 3;
-	int radius = 1;
-
 	std::vector<DirectX::XMFLOAT3> positions;
 	std::vector<DirectX::XMFLOAT3> normals;
 	std::vector<DirectX::XMFLOAT2> texCoords;
 	std::vector<unsigned int> indices;
 
-	double angle = PI / segments;
+	float angle = PI / segments;
 
 	for (int i = 0; i <= segments; i++)
 	{

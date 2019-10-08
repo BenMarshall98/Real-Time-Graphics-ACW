@@ -66,6 +66,19 @@ DX11Render::DX11Render()
 	viewport.TopLeftY = 0;
 
 	deviceContext->RSSetViewports(1, &viewport);
+
+	D3D11_RASTERIZER_DESC rasterizerDesc;
+	rasterizerDesc.CullMode = D3D11_CULL_NONE;
+	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	rasterizerDesc.ScissorEnable = false;
+	rasterizerDesc.DepthBias = 0;
+	rasterizerDesc.DepthBiasClamp = 0.0f;
+	rasterizerDesc.DepthClipEnable = true;
+	rasterizerDesc.MultisampleEnable = false;
+	rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+
+	result = device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
+	deviceContext->RSSetState(rasterizerState);
 }
 
 DX11Render::~DX11Render()

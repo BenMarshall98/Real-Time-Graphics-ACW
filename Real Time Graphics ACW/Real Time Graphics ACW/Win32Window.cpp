@@ -71,6 +71,11 @@ LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM 
 		hdc = BeginPaint(pHWND, &paintStruct);
 		EndPaint(pHWND, &paintStruct);
 		break;
+	case WM_CLOSE:
+	{
+		DestroyWindow(pHWND);
+	}
+	break;
 
 	case WM_DESTROY:
 		PostQuitMessage(0);
@@ -85,8 +90,10 @@ LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM 
 bool Win32Window::WindowEvents()
 {
 	bool result = true;
+	
 	MSG msg = { 0 };
-	while(PeekMessage(&msg, mHWND, 0, 0, PM_REMOVE))
+	
+	while(PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);

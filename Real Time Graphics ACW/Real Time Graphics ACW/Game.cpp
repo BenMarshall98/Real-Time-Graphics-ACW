@@ -7,6 +7,8 @@
 #include <directxcolors.h>
 #include <Windows.h>
 
+#include "ModelLoader.h"
+
 HRESULT Game::CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
 {
 	HRESULT hr = S_OK;
@@ -65,7 +67,7 @@ Game::Game()
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		//{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT numElements = ARRAYSIZE(layout);
 
@@ -92,99 +94,11 @@ Game::Game()
 	{
 		
 	}
-	// Create vertex buffer
-	SimpleVertex vertices[] =
-	{
-		{ DirectX::XMFLOAT3(0.000000f,0.000000f,1.000000f),  DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.000000f,0.000000f,1.000000f),  DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.000000f,0.000000f,1.000000f),  DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.000000f,0.000000f,1.000000f),  DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.000000f,-0.000000f,1.000000f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.000000f,-0.000000f,1.000000f),  DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.866025f,0.000000f,0.500000f),  DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.433013f,0.750000f,0.500000f),  DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.433013f,0.750000f,0.500000f),  DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.866025f,0.000000f,0.500000f),  DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.433013f,-0.750000f,0.500000f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.433013f,-0.750000f,0.500000f),  DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.866025f,0.000000f,-0.500000f),  DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.433013f,0.750000f,-0.500000f),  DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.433013f,0.750000f,-0.500000f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.866025f,0.000000f,-0.500000f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.433013f,-0.750000f,-0.500000f),DirectX:: XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.433013f,-0.750000f,-0.500000f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.000000f,0.000000f,-1.000000f),  DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.000000f,0.000000f,-1.000000f),  DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.000000f,0.000000f,-1.000000f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.000000f,0.000000f,-1.000000f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(-0.000000f,-0.000000f,-1.000000f),DirectX:: XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.000000f,-0.000000f,-1.000000f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.f, 1.0f) }
-	};
-	
+
+	model = ModelLoader::CreateSphere(1, 20);
+
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(SimpleVertex) * 24;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	D3D11_SUBRESOURCE_DATA InitData;
-	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = vertices;
-	hr = device->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
-	if (FAILED(hr))
-	{
-		
-	}
-
-	// Set vertex buffer
-	UINT stride = sizeof(SimpleVertex);
-	UINT offset = 0;
-	deviceContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
-
-	// Create index buffer
-	WORD indices[] =
-	{
-		0,6,7,
-		1,7,8,
-		2,8,9,
-		3,9,10,
-		4,10,11,
-		5,11,6,
-		6,12,13,
-		6,13,7,
-		7,13,14,
-		7,14,8,
-		8,14,15,
-		8,15,9,
-		9,15,16,
-		9,16,10,
-		10,16,17,
-		10,17,11,
-		11,17,12,
-		11,12,6,
-		12,18,13,
-		13,19,14,
-		14,20,15,
-		15,21,16,
-		16,22,17,
-		17,23,12
-	};
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(WORD) * 72;        // 36 vertices needed for 12 triangles in a triangle list
-	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	InitData.pSysMem = indices;
-	hr = device->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
-	if (FAILED(hr))
-	{
-		
-	}
-
-	// Set index buffer
-	deviceContext->IASetIndexBuffer(g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
-
-	// Set primitive topology
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Create the constant buffer
 	bd.Usage = D3D11_USAGE_DEFAULT;
@@ -249,8 +163,8 @@ void Game::Run()
 		deviceContext->VSSetShader(g_pVertexShader, nullptr, 0);
 		deviceContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
 		deviceContext->PSSetShader(g_pPixelShader, nullptr, 0);
-		deviceContext->DrawIndexed(72, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
-
+		
+		model->Render();
 		//
 		// Present our back buffer to our front buffer
 		//

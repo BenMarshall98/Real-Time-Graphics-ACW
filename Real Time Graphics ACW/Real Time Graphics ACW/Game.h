@@ -2,6 +2,7 @@
 
 #include <directxmath.h>
 #include <d3d11_1.h>
+#include "Model.h"
 
 struct SimpleVertex
 {
@@ -28,6 +29,8 @@ private:
 	DirectX::XMMATRIX g_World;
 	DirectX::XMMATRIX g_View;
 	DirectX::XMMATRIX g_Projection;
+
+	Model * model;
 
 	HRESULT CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
 public:

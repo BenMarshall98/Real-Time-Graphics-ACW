@@ -1,10 +1,10 @@
 #include "Model.h"
+#include "DX11Render.h"
 
 Model::Model(std::vector<DirectX::XMFLOAT3> pPositions, std::vector<DirectX::XMFLOAT3> pNormals,
 	std::vector<DirectX::XMFLOAT2> pTexCoords, std::vector<unsigned int> pIndices) : mPositions(pPositions), mNormals(pNormals), mTexCoords(pTexCoords), mIndices(pIndices)
 {
-	ID3D11Device * device; //TODO: Remove and get from correct place
-	
+	ID3D11Device * device = DX11Render::Instance()->GetDevice();
 
 	//None changing data for buffers;
 	D3D11_BUFFER_DESC bufferDesc;
@@ -23,24 +23,26 @@ Model::Model(std::vector<DirectX::XMFLOAT3> pPositions, std::vector<DirectX::XMF
 
 	device->CreateBuffer(&bufferDesc, &initData, &positionBuffer);
 
-	//Create Normal Buffer
-	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * mNormals.size();
-	initData.pSysMem = mNormals.data();
+	////Create Normal Buffer
+	//bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * mNormals.size();
+	//initData.pSysMem = mNormals.data();
 
-	device->CreateBuffer(&bufferDesc, &initData, &normalBuffer);
+	//device->CreateBuffer(&bufferDesc, &initData, &normalBuffer);
 
-	//Create TexCoord Buffer
-	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT2) * mTexCoords.size();
-	initData.pSysMem = mTexCoords.data();
+	////Create TexCoord Buffer
+	//bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT2) * mTexCoords.size();
+	//initData.pSysMem = mTexCoords.data();
 
-	device->CreateBuffer(&bufferDesc, &initData, &texCoordBuffer);
+	//device->CreateBuffer(&bufferDesc, &initData, &texCoordBuffer);
 
 	//Create Index Buffer
 	bufferDesc.ByteWidth = sizeof(unsigned int) * mIndices.size();
 	bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	
+	ZeroMemory(&initData, sizeof(initData));
 	initData.pSysMem = mIndices.data();
 
-	device->CreateBuffer(&bufferDesc, &initData, &texCoordBuffer);
+	device->CreateBuffer(&bufferDesc, &initData, &indicesBuffer);
 }
 
 Model::~Model()
@@ -53,30 +55,31 @@ Model::~Model()
 
 void Model::Render()
 {
-	ID3D11DeviceContext * deviceContext; //TODO: Remove and get from correct place
+	ID3D11DeviceContext * deviceContext = DX11Render::Instance()->GetDeviceContext();
 
 	static Model * lastModel = nullptr;
 
 	if (this != lastModel)
 	{
-		ID3D11Buffer * bufferArray[3] =
+		ID3D11Buffer * bufferArray[1] =
 		{
-			positionBuffer, normalBuffer, texCoordBuffer
+			positionBuffer//, normalBuffer, texCoordBuffer
 		};
 
-		UINT strideArray[3] =
+		UINT strideArray[1] =
 		{
-			sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT2)
+			sizeof(DirectX::XMFLOAT3)//, sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT2)
 		};
 
-		UINT offsetArray[3] =
+		UINT offsetArray[1] =
 		{
-			0, 0, 0
+			0//, 0, 0
 		};
 
-		deviceContext->IASetVertexBuffers(0, 3, bufferArray, strideArray, offsetArray);
-		deviceContext->IASetIndexBuffer(indicesBuffer, DXGI_FORMAT_R16_UINT, 0);
+		deviceContext->IASetVertexBuffers(0, 1, bufferArray, strideArray, offsetArray);
+		deviceContext->IASetIndexBuffer(indicesBuffer, DXGI_FORMAT_R32_UINT, 0);
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		lastModel = this;
 	}
 
 	deviceContext->DrawIndexed(mIndices.size(), 0, 0);

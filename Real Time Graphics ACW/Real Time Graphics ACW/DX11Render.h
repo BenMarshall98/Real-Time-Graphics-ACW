@@ -16,6 +16,7 @@ private:
 	IDXGISwapChain * swapChain;
 	IDXGISwapChain1 * swapChain1;
 	ID3D11RenderTargetView * renderTargetView;
+	ID3D11RasterizerState * rasterizerState;
 
 	DX11Render();
 	

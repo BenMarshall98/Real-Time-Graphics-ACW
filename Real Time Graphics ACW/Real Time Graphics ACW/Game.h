@@ -10,11 +10,16 @@ struct SimpleVertex
 	DirectX::XMFLOAT4 Color;
 };
 
-struct ConstantBuffer
+struct CameraBuffer
 {
-	DirectX::XMMATRIX mWorld;
 	DirectX::XMMATRIX mView;
 	DirectX::XMMATRIX mProjection;
+};
+
+struct ModelBuffer
+{
+	DirectX::XMMATRIX mModel;
+	DirectX::XMFLOAT4 mColor;
 };
 
 class Game
@@ -25,7 +30,8 @@ private:
 	ID3D11InputLayout * g_pVertexLayout = nullptr;
 	ID3D11Buffer * g_pVertexBuffer = nullptr;
 	ID3D11Buffer * g_pIndexBuffer = nullptr;
-	ID3D11Buffer * g_pConstantBuffer = nullptr;
+	ID3D11Buffer * cameraBuffer = nullptr;
+	ID3D11Buffer * modelBuffer = nullptr;
 	DirectX::XMMATRIX g_World;
 	DirectX::XMMATRIX g_View;
 	DirectX::XMMATRIX g_Projection;

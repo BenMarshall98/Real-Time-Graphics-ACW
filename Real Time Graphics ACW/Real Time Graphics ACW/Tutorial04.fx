@@ -7,17 +7,24 @@
 //--------------------------------------------------------------------------------------
 // Constant Buffer Variables
 //--------------------------------------------------------------------------------------
-cbuffer ConstantBuffer : register(b0)
+cbuffer cameraBuffer : register(b0)
 {
-	matrix World;
+	//matrix World;
 	matrix View;
 	matrix Projection;
+}
+
+cbuffer modelBuffer : register(b1)
+{
+	matrix World;
+	float4 Color;
 }
 
 //--------------------------------------------------------------------------------------
 struct VS_OUTPUT
 {
 	float4 Pos : SV_POSITION;
+	float4 Col : COLOR0;
 };
 
 //--------------------------------------------------------------------------------------
@@ -29,6 +36,7 @@ VS_OUTPUT VS(float4 Pos : POSITION)
 	output.Pos = mul(Pos, World);
 	output.Pos = mul(output.Pos, View);
 	output.Pos = mul(output.Pos, Projection);
+	output.Col = Color;
 	return output;
 }
 
@@ -38,5 +46,5 @@ VS_OUTPUT VS(float4 Pos : POSITION)
 //--------------------------------------------------------------------------------------
 float4 PS(VS_OUTPUT input) : SV_Target
 {
-	return float4(1.0f, 0.0f, 0.0f, 1.0f);
+	return input.Col;
 }

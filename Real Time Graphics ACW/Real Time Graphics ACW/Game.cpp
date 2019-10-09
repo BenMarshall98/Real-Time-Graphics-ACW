@@ -102,14 +102,18 @@ Game::Game()
 
 	// Create the constant buffer
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(ConstantBuffer);
+	bd.ByteWidth = sizeof(CameraBuffer);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd.CPUAccessFlags = 0;
-	hr = device->CreateBuffer(&bd, nullptr, &g_pConstantBuffer);
+	hr = device->CreateBuffer(&bd, nullptr, &cameraBuffer);
 	if (FAILED(hr))
 	{
 		
 	}
+
+	bd.ByteWidth = sizeof(ModelBuffer);
+
+	hr = device->CreateBuffer(&bd, nullptr, &modelBuffer);
 
 	// Initialize the world matrix
 	g_World = DirectX::XMMatrixIdentity();
@@ -146,24 +150,58 @@ void Game::Run()
 		//
 		// Animate the cube
 		//
-		g_World = DirectX::XMMatrixRotationY(t);
+		
 
 		//
 		// Update variables
 		//
-		ConstantBuffer cb;
-		cb.mWorld = XMMatrixTranspose(g_World);
+		CameraBuffer cb;
+		//cb.mWorld = XMMatrixTranspose(g_World);
 		cb.mView = XMMatrixTranspose(g_View);
 		cb.mProjection = XMMatrixTranspose(g_Projection);
-		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+		deviceContext->UpdateSubresource(cameraBuffer, 0, nullptr, &cb, 0, 0);
 
 		//
 		// Renders a triangle
 		//
 		deviceContext->VSSetShader(g_pVertexShader, nullptr, 0);
-		deviceContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
+		deviceContext->VSSetConstantBuffers(0, 1, &cameraBuffer);
 		deviceContext->PSSetShader(g_pPixelShader, nullptr, 0);
+
+		DirectX::XMMATRIX transSun = DirectX::XMMatrixTranslation(0, 0, 10);
+		DirectX::XMMATRIX rotSun = DirectX::XMMatrixRotationY(t);
+		g_World = rotSun * transSun;
+
+		ModelBuffer mb;
+		mb.mModel = XMMatrixTranspose(g_World);
+		mb.mColor = DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
+		deviceContext->UpdateSubresource(modelBuffer, 0, nullptr, &mb, 0, 0);
+		deviceContext->VSSetConstantBuffers(1, 1, &modelBuffer);
 		
+		model->Render();
+
+		DirectX::XMMATRIX transEarth = DirectX::XMMatrixTranslation(15, 0, 0);
+		DirectX::XMMATRIX scaleEarth = DirectX::XMMatrixScaling(0.5, 0.5, 0.5);
+		DirectX::XMMATRIX rotEarth = DirectX::XMMatrixRotationY(t * 2);
+		g_World = transEarth * rotEarth * scaleEarth * transSun;
+
+		mb.mModel = XMMatrixTranspose(g_World);
+		mb.mColor = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+		deviceContext->UpdateSubresource(modelBuffer, 0, nullptr, &mb, 0, 0);
+		deviceContext->VSSetConstantBuffers(1, 1, &modelBuffer);
+
+		model->Render();
+
+		DirectX::XMMATRIX transMoon = DirectX::XMMatrixTranslation(5, 0, 0);
+		DirectX::XMMATRIX scaleMoon = DirectX::XMMatrixScaling(0.5, 0.5, 0.5);
+		DirectX::XMMATRIX rotMoon = DirectX::XMMatrixRotationY(t * 20);
+		g_World = transMoon * rotMoon * transEarth * rotEarth * transSun;
+
+		mb.mModel = XMMatrixTranspose(g_World);
+		mb.mColor = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
+		deviceContext->UpdateSubresource(modelBuffer, 0, nullptr, &mb, 0, 0);
+		deviceContext->VSSetConstantBuffers(1, 1, &modelBuffer);
+
 		model->Render();
 		//
 		// Present our back buffer to our front buffer

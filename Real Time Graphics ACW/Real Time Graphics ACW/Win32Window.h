@@ -9,6 +9,7 @@ private:
 	int width = 800;
 	int height = 600;
 	HWND mHWND;
+	int mCmdShow;
 
 	static Win32Window * instance;
 
@@ -36,6 +37,11 @@ public:
 	inline HWND GetHWND()
 	{
 		return mHWND;
+	}
+
+	inline void Run()
+	{
+		ShowWindow(mHWND, mCmdShow);
 	}
 	
 	~Win32Window();

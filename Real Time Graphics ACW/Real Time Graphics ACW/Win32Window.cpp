@@ -1,8 +1,9 @@
 #include "Win32Window.h"
+#include "DX11Render.h"
 
 Win32Window * Win32Window::instance = nullptr;
 
-Win32Window::Win32Window(HINSTANCE pHInstance, int pCmdShow)
+Win32Window::Win32Window(HINSTANCE pHInstance, int pCmdShow) : mCmdShow(pCmdShow)
 {
 	WNDCLASSEX wndClassEx;
 	wndClassEx.cbSize = sizeof(WNDCLASSEX);
@@ -38,7 +39,7 @@ Win32Window::Win32Window(HINSTANCE pHInstance, int pCmdShow)
 		int i = 0;
 	}
 
-	ShowWindow(mHWND, pCmdShow);
+	//ShowWindow(mHWND, pCmdShow);
 }
 
 Win32Window::~Win32Window()
@@ -76,7 +77,13 @@ LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM 
 		DestroyWindow(pHWND);
 	}
 	break;
-
+	case WM_SIZE:
+	{
+		const int width = LOWORD(pLParam);
+		const int height = HIWORD(pLParam);
+		DX11Render::Instance()->Resize(width, height);
+	}
+	break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;

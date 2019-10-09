@@ -4,7 +4,7 @@
 
 int WINAPI wWinMain(HINSTANCE pHInstance, HINSTANCE pPrevInstance, LPWSTR pCmdLine, int pCmdShow)
 {
-	Win32Window::Instance(pHInstance, pCmdShow);
+	Win32Window::Instance(pHInstance, pCmdShow)->Run();
 	DX11Render::Instance();
 
 	Game * game = new Game();

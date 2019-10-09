@@ -192,10 +192,10 @@ void Game::Run()
 
 		model->Render();
 
-		DirectX::XMMATRIX transMoon = DirectX::XMMatrixTranslation(5, 0, 0);
+		DirectX::XMMATRIX transMoon = DirectX::XMMatrixTranslation(-5, 0, 0);
 		DirectX::XMMATRIX scaleMoon = DirectX::XMMatrixScaling(0.5, 0.5, 0.5);
-		DirectX::XMMATRIX rotMoon = DirectX::XMMatrixRotationY(t * 20);
-		g_World = transMoon * rotMoon * transEarth * rotEarth * transSun;
+		DirectX::XMMATRIX rotMoon = DirectX::XMMatrixRotationY(t * 3);
+		g_World = transMoon * rotMoon * scaleMoon * transEarth * rotEarth * scaleEarth * transSun;
 
 		mb.mModel = XMMatrixTranspose(g_World);
 		mb.mColor = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);

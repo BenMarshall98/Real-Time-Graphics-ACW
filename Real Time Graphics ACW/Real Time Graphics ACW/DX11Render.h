@@ -16,6 +16,7 @@ private:
 	IDXGISwapChain * swapChain;
 	IDXGISwapChain1 * swapChain1;
 	ID3D11RenderTargetView * renderTargetView;
+	ID3D11DepthStencilView * depthView;
 	ID3D11RasterizerState * rasterizerState;
 
 	DX11Render();
@@ -26,6 +27,7 @@ public:
 	inline void ClearRenderTargetView(const float color[4])
 	{
 		deviceContext->ClearRenderTargetView(renderTargetView, color);
+		deviceContext->ClearDepthStencilView(depthView, D3D11_CLEAR_DEPTH, 1.0f, 0.0f);
 	}
 
 	inline void Present()
@@ -42,6 +44,8 @@ public:
 	{
 		return deviceContext;
 	}
+
+	void Resize(int width, int height);
 	
 	~DX11Render();
 };

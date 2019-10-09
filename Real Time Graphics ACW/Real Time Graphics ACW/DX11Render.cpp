@@ -50,12 +50,63 @@ DX11Render::DX11Render()
 
 	result = swapChain1->QueryInterface(__uuidof(IDXGISwapChain), (void **)&swapChain);
 
+	//Create Color Backbuffer
 	ID3D11Texture2D * backBuffer;
 	result = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void **)&backBuffer);
 
 	device->CreateRenderTargetView(backBuffer, nullptr, &renderTargetView);
 
-	deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);
+	//Create Depth / Stencil BackBuffer
+	D3D11_TEXTURE2D_DESC depthTextureDesc;
+	depthTextureDesc.Width = window->GetWidth();
+	depthTextureDesc.Height = window->GetHeight();
+	depthTextureDesc.MipLevels = 1;
+	depthTextureDesc.ArraySize = 1;
+	depthTextureDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthTextureDesc.SampleDesc.Count = 1;
+	depthTextureDesc.SampleDesc.Quality = 0;
+	depthTextureDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthTextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthTextureDesc.CPUAccessFlags = 0;
+	depthTextureDesc.MiscFlags = 0;
+
+	ID3D11Texture2D * depthStencil = nullptr;
+	result = device->CreateTexture2D(&depthTextureDesc, nullptr, &depthStencil);
+
+	D3D11_DEPTH_STENCIL_DESC depthStateDesc;
+	depthStateDesc.DepthEnable = true;
+	depthStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+	depthStateDesc.StencilEnable = false;
+	depthStateDesc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
+	depthStateDesc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK;
+
+	depthStateDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+	depthStateDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+	depthStateDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthStateDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+
+	depthStateDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+	depthStateDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+	depthStateDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthStateDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+
+	ID3D11DepthStencilState * depthState;
+
+	result = device->CreateDepthStencilState(&depthStateDesc, &depthState);
+
+	deviceContext->OMSetDepthStencilState(depthState, 1);
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthViewDesc;
+	depthViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	depthViewDesc.Flags = 0;
+	depthViewDesc.Texture2D.MipSlice = 0;
+
+	result = device->CreateDepthStencilView(depthStencil, &depthViewDesc, &depthView);
+
+	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthView);
 
 	D3D11_VIEWPORT viewport;
 	viewport.Width = (float)window->GetWidth();
@@ -80,6 +131,12 @@ DX11Render::DX11Render()
 	result = device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
 	deviceContext->RSSetState(rasterizerState);
 }
+
+void DX11Render::Resize(int width, int height)
+{
+	swapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_UNKNOWN, 0);
+}
+
 
 DX11Render::~DX11Render()
 {

@@ -3,6 +3,7 @@
 #include <directxmath.h>
 #include <d3d11_1.h>
 #include "Model.h"
+#include "Camera.h"
 
 struct SimpleVertex
 {
@@ -25,6 +26,7 @@ struct ModelBuffer
 class Game
 {
 private:
+	LARGE_INTEGER timer;
 	ID3D11VertexShader * g_pVertexShader = nullptr;
 	ID3D11PixelShader * g_pPixelShader = nullptr;
 	ID3D11InputLayout * g_pVertexLayout = nullptr;
@@ -33,8 +35,10 @@ private:
 	ID3D11Buffer * cameraBuffer = nullptr;
 	ID3D11Buffer * modelBuffer = nullptr;
 	DirectX::XMMATRIX g_World;
-	DirectX::XMMATRIX g_View;
 	DirectX::XMMATRIX g_Projection;
+	double freq;
+	__int64 start;
+	__int64 stop;
 
 	Model * model;
 
@@ -42,6 +46,9 @@ private:
 public:
 	Game();
 	~Game();
+
+	static double DT;
+	static Camera * camera;
 
 	void Run();
 };

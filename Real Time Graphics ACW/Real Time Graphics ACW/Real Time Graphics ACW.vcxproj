@@ -121,6 +121,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="DX11Render.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Model.h" />
@@ -128,6 +129,7 @@
     <ClInclude Include="Win32Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DX11Render.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />

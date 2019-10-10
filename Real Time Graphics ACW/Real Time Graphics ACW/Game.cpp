@@ -9,6 +9,11 @@
 
 #include "ModelLoader.h"
 
+#include <string>
+
+double Game::DT = 0.0f;
+Camera * Game::camera = nullptr;
+
 HRESULT Game::CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
 {
 	HRESULT hr = S_OK;
@@ -122,10 +127,17 @@ Game::Game()
 	DirectX::XMVECTOR Eye = DirectX::XMVectorSet(0.0f, 1.0f, -5.0f, 0.0f);
 	DirectX::XMVECTOR At =  DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	DirectX::XMVECTOR Up =  DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	g_View = DirectX::XMMatrixLookAtLH(Eye, At, Up);
+
+	camera = new Camera(Eye, Up, At);
 
 	// Initialize the projection matrix
 	g_Projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, Win32Window::Instance()->GetWidth() / (FLOAT)Win32Window::Instance()->GetHeight(), 0.01f, 100.0f);
+
+	QueryPerformanceFrequency(&timer);
+	freq = double(timer.QuadPart);
+
+	QueryPerformanceCounter(&timer);
+	start = timer.QuadPart;
 }
 
 Game::~Game()
@@ -140,24 +152,22 @@ void Game::Run()
 
 		ID3D11DeviceContext * deviceContext = DX11Render::Instance()->GetDeviceContext();
 		// Update our time
-		static float t = 0.0f;
-		static ULONGLONG timeStart = 0;
-		ULONGLONG timeCur = GetTickCount64();
-		if (timeStart == 0)
-			timeStart = timeCur;
-		t = (timeCur - timeStart) / 1000.0f;
 
+		QueryPerformanceCounter(&timer);
+		stop = timer.QuadPart;
+		DT = double(stop - start) / freq;
+
+		start = stop;
 		//
 		// Animate the cube
 		//
-		
 
 		//
 		// Update variables
 		//
 		CameraBuffer cb;
 		//cb.mWorld = XMMatrixTranspose(g_World);
-		cb.mView = XMMatrixTranspose(g_View);
+		cb.mView = camera->GetViewMatrix();
 		cb.mProjection = XMMatrixTranspose(g_Projection);
 		deviceContext->UpdateSubresource(cameraBuffer, 0, nullptr, &cb, 0, 0);
 
@@ -169,7 +179,7 @@ void Game::Run()
 		deviceContext->PSSetShader(g_pPixelShader, nullptr, 0);
 
 		DirectX::XMMATRIX transSun = DirectX::XMMatrixTranslation(0, 0, 10);
-		DirectX::XMMATRIX rotSun = DirectX::XMMatrixRotationY(t);
+		DirectX::XMMATRIX rotSun = DirectX::XMMatrixRotationY(DT);
 		g_World = rotSun * transSun;
 
 		ModelBuffer mb;
@@ -182,7 +192,7 @@ void Game::Run()
 
 		DirectX::XMMATRIX transEarth = DirectX::XMMatrixTranslation(15, 0, 0);
 		DirectX::XMMATRIX scaleEarth = DirectX::XMMatrixScaling(0.5, 0.5, 0.5);
-		DirectX::XMMATRIX rotEarth = DirectX::XMMatrixRotationY(t * 2);
+		DirectX::XMMATRIX rotEarth = DirectX::XMMatrixRotationY(DT * 2);
 		g_World = transEarth * rotEarth * scaleEarth * transSun;
 
 		mb.mModel = XMMatrixTranspose(g_World);
@@ -194,7 +204,7 @@ void Game::Run()
 
 		DirectX::XMMATRIX transMoon = DirectX::XMMatrixTranslation(-5, 0, 0);
 		DirectX::XMMATRIX scaleMoon = DirectX::XMMatrixScaling(0.5, 0.5, 0.5);
-		DirectX::XMMATRIX rotMoon = DirectX::XMMatrixRotationY(t * 3);
+		DirectX::XMMATRIX rotMoon = DirectX::XMMatrixRotationY(DT * 3);
 		g_World = transMoon * rotMoon * scaleMoon * transEarth * rotEarth * scaleEarth * transSun;
 
 		mb.mModel = XMMatrixTranspose(g_World);

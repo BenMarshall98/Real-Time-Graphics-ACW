@@ -1,5 +1,7 @@
 #include "Win32Window.h"
 #include "DX11Render.h"
+#include "Game.h"
+#include <string>
 
 Win32Window * Win32Window::instance = nullptr;
 
@@ -75,6 +77,19 @@ LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM 
 	case WM_CLOSE:
 	{
 		DestroyWindow(pHWND);
+	}
+	break;
+	case WM_KEYDOWN:
+	{
+		switch(pWParam)
+		{
+		case VK_LEFT:
+			Game::camera->RotateLeftRight();
+			break;
+		case VK_RIGHT:
+			Game::camera->RotateLeftRight(false);
+			break;
+		}
 	}
 	break;
 	case WM_SIZE:

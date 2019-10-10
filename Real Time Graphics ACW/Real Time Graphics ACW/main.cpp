@@ -10,6 +10,7 @@ int WINAPI wWinMain(HINSTANCE pHInstance, HINSTANCE pPrevInstance, LPWSTR pCmdLi
 	Game * game = new Game();
 	game->Run();
 
+	delete game;
 	delete Win32Window::Instance();
 	delete DX11Render::Instance();
 }

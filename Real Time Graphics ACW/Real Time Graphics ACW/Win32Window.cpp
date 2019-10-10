@@ -89,6 +89,12 @@ LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM 
 		case VK_RIGHT:
 			Game::camera->RotateLeftRight(false);
 			break;
+		case VK_UP:
+			Game::camera->RotateUpDown();
+			break;
+		case VK_DOWN:
+			Game::camera->RotateUpDown(false);
+			break;
 		}
 	}
 	break;

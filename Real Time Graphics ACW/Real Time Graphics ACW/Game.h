@@ -5,12 +5,6 @@
 #include "Model.h"
 #include "Camera.h"
 
-struct SimpleVertex
-{
-	DirectX::XMFLOAT3 Pos;
-	DirectX::XMFLOAT4 Color;
-};
-
 struct CameraBuffer
 {
 	DirectX::XMMATRIX mView;

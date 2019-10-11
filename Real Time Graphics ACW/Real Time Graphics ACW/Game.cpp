@@ -72,7 +72,7 @@ Game::Game()
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		//{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT numElements = ARRAYSIZE(layout);
 
@@ -167,7 +167,7 @@ void Game::Run()
 		//
 		CameraBuffer cb;
 		//cb.mWorld = XMMatrixTranspose(g_World);
-		cb.mView = camera->GetViewMatrix();
+		cb.mView = XMMatrixTranspose(camera->GetViewMatrix());
 		cb.mProjection = XMMatrixTranspose(g_Projection);
 		deviceContext->UpdateSubresource(cameraBuffer, 0, nullptr, &cb, 0, 0);
 

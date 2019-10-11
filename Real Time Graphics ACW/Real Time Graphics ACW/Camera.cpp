@@ -55,16 +55,61 @@ void Camera::RotateUpDown(bool up)
 void Camera::PanLeftRight(bool left)
 {
 	float movementChange = movementSpeed * Game::DT;
+
+	if (!left)
+	{
+		movementChange = -movementChange;
+	}
+
+	DirectX::XMVECTOR zAxis = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(mTargetPosition, mEyePosition));
+	DirectX::XMVECTOR xAxis = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(zAxis, mUpDirection));
+
+	DirectX::XMVECTOR movement = DirectX::XMVectorScale(xAxis, movementChange);
+
+	mEyePosition = DirectX::XMVectorAdd(mEyePosition, movement);
+	mTargetPosition = DirectX::XMVectorAdd(mTargetPosition, movement);
+
+	Update();
 }
 
 void Camera::PanForwardBackward(bool forward)
 {
 	float movementChange = movementSpeed * Game::DT;
+
+	if (!forward)
+	{
+		movementChange = -movementChange;
+	}
+
+	DirectX::XMVECTOR zAxis = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(mTargetPosition, mEyePosition));
+
+	DirectX::XMVECTOR movement = DirectX::XMVectorScale(zAxis, movementChange);
+
+	mEyePosition = DirectX::XMVectorAdd(mEyePosition, movement);
+	mTargetPosition = DirectX::XMVectorAdd(mTargetPosition, movement);
+
+	Update();
 }
 
 void Camera::PanUpDown(bool up)
 {
 	float movementChange = movementSpeed * Game::DT;
+
+	if (!up)
+	{
+		movementChange = -movementChange;
+	}
+
+	DirectX::XMVECTOR zAxis = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(mTargetPosition, mEyePosition));
+	DirectX::XMVECTOR xAxis = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(zAxis, mUpDirection));
+	DirectX::XMVECTOR yAxis = DirectX::XMVector3Cross(zAxis, xAxis);
+
+	DirectX::XMVECTOR movement = DirectX::XMVectorScale(yAxis, movementChange);
+
+	mEyePosition = DirectX::XMVectorAdd(mEyePosition, movement);
+	mTargetPosition = DirectX::XMVectorAdd(mTargetPosition, movement);
+
+	Update();
 }
 
 void Camera::Update()

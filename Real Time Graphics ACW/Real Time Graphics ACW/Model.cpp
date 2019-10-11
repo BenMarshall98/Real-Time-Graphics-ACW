@@ -23,11 +23,11 @@ Model::Model(std::vector<DirectX::XMFLOAT3> pPositions, std::vector<DirectX::XMF
 
 	device->CreateBuffer(&bufferDesc, &initData, &positionBuffer);
 
-	////Create Normal Buffer
-	//bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * mNormals.size();
-	//initData.pSysMem = mNormals.data();
+	//Create Normal Buffer
+	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * mNormals.size();
+	initData.pSysMem = mNormals.data();
 
-	//device->CreateBuffer(&bufferDesc, &initData, &normalBuffer);
+	device->CreateBuffer(&bufferDesc, &initData, &normalBuffer);
 
 	////Create TexCoord Buffer
 	//bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT2) * mTexCoords.size();
@@ -61,22 +61,22 @@ void Model::Render()
 
 	if (this != lastModel)
 	{
-		ID3D11Buffer * bufferArray[1] =
+		ID3D11Buffer * bufferArray[2] =
 		{
-			positionBuffer//, normalBuffer, texCoordBuffer
+			positionBuffer, normalBuffer//, texCoordBuffer
 		};
 
-		UINT strideArray[1] =
+		UINT strideArray[2] =
 		{
-			sizeof(DirectX::XMFLOAT3)//, sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT2)
+			sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT3)//, sizeof(DirectX::XMFLOAT2)
 		};
 
-		UINT offsetArray[1] =
+		UINT offsetArray[2] =
 		{
-			0//, 0, 0
+			0, 0//, 0
 		};
 
-		deviceContext->IASetVertexBuffers(0, 1, bufferArray, strideArray, offsetArray);
+		deviceContext->IASetVertexBuffers(0, 2, bufferArray, strideArray, offsetArray);
 		deviceContext->IASetIndexBuffer(indicesBuffer, DXGI_FORMAT_R32_UINT, 0);
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		lastModel = this;

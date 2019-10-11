@@ -10,7 +10,7 @@ private:
 	DirectX::XMVECTOR mEyePosition;
 	DirectX::XMVECTOR mTargetPosition;
 	double angleSpeed = 360.0f;
-	float movementSpeed = 1.0f;
+	float movementSpeed = 1000.0f;
 	
 public:
 	Camera(DirectX::XMVECTOR pEyePosition, DirectX::XMVECTOR pUpDirection,

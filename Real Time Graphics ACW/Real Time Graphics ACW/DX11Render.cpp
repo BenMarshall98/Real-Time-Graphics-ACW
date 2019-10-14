@@ -134,7 +134,7 @@ DX11Render::DX11Render()
 
 void DX11Render::Resize(int width, int height)
 {
-	swapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_UNKNOWN, 0);
+	//swapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_UNKNOWN, 0);
 }
 
 

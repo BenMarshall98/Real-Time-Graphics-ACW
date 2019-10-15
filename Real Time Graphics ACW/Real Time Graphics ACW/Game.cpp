@@ -14,91 +14,13 @@
 double Game::DT = 0.0f;
 Camera * Game::camera = nullptr;
 
-HRESULT Game::CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
-{
-	HRESULT hr = S_OK;
-
-	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
-#ifdef _DEBUG
-	// Set the D3DCOMPILE_DEBUG flag to embed debug information in the shaders.
-	// Setting this flag improves the shader debugging experience, but still allows 
-	// the shaders to be optimized and to run exactly the way they will run in 
-	// the release configuration of this program.
-	dwShaderFlags |= D3DCOMPILE_DEBUG;
-
-	// Disable optimizations to further improve shader debugging
-	dwShaderFlags |= D3DCOMPILE_SKIP_OPTIMIZATION;
-#endif
-
-	ID3DBlob* pErrorBlob = nullptr;
-	hr = D3DCompileFromFile(szFileName, nullptr, nullptr, szEntryPoint, szShaderModel,
-		dwShaderFlags, 0, ppBlobOut, &pErrorBlob);
-	if (FAILED(hr))
-	{
-		if (pErrorBlob)
-		{
-			OutputDebugStringA(reinterpret_cast<const char*>(pErrorBlob->GetBufferPointer()));
-			pErrorBlob->Release();
-		}
-		return hr;
-	}
-	if (pErrorBlob) pErrorBlob->Release();
-
-	return S_OK;
-}
-
 Game::Game()
 {
 	ID3D11Device * device = DX11Render::Instance()->GetDevice();
 	ID3D11DeviceContext * deviceContext = DX11Render::Instance()->GetDeviceContext();
 	
 	HRESULT hr;
-	// Compile the vertex shader
-	ID3DBlob* pVSBlob = nullptr;
-	hr = CompileShaderFromFile(L"Tutorial04.fx", "VS", "vs_4_0", &pVSBlob);
-	if (FAILED(hr))
-	{
-		
-	}
-
-	// Create the vertex shader
-	hr = device->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), nullptr, &g_pVertexShader);
-	if (FAILED(hr))
-	{
-		pVSBlob->Release();
-	}
-
-	// Define the input layout
-	D3D11_INPUT_ELEMENT_DESC layout[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-	UINT numElements = ARRAYSIZE(layout);
-
-	// Create the input layout
-	hr = device->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
-		pVSBlob->GetBufferSize(), &g_pVertexLayout);
-	pVSBlob->Release();
-	if (FAILED(hr))
-	{ }
-	// Set the input layout
-	deviceContext->IASetInputLayout(g_pVertexLayout);
-
-	// Compile the pixel shader
-	ID3DBlob* pPSBlob = nullptr;
-	hr = CompileShaderFromFile(L"Tutorial04.fx", "PS", "ps_4_0", &pPSBlob);
-	if (FAILED(hr))
-	{
-	}
-
-	// Create the pixel shader
-	hr = device->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), nullptr, &g_pPixelShader);
-	pPSBlob->Release();
-	if (FAILED(hr))
-	{
-		
-	}
+	shader = new Shader(L"VertexShader.hlsl", L"PixelShader.hlsl");
 
 	model = ModelLoader::CreateSphere(1, 20);
 
@@ -150,12 +72,16 @@ void Game::Run()
 	{
 		DX11Render::Instance()->ClearRenderTargetView(DirectX::Colors::MidnightBlue);
 
+		shader->UseShader();
+
 		ID3D11DeviceContext * deviceContext = DX11Render::Instance()->GetDeviceContext();
 		// Update our time
 
 		QueryPerformanceCounter(&timer);
 		stop = timer.QuadPart;
 		DT = double(stop - start) / freq;
+
+		DT2 += DT;
 
 		start = stop;
 		//
@@ -174,16 +100,15 @@ void Game::Run()
 		//
 		// Renders a triangle
 		//
-		deviceContext->VSSetShader(g_pVertexShader, nullptr, 0);
 		deviceContext->VSSetConstantBuffers(0, 1, &cameraBuffer);
-		deviceContext->PSSetShader(g_pPixelShader, nullptr, 0);
 
 		DirectX::XMMATRIX transSun = DirectX::XMMatrixTranslation(0, 0, 10);
-		DirectX::XMMATRIX rotSun = DirectX::XMMatrixRotationY(DT);
+		DirectX::XMMATRIX rotSun = DirectX::XMMatrixRotationY(DT2);
 		g_World = rotSun * transSun;
 
 		ModelBuffer mb;
 		mb.mModel = XMMatrixTranspose(g_World);
+		mb.mModelInverse = XMMatrixInverse(nullptr, g_World);
 		mb.mColor = DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
 		deviceContext->UpdateSubresource(modelBuffer, 0, nullptr, &mb, 0, 0);
 		deviceContext->VSSetConstantBuffers(1, 1, &modelBuffer);
@@ -192,10 +117,11 @@ void Game::Run()
 
 		DirectX::XMMATRIX transEarth = DirectX::XMMatrixTranslation(15, 0, 0);
 		DirectX::XMMATRIX scaleEarth = DirectX::XMMatrixScaling(0.5, 0.5, 0.5);
-		DirectX::XMMATRIX rotEarth = DirectX::XMMatrixRotationY(DT * 2);
+		DirectX::XMMATRIX rotEarth = DirectX::XMMatrixRotationY(DT2 * 2);
 		g_World = transEarth * rotEarth * scaleEarth * transSun;
 
 		mb.mModel = XMMatrixTranspose(g_World);
+		mb.mModelInverse = XMMatrixInverse(nullptr, g_World);
 		mb.mColor = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 		deviceContext->UpdateSubresource(modelBuffer, 0, nullptr, &mb, 0, 0);
 		deviceContext->VSSetConstantBuffers(1, 1, &modelBuffer);
@@ -204,10 +130,11 @@ void Game::Run()
 
 		DirectX::XMMATRIX transMoon = DirectX::XMMatrixTranslation(-5, 0, 0);
 		DirectX::XMMATRIX scaleMoon = DirectX::XMMatrixScaling(0.5, 0.5, 0.5);
-		DirectX::XMMATRIX rotMoon = DirectX::XMMatrixRotationY(DT * 3);
+		DirectX::XMMATRIX rotMoon = DirectX::XMMatrixRotationY(DT2 * 3);
 		g_World = transMoon * rotMoon * scaleMoon * transEarth * rotEarth * scaleEarth * transSun;
 
 		mb.mModel = XMMatrixTranspose(g_World);
+		mb.mModelInverse = XMMatrixInverse(nullptr, g_World);
 		mb.mColor = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 		deviceContext->UpdateSubresource(modelBuffer, 0, nullptr, &mb, 0, 0);
 		deviceContext->VSSetConstantBuffers(1, 1, &modelBuffer);

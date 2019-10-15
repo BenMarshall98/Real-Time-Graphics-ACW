@@ -4,6 +4,7 @@
 #include <d3d11_1.h>
 #include "Model.h"
 #include "Camera.h"
+#include "Shader.h"
 
 struct CameraBuffer
 {
@@ -14,6 +15,7 @@ struct CameraBuffer
 struct ModelBuffer
 {
 	DirectX::XMMATRIX mModel;
+	DirectX::XMMATRIX mModelInverse;
 	DirectX::XMFLOAT4 mColor;
 };
 
@@ -31,12 +33,12 @@ private:
 	DirectX::XMMATRIX g_World;
 	DirectX::XMMATRIX g_Projection;
 	double freq;
+	double DT2 = 0.0;
 	__int64 start;
 	__int64 stop;
 
 	Model * model;
-
-	HRESULT CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
+	Shader * shader;
 public:
 	Game();
 	~Game();

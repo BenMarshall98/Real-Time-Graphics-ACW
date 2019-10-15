@@ -17,6 +17,7 @@ cbuffer cameraBuffer : register(b0)
 cbuffer modelBuffer : register(b1)
 {
 	matrix World;
+    matrix InverseWorld;
 	float4 Color;
 }
 
@@ -37,7 +38,7 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Normal : NORMAL)
 	output.Pos = mul(Pos, World);
 	output.Pos = mul(output.Pos, View);
 	output.Pos = mul(output.Pos, Projection);
-	output.Normal = Normal;
+    output.Normal = mul(Normal, InverseWorld);
     output.Col = Color;
 	return output;
 }
@@ -50,4 +51,5 @@ float4 PS(VS_OUTPUT input) : SV_Target
     float3 L = normalize(float3(0, 0, -1));
     float3 N = normalize(input.Normal.xyz);
     return max(0.0f, dot(L, N)) * float4(1.0f, 1.0f, 1.0f, 1.0f) * input.Col;
+	//return input.Col;
 }

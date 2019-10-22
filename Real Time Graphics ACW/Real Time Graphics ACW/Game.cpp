@@ -17,7 +17,6 @@ Camera * Game::camera = nullptr;
 Game::Game()
 {
 	ID3D11Device * device = DX11Render::Instance()->GetDevice();
-	ID3D11DeviceContext * deviceContext = DX11Render::Instance()->GetDeviceContext();
 	
 	HRESULT hr;
 	shader = new Shader(L"VertexShader.hlsl", L"PixelShader.hlsl");

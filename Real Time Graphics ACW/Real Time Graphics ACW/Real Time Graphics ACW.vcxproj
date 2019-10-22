@@ -125,6 +125,7 @@
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="DX11Render.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="LightingManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="PointLight.h" />
@@ -137,6 +138,7 @@
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="DX11Render.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="LightingManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelLoader.cpp" />

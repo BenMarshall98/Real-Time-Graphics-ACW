@@ -45,8 +45,11 @@
     <ClInclude Include="DirectionalLight.h">
       <Filter>Lighting</Filter>
     </ClInclude>
+    <ClInclude Include="LightingManager.h">
+      <Filter>Lighting</Filter>
+    </ClInclude>
     <ClInclude Include="SpotLight.h">
-      <Filter>Header Files</Filter>
+      <Filter>Lighting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -80,8 +83,11 @@
     <ClCompile Include="DirectionalLight.cpp">
       <Filter>Lighting</Filter>
     </ClCompile>
+    <ClCompile Include="LightingManager.cpp">
+      <Filter>Lighting</Filter>
+    </ClCompile>
     <ClCompile Include="SpotLight.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Lighting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

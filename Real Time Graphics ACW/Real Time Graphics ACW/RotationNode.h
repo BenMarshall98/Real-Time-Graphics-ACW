@@ -1,8 +1,14 @@
 #pragma once
-class RotationNode
+
+#include "SceneGraphNode.h"
+
+class RotationNode final : public SceneGraphNode
 {
 public:
-	RotationNode();
-	~RotationNode();
+	explicit RotationNode(const DirectX::XMFLOAT3 & pAxis, const float & pAngle);
+	RotationNode() = default;
+	~RotationNode() = default;
+
+	void read(std::istream& pIn) override;
 };
 

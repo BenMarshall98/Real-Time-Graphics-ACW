@@ -70,19 +70,19 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IdentityNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TranslationNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RotationNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ScaleNode.h">
-      <Filter>Header Files</Filter>
+      <Filter>SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="ObjectNode.h">
-      <Filter>Header Files</Filter>
+      <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="RotationNode.h">
+      <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="ScaleNode.h">
+      <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationNode.h">
+      <Filter>SceneGraph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -138,19 +138,19 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IdentityNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TranslationNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RotationNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ScaleNode.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="ObjectNode.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="RotationNode.cpp">
+      <Filter>SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="ScaleNode.cpp">
+      <Filter>SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationNode.cpp">
+      <Filter>SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

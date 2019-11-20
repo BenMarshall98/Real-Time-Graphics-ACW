@@ -1,9 +1,19 @@
 #include "Win32Window.h"
 #include "DX11Render.h"
 #include "Game.h"
+#include "IdentityNode.h"
+#include <fstream>
 
 int WINAPI wWinMain(HINSTANCE pHInstance, HINSTANCE pPrevInstance, LPWSTR pCmdLine, int pCmdShow)
 {
+	std::ifstream fin("Configuration.txt");
+
+	const auto node = new IdentityNode();
+
+	fin >> node;
+
+	delete node;
+	
 	Win32Window::Instance(pHInstance, pCmdShow)->Run();
 	DX11Render::Instance();
 

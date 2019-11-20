@@ -1,12 +1,6 @@
 #include "IdentityNode.h"
 
-
-
-IdentityNode::IdentityNode()
+void IdentityNode::read(std::istream & pIn)
 {
-}
-
-
-IdentityNode::~IdentityNode()
-{
+	//Do nothing
 }

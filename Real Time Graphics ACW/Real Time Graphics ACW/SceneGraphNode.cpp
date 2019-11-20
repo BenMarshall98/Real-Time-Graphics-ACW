@@ -6,16 +6,34 @@
 #include "ScaleNode.h"
 #include "ObjectNode.h"
 
+SceneGraphNode::SceneGraphNode(const DirectX::XMMATRIX& pMatrix) : mMatrix(pMatrix)
+{
+}
+
 SceneGraphNode::SceneGraphNode() : mMatrix(DirectX::XMMatrixIdentity())
 {
 }
 
 SceneGraphNode::~SceneGraphNode()
 {
+	for(auto child : mChildren)
+	{
+		delete child;
+	}
+
+	mChildren.clear();
 }
 
-std::istream & operator >> (std::istream & pIn, SceneGraphNode * pNode)
+void SceneGraphNode::addChild(SceneGraphNode* pChild)
 {
+	mChildren.push_back(pChild);
+}
+
+std::istream& operator>>(std::istream & pIn, SceneGraphNode* pNode)
+{
+	char c;
+	pIn >> c;
+	
 	pNode->read(pIn);
 	
 	while(true)

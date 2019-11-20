@@ -1,8 +1,12 @@
 #pragma once
-class IdentityNode
+
+#include "SceneGraphNode.h"
+
+class IdentityNode final : public SceneGraphNode
 {
 public:
-	IdentityNode();
-	~IdentityNode();
+	IdentityNode() = default;
+
+	void read(std::istream & pIn) override;
 };
 

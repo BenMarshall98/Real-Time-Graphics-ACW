@@ -1,0 +1,32 @@
+Scene
+{
+	Identity
+	{
+		Translate
+		{
+			Pos: x, y, z
+			Animation
+			{
+				...
+			}
+			Object
+			{
+				"wall.obj"
+				Type: static
+			}
+		}
+		Translate
+		{
+			Pos: x, y, z
+			Animation
+			{
+				...
+			}
+			Object
+			{
+				"sphere.obj"
+				Type: dynamic
+			}
+		}
+	}
+}

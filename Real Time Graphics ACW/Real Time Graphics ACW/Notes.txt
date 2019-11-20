@@ -1,0 +1,51 @@
+Object Manager
+
+* List of 'static' objects
+* List of 'dynamic' objects
+* One visual effect kept seperate for 'static' objects
+* List of visual effects
+* Map of dynamic objects to visual effect
+* Scene Graph
+
+Scene Graph
+
+* Contains matrix
+* List of children
+* Animation
+* Types (Identity, Translation, Rotation, Scale, Object)
+
+Object Node
+
+* contains object
+* can pass matrix to object
+
+Object
+
+* Has matrix from scene graph node
+* has model
+* has ambient colour
+* Has diffuse colour
+* has specular colour
+* has shininess
+* has Texture pack
+* the colours can be replaced for textured effects
+
+Visual Effect
+
+* contains the required shader
+* takes in the required model
+* might make use effects?
+* requests light from light manager
+
+Light Manager
+
+* List of lights (Directional, Point, Spot)
+* contains shaders for shadows?
+
+Resource Manager
+
+* makes sure that only one of each resource is loaded into the scene
+
+ModelLoader
+
+* loads in a model

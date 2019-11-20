@@ -1,11 +1,9 @@
 #include "Framebuffer.h"
 
-
-
-Framebuffer::Framebuffer()
+Framebuffer::Framebuffer(const bool& pColour, const bool& pDepth)
 {
+	
 }
-
 
 Framebuffer::~Framebuffer()
 {

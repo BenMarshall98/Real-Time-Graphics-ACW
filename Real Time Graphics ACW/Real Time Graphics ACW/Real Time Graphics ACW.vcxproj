@@ -127,13 +127,20 @@
     <ClInclude Include="DX11Render.h" />
     <ClInclude Include="Framebuffer.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="IdentityNode.h" />
     <ClInclude Include="LightingManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="ObjectNode.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="RotationNode.h" />
+    <ClInclude Include="ScaleNode.h" />
+    <ClInclude Include="SceneGraphNode.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TranslationNode.h" />
     <ClInclude Include="Win32Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -143,14 +150,21 @@
     <ClCompile Include="DX11Render.cpp" />
     <ClCompile Include="Framebuffer.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="IdentityNode.cpp" />
     <ClCompile Include="LightingManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
+    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="ObjectNode.cpp" />
     <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="RotationNode.cpp" />
+    <ClCompile Include="ScaleNode.cpp" />
+    <ClCompile Include="SceneGraphNode.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TranslationNode.cpp" />
     <ClCompile Include="Win32Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +184,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Configuration.txt" />
+    <Text Include="Notes.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

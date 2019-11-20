@@ -1,9 +1,9 @@
 #include "TranslationNode.h"
 #include <string>
 
-TranslationNode::TranslationNode(const float& pX, const float& pY, const float& pZ) :
-	SceneGraphNode(DirectX::XMMatrixTranslation(pX, pY, pZ))
+TranslationNode::TranslationNode(const float& pX, const float& pY, const float& pZ)
 {
+	XMStoreFloat4x4(&mMatrix, DirectX::XMMatrixTranslation(pX, pY, pZ));
 }
 
 void TranslationNode::read(std::istream& pIn)
@@ -17,5 +17,5 @@ void TranslationNode::read(std::istream& pIn)
 	pIn >> x >> c >> y >> c >> z;
 
 	DirectX::XMFLOAT3 temp(x, y, z);
-	mMatrix = DirectX::XMMatrixTranslation(x, y, z);
+	XMStoreFloat4x4(&mMatrix, DirectX::XMMatrixTranslation(x, y, z));
 }

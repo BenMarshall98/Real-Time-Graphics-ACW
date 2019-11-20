@@ -6,11 +6,15 @@
 #include "ScaleNode.h"
 #include "ObjectNode.h"
 
-SceneGraphNode::SceneGraphNode(const DirectX::XMMATRIX& pMatrix) : mMatrix(pMatrix)
+SceneGraphNode::SceneGraphNode(const DirectX::XMFLOAT4X4& pMatrix) : mMatrix(pMatrix)
 {
 }
 
-SceneGraphNode::SceneGraphNode() : mMatrix(DirectX::XMMatrixIdentity())
+SceneGraphNode::SceneGraphNode() :
+	mMatrix(1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f)
 {
 }
 
@@ -31,11 +35,11 @@ std::istream& operator>>(std::istream & pIn, SceneGraphNode & pNode)
 		std::string nodeType;
 		pIn >> nodeType;
 
-		std::shared_ptr<SceneGraphNode> child = nullptr;
+		std::shared_ptr<SceneGraphNode> child;
 
 		if (nodeType == "Identity")
 		{
-			child = std::make_shared(new IdentityNode());
+			child = std::make_shared<IdentityNode>();
 		}
 		else if (nodeType == "Translate")
 		{

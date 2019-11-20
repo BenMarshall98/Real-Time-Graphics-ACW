@@ -60,14 +60,16 @@ void LightingManager::Update()
 
 	if (mPointLight)
 	{
-		mPointLight->use(mPointLightBuffer);
+		//TODO
+		//mPointLight->use(mPointLightBuffer);
 	}
 
 	SpotLightBuffer spotLightBuffer;
 	
 	for (auto i = 0u; i < mSpotLights.size(); i++)
 	{
-		mSpotLights[i]->use(&spotLightBuffer, i);
+		//TODO
+		//mSpotLights[i]->use(&spotLightBuffer, i);
 	}
 
 	ID3D11DeviceContext * deviceContext = DX11Render::Instance()->GetDeviceContext();

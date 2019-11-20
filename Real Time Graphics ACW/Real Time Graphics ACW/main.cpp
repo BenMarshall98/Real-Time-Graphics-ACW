@@ -8,11 +8,11 @@ int WINAPI wWinMain(HINSTANCE pHInstance, HINSTANCE pPrevInstance, LPWSTR pCmdLi
 {
 	std::ifstream fin("Configuration.txt");
 
-	const auto node = new IdentityNode();
+	std::shared_ptr<SceneGraphNode> node = std::make_shared<IdentityNode>();
 
-	fin >> node;
+	fin >> *node;
 
-	delete node;
+	node.reset();
 	
 	Win32Window::Instance(pHInstance, pCmdShow)->Run();
 	DX11Render::Instance();

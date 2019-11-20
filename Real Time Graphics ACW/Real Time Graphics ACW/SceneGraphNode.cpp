@@ -16,52 +16,42 @@ SceneGraphNode::SceneGraphNode() : mMatrix(DirectX::XMMatrixIdentity())
 
 SceneGraphNode::~SceneGraphNode()
 {
-	for(auto child : mChildren)
-	{
-		delete child;
-	}
-
 	mChildren.clear();
 }
 
-void SceneGraphNode::addChild(SceneGraphNode* pChild)
-{
-	mChildren.push_back(pChild);
-}
-
-std::istream& operator>>(std::istream & pIn, SceneGraphNode* pNode)
+std::istream& operator>>(std::istream & pIn, SceneGraphNode & pNode)
 {
 	char c;
 	pIn >> c;
 	
-	pNode->read(pIn);
+	pNode.read(pIn);
 	
 	while(true)
 	{
 		std::string nodeType;
 		pIn >> nodeType;
 
-		SceneGraphNode * child = nullptr;
+		std::shared_ptr<SceneGraphNode> child = nullptr;
 
 		if (nodeType == "Identity")
 		{
-			child = new IdentityNode();
+			child = std::make_shared(new IdentityNode());
 		}
 		else if (nodeType == "Translate")
 		{
-			child = new TranslationNode();
+			child = std::make_shared<TranslationNode>();
 		}
 		else if (nodeType == "Rotation")
 		{
-			child = new RotationNode();
+			child = std::make_shared<RotationNode>();
 		}
 		else if (nodeType == "Scale")
 		{
-			child = new ScaleNode();
+			child = std::make_shared<ScaleNode>();
 		}
 		else if (nodeType == "Object")
 		{
-			child = new ObjectNode();
+			child = std::make_shared<ObjectNode>();
 		}
 		else if (nodeType == "}")
 		{
@@ -70,8 +60,8 @@ std::istream& operator>>(std::istream & pIn, SceneGraphNode* pNode)
 
 		if (child)
 		{
-			pIn >> child;
-			pNode->addChild(child);
+			pIn >> *child;
+			pNode.addChild(child);
 		}
 	}
 

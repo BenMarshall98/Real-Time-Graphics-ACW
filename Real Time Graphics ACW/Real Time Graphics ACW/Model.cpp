@@ -2,7 +2,7 @@
 #include "DX11Render.h"
 
 Model::Model(std::vector<DirectX::XMFLOAT3> pPositions, std::vector<DirectX::XMFLOAT3> pNormals,
-	std::vector<DirectX::XMFLOAT2> pTexCoords, std::vector<unsigned int> pIndices) : mPositions(pPositions), mNormals(pNormals), mTexCoords(pTexCoords), mIndices(pIndices)
+	std::vector<DirectX::XMFLOAT2> pTexCoords, std::vector<unsigned int> pIndices) : mIndicesSize(pIndices.size())//mPositions(pPositions), mNormals(pNormals), mTexCoords(pTexCoords), mIndices(pIndices)
 {
 	ID3D11Device * device = DX11Render::Instance()->GetDevice();
 
@@ -18,14 +18,14 @@ Model::Model(std::vector<DirectX::XMFLOAT3> pPositions, std::vector<DirectX::XMF
 	ZeroMemory(&initData, sizeof(initData));
 
 	//Create Position Buffer
-	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * mPositions.size();
-	initData.pSysMem = mPositions.data();
+	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * pPositions.size();
+	initData.pSysMem = pPositions.data();
 
 	device->CreateBuffer(&bufferDesc, &initData, &positionBuffer);
 
 	//Create Normal Buffer
-	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * mNormals.size();
-	initData.pSysMem = mNormals.data();
+	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * pNormals.size();
+	initData.pSysMem = pNormals.data();
 
 	device->CreateBuffer(&bufferDesc, &initData, &normalBuffer);
 
@@ -36,11 +36,11 @@ Model::Model(std::vector<DirectX::XMFLOAT3> pPositions, std::vector<DirectX::XMF
 	//device->CreateBuffer(&bufferDesc, &initData, &texCoordBuffer);
 
 	//Create Index Buffer
-	bufferDesc.ByteWidth = sizeof(unsigned int) * mIndices.size();
+	bufferDesc.ByteWidth = sizeof(unsigned int) * pIndices.size();
 	bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	
 	ZeroMemory(&initData, sizeof(initData));
-	initData.pSysMem = mIndices.data();
+	initData.pSysMem = pIndices.data();
 
 	device->CreateBuffer(&bufferDesc, &initData, &indicesBuffer);
 }
@@ -82,5 +82,5 @@ void Model::Render()
 		lastModel = this;
 	}
 
-	deviceContext->DrawIndexed(mIndices.size(), 0, 0);
+	deviceContext->DrawIndexed(mIndicesSize, 0, 0);
 }

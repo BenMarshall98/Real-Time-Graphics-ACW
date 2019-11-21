@@ -15,7 +15,7 @@ public:
 	Object(const std::string & pModelFile, const DirectX::XMFLOAT3 & pAmbient,
 		const DirectX::XMFLOAT3 & pDiffuse, const DirectX::XMFLOAT3 & pSpecular,
 		const float & pShininess);
-	
+	Object();
 	~Object();
 
 	void setModel(Model * pModel)
@@ -43,3 +43,5 @@ public:
 		mShininess = pShininess;
 	}
 };
+
+std::istream& operator>>(std::istream& pIn, Object & pObject);

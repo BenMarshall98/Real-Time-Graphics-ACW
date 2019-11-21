@@ -162,4 +162,7 @@
     <Text Include="Configuration.txt" />
     <Text Include="Notes.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
 </Project>

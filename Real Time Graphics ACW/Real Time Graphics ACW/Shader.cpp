@@ -57,6 +57,8 @@ Shader::Shader(std::wstring vertexFile, std::wstring fragmentFile, std::wstring 
 	};
 	UINT numElements = ARRAYSIZE(layout);
 
+	//Look at the warning code and see if the layout can be made to match exactly
+	
 	result = device->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &inputLayout);
 	if (FAILED(result))
 	{

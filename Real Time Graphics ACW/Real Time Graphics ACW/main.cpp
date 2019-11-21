@@ -17,7 +17,6 @@ int WINAPI wWinMain(HINSTANCE pHInstance, HINSTANCE pPrevInstance, LPWSTR pCmdLi
 
 	node.reset();
 	
-	
 	Win32Window::Instance(pHInstance, pCmdShow)->Run();
 	DX11Render::Instance();
 

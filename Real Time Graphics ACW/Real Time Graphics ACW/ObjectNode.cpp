@@ -15,5 +15,6 @@ ObjectNode::~ObjectNode()
 
 void ObjectNode::read(std::istream& pIn)
 {
-	//TODO: Need to read in a object
+	mObject = new Object();
+	pIn >> *mObject;
 }

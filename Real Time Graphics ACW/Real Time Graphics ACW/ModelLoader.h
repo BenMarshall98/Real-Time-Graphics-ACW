@@ -9,5 +9,6 @@ public:
 	~ModelLoader();
 
 	static Model * CreateSphere(float radius, int segments);
+	static Model * LoadModelFromFile(const std::string & pModelFile);
 };
 

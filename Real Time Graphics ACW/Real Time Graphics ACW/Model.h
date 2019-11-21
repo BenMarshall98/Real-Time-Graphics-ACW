@@ -7,10 +7,12 @@
 class Model
 {
 private:
-	std::vector<DirectX::XMFLOAT3> mPositions;
-	std::vector<DirectX::XMFLOAT3> mNormals;
-	std::vector<DirectX::XMFLOAT2> mTexCoords;
-	std::vector<unsigned int> mIndices;
+	//std::vector<DirectX::XMFLOAT3> mPositions;
+	//std::vector<DirectX::XMFLOAT3> mNormals;
+	//std::vector<DirectX::XMFLOAT2> mTexCoords;
+	//std::vector<unsigned int> mIndices;
+
+	unsigned int mIndicesSize;
 
 	ID3D11Buffer * positionBuffer;
 	ID3D11Buffer * normalBuffer;

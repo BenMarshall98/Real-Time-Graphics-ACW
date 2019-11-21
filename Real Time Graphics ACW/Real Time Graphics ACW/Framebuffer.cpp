@@ -4,7 +4,3 @@ Framebuffer::Framebuffer(const bool& pColour, const bool& pDepth)
 {
 	
 }
-
-Framebuffer::~Framebuffer()
-{
-}

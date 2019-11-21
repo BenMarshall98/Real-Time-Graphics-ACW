@@ -3,25 +3,24 @@
 #include "DX11Render.h"
 
 #include <d3dcompiler.h>
-#include <directxmath.h>
-#include <directxcolors.h>
+#include <DirectXMath.h>
+#include <DirectXColors.h>
 #include <Windows.h>
 
 #include "ModelLoader.h"
 
 #include <string>
 
-double Game::DT = 0.0f;
-Camera * Game::camera = nullptr;
+double Game::mDt = 0.0f;
+Camera * Game::mCamera = nullptr;
 
 Game::Game()
 {
-	ID3D11Device * device = DX11Render::Instance()->GetDevice();
-	
-	HRESULT hr;
-	shader = new Shader(L"VertexShader.hlsl", L"PixelShader.hlsl");
+	auto device = Dx11Render::instance()->getDevice();
 
-	model = ModelLoader::LoadModelFromFile("sphere.obj");
+	mShader = new Shader(L"VertexShader.hlsl", L"PixelShader.hlsl");
+
+	mModel = ModelLoader::loadModelFromFile("sphere.obj");
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
@@ -31,7 +30,7 @@ Game::Game()
 	bd.ByteWidth = sizeof(CameraBuffer);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd.CPUAccessFlags = 0;
-	hr = device->CreateBuffer(&bd, nullptr, &cameraBuffer);
+	auto hr = device->CreateBuffer(&bd, nullptr, &mCameraBuffer);
 	if (FAILED(hr))
 	{
 		
@@ -39,50 +38,46 @@ Game::Game()
 
 	bd.ByteWidth = sizeof(ModelBuffer);
 
-	hr = device->CreateBuffer(&bd, nullptr, &modelBuffer);
+	hr = device->CreateBuffer(&bd, nullptr, &mModelBuffer);
 
 	// Initialize the world matrix
-	g_World = DirectX::XMMatrixIdentity();
+	mWorld = DirectX::XMMatrixIdentity();
 
 	// Initialize the view matrix
-	DirectX::XMVECTOR Eye = DirectX::XMVectorSet(0.0f, 1.0f, -5.0f, 0.0f);
-	DirectX::XMVECTOR At =  DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	DirectX::XMVECTOR Up =  DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	const auto eye = DirectX::XMFLOAT3(0.0f, 1.0f, -5.0f);
+	const auto at = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
+	const auto up = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
 
-	camera = new Camera(Eye, Up, At);
+	mCamera = new Camera(eye, up, at);
 
 	// Initialize the projection matrix
-	g_Projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, Win32Window::Instance()->GetWidth() / (FLOAT)Win32Window::Instance()->GetHeight(), 0.01f, 100.0f);
+	mProjection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, Win32Window::instance()->getWidth() / (FLOAT)Win32Window::instance()->getHeight(), 0.01f, 100.0f);
 
-	QueryPerformanceFrequency(&timer);
-	freq = double(timer.QuadPart);
+	QueryPerformanceFrequency(&mTimer);
+	mFreq = double(mTimer.QuadPart);
 
-	QueryPerformanceCounter(&timer);
-	start = timer.QuadPart;
+	QueryPerformanceCounter(&mTimer);
+	mStart = mTimer.QuadPart;
 }
 
-Game::~Game()
+void Game::run()
 {
-}
-
-void Game::Run()
-{
-	while(Win32Window::Instance()->WindowEvents())
+	while(Win32Window::instance()->windowEvents())
 	{
-		DX11Render::Instance()->ClearRenderTargetView(DirectX::Colors::MidnightBlue);
+		Dx11Render::instance()->clearRenderTargetView(DirectX::Colors::MidnightBlue);
 
-		shader->UseShader();
+		mShader->useShader();
 
-		ID3D11DeviceContext * deviceContext = DX11Render::Instance()->GetDeviceContext();
+		auto deviceContext = Dx11Render::instance()->getDeviceContext();
 		// Update our time
 
-		QueryPerformanceCounter(&timer);
-		stop = timer.QuadPart;
-		DT = double(stop - start) / freq;
+		QueryPerformanceCounter(&mTimer);
+		mStop = mTimer.QuadPart;
+		mDt = double(mStop - mStart) / mFreq;
 
-		DT2 += DT;
+		mDt2 += mDt;
 
-		start = stop;
+		mStart = mStop;
 		//
 		// Animate the cube
 		//
@@ -92,56 +87,58 @@ void Game::Run()
 		//
 		CameraBuffer cb;
 		//cb.mWorld = XMMatrixTranspose(g_World);
-		cb.mView = XMMatrixTranspose(camera->getViewMatrix());
-		cb.mProjection = XMMatrixTranspose(g_Projection);
-		deviceContext->UpdateSubresource(cameraBuffer, 0, nullptr, &cb, 0, 0);
+		const auto viewMatrix = mCamera->getViewMatrix();
+		
+		cb.mView = XMMatrixTranspose(XMLoadFloat4x4(&viewMatrix));
+		cb.mProjection = XMMatrixTranspose(mProjection);
+		deviceContext->UpdateSubresource(mCameraBuffer, 0, nullptr, &cb, 0, 0);
 
 		//
 		// Renders a triangle
 		//
-		deviceContext->VSSetConstantBuffers(0, 1, &cameraBuffer);
+		deviceContext->VSSetConstantBuffers(0, 1, &mCameraBuffer);
 
-		DirectX::XMMATRIX transSun = DirectX::XMMatrixTranslation(0, 0, 10);
-		DirectX::XMMATRIX rotSun = DirectX::XMMatrixRotationY(DT2);
-		g_World = rotSun * transSun;
+		auto transSun = DirectX::XMMatrixTranslation(0, 0, 10);
+		auto rotSun = DirectX::XMMatrixRotationY(mDt2);
+		mWorld = rotSun * transSun;
 
 		ModelBuffer mb;
-		mb.mModel = XMMatrixTranspose(g_World);
-		mb.mModelInverse = XMMatrixInverse(nullptr, g_World);
+		mb.mModel = XMMatrixTranspose(mWorld);
+		mb.mModelInverse = XMMatrixInverse(nullptr, mWorld);
 		mb.mColor = DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
-		deviceContext->UpdateSubresource(modelBuffer, 0, nullptr, &mb, 0, 0);
-		deviceContext->VSSetConstantBuffers(1, 1, &modelBuffer);
+		deviceContext->UpdateSubresource(mModelBuffer, 0, nullptr, &mb, 0, 0);
+		deviceContext->VSSetConstantBuffers(1, 1, &mModelBuffer);
 		
-		model->Render();
+		mModel->render();
 
-		DirectX::XMMATRIX transEarth = DirectX::XMMatrixTranslation(15, 0, 0);
-		DirectX::XMMATRIX scaleEarth = DirectX::XMMatrixScaling(0.5, 0.5, 0.5);
-		DirectX::XMMATRIX rotEarth = DirectX::XMMatrixRotationY(DT2 * 2);
-		g_World = transEarth * rotEarth * scaleEarth * transSun;
+		auto transEarth = DirectX::XMMatrixTranslation(15, 0, 0);
+		auto scaleEarth = DirectX::XMMatrixScaling(0.5, 0.5, 0.5);
+		auto rotEarth = DirectX::XMMatrixRotationY(mDt2 * 2);
+		mWorld = transEarth * rotEarth * scaleEarth * transSun;
 
-		mb.mModel = XMMatrixTranspose(g_World);
-		mb.mModelInverse = XMMatrixInverse(nullptr, g_World);
+		mb.mModel = XMMatrixTranspose(mWorld);
+		mb.mModelInverse = XMMatrixInverse(nullptr, mWorld);
 		mb.mColor = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
-		deviceContext->UpdateSubresource(modelBuffer, 0, nullptr, &mb, 0, 0);
-		deviceContext->VSSetConstantBuffers(1, 1, &modelBuffer);
+		deviceContext->UpdateSubresource(mModelBuffer, 0, nullptr, &mb, 0, 0);
+		deviceContext->VSSetConstantBuffers(1, 1, &mModelBuffer);
 
-		model->Render();
+		mModel->render();
 
-		DirectX::XMMATRIX transMoon = DirectX::XMMatrixTranslation(-5, 0, 0);
-		DirectX::XMMATRIX scaleMoon = DirectX::XMMatrixScaling(0.5, 0.5, 0.5);
-		DirectX::XMMATRIX rotMoon = DirectX::XMMatrixRotationY(DT2 * 3);
-		g_World = transMoon * rotMoon * scaleMoon * transEarth * rotEarth * scaleEarth * transSun;
+		auto transMoon = DirectX::XMMatrixTranslation(-5, 0, 0);
+		auto scaleMoon = DirectX::XMMatrixScaling(0.5, 0.5, 0.5);
+		auto rotMoon = DirectX::XMMatrixRotationY(mDt2 * 3);
+		mWorld = transMoon * rotMoon * scaleMoon * transEarth * rotEarth * scaleEarth * transSun;
 
-		mb.mModel = XMMatrixTranspose(g_World);
-		mb.mModelInverse = XMMatrixInverse(nullptr, g_World);
+		mb.mModel = XMMatrixTranspose(mWorld);
+		mb.mModelInverse = XMMatrixInverse(nullptr, mWorld);
 		mb.mColor = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-		deviceContext->UpdateSubresource(modelBuffer, 0, nullptr, &mb, 0, 0);
-		deviceContext->VSSetConstantBuffers(1, 1, &modelBuffer);
+		deviceContext->UpdateSubresource(mModelBuffer, 0, nullptr, &mb, 0, 0);
+		deviceContext->VSSetConstantBuffers(1, 1, &mModelBuffer);
 
-		model->Render();
+		mModel->render();
 		//
 		// Present our back buffer to our front buffer
 		//
-		DX11Render::Instance()->Present();
+		Dx11Render::instance()->present();
 	}
 }

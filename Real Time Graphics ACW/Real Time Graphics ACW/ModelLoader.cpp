@@ -13,15 +13,7 @@
 
 #define PI 3.14159265358979323846
 
-ModelLoader::ModelLoader()
-{
-}
-
-ModelLoader::~ModelLoader()
-{
-}
-
-class Model * ModelLoader::LoadModelFromFile(const std::string& pModelFile)
+class Model * ModelLoader::loadModelFromFile(const std::string& pModelFile)
 {
 	Assimp::Importer importer;
 	const auto scene = importer.ReadFile(pModelFile,

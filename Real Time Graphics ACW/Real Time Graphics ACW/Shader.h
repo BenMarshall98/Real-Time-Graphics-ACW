@@ -5,17 +5,22 @@
 
 class Shader
 {
-	ID3D11VertexShader * vertexShader = nullptr;
-	ID3D11PixelShader * pixelShader = nullptr;
-	ID3D11GeometryShader * geometryShader = nullptr;
-	ID3D11InputLayout * inputLayout = nullptr;
+	ID3D11VertexShader * mVertexShader = nullptr;
+	ID3D11PixelShader * mPixelShader = nullptr;
+	ID3D11GeometryShader * mGeometryShader = nullptr;
+	ID3D11InputLayout * mInputLayout = nullptr;
 
-	HRESULT CompileShaderFromFile(std::wstring fileName, const char * target, ID3DBlob** shaderBlob);
+	static HRESULT compileShaderFromFile(const std::wstring & pFileName, const char * pTarget, ID3DBlob** pShaderBlob);
 	
 public:
-	Shader(std::wstring vertexFile, std::wstring fragmentFile, std::wstring geometryShader = L"");
-	~Shader();
+	Shader(const std::wstring & pVertexFile, const std::wstring & pFragmentFile, const std::wstring & pGeometryFile = L"");
+	~Shader() = default;
 
-	void UseShader();
+	Shader(const Shader&) = delete;
+	Shader(Shader &&) = delete;
+	Shader & operator= (const Shader &) = delete;
+	Shader & operator= (Shader &&) = delete;
+
+	void useShader();
 };
 

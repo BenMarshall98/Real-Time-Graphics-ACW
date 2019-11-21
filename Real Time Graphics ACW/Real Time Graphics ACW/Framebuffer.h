@@ -9,7 +9,7 @@ class Framebuffer
 	
 public:
 	Framebuffer(const bool & pColour, const bool & pDepth);
-	~Framebuffer();
+	~Framebuffer() = default;
 
 	Framebuffer(const Framebuffer & pFramebuffer) = delete;
 	Framebuffer & operator= (const Framebuffer & pFramebuffer) = delete;

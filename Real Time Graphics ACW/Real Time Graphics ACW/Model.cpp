@@ -5,7 +5,7 @@ Model::Model(const std::vector<DirectX::XMFLOAT3> & pPositions, const std::vecto
 	const std::vector<DirectX::XMFLOAT2> & pTexCoords, const std::vector<DirectX::XMFLOAT3> & pTangents,
 	const std::vector<DirectX::XMFLOAT3> & pBiTangents, const std::vector<WORD> & pIndices) : mIndicesSize(pIndices.size())//mPositions(pPositions), mNormals(pNormals), mTexCoords(pTexCoords), mIndices(pIndices)
 {
-	ID3D11Device * device = DX11Render::Instance()->GetDevice();
+	auto device = Dx11Render::instance()->getDevice();
 
 	//None changing data for buffers;
 	D3D11_BUFFER_DESC bufferDesc;
@@ -68,9 +68,9 @@ Model::~Model()
 	mIndicesBuffer->Release();
 }
 
-void Model::Render()
+void Model::render()
 {
-	ID3D11DeviceContext * deviceContext = DX11Render::Instance()->GetDeviceContext();
+	auto deviceContext = Dx11Render::instance()->getDeviceContext();
 
 	static Model * lastModel = nullptr;
 

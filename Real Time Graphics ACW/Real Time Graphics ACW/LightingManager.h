@@ -19,12 +19,17 @@ class LightingManager
 
 public:
 	LightingManager();
-	~LightingManager();
+	~LightingManager() = default;
 
-	void SetDirectionalLight(DirectionalLight * pDirectionalLight);
-	void SetPointLight(PointLight * pPointLight);
-	void AddSpotLight(SpotLight * pSpotLight);
+	LightingManager(const LightingManager&) = delete;
+	LightingManager(LightingManager &&) = delete;
+	LightingManager & operator= (const LightingManager &) = delete;
+	LightingManager & operator= (LightingManager &&) = delete;
 
-	void Update();
+	void setDirectionalLight(DirectionalLight * pDirectionalLight);
+	void setPointLight(PointLight * pPointLight);
+	void addSpotLight(SpotLight * pSpotLight);
+
+	void update() const;
 };
 

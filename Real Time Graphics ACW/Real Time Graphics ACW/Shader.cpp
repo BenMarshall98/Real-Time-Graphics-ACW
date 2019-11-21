@@ -2,48 +2,46 @@
 #include <d3dcompiler.h>
 #include "DX11Render.h"
 
-Shader::Shader(std::wstring vertexFile, std::wstring fragmentFile, std::wstring geometryFile)
+Shader::Shader(const std::wstring & pVertexFile, const std::wstring & pFragmentFile, const std::wstring & pGeometryFile)
 {
-	ID3D11Device * device = DX11Render::Instance()->GetDevice();
-	
-	HRESULT result;
+	auto device = Dx11Render::instance()->getDevice();
 
 	ID3DBlob * vsBlob = nullptr;
-	result = CompileShaderFromFile(vertexFile, "vs_4_0", &vsBlob);
+	auto result = compileShaderFromFile(pVertexFile, "vs_4_0", &vsBlob);
 	if (FAILED(result))
 	{
 		
 	}
 
-	result = device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vertexShader);
+	result = device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &mVertexShader);
 	if (FAILED(result))
 	{
 		
 	}
 
 	ID3DBlob * psBlob = nullptr;
-	result = CompileShaderFromFile(fragmentFile, "ps_4_0", &psBlob);
+	result = compileShaderFromFile(pFragmentFile, "ps_4_0", &psBlob);
 	if (FAILED(result))
 	{
 		
 	}
 
-	result = device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &pixelShader);
+	result = device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &mPixelShader);
 	if (FAILED(result))
 	{
 		
 	}
 
 	ID3DBlob * gsBlob = nullptr;
-	if (geometryFile.compare(L""))
+	if (pGeometryFile.empty())
 	{
-		result = CompileShaderFromFile(geometryFile, "gs_4_0", &gsBlob);
+		result = compileShaderFromFile(pGeometryFile, "gs_4_0", &gsBlob);
 		if (FAILED(result))
 		{
 			
 		}
 
-		result = device->CreateGeometryShader(gsBlob->GetBufferPointer(), gsBlob->GetBufferSize(), nullptr, &geometryShader);
+		result = device->CreateGeometryShader(gsBlob->GetBufferPointer(), gsBlob->GetBufferSize(), nullptr, &mGeometryShader);
 		if (FAILED(result))
 		{
 			
@@ -55,11 +53,11 @@ Shader::Shader(std::wstring vertexFile, std::wstring fragmentFile, std::wstring 
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
-	UINT numElements = ARRAYSIZE(layout);
+	const UINT numElements = ARRAYSIZE(layout);
 
 	//Look at the warning code and see if the layout can be made to match exactly
 	
-	result = device->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &inputLayout);
+	result = device->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
 	if (FAILED(result))
 	{
 		
@@ -81,17 +79,13 @@ Shader::Shader(std::wstring vertexFile, std::wstring fragmentFile, std::wstring 
 	}
 }
 
-Shader::~Shader()
+HRESULT Shader::compileShaderFromFile(const std::wstring & pFileName, const char * pTarget, ID3DBlob** pShaderBlob)
 {
-}
-
-HRESULT Shader::CompileShaderFromFile(std::wstring fileName, const char * target, ID3DBlob** shaderBlob)
-{
-	DWORD shaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+	const DWORD shaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
 
 	ID3DBlob * errorBlob = nullptr;
-	HRESULT result = D3DCompileFromFile(fileName.c_str(), nullptr, nullptr, "main", target,
-		shaderFlags, 0, shaderBlob, &errorBlob);
+	const auto result = D3DCompileFromFile(pFileName.c_str(), nullptr, nullptr, "main", pTarget,
+		shaderFlags, 0, pShaderBlob, &errorBlob);
 
 	if (FAILED(result))
 	{
@@ -109,16 +103,16 @@ HRESULT Shader::CompileShaderFromFile(std::wstring fileName, const char * target
 	return result;
 }
 
-void Shader::UseShader()
+void Shader::useShader()
 {
 	static Shader * shader = nullptr;
 
 	if (shader != this)
 	{
-		ID3D11DeviceContext * deviceContext = DX11Render::Instance()->GetDeviceContext();
-		deviceContext->VSSetShader(vertexShader, nullptr, 0);
-		deviceContext->PSSetShader(pixelShader, nullptr, 0);
-		deviceContext->GSSetShader(geometryShader, nullptr, 0);
-		deviceContext->IASetInputLayout(inputLayout);
+		auto deviceContext = Dx11Render::instance()->getDeviceContext();
+		deviceContext->VSSetShader(mVertexShader, nullptr, 0);
+		deviceContext->PSSetShader(mPixelShader, nullptr, 0);
+		deviceContext->GSSetShader(mGeometryShader, nullptr, 0);
+		deviceContext->IASetInputLayout(mInputLayout);
 	}
 }

@@ -16,7 +16,7 @@ public:
 		const DirectX::XMFLOAT3 & pDiffuse, const DirectX::XMFLOAT3 & pSpecular,
 		const float & pShininess);
 	Object();
-	~Object();
+	~Object() = default;
 
 	void setModel(Model * pModel)
 	{

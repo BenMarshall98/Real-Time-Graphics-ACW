@@ -6,7 +6,7 @@ struct PointLightBuffer
 {
 	DirectX::XMFLOAT4 mColor;
 	DirectX::XMFLOAT3 mPosition;
-	int isUsed;
+	int mIsUsed;
 };
 
 class PointLight
@@ -17,7 +17,7 @@ class PointLight
 	
 public:
 	PointLight(DirectX::XMFLOAT4 pColor, DirectX::XMFLOAT3 pDirection);
-	~PointLight();
+	~PointLight() = default;
 
 	static void use(PointLight * pPointLight, ID3D11Buffer * pDeviceBuffer);
 };

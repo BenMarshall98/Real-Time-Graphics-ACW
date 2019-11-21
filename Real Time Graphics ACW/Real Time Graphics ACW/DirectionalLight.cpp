@@ -1,19 +1,15 @@
 #include "DirectionalLight.h"
 #include "DX11Render.h"
 
-DirectionalLight::DirectionalLight(DirectX::XMFLOAT4 pColor, DirectX::XMFLOAT3 pDirection) :
+DirectionalLight::DirectionalLight(const DirectX::XMFLOAT4 & pColor, const DirectX::XMFLOAT3 & pDirection) :
 	mColor(pColor), mDirection(pDirection), mDirty(true)
-{
-}
-
-DirectionalLight::~DirectionalLight()
 {
 }
 
 void DirectionalLight::use(DirectionalLight* pDirectionalLight, ID3D11Buffer* pDeviceBuffer)
 {
 	DirectionalLightBuffer db;
-	ZeroMemory(&db, sizeof(db));
+	ZeroMemory(&db, sizeof db);
 
 	if (pDirectionalLight)
 	{
@@ -21,7 +17,7 @@ void DirectionalLight::use(DirectionalLight* pDirectionalLight, ID3D11Buffer* pD
 		{
 			db.mDirection = pDirectionalLight->mDirection;
 			db.mColor = pDirectionalLight->mColor;
-			db.isUsed = true;
+			db.mIsUsed = true;
 			
 			pDirectionalLight->mDirty = false;
 		}
@@ -32,10 +28,10 @@ void DirectionalLight::use(DirectionalLight* pDirectionalLight, ID3D11Buffer* pD
 	}
 	else
 	{
-		db.isUsed = false;
+		db.mIsUsed = false;
 	}
 
-	ID3D11DeviceContext * deviceContext = DX11Render::Instance()->GetDeviceContext();
+	auto deviceContext = Dx11Render::instance()->getDeviceContext();
 
 	deviceContext->UpdateSubresource(pDeviceBuffer, 0, nullptr, &db, 0, 0);
 	deviceContext->PSSetConstantBuffers(0, 1, &pDeviceBuffer);

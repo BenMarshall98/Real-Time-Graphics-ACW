@@ -1,8 +1,6 @@
 #include "Camera.h"
 #include "Game.h"
 
-//TODO: Do load float3 as temp values for each method
-
 Camera::Camera(const DirectX::XMFLOAT3 & pEyePosition, const DirectX::XMFLOAT3 & pUpDirection,
 	const DirectX::XMFLOAT3 & pTargetPosition) : mViewMatrix(), mUpDirection(pUpDirection),
 	mEyePosition(pEyePosition), mTargetPosition(pTargetPosition)
@@ -12,105 +10,127 @@ Camera::Camera(const DirectX::XMFLOAT3 & pEyePosition, const DirectX::XMFLOAT3 &
 
 void Camera::rotateLeftRight(const bool pLeft)
 {
-	auto angleChange = mAngleSpeed * Game::DT;
+	auto angleChange = mAngleSpeed * Game::mDt;
 
 	if (!pLeft)
 	{
 		angleChange = -angleChange;
 	}
 
-	const auto zAxis = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(XMLoadFloat3(&mTargetPosition), XMLoadFloat3(&mEyePosition)));
-	const auto xAxis = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(zAxis, XMLoadFloat3(&mUpDirection)));
+	const auto targetTemp = XMLoadFloat3(&mTargetPosition);
+	const auto eyeTemp = XMLoadFloat3(&mEyePosition);
+	const auto upTemp = XMLoadFloat3(&mUpDirection);
+
+	const auto zAxis = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(targetTemp, eyeTemp));
+	const auto xAxis = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(zAxis, upTemp));
 	const auto yAxis = DirectX::XMVector3Cross(zAxis, xAxis);
 
 	const auto leftRightMat = DirectX::XMMatrixRotationNormal(yAxis, angleChange);
 
-	XMStoreFloat3(&mTargetPosition, DirectX::XMVectorAdd(XMLoadFloat3(&mEyePosition), XMVector3Transform(zAxis, leftRightMat)));
+	XMStoreFloat3(&mTargetPosition, DirectX::XMVectorAdd(eyeTemp, XMVector3Transform(zAxis, leftRightMat)));
 
 	update();
 }
 
 void Camera::rotateUpDown(const bool pUp)
 {
-	auto angleChange = mAngleSpeed * Game::DT;
+	auto angleChange = mAngleSpeed * Game::mDt;
 
 	if (!pUp)
 	{
 		angleChange = -angleChange;
 	}
 
-	const auto zAxis = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(XMLoadFloat3(&mTargetPosition), XMLoadFloat3(&mEyePosition)));
-	const auto xAxis = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(zAxis, XMLoadFloat3(&mUpDirection)));
+	const auto targetTemp = XMLoadFloat3(&mTargetPosition);
+	const auto eyeTemp = XMLoadFloat3(&mEyePosition);
+	const auto upTemp = XMLoadFloat3(&mUpDirection);
+
+	const auto zAxis = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(targetTemp, eyeTemp));
+	const auto xAxis = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(zAxis, upTemp));
 
 	const auto leftRightMat = DirectX::XMMatrixRotationNormal(xAxis, angleChange);
 	
-	XMStoreFloat3(&mTargetPosition, DirectX::XMVectorAdd(XMLoadFloat3(&mEyePosition), XMVector3Transform(zAxis, leftRightMat)));
-	XMStoreFloat3(&mUpDirection, XMVector3Transform(XMLoadFloat3(&mUpDirection), leftRightMat));
+	XMStoreFloat3(&mTargetPosition, DirectX::XMVectorAdd(eyeTemp, XMVector3Transform(zAxis, leftRightMat)));
+	XMStoreFloat3(&mUpDirection, XMVector3Transform(upTemp, leftRightMat));
 
 	update();
 }
 
 void Camera::panLeftRight(const bool pLeft)
 {
-	auto movementChange = mMovementSpeed * Game::DT;
+	auto movementChange = mMovementSpeed * Game::mDt;
 
 	if (!pLeft)
 	{
 		movementChange = -movementChange;
 	}
 
-	const auto zAxis = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(XMLoadFloat3(&mTargetPosition), XMLoadFloat3(&mEyePosition)));
-	const auto xAxis = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(zAxis, XMLoadFloat3(&mUpDirection)));
+	const auto targetTemp = XMLoadFloat3(&mTargetPosition);
+	const auto eyeTemp = XMLoadFloat3(&mEyePosition);
+	const auto upTemp = XMLoadFloat3(&mUpDirection);
+
+	const auto zAxis = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(targetTemp, eyeTemp));
+	const auto xAxis = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(zAxis, upTemp));
 
 	const auto movement = DirectX::XMVectorScale(xAxis, movementChange);
 
-	XMStoreFloat3(&mEyePosition, DirectX::XMVectorAdd(XMLoadFloat3(&mEyePosition), movement));
-	XMStoreFloat3(&mTargetPosition, DirectX::XMVectorAdd(XMLoadFloat3(&mTargetPosition), movement));
+	XMStoreFloat3(&mEyePosition, DirectX::XMVectorAdd(eyeTemp, movement));
+	XMStoreFloat3(&mTargetPosition, DirectX::XMVectorAdd(targetTemp, movement));
 
 	update();
 }
 
 void Camera::panForwardBackward(const bool pForward)
 {
-	auto movementChange = mMovementSpeed * Game::DT;
+	auto movementChange = mMovementSpeed * Game::mDt;
 
 	if (!pForward)
 	{
 		movementChange = -movementChange;
 	}
 
-	const auto zAxis = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(XMLoadFloat3(&mTargetPosition), XMLoadFloat3(&mEyePosition)));
+	const auto targetTemp = XMLoadFloat3(&mTargetPosition);
+	const auto eyeTemp = XMLoadFloat3(&mEyePosition);
+
+	const auto zAxis = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(targetTemp, eyeTemp));
 
 	const auto movement = DirectX::XMVectorScale(zAxis, movementChange);
 
-	XMStoreFloat3(&mEyePosition, DirectX::XMVectorAdd(XMLoadFloat3(&mEyePosition), movement));
-	XMStoreFloat3(&mTargetPosition, DirectX::XMVectorAdd(XMLoadFloat3(&mTargetPosition), movement));
+	XMStoreFloat3(&mEyePosition, DirectX::XMVectorAdd(eyeTemp, movement));
+	XMStoreFloat3(&mTargetPosition, DirectX::XMVectorAdd(targetTemp, movement));
 
 	update();
 }
 
 void Camera::panUpDown(const bool pUp)
 {
-	auto movementChange = mMovementSpeed * Game::DT;
+	auto movementChange = mMovementSpeed * Game::mDt;
 
 	if (!pUp)
 	{
 		movementChange = -movementChange;
 	}
 
-	DirectX::XMVECTOR zAxis = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(mTargetPosition, mEyePosition));
-	DirectX::XMVECTOR xAxis = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(zAxis, mUpDirection));
-	DirectX::XMVECTOR yAxis = DirectX::XMVector3Cross(zAxis, xAxis);
+	const auto targetTemp = XMLoadFloat3(&mTargetPosition);
+	const auto eyeTemp = XMLoadFloat3(&mEyePosition);
+	const auto upTemp = XMLoadFloat3(&mUpDirection);
 
-	DirectX::XMVECTOR movement = DirectX::XMVectorScale(yAxis, movementChange);
+	const auto zAxis = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(targetTemp, eyeTemp));
+	const auto xAxis = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(zAxis, upTemp));
+	const auto yAxis = DirectX::XMVector3Cross(zAxis, xAxis);
 
-	mEyePosition = DirectX::XMVectorAdd(mEyePosition, movement);
-	mTargetPosition = DirectX::XMVectorAdd(mTargetPosition, movement);
+	const auto movement = DirectX::XMVectorScale(yAxis, movementChange);
+
+	XMStoreFloat3(&mEyePosition,DirectX::XMVectorAdd(eyeTemp, movement));
+	XMStoreFloat3(&mTargetPosition, DirectX::XMVectorAdd(targetTemp, movement));
 
 	update();
 }
 
 void Camera::update()
 {
-	mViewMatrix = DirectX::XMMatrixLookAtLH(mEyePosition, mTargetPosition, mUpDirection);
+	const auto targetTemp = XMLoadFloat3(&mTargetPosition);
+	const auto eyeTemp = XMLoadFloat3(&mEyePosition);
+	const auto upTemp = XMLoadFloat3(&mUpDirection);
+	XMStoreFloat4x4(&mViewMatrix, DirectX::XMMatrixLookAtLH(eyeTemp, targetTemp, upTemp));
 }

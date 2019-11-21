@@ -3,7 +3,3 @@
 SpotLight::SpotLight()
 {
 }
-
-SpotLight::~SpotLight()
-{
-}

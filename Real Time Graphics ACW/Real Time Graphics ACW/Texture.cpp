@@ -4,8 +4,8 @@
 
 Texture::Texture(const std::wstring & pTextureFile)
 {
-	const auto device = DX11Render::Instance()->GetDevice();
-	HRESULT result = DirectX::CreateDDSTextureFromFile(device, pTextureFile.c_str(), nullptr, &mTexture);
+	const auto device = Dx11Render::instance()->getDevice();
+	auto result = DirectX::CreateDDSTextureFromFile(device, pTextureFile.c_str(), nullptr, &mTexture);
 
 	D3D11_SAMPLER_DESC desc;
 	ZeroMemory(&desc, sizeof desc);
@@ -26,7 +26,7 @@ Texture::~Texture()
 
 void Texture::use() const
 {
-	const auto deviceContext = DX11Render::Instance()->GetDeviceContext();
+	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
 
 	deviceContext->PSSetShaderResources(0, 1, &mTexture);
 	deviceContext->PSSetSamplers(0, 1, &mSampler);

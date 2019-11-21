@@ -8,7 +8,7 @@ struct SpotLightBuffer
 	DirectX::XMFLOAT3 mDirection[4];
 	float mInnerAngle[4];
 	float mOuterAngle[4];
-	int isUsed[4];
+	int mIsUsed[4];
 };
 
 class SpotLight
@@ -18,10 +18,15 @@ class SpotLight
 	DirectX::XMFLOAT3 mDirection;
 	float mInnerAngle;
 	float mOuterAngle;
-	bool dirty;
+	bool mDirty;
 	
 public:
 	SpotLight();
-	~SpotLight();
+	~SpotLight() = default;
+
+	SpotLight(const SpotLight &) = delete;
+	SpotLight(SpotLight &&) = delete;
+	SpotLight & operator= (const SpotLight &) = delete;
+	SpotLight & operator= (SpotLight &&) = delete;
 };
 

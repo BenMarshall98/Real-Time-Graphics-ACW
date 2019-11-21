@@ -3,14 +3,14 @@
 #include "Game.h"
 #include <string>
 
-Win32Window * Win32Window::instance = nullptr;
+Win32Window * Win32Window::mInstance = nullptr;
 
 Win32Window::Win32Window(HINSTANCE pHInstance, int pCmdShow) : mCmdShow(pCmdShow)
 {
 	WNDCLASSEX wndClassEx;
 	wndClassEx.cbSize = sizeof(WNDCLASSEX);
 	wndClassEx.style = CS_HREDRAW | CS_VREDRAW;
-	wndClassEx.lpfnWndProc = WindowProcedure;
+	wndClassEx.lpfnWndProc = windowProcedure;
 	wndClassEx.cbClsExtra = 0;
 	wndClassEx.cbWndExtra = 0;
 	wndClassEx.hInstance = pHInstance;
@@ -18,52 +18,44 @@ Win32Window::Win32Window(HINSTANCE pHInstance, int pCmdShow) : mCmdShow(pCmdShow
 	wndClassEx.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	wndClassEx.hbrBackground = NULL;
 	wndClassEx.lpszMenuName = nullptr;
-	wndClassEx.lpszClassName = className;
+	wndClassEx.lpszClassName = mClassName;
 	wndClassEx.hIconSm = LoadIcon(pHInstance, IDI_APPLICATION);
 
 	if (!RegisterClassEx(&wndClassEx))
 	{
-		//TODO: Log Error
-		int i = 0;
+
 	}
 
-	RECT rect = { 0, 0, width, height };
+	RECT rect = { 0, 0, mWidth, mHeight };
 	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
 
-	mHWND = CreateWindow(className, "Real Time Graphics ACW",
+	mHwnd = CreateWindow(mClassName, "Real Time Graphics ACW",
 		WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
 		rect.right - rect.left, rect.bottom - rect.top,
 		nullptr, nullptr, pHInstance, nullptr);
 
-	if (!mHWND)
+	if (!mHwnd)
 	{
-		//TODO: Log Error
-		int i = 0;
+
+	}
+}
+
+Win32Window * Win32Window::instance()
+{
+	return mInstance;
+}
+
+Win32Window * Win32Window::instance(HINSTANCE pHInstance, int pCmdShow)
+{
+	if (!mInstance)
+	{
+		mInstance = new Win32Window(pHInstance, pCmdShow);
 	}
 
-	//ShowWindow(mHWND, pCmdShow);
+	return mInstance;
 }
 
-Win32Window::~Win32Window()
-{
-}
-
-Win32Window * Win32Window::Instance()
-{
-	return instance;
-}
-
-Win32Window * Win32Window::Instance(HINSTANCE pHInstance, int pCmdShow)
-{
-	if (!instance)
-	{
-		instance = new Win32Window(pHInstance, pCmdShow);
-	}
-
-	return instance;
-}
-
-LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM pWParam, LPARAM pLParam)
+LRESULT CALLBACK Win32Window::windowProcedure(HWND pHwnd, UINT pMessage, WPARAM pWParam, LPARAM pLParam)
 {
 	PAINTSTRUCT paintStruct;
 	HDC hdc;
@@ -71,12 +63,12 @@ LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM 
 	switch (pMessage)
 	{
 	case WM_PAINT:
-		hdc = BeginPaint(pHWND, &paintStruct);
-		EndPaint(pHWND, &paintStruct);
+		hdc = BeginPaint(pHwnd, &paintStruct);
+		EndPaint(pHwnd, &paintStruct);
 		break;
 	case WM_CLOSE:
 	{
-		DestroyWindow(pHWND);
+		DestroyWindow(pHwnd);
 	}
 	break;
 	case WM_KEYDOWN:
@@ -88,11 +80,11 @@ LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM 
 		case 'J':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::camera->panLeftRight(false);
+				Game::mCamera->panLeftRight(false);
 			}
 			else
 			{
-				Game::camera->rotateLeftRight();
+				Game::mCamera->rotateLeftRight();
 			}
 			break;
 		case VK_RIGHT:
@@ -100,11 +92,11 @@ LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM 
 		case 'L':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::camera->panLeftRight();
+				Game::mCamera->panLeftRight();
 			}
 			else
 			{
-				Game::camera->rotateLeftRight(false);
+				Game::mCamera->rotateLeftRight(false);
 			}
 			break;
 		case VK_UP:
@@ -112,11 +104,11 @@ LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM 
 		case 'I':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::camera->panForwardBackward();
+				Game::mCamera->panForwardBackward();
 			}
 			else
 			{
-				Game::camera->rotateUpDown();
+				Game::mCamera->rotateUpDown();
 			}
 			break;
 		case VK_DOWN:
@@ -124,18 +116,18 @@ LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM 
 		case 'K':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::camera->panForwardBackward(false);
+				Game::mCamera->panForwardBackward(false);
 			}
 			else
 			{
-				Game::camera->rotateUpDown(false);
+				Game::mCamera->rotateUpDown(false);
 			}
 			break;
 		case VK_PRIOR:
-			Game::camera->panUpDown();
+			Game::mCamera->panUpDown();
 			break;
 		case VK_NEXT:
-			Game::camera->panUpDown(false);
+			Game::mCamera->panUpDown(false);
 			break;
 		}
 	}
@@ -144,24 +136,24 @@ LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM 
 	{
 		const int width = LOWORD(pLParam);
 		const int height = HIWORD(pLParam);
-		DX11Render::Instance()->Resize(width, height);
+		Dx11Render::instance()->resize(width, height);
 	}
 	break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
 	default:
-		return DefWindowProc(pHWND, pMessage, pWParam, pLParam);
+		return DefWindowProc(pHwnd, pMessage, pWParam, pLParam);
 	}
 
 	return 0;
 }
 
-bool Win32Window::WindowEvents()
+bool Win32Window::windowEvents()
 {
-	bool result = true;
+	auto result = true;
 	
-	MSG msg = { 0 };
+	MSG msg;
 	
 	while(PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 	{

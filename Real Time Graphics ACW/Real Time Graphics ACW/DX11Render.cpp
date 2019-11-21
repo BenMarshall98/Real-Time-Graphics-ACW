@@ -1,13 +1,15 @@
 #include "DX11Render.h"
 #include "Win32Window.h"
 
-DX11Render * DX11Render::instance = nullptr;
+Dx11Render * Dx11Render::mInstance = nullptr;
 
-DX11Render::DX11Render()
+Dx11Render::Dx11Render() : mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullptr), mDeviceContext(nullptr),
+	mDeviceContext1(nullptr), mSwapChain(nullptr), mSwapChain1(nullptr), mRenderTargetView(nullptr), mDepthView(nullptr),
+	mRasterizerState(nullptr)
 {
-	Win32Window * window = Win32Window::Instance();
+	auto window = Win32Window::instance();
 
-	driverType = D3D_DRIVER_TYPE_HARDWARE;
+	mDriverType = D3D_DRIVER_TYPE_HARDWARE;
 
 	D3D_FEATURE_LEVEL featureLevels[] =
 	{
@@ -17,49 +19,48 @@ DX11Render::DX11Render()
 		D3D_FEATURE_LEVEL_10_0
 	};
 
-	HRESULT result;
-	result = D3D11CreateDevice(nullptr, driverType, nullptr, 0, featureLevels, 4, D3D11_SDK_VERSION, &device, &featureLevel, &deviceContext);
+	auto result = D3D11CreateDevice(nullptr, mDriverType, nullptr, 0, featureLevels, 4, D3D11_SDK_VERSION, &mDevice, &mFeatureLevel, &mDeviceContext);
 
-	IDXGIDevice * DXGIDevice = nullptr;
-	result = device->QueryInterface(__uuidof(IDXGIDevice), (void **)&DXGIDevice);
+	IDXGIDevice * dxgiDevice = nullptr;
+	result = mDevice->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void **>(&dxgiDevice));
 
-	IDXGIAdapter * DXGIAdapter = nullptr;
-	result = DXGIDevice->GetAdapter(&DXGIAdapter);
+	IDXGIAdapter * dxgiAdapter = nullptr;
+	result = dxgiDevice->GetAdapter(&dxgiAdapter);
 
-	IDXGIFactory1 * DXGIFactory1 = nullptr;
-	result = DXGIAdapter->GetParent(__uuidof(IDXGIFactory), (void **)&DXGIFactory1);
+	IDXGIFactory1 * dxgiFactory1 = nullptr;
+	result = dxgiAdapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void **>(&dxgiFactory1));
 
-	IDXGIFactory2 * DXGIFactory2 = nullptr;
-	result = DXGIFactory1->QueryInterface(__uuidof(IDXGIFactory1), (void **)&DXGIFactory2);
+	IDXGIFactory2 * dxgiFactory2 = nullptr;
+	result = dxgiFactory1->QueryInterface(__uuidof(IDXGIFactory1), reinterpret_cast<void **>(&dxgiFactory2));
 
-	result = device->QueryInterface(__uuidof(ID3D11Device1), (void **)&deviceContext1);
-	result = deviceContext->QueryInterface(__uuidof(ID3D11DeviceContext1), (void **)&deviceContext1);
+	result = mDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void **>(&mDeviceContext1));
+	result = mDeviceContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void **>(&mDeviceContext1));
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc;
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
 
-	swapChainDesc.Width = window->GetWidth();
-	swapChainDesc.Height = window->GetHeight();
+	swapChainDesc.Width = window->getWidth();
+	swapChainDesc.Height = window->getHeight();
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.SampleDesc.Quality = 0;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.BufferCount = 1;
 
-	DXGIFactory2->CreateSwapChainForHwnd(device, window->GetHWND(), &swapChainDesc, nullptr, nullptr, &swapChain1);
+	dxgiFactory2->CreateSwapChainForHwnd(mDevice, window->getHwnd(), &swapChainDesc, nullptr, nullptr, &mSwapChain1);
 
-	result = swapChain1->QueryInterface(__uuidof(IDXGISwapChain), (void **)&swapChain);
+	result = mSwapChain1->QueryInterface(__uuidof(IDXGISwapChain), reinterpret_cast<void **>(&mSwapChain));
 
 	//Create Color Backbuffer
 	ID3D11Texture2D * backBuffer;
-	result = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void **)&backBuffer);
+	result = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void **>(&backBuffer));
 
-	device->CreateRenderTargetView(backBuffer, nullptr, &renderTargetView);
+	mDevice->CreateRenderTargetView(backBuffer, nullptr, &mRenderTargetView);
 
 	//Create Depth / Stencil BackBuffer
 	D3D11_TEXTURE2D_DESC depthTextureDesc;
-	depthTextureDesc.Width = window->GetWidth();
-	depthTextureDesc.Height = window->GetHeight();
+	depthTextureDesc.Width = window->getWidth();
+	depthTextureDesc.Height = window->getHeight();
 	depthTextureDesc.MipLevels = 1;
 	depthTextureDesc.ArraySize = 1;
 	depthTextureDesc.Format = DXGI_FORMAT_D32_FLOAT;
@@ -71,7 +72,7 @@ DX11Render::DX11Render()
 	depthTextureDesc.MiscFlags = 0;
 
 	ID3D11Texture2D * depthStencil = nullptr;
-	result = device->CreateTexture2D(&depthTextureDesc, nullptr, &depthStencil);
+	result = mDevice->CreateTexture2D(&depthTextureDesc, nullptr, &depthStencil);
 
 	D3D11_DEPTH_STENCIL_DESC depthStateDesc;
 	depthStateDesc.DepthEnable = true;
@@ -94,9 +95,9 @@ DX11Render::DX11Render()
 
 	ID3D11DepthStencilState * depthState;
 
-	result = device->CreateDepthStencilState(&depthStateDesc, &depthState);
+	result = mDevice->CreateDepthStencilState(&depthStateDesc, &depthState);
 
-	deviceContext->OMSetDepthStencilState(depthState, 1);
+	mDeviceContext->OMSetDepthStencilState(depthState, 1);
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthViewDesc;
 	depthViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
@@ -104,19 +105,19 @@ DX11Render::DX11Render()
 	depthViewDesc.Flags = 0;
 	depthViewDesc.Texture2D.MipSlice = 0;
 
-	result = device->CreateDepthStencilView(depthStencil, &depthViewDesc, &depthView);
+	result = mDevice->CreateDepthStencilView(depthStencil, &depthViewDesc, &mDepthView);
 
-	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthView);
+	mDeviceContext->OMSetRenderTargets(1, &mRenderTargetView, mDepthView);
 
 	D3D11_VIEWPORT viewport;
-	viewport.Width = (float)window->GetWidth();
-	viewport.Height = (float)window->GetHeight();
+	viewport.Width = static_cast<float>(window->getWidth());
+	viewport.Height = static_cast<float>(window->getHeight());
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 
-	deviceContext->RSSetViewports(1, &viewport);
+	mDeviceContext->RSSetViewports(1, &viewport);
 
 	D3D11_RASTERIZER_DESC rasterizerDesc;
 	rasterizerDesc.CullMode = D3D11_CULL_NONE;
@@ -128,26 +129,21 @@ DX11Render::DX11Render()
 	rasterizerDesc.MultisampleEnable = false;
 	rasterizerDesc.SlopeScaledDepthBias = 0.0f;
 
-	result = device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
-	deviceContext->RSSetState(rasterizerState);
+	result = mDevice->CreateRasterizerState(&rasterizerDesc, &mRasterizerState);
+	mDeviceContext->RSSetState(mRasterizerState);
 }
 
-void DX11Render::Resize(int width, int height)
+void Dx11Render::resize(int pWidth, int pHeight)
 {
 	//swapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_UNKNOWN, 0);
 }
 
-
-DX11Render::~DX11Render()
+Dx11Render * Dx11Render::instance()
 {
-}
-
-DX11Render * DX11Render::Instance()
-{
-	if (!instance)
+	if (!mInstance)
 	{
-		instance = new DX11Render();
+		mInstance = new Dx11Render();
 	}
 
-	return instance;
+	return mInstance;
 }

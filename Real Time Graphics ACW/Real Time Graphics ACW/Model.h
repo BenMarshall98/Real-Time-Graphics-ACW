@@ -21,6 +21,11 @@ public:
 		const std::vector<DirectX::XMFLOAT3> & pBiTangents, const std::vector<WORD> & pIndices);
 	~Model();
 
-	void Render();
+	Model(const Model&) = delete;
+	Model(Model &&) = delete;
+	Model & operator= (const Model &) = delete;
+	Model & operator= (Model &&) = delete;
+
+	void render();
 };
 

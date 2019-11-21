@@ -8,13 +8,14 @@
 
 int WINAPI wWinMain(HINSTANCE pHInstance, HINSTANCE pPrevInstance, LPWSTR pCmdLine, int pCmdShow)
 {
-	Win32Window::Instance(pHInstance, pCmdShow)->Run();
-	DX11Render::Instance();
+	auto window = Win32Window::instance(pHInstance, pCmdShow);
+	window->run();
+	auto render = Dx11Render::instance();
 
-	Game * game = new Game();
-	game->Run();
+	auto game = new Game();
+	game->run();
 
 	delete game;
-	delete Win32Window::Instance();
-	delete DX11Render::Instance();
+	delete render;
+	delete window;
 }

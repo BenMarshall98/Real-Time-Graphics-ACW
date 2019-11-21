@@ -5,9 +5,6 @@
 class ModelLoader
 {
 public:
-	ModelLoader();
-	~ModelLoader();
-
-	static Model * LoadModelFromFile(const std::string & pModelFile);
+	static Model * loadModelFromFile(const std::string & pModelFile);
 };
 

@@ -16,6 +16,11 @@ public:
 	explicit SceneGraphNode(const DirectX::XMFLOAT4X4 & pMatrix);
 	SceneGraphNode();
 	virtual ~SceneGraphNode();
+
+	SceneGraphNode(const SceneGraphNode&) = delete;
+	SceneGraphNode(SceneGraphNode &&) = delete;
+	SceneGraphNode & operator= (const SceneGraphNode &) = delete;
+	SceneGraphNode & operator= (SceneGraphNode &&) = delete;
 	
 	void addChild(std::shared_ptr<SceneGraphNode> & pChild)
 	{

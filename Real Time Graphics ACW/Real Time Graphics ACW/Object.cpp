@@ -15,10 +15,6 @@ Object::Object() : mModel(nullptr), mAmbient(), mDiffuse(), mSpecular(), mShinin
 {
 }
 
-Object::~Object()
-{
-}
-
 std::istream& operator>>(std::istream& pIn, Object & pObject)
 {
 	std::string s;

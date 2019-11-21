@@ -3,7 +3,7 @@
 
 LightingManager::LightingManager()
 {
-	ID3D11Device * device = DX11Render::Instance()->GetDevice();
+	auto device = Dx11Render::instance()->getDevice();
 
 	D3D11_BUFFER_DESC bufferDesc;
 	ZeroMemory(&bufferDesc, sizeof(bufferDesc));
@@ -24,25 +24,21 @@ LightingManager::LightingManager()
 	device->CreateBuffer(&bufferDesc, nullptr, &mSpotLightBuffer);
 }
 
-LightingManager::~LightingManager()
-{
-}
-
-void LightingManager::SetDirectionalLight(DirectionalLight* pDirectionalLight)
+void LightingManager::setDirectionalLight(DirectionalLight* pDirectionalLight)
 {
 	delete mDirectionalLight;
 
 	mDirectionalLight = pDirectionalLight;
 }
 
-void LightingManager::SetPointLight(PointLight* pPointLight)
+void LightingManager::setPointLight(PointLight* pPointLight)
 {
 	delete mPointLight;
 
 	mPointLight = pPointLight;
 }
 
-void LightingManager::AddSpotLight(SpotLight* pSpotLight)
+void LightingManager::addSpotLight(SpotLight* pSpotLight)
 {
 	if (mSpotLights.size() == 4)
 	{
@@ -53,7 +49,7 @@ void LightingManager::AddSpotLight(SpotLight* pSpotLight)
 	mSpotLights.push_back(pSpotLight);
 }
 
-void LightingManager::Update()
+void LightingManager::update() const
 {
 	DirectionalLight::use(mDirectionalLight, mDirectionalLightBuffer);
 	
@@ -72,7 +68,7 @@ void LightingManager::Update()
 		//mSpotLights[i]->use(&spotLightBuffer, i);
 	}
 
-	ID3D11DeviceContext * deviceContext = DX11Render::Instance()->GetDeviceContext();
+	auto deviceContext = Dx11Render::instance()->getDeviceContext();
 	
 	deviceContext->UpdateSubresource(mSpotLightBuffer, 0, nullptr, &spotLightBuffer, 0, 0);
 	deviceContext->PSSetConstantBuffers(2, 1, &mSpotLightBuffer);

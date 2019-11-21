@@ -5,45 +5,50 @@
 class Win32Window
 {
 private:
-	const char * className = "RealTimeGraphics";
-	int width = 800;
-	int height = 600;
-	HWND mHWND;
+	const char * mClassName = "RealTimeGraphics";
+	int mWidth = 800;
+	int mHeight = 600;
+	HWND mHwnd;
 	int mCmdShow;
 
-	static Win32Window * instance;
+	static Win32Window * mInstance;
 
 	Win32Window(HINSTANCE pHInstance, int pCmdShow);
 
-	static LRESULT CALLBACK WindowProcedure(HWND pHWND, UINT pMessage, WPARAM pWParam, LPARAM pLParam);
+	static LRESULT CALLBACK windowProcedure(HWND pHwnd, UINT pMessage, WPARAM pWParam, LPARAM pLParam);
 	
 public:
 
-	static Win32Window * Instance();
-	static Win32Window * Instance(HINSTANCE pHInstance, int pCmdShow);
+	static Win32Window * instance();
+	static Win32Window * instance(HINSTANCE pHInstance, int pCmdShow);
 
-	bool WindowEvents();
+	bool windowEvents();
 
-	inline int GetWidth()
+	int getWidth() const
 	{
-		return width;
+		return mWidth;
 	}
 
-	inline int GetHeight()
+	int getHeight() const
 	{
-		return height;
+		return mHeight;
 	}
 
-	inline HWND GetHWND()
+	HWND getHwnd() const
 	{
-		return mHWND;
+		return mHwnd;
 	}
 
-	inline void Run()
+	void run() const
 	{
-		ShowWindow(mHWND, mCmdShow);
+		ShowWindow(mHwnd, mCmdShow);
 	}
 	
-	~Win32Window();
+	~Win32Window() = default;
+
+	Win32Window(const Win32Window&) = delete;
+	Win32Window(Win32Window &&) = delete;
+	Win32Window & operator= (const Win32Window &) = delete;
+	Win32Window & operator= (Win32Window &&) = delete;
 };
 

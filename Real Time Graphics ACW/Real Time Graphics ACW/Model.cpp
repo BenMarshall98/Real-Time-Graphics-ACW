@@ -1,8 +1,9 @@
 #include "Model.h"
 #include "DX11Render.h"
 
-Model::Model(std::vector<DirectX::XMFLOAT3> pPositions, std::vector<DirectX::XMFLOAT3> pNormals,
-	std::vector<DirectX::XMFLOAT2> pTexCoords, std::vector<unsigned int> pIndices) : mIndicesSize(pIndices.size())//mPositions(pPositions), mNormals(pNormals), mTexCoords(pTexCoords), mIndices(pIndices)
+Model::Model(const std::vector<DirectX::XMFLOAT3> & pPositions, const std::vector<DirectX::XMFLOAT3> & pNormals,
+	const std::vector<DirectX::XMFLOAT2> & pTexCoords, const std::vector<DirectX::XMFLOAT3> & pTangents,
+	const std::vector<DirectX::XMFLOAT3> & pBiTangents, const std::vector<WORD> & pIndices) : mIndicesSize(pIndices.size())//mPositions(pPositions), mNormals(pNormals), mTexCoords(pTexCoords), mIndices(pIndices)
 {
 	ID3D11Device * device = DX11Render::Instance()->GetDevice();
 
@@ -21,36 +22,50 @@ Model::Model(std::vector<DirectX::XMFLOAT3> pPositions, std::vector<DirectX::XMF
 	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * pPositions.size();
 	initData.pSysMem = pPositions.data();
 
-	device->CreateBuffer(&bufferDesc, &initData, &positionBuffer);
+	device->CreateBuffer(&bufferDesc, &initData, &mPositionBuffer);
 
 	//Create Normal Buffer
 	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * pNormals.size();
 	initData.pSysMem = pNormals.data();
 
-	device->CreateBuffer(&bufferDesc, &initData, &normalBuffer);
+	device->CreateBuffer(&bufferDesc, &initData, &mNormalBuffer);
 
-	////Create TexCoord Buffer
-	//bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT2) * mTexCoords.size();
-	//initData.pSysMem = mTexCoords.data();
+	//Create TexCoord Buffer
+	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT2) * pTexCoords.size();
+	initData.pSysMem = pTexCoords.data();
 
-	//device->CreateBuffer(&bufferDesc, &initData, &texCoordBuffer);
+	device->CreateBuffer(&bufferDesc, &initData, &mTexCoordBuffer);
+
+	//Create Tangent Buffer
+	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * pTangents.size();
+	initData.pSysMem = pTangents.data();
+
+	device->CreateBuffer(&bufferDesc, &initData, &mTangentBuffer);
+
+	//Create BiTangent Buffer
+	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * pBiTangents.size();
+	initData.pSysMem = pBiTangents.data();
+
+	device->CreateBuffer(&bufferDesc, &initData, &mBiTangentBuffer);
 
 	//Create Index Buffer
-	bufferDesc.ByteWidth = sizeof(unsigned int) * pIndices.size();
+	bufferDesc.ByteWidth = sizeof(WORD) * pIndices.size();
 	bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	
 	ZeroMemory(&initData, sizeof(initData));
 	initData.pSysMem = pIndices.data();
 
-	device->CreateBuffer(&bufferDesc, &initData, &indicesBuffer);
+	device->CreateBuffer(&bufferDesc, &initData, &mIndicesBuffer);
 }
 
 Model::~Model()
 {
-	positionBuffer->Release();
-	normalBuffer->Release();
-	texCoordBuffer->Release();
-	indicesBuffer->Release();
+	mPositionBuffer->Release();
+	mNormalBuffer->Release();
+	mTexCoordBuffer->Release();
+	mTangentBuffer->Release();
+	mBiTangentBuffer->Release();
+	mIndicesBuffer->Release();
 }
 
 void Model::Render()
@@ -63,7 +78,7 @@ void Model::Render()
 	{
 		ID3D11Buffer * bufferArray[2] =
 		{
-			positionBuffer, normalBuffer//, texCoordBuffer
+			mPositionBuffer, mNormalBuffer//, texCoordBuffer
 		};
 
 		UINT strideArray[2] =
@@ -77,7 +92,7 @@ void Model::Render()
 		};
 
 		deviceContext->IASetVertexBuffers(0, 2, bufferArray, strideArray, offsetArray);
-		deviceContext->IASetIndexBuffer(indicesBuffer, DXGI_FORMAT_R32_UINT, 0);
+		deviceContext->IASetIndexBuffer(mIndicesBuffer, DXGI_FORMAT_R16_UINT, 0);
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		lastModel = this;
 	}

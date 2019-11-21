@@ -8,15 +8,6 @@
 
 int WINAPI wWinMain(HINSTANCE pHInstance, HINSTANCE pPrevInstance, LPWSTR pCmdLine, int pCmdShow)
 {
-	std::ifstream fin("Configuration.txt");
-
-	std::shared_ptr<IdentityNode> node(new IdentityNode());
-
-	fin >> *node;
-	fin.close();
-
-	node.reset();
-	
 	Win32Window::Instance(pHInstance, pCmdShow)->Run();
 	DX11Render::Instance();
 

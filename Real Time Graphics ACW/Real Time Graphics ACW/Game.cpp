@@ -21,7 +21,7 @@ Game::Game()
 	HRESULT hr;
 	shader = new Shader(L"VertexShader.hlsl", L"PixelShader.hlsl");
 
-	model = ModelLoader::CreateSphere(1, 20);
+	model = ModelLoader::LoadModelFromFile("sphere.obj");
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));

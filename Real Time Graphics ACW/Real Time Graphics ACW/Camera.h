@@ -4,28 +4,31 @@
 
 class Camera
 {
-private:
-	DirectX::XMMATRIX mViewMatrix;
-	DirectX::XMVECTOR mUpDirection;
-	DirectX::XMVECTOR mEyePosition;
-	DirectX::XMVECTOR mTargetPosition;
-	double angleSpeed = 360.0f;
-	float movementSpeed = 1000.0f;
+	DirectX::XMFLOAT4X4 mViewMatrix;
+	DirectX::XMFLOAT3 mUpDirection;
+	DirectX::XMFLOAT3 mEyePosition;
+	DirectX::XMFLOAT3 mTargetPosition;
+	float mAngleSpeed = 360.0f;
+	float mMovementSpeed = 1000.0f;
 	
 public:
-	Camera(DirectX::XMVECTOR pEyePosition, DirectX::XMVECTOR pUpDirection,
-		DirectX::XMVECTOR pTargetPosition);
-	~Camera();
+	Camera(const DirectX::XMFLOAT3 & pEyePosition, const DirectX::XMFLOAT3 & pUpDirection,
+		const DirectX::XMFLOAT3 & pTargetPosition);
+	~Camera() = default;
+	Camera(const Camera&) = delete;
+	Camera(Camera &&) = delete;
+	Camera & operator= (const Camera &) = delete;
+	Camera & operator= (Camera &&) = delete;
 
-	void RotateLeftRight(bool left = true);
-	void RotateUpDown(bool up = true);
-	void PanLeftRight(bool left = true);
-	void PanForwardBackward(bool forward = true);
-	void PanUpDown(bool up = true);
+	void rotateLeftRight(bool pLeft = true);
+	void rotateUpDown(bool pUp = true);
+	void panLeftRight(bool pLeft = true);
+	void panForwardBackward(bool pForward = true);
+	void panUpDown(bool pUp = true);
 
-	void Update();
+	void update();
 
-	inline DirectX::XMMATRIX GetViewMatrix()
+	DirectX::XMFLOAT4X4 getViewMatrix() const
 	{
 		return mViewMatrix;
 	}

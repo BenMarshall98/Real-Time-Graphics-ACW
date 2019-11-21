@@ -92,7 +92,7 @@ void Game::Run()
 		//
 		CameraBuffer cb;
 		//cb.mWorld = XMMatrixTranspose(g_World);
-		cb.mView = XMMatrixTranspose(camera->GetViewMatrix());
+		cb.mView = XMMatrixTranspose(camera->getViewMatrix());
 		cb.mProjection = XMMatrixTranspose(g_Projection);
 		deviceContext->UpdateSubresource(cameraBuffer, 0, nullptr, &cb, 0, 0);
 

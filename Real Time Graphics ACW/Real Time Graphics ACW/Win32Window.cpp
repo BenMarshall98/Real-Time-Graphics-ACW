@@ -88,11 +88,11 @@ LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM 
 		case 'J':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::camera->PanLeftRight(false);
+				Game::camera->panLeftRight(false);
 			}
 			else
 			{
-				Game::camera->RotateLeftRight();
+				Game::camera->rotateLeftRight();
 			}
 			break;
 		case VK_RIGHT:
@@ -100,11 +100,11 @@ LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM 
 		case 'L':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::camera->PanLeftRight();
+				Game::camera->panLeftRight();
 			}
 			else
 			{
-				Game::camera->RotateLeftRight(false);
+				Game::camera->rotateLeftRight(false);
 			}
 			break;
 		case VK_UP:
@@ -112,11 +112,11 @@ LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM 
 		case 'I':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::camera->PanForwardBackward();
+				Game::camera->panForwardBackward();
 			}
 			else
 			{
-				Game::camera->RotateUpDown();
+				Game::camera->rotateUpDown();
 			}
 			break;
 		case VK_DOWN:
@@ -124,18 +124,18 @@ LRESULT CALLBACK Win32Window::WindowProcedure(HWND pHWND, UINT pMessage, WPARAM 
 		case 'K':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::camera->PanForwardBackward(false);
+				Game::camera->panForwardBackward(false);
 			}
 			else
 			{
-				Game::camera->RotateUpDown(false);
+				Game::camera->rotateUpDown(false);
 			}
 			break;
 		case VK_PRIOR:
-			Game::camera->PanUpDown();
+			Game::camera->panUpDown();
 			break;
 		case VK_NEXT:
-			Game::camera->PanUpDown(false);
+			Game::camera->panUpDown(false);
 			break;
 		}
 	}

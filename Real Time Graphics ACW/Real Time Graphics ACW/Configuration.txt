@@ -1,16 +1,63 @@
 Identity
 {
+	Object
+	{
+		Model: sphere.obj
+		Ambient: 0.1, 0.1, 0.1
+		Diffuse: 1.0, 1.0, 1.0
+		Specular: 1.0, 1.0, 1.0
+		Shininess: 32.0
+		NoTexture
+	}
 	Translate
 	{
-		Pos: 1, 2, 3
-		Object
+		Pos: 3.0, 0.0, 0.0
+		NoAnimation
+		Rotate
 		{
-			Model: sphere.obj
-			Ambient: 0.1, 0.1, 0.1
-			Diffuse: 1.0, 1.0, 1.0
-			Specular: 1.0, 1.0, 1.0
-			Shininess: 32.0
-			NoTexture
+			Axis: 0.0, 1.0, 0.0
+			Angle: 0.0
+			NoAnimation
+			Scale
+			{
+				Size: 0.5, 0.5, 0.5
+				NoAnimation
+				Object
+				{
+					Model: sphere.obj
+					Ambient: 0.1, 0.1, 0.1
+					Diffuse: 1.0, 1.0, 1.0
+					Specular: 1.0, 1.0, 1.0
+					Shininess: 32.0
+					NoTexture
+				}
+			}
+			Translate
+			{
+				Pos: 1.0, 0.0, 0.0
+				NoAnimation
+				Rotate
+				{
+					Axis: 0.0, 1.0, 0.0
+					Angle: 90.0
+					NoAnimation
+					Scale
+					{
+						Size: 0.25, 0.25, 0.25
+						NoAnimation
+						Object
+						{
+							Model: sphere.obj
+							Ambient: 0.1, 0.1, 0.1
+							Diffuse: 1.0, 1.0, 1.0
+							Specular: 1.0, 1.0, 1.0
+							Shininess: 32.0
+							NoTexture
+						}
+					}
+				}
+			}
 		}
 	}
+
 }

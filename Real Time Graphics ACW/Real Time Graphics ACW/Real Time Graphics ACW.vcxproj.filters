@@ -19,6 +19,9 @@
     <Filter Include="SceneGraph">
       <UniqueIdentifier>{be9e706d-b370-468c-a8fc-ca3b1228aaeb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Technique">
+      <UniqueIdentifier>{70df6ff8-86b0-4778-86a5-0b231b9c32b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -83,6 +86,36 @@
     </ClInclude>
     <ClInclude Include="TranslationNode.h">
       <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="Technique.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="GourandShading.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="PhongShading.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureMapping.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="BumpMapping.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="DisplacementMapping.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="ToonShading.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="TransparencyShading.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="EnvironmentMapping.h">
+      <Filter>Technique</Filter>
+    </ClInclude>
+    <ClInclude Include="GlowingShading.h">
+      <Filter>Technique</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +184,36 @@
     </ClCompile>
     <ClCompile Include="TranslationNode.cpp">
       <Filter>SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="Technique.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="GourandShading.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="PhongShading.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureMapping.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="BumpMapping.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="DisplacementMapping.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="ToonShading.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="TransparencyShading.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="EnvironmentMapping.cpp">
+      <Filter>Technique</Filter>
+    </ClCompile>
+    <ClCompile Include="GlowingShading.cpp">
+      <Filter>Technique</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

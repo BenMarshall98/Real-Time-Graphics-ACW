@@ -125,35 +125,50 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BumpMapping.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DDSTextureLoader.h" />
     <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="DisplacementMapping.h" />
     <ClInclude Include="DX11Render.h" />
+    <ClInclude Include="EnvironmentMapping.h" />
     <ClInclude Include="Framebuffer.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GlowingShading.h" />
+    <ClInclude Include="GourandShading.h" />
     <ClInclude Include="IdentityNode.h" />
     <ClInclude Include="LightingManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectNode.h" />
+    <ClInclude Include="PhongShading.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RotationNode.h" />
     <ClInclude Include="ScaleNode.h" />
     <ClInclude Include="SceneGraphNode.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SpotLight.h" />
+    <ClInclude Include="Technique.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureMapping.h" />
+    <ClInclude Include="ToonShading.h" />
     <ClInclude Include="TranslationNode.h" />
+    <ClInclude Include="TransparencyShading.h" />
     <ClInclude Include="Win32Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BumpMapping.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DDSTextureLoader.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
+    <ClCompile Include="DisplacementMapping.cpp" />
     <ClCompile Include="DX11Render.cpp" />
+    <ClCompile Include="EnvironmentMapping.cpp" />
     <ClCompile Include="Framebuffer.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GlowingShading.cpp" />
+    <ClCompile Include="GourandShading.cpp" />
     <ClCompile Include="IdentityNode.cpp" />
     <ClCompile Include="LightingManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -161,14 +176,19 @@
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectNode.cpp" />
+    <ClCompile Include="PhongShading.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="RotationNode.cpp" />
     <ClCompile Include="ScaleNode.cpp" />
     <ClCompile Include="SceneGraphNode.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SpotLight.cpp" />
+    <ClCompile Include="Technique.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureMapping.cpp" />
+    <ClCompile Include="ToonShading.cpp" />
     <ClCompile Include="TranslationNode.cpp" />
+    <ClCompile Include="TransparencyShading.cpp" />
     <ClCompile Include="Win32Window.cpp" />
   </ItemGroup>
   <ItemGroup>

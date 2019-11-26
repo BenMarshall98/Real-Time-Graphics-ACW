@@ -22,6 +22,9 @@
     <Filter Include="Technique">
       <UniqueIdentifier>{70df6ff8-86b0-4778-86a5-0b231b9c32b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\GourandShading">
+      <UniqueIdentifier>{2e165121-fd2b-4605-ad4c-3b9d09ff144b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -225,6 +228,12 @@
     </FxCompile>
     <FxCompile Include="PixelShader.hlsl">
       <Filter>Resource Files</Filter>
+    </FxCompile>
+    <FxCompile Include="GourandFragmentShader.hlsl">
+      <Filter>Resource Files\GourandShading</Filter>
+    </FxCompile>
+    <FxCompile Include="GourandVertexShader.hlsl">
+      <Filter>Resource Files\GourandShading</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

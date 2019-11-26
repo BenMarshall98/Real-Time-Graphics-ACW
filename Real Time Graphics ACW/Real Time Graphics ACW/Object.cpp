@@ -3,6 +3,7 @@
 #include <string>
 #include "ModelLoader.h"
 #include "DX11Render.h"
+#include "GourandShading.h"
 
 Object::Object(const std::string & pModelFile, const DirectX::XMFLOAT3 & pAmbient,
 	const DirectX::XMFLOAT3 & pDiffuse, const DirectX::XMFLOAT3 & pSpecular,
@@ -17,6 +18,10 @@ Object::Object() : mModel(nullptr), mAmbient(), mDiffuse(), mSpecular(), mShinin
 
 void Object::render()
 {
+	static auto shader = new GourandShading();
+
+	shader->render(this, true);
+	
 	const auto matrix = XMLoadFloat4x4(&mMatrix);
 	
 	ModelBuffer mb;

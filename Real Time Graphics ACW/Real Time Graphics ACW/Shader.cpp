@@ -33,7 +33,7 @@ Shader::Shader(const std::wstring & pVertexFile, const std::wstring & pFragmentF
 	}
 
 	ID3DBlob * gsBlob = nullptr;
-	if (pGeometryFile.empty())
+	if (!pGeometryFile.empty())
 	{
 		result = compileShaderFromFile(pGeometryFile, "gs_4_0", &gsBlob);
 		if (FAILED(result))

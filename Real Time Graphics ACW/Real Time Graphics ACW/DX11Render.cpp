@@ -131,6 +131,22 @@ Dx11Render::Dx11Render() : mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullpt
 
 	result = mDevice->CreateRasterizerState(&rasterizerDesc, &mRasterizerState);
 	mDeviceContext->RSSetState(mRasterizerState);
+
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof bd);
+
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = sizeof(ModelBuffer);
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bd.CPUAccessFlags = 0;
+
+	result = mDevice->CreateBuffer(&bd, nullptr, &mModelBuffer);
+}
+
+void Dx11Render::useModelBuffer(const ModelBuffer& pModelBuffer) const
+{
+	mDeviceContext->UpdateSubresource(mModelBuffer, 0, nullptr, &pModelBuffer, 0, 0);
+	mDeviceContext->VSSetConstantBuffers(1, 1, &mModelBuffer);
 }
 
 void Dx11Render::resize(int pWidth, int pHeight)

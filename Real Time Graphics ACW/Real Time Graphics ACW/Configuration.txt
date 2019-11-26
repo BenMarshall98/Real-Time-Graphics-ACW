@@ -4,52 +4,46 @@ Identity
 	{
 		Model: sphere.obj
 		Ambient: 0.1, 0.1, 0.1
-		Diffuse: 1.0, 1.0, 1.0
+		Diffuse: 1.0, 0.0, 0.0
 		Specular: 1.0, 1.0, 1.0
 		Shininess: 32.0
 		NoTexture
 	}
-	Translate
+	Rotation
 	{
-		Pos: 3.0, 0.0, 0.0
-		NoAnimation
-		Rotate
+		Axis: 0.0, 1.0, 0.0
+		Angle: 0.0
+		Translate
 		{
-			Axis: 0.0, 1.0, 0.0
-			Angle: 0.0
-			NoAnimation
+			Pos: 4.0, 0.0, 0.0
 			Scale
 			{
 				Size: 0.5, 0.5, 0.5
-				NoAnimation
 				Object
 				{
 					Model: sphere.obj
 					Ambient: 0.1, 0.1, 0.1
-					Diffuse: 1.0, 1.0, 1.0
+					Diffuse: 0.0, 1.0, 0.0
 					Specular: 1.0, 1.0, 1.0
 					Shininess: 32.0
 					NoTexture
 				}
 			}
-			Translate
+			Rotation
 			{
-				Pos: 1.0, 0.0, 0.0
-				NoAnimation
-				Rotate
+				Axis: 0.0, 1.0, 0.0
+				Angle: 90.0
+				Translate
 				{
-					Axis: 0.0, 1.0, 0.0
-					Angle: 90.0
-					NoAnimation
+					Pos: 2.0, 0.0, 0.0
 					Scale
 					{
 						Size: 0.25, 0.25, 0.25
-						NoAnimation
 						Object
 						{
 							Model: sphere.obj
 							Ambient: 0.1, 0.1, 0.1
-							Diffuse: 1.0, 1.0, 1.0
+							Diffuse: 0.0, 0.0, 1.0
 							Specular: 1.0, 1.0, 1.0
 							Shininess: 32.0
 							NoTexture

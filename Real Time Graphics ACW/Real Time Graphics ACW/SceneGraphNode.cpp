@@ -23,6 +23,25 @@ SceneGraphNode::~SceneGraphNode()
 	mChildren.clear();
 }
 
+void SceneGraphNode::update(DirectX::XMFLOAT4X4 pMatrix)
+{
+	DirectX::XMFLOAT4X4 matrix;
+	XMStoreFloat4x4(&matrix, DirectX::XMMatrixMultiply(DirectX::XMLoadFloat4x4(&mMatrix), XMLoadFloat4x4(&pMatrix)));
+
+	for (const auto& child : mChildren)
+	{
+		child->update(matrix);
+	}
+}
+
+void SceneGraphNode::render()
+{
+	for (const auto& child : mChildren)
+	{
+		child->render();
+	}
+}
+
 std::istream& operator>>(std::istream & pIn, SceneGraphNode & pNode)
 {
 	char c;

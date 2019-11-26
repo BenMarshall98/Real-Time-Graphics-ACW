@@ -11,7 +11,6 @@ class SceneGraphNode
 protected:
 	DirectX::XMFLOAT4X4 mMatrix;
 	
-	
 public:
 	explicit SceneGraphNode(const DirectX::XMFLOAT4X4 & pMatrix);
 	SceneGraphNode();
@@ -26,6 +25,10 @@ public:
 	{
 		mChildren.push_back(pChild);
 	}
+
+	virtual void update(DirectX::XMFLOAT4X4 pMatrix);
+	
+	virtual void render();
 	
 	virtual void read(std::istream & pIn) = 0;
 };

@@ -1,18 +1,35 @@
 #include "Object.h"
 
 #include <string>
-
-//TODO: look at model
+#include "ModelLoader.h"
+#include "DX11Render.h"
 
 Object::Object(const std::string & pModelFile, const DirectX::XMFLOAT3 & pAmbient,
 	const DirectX::XMFLOAT3 & pDiffuse, const DirectX::XMFLOAT3 & pSpecular,
 	const float & pShininess) :
-	mModel(nullptr), mAmbient(pAmbient), mDiffuse(pDiffuse), mSpecular(pSpecular), mShininess(pShininess)
+	mModel(ModelLoader::loadModelFromFile(pModelFile)), mMatrix(), mAmbient(pAmbient), mDiffuse(pDiffuse), mSpecular(pSpecular), mShininess(pShininess)
 {
 }
 
 Object::Object() : mModel(nullptr), mAmbient(), mDiffuse(), mSpecular(), mShininess()
 {
+}
+
+void Object::render()
+{
+	const auto matrix = XMLoadFloat4x4(&mMatrix);
+	
+	ModelBuffer mb;
+	mb.mModel = XMMatrixTranspose(matrix);
+	mb.mModelInverse = XMMatrixInverse(nullptr, matrix);
+	mb.mColor = XMLoadFloat3(&mDiffuse);
+
+	Dx11Render::instance()->useModelBuffer(mb);
+
+	if (mModel)
+	{
+		mModel->render();
+	}
 }
 
 std::istream& operator>>(std::istream& pIn, Object & pObject)
@@ -22,7 +39,7 @@ std::istream& operator>>(std::istream& pIn, Object & pObject)
 
 	std::string modelFile;
 	pIn >> s >> modelFile;
-	//TODO: look at model
+	pObject.setModel(ModelLoader::loadModelFromFile(modelFile));
 
 	float x, y, z;
 	pIn >> s >> x >> c >> y >> c >> z;

@@ -1,4 +1,5 @@
 #pragma once
+
 #include <DirectXMath.h>
 #include "Model.h"
 #include <memory>
@@ -6,6 +7,7 @@
 class Object
 {
 	std::unique_ptr<Model> mModel;
+	DirectX::XMFLOAT4X4 mMatrix;
 	DirectX::XMFLOAT3 mAmbient;
 	DirectX::XMFLOAT3 mDiffuse;
 	DirectX::XMFLOAT3 mSpecular;
@@ -42,6 +44,12 @@ public:
 	{
 		mShininess = pShininess;
 	}
+
+	void setMatrix(const DirectX::XMFLOAT4X4 & pMatrix)
+	{
+		mMatrix = pMatrix;
+	}
+	void render();
 };
 
 std::istream& operator>>(std::istream& pIn, Object & pObject);

@@ -10,6 +10,8 @@
 #include "ModelLoader.h"
 
 #include <string>
+#include "IdentityNode.h"
+#include <fstream>
 
 double Game::mDt = 0.0f;
 Camera * Game::mCamera = nullptr;
@@ -20,7 +22,16 @@ Game::Game()
 
 	mShader = new Shader(L"VertexShader.hlsl", L"PixelShader.hlsl");
 
-	mModel = ModelLoader::loadModelFromFile("sphere.obj");
+	mNode = std::make_unique<IdentityNode>();
+
+	std::ifstream in("Configuration.txt");
+
+	if (in.good())
+	{
+		in >> *mNode;
+	}
+
+	in.close();
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
@@ -33,12 +44,8 @@ Game::Game()
 	auto hr = device->CreateBuffer(&bd, nullptr, &mCameraBuffer);
 	if (FAILED(hr))
 	{
-		
+
 	}
-
-	bd.ByteWidth = sizeof(ModelBuffer);
-
-	hr = device->CreateBuffer(&bd, nullptr, &mModelBuffer);
 
 	// Initialize the world matrix
 	mWorld = DirectX::XMMatrixIdentity();
@@ -93,49 +100,14 @@ void Game::run()
 		cb.mProjection = XMMatrixTranspose(mProjection);
 		deviceContext->UpdateSubresource(mCameraBuffer, 0, nullptr, &cb, 0, 0);
 
-		//
-		// Renders a triangle
-		//
 		deviceContext->VSSetConstantBuffers(0, 1, &mCameraBuffer);
 
-		auto transSun = DirectX::XMMatrixTranslation(0, 0, 10);
-		auto rotSun = DirectX::XMMatrixRotationY(mDt2);
-		mWorld = rotSun * transSun;
-
-		ModelBuffer mb;
-		mb.mModel = XMMatrixTranspose(mWorld);
-		mb.mModelInverse = XMMatrixInverse(nullptr, mWorld);
-		mb.mColor = DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
-		deviceContext->UpdateSubresource(mModelBuffer, 0, nullptr, &mb, 0, 0);
-		deviceContext->VSSetConstantBuffers(1, 1, &mModelBuffer);
+		DirectX::XMFLOAT4X4 world;
+		XMStoreFloat4x4(&world, DirectX::XMMatrixIdentity());
 		
-		mModel->render();
-
-		auto transEarth = DirectX::XMMatrixTranslation(15, 0, 0);
-		auto scaleEarth = DirectX::XMMatrixScaling(0.5, 0.5, 0.5);
-		auto rotEarth = DirectX::XMMatrixRotationY(mDt2 * 2);
-		mWorld = transEarth * rotEarth * scaleEarth * transSun;
-
-		mb.mModel = XMMatrixTranspose(mWorld);
-		mb.mModelInverse = XMMatrixInverse(nullptr, mWorld);
-		mb.mColor = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
-		deviceContext->UpdateSubresource(mModelBuffer, 0, nullptr, &mb, 0, 0);
-		deviceContext->VSSetConstantBuffers(1, 1, &mModelBuffer);
-
-		mModel->render();
-
-		auto transMoon = DirectX::XMMatrixTranslation(-5, 0, 0);
-		auto scaleMoon = DirectX::XMMatrixScaling(0.5, 0.5, 0.5);
-		auto rotMoon = DirectX::XMMatrixRotationY(mDt2 * 3);
-		mWorld = transMoon * rotMoon * scaleMoon * transEarth * rotEarth * scaleEarth * transSun;
-
-		mb.mModel = XMMatrixTranspose(mWorld);
-		mb.mModelInverse = XMMatrixInverse(nullptr, mWorld);
-		mb.mColor = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-		deviceContext->UpdateSubresource(mModelBuffer, 0, nullptr, &mb, 0, 0);
-		deviceContext->VSSetConstantBuffers(1, 1, &mModelBuffer);
-
-		mModel->render();
+		mNode->update(world);
+		mNode->render();
+		
 		//
 		// Present our back buffer to our front buffer
 		//

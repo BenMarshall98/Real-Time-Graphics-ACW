@@ -1,11 +1,19 @@
 #include "Texture.h"
 #include "DX11Render.h"
 #include "DDSTextureLoader.h"
+#include <codecvt>
 
-Texture::Texture(const std::wstring & pTextureFile)
+bool Texture::loadTexture(const std::string & pTextureFile)
 {
+	//TODO: Check if there is a better way
+	const auto temp = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(pTextureFile);
 	const auto device = Dx11Render::instance()->getDevice();
-	auto result = DirectX::CreateDDSTextureFromFile(device, pTextureFile.c_str(), nullptr, &mTexture);
+	auto result = DirectX::CreateDDSTextureFromFile(device, temp.c_str(), nullptr, &mTexture);
+
+	if (FAILED(result))
+	{
+		return false;
+	}
 
 	D3D11_SAMPLER_DESC desc;
 	ZeroMemory(&desc, sizeof desc);
@@ -16,12 +24,26 @@ Texture::Texture(const std::wstring & pTextureFile)
 	desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 
 	result = device->CreateSamplerState(&desc, &mSampler);
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+	
+	return true;
 }
 
 Texture::~Texture()
 {
-	mTexture->Release();
-	mSampler->Release();
+	if (mTexture)
+	{
+		mTexture->Release();
+	}
+
+	if (mSampler)
+	{
+		mSampler->Release();
+	}
 }
 
 void Texture::use() const

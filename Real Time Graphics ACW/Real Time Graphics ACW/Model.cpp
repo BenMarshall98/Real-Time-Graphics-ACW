@@ -1,10 +1,12 @@
 #include "Model.h"
 #include "DX11Render.h"
 
-Model::Model(const std::vector<DirectX::XMFLOAT3> & pPositions, const std::vector<DirectX::XMFLOAT3> & pNormals,
+bool Model::loadModel(const std::vector<DirectX::XMFLOAT3> & pPositions, const std::vector<DirectX::XMFLOAT3> & pNormals,
 	const std::vector<DirectX::XMFLOAT2> & pTexCoords, const std::vector<DirectX::XMFLOAT3> & pTangents,
-	const std::vector<DirectX::XMFLOAT3> & pBiTangents, const std::vector<WORD> & pIndices) : mIndicesSize(pIndices.size())//mPositions(pPositions), mNormals(pNormals), mTexCoords(pTexCoords), mIndices(pIndices)
+	const std::vector<DirectX::XMFLOAT3> & pBiTangents, const std::vector<WORD> & pIndices)
 {
+	mIndicesSize = pIndices.size();
+	
 	auto device = Dx11Render::instance()->getDevice();
 
 	//None changing data for buffers;
@@ -22,31 +24,61 @@ Model::Model(const std::vector<DirectX::XMFLOAT3> & pPositions, const std::vecto
 	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * pPositions.size();
 	initData.pSysMem = pPositions.data();
 
-	device->CreateBuffer(&bufferDesc, &initData, &mPositionBuffer);
+	auto result = device->CreateBuffer(&bufferDesc, &initData, &mPositionBuffer);
+
+	if (FAILED(result))
+	{
+		//TODO: Log error
+		return false;
+	}
 
 	//Create Normal Buffer
 	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * pNormals.size();
 	initData.pSysMem = pNormals.data();
 
-	device->CreateBuffer(&bufferDesc, &initData, &mNormalBuffer);
+	result = device->CreateBuffer(&bufferDesc, &initData, &mNormalBuffer);
+
+	if (FAILED(result))
+	{
+		//TODO: Log error
+		return false;
+	}
 
 	//Create TexCoord Buffer
 	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT2) * pTexCoords.size();
 	initData.pSysMem = pTexCoords.data();
 
-	device->CreateBuffer(&bufferDesc, &initData, &mTexCoordBuffer);
+	result = device->CreateBuffer(&bufferDesc, &initData, &mTexCoordBuffer);
+
+	if (FAILED(result))
+	{
+		//TODO: Log error
+		return false;
+	}
 
 	//Create Tangent Buffer
 	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * pTangents.size();
 	initData.pSysMem = pTangents.data();
 
-	device->CreateBuffer(&bufferDesc, &initData, &mTangentBuffer);
+	result = device->CreateBuffer(&bufferDesc, &initData, &mTangentBuffer);
+
+	if (FAILED(result))
+	{
+		//TODO: Log error
+		return false;
+	}
 
 	//Create BiTangent Buffer
 	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * pBiTangents.size();
 	initData.pSysMem = pBiTangents.data();
 
-	device->CreateBuffer(&bufferDesc, &initData, &mBiTangentBuffer);
+	result = device->CreateBuffer(&bufferDesc, &initData, &mBiTangentBuffer);
+
+	if (FAILED(result))
+	{
+		//TODO: Log error
+		return false;
+	}
 
 	//Create Index Buffer
 	bufferDesc.ByteWidth = sizeof(WORD) * pIndices.size();
@@ -55,17 +87,46 @@ Model::Model(const std::vector<DirectX::XMFLOAT3> & pPositions, const std::vecto
 	ZeroMemory(&initData, sizeof(initData));
 	initData.pSysMem = pIndices.data();
 
-	device->CreateBuffer(&bufferDesc, &initData, &mIndicesBuffer);
+	result = device->CreateBuffer(&bufferDesc, &initData, &mIndicesBuffer);
+
+	if (FAILED(result))
+	{
+		//TODO: Log error
+		return false;
+	}
 }
 
 Model::~Model()
 {
-	mPositionBuffer->Release();
-	mNormalBuffer->Release();
-	mTexCoordBuffer->Release();
-	mTangentBuffer->Release();
-	mBiTangentBuffer->Release();
-	mIndicesBuffer->Release();
+	if (mPositionBuffer)
+	{
+		mPositionBuffer->Release();
+	}
+
+	if (mNormalBuffer)
+	{
+		mNormalBuffer->Release();
+	}
+
+	if (mTexCoordBuffer)
+	{
+		mTexCoordBuffer->Release();
+	}
+	
+	if (mTangentBuffer)
+	{
+		mTangentBuffer->Release();
+	}
+
+	if (mBiTangentBuffer)
+	{
+		mBiTangentBuffer->Release();
+	}
+
+	if (mIndicesBuffer)
+	{
+		mIndicesBuffer->Release();
+	}
 }
 
 void Model::render()

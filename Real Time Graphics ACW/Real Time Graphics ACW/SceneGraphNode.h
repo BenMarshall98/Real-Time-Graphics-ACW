@@ -26,6 +26,8 @@ public:
 	{
 		mChildren.push_back(pChild);
 	}
+
+	void update(DirectX::XMFLOAT4X4 & pWorldMatrix);
 	
 	virtual void read(std::istream & pIn) = 0;
 };

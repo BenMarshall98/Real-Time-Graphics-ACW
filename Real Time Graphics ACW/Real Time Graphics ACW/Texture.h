@@ -4,15 +4,16 @@
 
 class Texture
 {
-	ID3D11ShaderResourceView * mTexture;
-	ID3D11SamplerState * mSampler;
+	ID3D11ShaderResourceView * mTexture = nullptr;
+	ID3D11SamplerState * mSampler = nullptr;
 	
 public:
-	Texture(const std::wstring & pTextureFile);
+	Texture() = default;
 	~Texture();
 	Texture(const Texture & pTexture) = delete;
 	Texture & operator= (const Texture & pTexture) = delete;
 
+	bool loadTexture(const std::string & pTextureFile);
 	void use() const;
 };
 

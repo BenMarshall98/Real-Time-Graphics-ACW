@@ -3,7 +3,6 @@
 #include "ModelLoader.h"
 
 #include <DirectXMath.h>
-#include <cmath>
 #include <vector>
 
 #include "assimp/scene.h"
@@ -13,11 +12,17 @@
 
 #define PI 3.14159265358979323846
 
-class Model * ModelLoader::loadModelFromFile(const std::string& pModelFile)
+class std::shared_ptr<Model> ModelLoader::loadModelFromFile(const std::string& pModelFile)
 {
 	Assimp::Importer importer;
 	const auto scene = importer.ReadFile(pModelFile,
 		aiProcess_Triangulate | aiProcess_CalcTangentSpace);
+
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+	{
+		//TODO: Log error
+		return nullptr;
+	}
 
 	const auto mesh = scene->mMeshes[0];
 
@@ -76,5 +81,12 @@ class Model * ModelLoader::loadModelFromFile(const std::string& pModelFile)
 		}
 	}
 
-	return new Model(vertex, normals, texCoords, tangent, biTangent, indices);
+	auto model = std::make_shared<Model>();
+
+	if (!model->loadModel(vertex, normals, texCoords, tangent, biTangent, indices))
+	{
+		model.reset();
+	}
+
+	return model;
 }

@@ -5,6 +5,7 @@
 #include "Model.h"
 #include "Camera.h"
 #include "Shader.h"
+#include "SceneGraphNode.h"
 
 struct CameraBuffer
 {
@@ -26,12 +27,12 @@ class Game
 	ID3D11Buffer * mModelBuffer = nullptr;
 	DirectX::XMMATRIX mWorld;
 	DirectX::XMMATRIX mProjection;
+	std::shared_ptr<SceneGraphNode> node;
 	double mFreq;
 	double mDt2 = 0.0;
 	__int64 mStart;
 	__int64 mStop;
-
-	Model * mModel;
+	
 	Shader * mShader;
 public:
 	Game();

@@ -5,7 +5,8 @@
 
 class Object
 {
-	std::unique_ptr<Model> mModel;
+	std::shared_ptr<Model> mModel;
+	DirectX::XMFLOAT4X4 mMatrix;
 	DirectX::XMFLOAT3 mAmbient;
 	DirectX::XMFLOAT3 mDiffuse;
 	DirectX::XMFLOAT3 mSpecular;
@@ -18,9 +19,10 @@ public:
 	Object();
 	~Object() = default;
 
-	void setModel(Model * pModel)
+	void setModel(const std::shared_ptr<Model> & pModel)
 	{
-		mModel.reset(pModel);
+		mModel.reset();
+		mModel = pModel;
 	}
 
 	void setAmbient(const DirectX::XMFLOAT3 & pAmbient)

@@ -134,6 +134,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectNode.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="RotationNode.h" />
     <ClInclude Include="ScaleNode.h" />
     <ClInclude Include="SceneGraphNode.h" />
@@ -158,6 +159,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectNode.cpp" />
     <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="RotationNode.cpp" />
     <ClCompile Include="ScaleNode.cpp" />
     <ClCompile Include="SceneGraphNode.cpp" />

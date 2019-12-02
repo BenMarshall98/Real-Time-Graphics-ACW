@@ -1,17 +1,17 @@
 #include "Object.h"
 
 #include <string>
-
-//TODO: look at model
+#include "ModelLoader.h"
+#include "ResourceManager.h"
 
 Object::Object(const std::string & pModelFile, const DirectX::XMFLOAT3 & pAmbient,
 	const DirectX::XMFLOAT3 & pDiffuse, const DirectX::XMFLOAT3 & pSpecular,
 	const float & pShininess) :
-	mModel(nullptr), mAmbient(pAmbient), mDiffuse(pDiffuse), mSpecular(pSpecular), mShininess(pShininess)
+	mModel(ResourceManager::instance()->loadModel(pModelFile)), mAmbient(pAmbient), mDiffuse(pDiffuse), mSpecular(pSpecular), mShininess(pShininess)
 {
 }
 
-Object::Object() : mModel(nullptr), mAmbient(), mDiffuse(), mSpecular(), mShininess()
+Object::Object() : mModel(nullptr), mMatrix(), mAmbient(), mDiffuse(), mSpecular(), mShininess()
 {
 }
 
@@ -22,7 +22,7 @@ std::istream& operator>>(std::istream& pIn, Object & pObject)
 
 	std::string modelFile;
 	pIn >> s >> modelFile;
-	//TODO: look at model
+	pObject.setModel(ResourceManager::instance()->loadModel(modelFile));
 
 	float x, y, z;
 	pIn >> s >> x >> c >> y >> c >> z;

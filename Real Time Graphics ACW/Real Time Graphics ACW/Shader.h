@@ -13,6 +13,7 @@ class Shader
 	static HRESULT compileShaderFromFile(const std::wstring & pFileName, const char * pTarget, ID3DBlob** pShaderBlob);
 	
 public:
+	Shader() = default;
 	Shader(const std::wstring & pVertexFile, const std::wstring & pFragmentFile, const std::wstring & pGeometryFile = L"");
 	~Shader() = default;
 

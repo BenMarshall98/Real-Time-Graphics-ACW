@@ -6,11 +6,11 @@
 class Technique
 {
 protected:
-	Shader * mShader;
-	Shader * mDeferredShader;
+	std::shared_ptr<Shader> mShader;
+	std::shared_ptr<Shader> mDeferredShader;
 	
 public:
-	Technique(Shader * pShader, Shader * pDeferredShader);
+	Technique(std::shared_ptr<Shader> pShader, std::shared_ptr<Shader> pDeferredShader);
 	~Technique();
 
 	virtual void render(Object * pObject, bool pDeferred) = 0;

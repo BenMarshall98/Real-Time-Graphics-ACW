@@ -20,8 +20,6 @@ Game::Game()
 {
 	auto device = Dx11Render::instance()->getDevice();
 
-	mShader = new Shader(L"VertexShader.hlsl", L"PixelShader.hlsl");
-
 	mNode = std::make_unique<IdentityNode>();
 
 	std::ifstream in("Configuration.txt");
@@ -72,8 +70,6 @@ void Game::run()
 	while(Win32Window::instance()->windowEvents())
 	{
 		Dx11Render::instance()->clearRenderTargetView(DirectX::Colors::MidnightBlue);
-
-		mShader->useShader();
 
 		auto deviceContext = Dx11Render::instance()->getDeviceContext();
 		// Update our time

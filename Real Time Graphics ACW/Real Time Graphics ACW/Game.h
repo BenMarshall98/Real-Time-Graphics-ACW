@@ -27,7 +27,6 @@ class Game
 	std::unique_ptr<SceneGraphNode> mNode;
 
 	Model * mModel;
-	Shader * mShader;
 public:
 	Game();
 	~Game() = default;

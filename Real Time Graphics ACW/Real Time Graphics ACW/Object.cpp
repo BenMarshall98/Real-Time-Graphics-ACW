@@ -12,7 +12,7 @@ Object::Object(const std::string & pModelFile, const DirectX::XMFLOAT3 & pAmbien
 {
 }
 
-Object::Object() : mModel(nullptr), mAmbient(), mDiffuse(), mSpecular(), mShininess()
+Object::Object() : mModel(nullptr), mMatrix(), mAmbient(), mDiffuse(), mSpecular(), mShininess()
 {
 }
 

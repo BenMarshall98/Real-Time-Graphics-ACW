@@ -1,6 +1,6 @@
 #include "Technique.h"
 
-Technique::Technique(Shader * pShader, Shader * pDeferredShader) :
+Technique::Technique(std::shared_ptr<Shader> pShader, std::shared_ptr<Shader> pDeferredShader) :
 	mShader(pShader), mDeferredShader(pDeferredShader)
 {
 }

@@ -25,6 +25,11 @@ public:
 		mModel = pModel;
 	}
 
+	void setMatrix(const DirectX::XMFLOAT4X4 & pMatrix)
+	{
+		mMatrix = pMatrix;
+	}
+
 	void setAmbient(const DirectX::XMFLOAT3 & pAmbient)
 	{
 		mAmbient = pAmbient;
@@ -44,6 +49,8 @@ public:
 	{
 		mShininess = pShininess;
 	}
+
+	void render();
 };
 
 std::istream& operator>>(std::istream& pIn, Object & pObject);

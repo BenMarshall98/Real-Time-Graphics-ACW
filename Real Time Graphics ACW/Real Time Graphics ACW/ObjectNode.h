@@ -11,4 +11,8 @@ public:
 	ObjectNode();
 	~ObjectNode();
 	void read(std::istream& pIn) override;
+
+	void update(DirectX::XMFLOAT4X4 pMatrix) override;
+
+	void render() override;
 };

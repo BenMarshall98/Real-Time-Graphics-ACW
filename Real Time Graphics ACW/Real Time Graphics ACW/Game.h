@@ -13,26 +13,20 @@ struct CameraBuffer
 	DirectX::XMMATRIX mProjection;
 };
 
-struct ModelBuffer
-{
-	DirectX::XMMATRIX mModel;
-	DirectX::XMMATRIX mModelInverse;
-	DirectX::XMFLOAT4 mColor;
-};
-
 class Game
 {
 	LARGE_INTEGER mTimer;
 	ID3D11Buffer * mCameraBuffer = nullptr;
-	ID3D11Buffer * mModelBuffer = nullptr;
 	DirectX::XMMATRIX mWorld;
 	DirectX::XMMATRIX mProjection;
-	std::shared_ptr<SceneGraphNode> node;
 	double mFreq;
 	double mDt2 = 0.0;
 	__int64 mStart;
 	__int64 mStop;
-	
+
+	std::unique_ptr<SceneGraphNode> mNode;
+
+	Model * mModel;
 	Shader * mShader;
 public:
 	Game();

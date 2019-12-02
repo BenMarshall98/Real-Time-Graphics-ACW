@@ -22,6 +22,17 @@ Game::Game()
 
 	mShader = new Shader(L"VertexShader.hlsl", L"PixelShader.hlsl");
 
+	mNode = std::make_unique<IdentityNode>();
+
+	std::ifstream in("Configuration.txt");
+
+	if (in.good())
+	{
+		in >> *mNode;
+	}
+
+	in.close();
+
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 
@@ -33,12 +44,8 @@ Game::Game()
 	auto hr = device->CreateBuffer(&bd, nullptr, &mCameraBuffer);
 	if (FAILED(hr))
 	{
-		
+
 	}
-
-	bd.ByteWidth = sizeof(ModelBuffer);
-
-	hr = device->CreateBuffer(&bd, nullptr, &mModelBuffer);
 
 	// Initialize the world matrix
 	mWorld = DirectX::XMMatrixIdentity();
@@ -51,13 +58,7 @@ Game::Game()
 	mCamera = new Camera(eye, up, at);
 
 	// Initialize the projection matrix
-	mProjection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, Win32Window::instance()->getWidth() / (float)Win32Window::instance()->getHeight(), 0.01f, 100.0f);
-
-	std::ifstream in("configuration.txt");
-
-	node = std::make_shared<IdentityNode>();
-
-	in >> *node;
+	mProjection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, Win32Window::instance()->getWidth() / (FLOAT)Win32Window::instance()->getHeight(), 0.01f, 100.0f);
 
 	QueryPerformanceFrequency(&mTimer);
 	mFreq = double(mTimer.QuadPart);
@@ -99,11 +100,14 @@ void Game::run()
 		cb.mProjection = XMMatrixTranspose(mProjection);
 		deviceContext->UpdateSubresource(mCameraBuffer, 0, nullptr, &cb, 0, 0);
 
-		//
-		// Renders a triangle
-		//
 		deviceContext->VSSetConstantBuffers(0, 1, &mCameraBuffer);
 
+		DirectX::XMFLOAT4X4 world;
+		XMStoreFloat4x4(&world, DirectX::XMMatrixIdentity());
+		
+		mNode->update(world);
+		mNode->render();
+		
 		//
 		// Present our back buffer to our front buffer
 		//

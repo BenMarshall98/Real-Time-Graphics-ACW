@@ -1,6 +1,14 @@
 #pragma once
 
 #include <d3d11_1.h>
+#include <DirectXMath.h>
+
+struct ModelBuffer
+{
+	DirectX::XMMATRIX mModel;
+	DirectX::XMMATRIX mModelInverse;
+	DirectX::XMVECTOR mColor;
+};
 
 class Dx11Render
 {
@@ -16,6 +24,8 @@ class Dx11Render
 	ID3D11RenderTargetView * mRenderTargetView;
 	ID3D11DepthStencilView * mDepthView;
 	ID3D11RasterizerState * mRasterizerState;
+
+	ID3D11Buffer * mModelBuffer = nullptr;
 
 	Dx11Render();
 	
@@ -42,6 +52,8 @@ public:
 	{
 		return mDeviceContext;
 	}
+
+	void useModelBuffer(const ModelBuffer & pModelBuffer) const;
 
 	void resize(int pWidth, int pHeight);
 	

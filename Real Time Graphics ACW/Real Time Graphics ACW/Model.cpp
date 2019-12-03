@@ -94,6 +94,8 @@ bool Model::loadModel(const std::vector<DirectX::XMFLOAT3> & pPositions, const s
 		//TODO: Log error
 		return false;
 	}
+
+	return true;
 }
 
 Model::~Model()

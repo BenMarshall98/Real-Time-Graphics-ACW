@@ -4,6 +4,7 @@
 #include "ModelLoader.h"
 #include "DX11Render.h"
 #include "GourandShading.h"
+#include "ResourceManager.h"
 
 Object::Object(const std::string & pModelFile, const DirectX::XMFLOAT3 & pAmbient,
 	const DirectX::XMFLOAT3 & pDiffuse, const DirectX::XMFLOAT3 & pSpecular,
@@ -44,7 +45,7 @@ std::istream& operator>>(std::istream& pIn, Object & pObject)
 
 	std::string modelFile;
 	pIn >> s >> modelFile;
-	pObject.setModel(ModelLoader::loadModelFromFile(modelFile));
+	pObject.setModel(ResourceManager::instance()->loadModel(modelFile));
 
 	float x, y, z;
 	pIn >> s >> x >> c >> y >> c >> z;

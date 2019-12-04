@@ -12,5 +12,5 @@ GourandShading::~GourandShading()
 void GourandShading::render(Object * pObject, bool pDeferred)
 {
 	mShader->useShader();
-	//pObject->render();
+	pObject->render();
 }

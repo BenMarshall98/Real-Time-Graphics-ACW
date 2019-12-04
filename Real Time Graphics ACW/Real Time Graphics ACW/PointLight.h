@@ -19,6 +19,6 @@ public:
 	PointLight(DirectX::XMFLOAT4 pColor, DirectX::XMFLOAT3 pDirection);
 	~PointLight() = default;
 
-	static void use(PointLight * pPointLight, ID3D11Buffer * pDeviceBuffer);
+	void use(ID3D11Buffer ** pDeviceBuffer);
 };
 

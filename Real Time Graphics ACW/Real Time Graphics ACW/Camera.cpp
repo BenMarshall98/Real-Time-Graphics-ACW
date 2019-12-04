@@ -129,6 +129,51 @@ void Camera::panUpDown(const bool pUp)
 
 void Camera::update()
 {
+	if (mRotateLeft && !mRotateRight)
+	{
+		rotateLeftRight(true);
+	}
+	else if (!mRotateLeft && mRotateRight)
+	{
+		rotateLeftRight(false);
+	}
+	
+	if (mRotateUp && !mRotateDown)
+	{
+		rotateUpDown(true);
+	}
+	else if (!mRotateUp && mRotateDown)
+	{
+		rotateUpDown(false);
+	}
+	
+	if (mPanLeft && !mPanRight)
+	{
+		panLeftRight(true);
+	}
+	else if (!mPanLeft && mPanRight)
+	{
+		panLeftRight(false);
+	}
+	
+	if (mPanUp && !mPanDown)
+	{
+		panUpDown(true);
+	}
+	else if (!mPanUp && mPanDown)
+	{
+		panUpDown(false);
+	}
+	
+	if (mPanForward && !mPanBackward)
+	{
+		panForwardBackward(true);
+	}
+	else if (!mPanForward && mPanbackward)
+	{
+		panForwardBackward(false);
+	}
+	
 	const auto targetTemp = XMLoadFloat3(&mTargetPosition);
 	const auto eyeTemp = XMLoadFloat3(&mEyePosition);
 	const auto upTemp = XMLoadFloat3(&mUpDirection);

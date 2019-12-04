@@ -19,10 +19,6 @@ Object::Object() : mModel(nullptr), mMatrix(), mAmbient(), mDiffuse(), mSpecular
 
 void Object::render()
 {
-	static auto shader = new GourandShading();
-
-	shader->render(this, true);
-	
 	const auto matrix = XMLoadFloat4x4(&mMatrix);
 	
 	ModelBuffer mb;

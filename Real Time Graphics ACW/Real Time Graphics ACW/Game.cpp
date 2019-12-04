@@ -13,6 +13,7 @@
 #include "IdentityNode.h"
 #include <fstream>
 #include "ObjectManager.h"
+#include "DirectionalLight.h"
 
 double Game::mDt = 0.0f;
 Camera * Game::mCamera = nullptr;
@@ -45,6 +46,10 @@ Game::Game()
 	{
 
 	}
+
+	bd.ByteWidth = sizeof(DirectionalLightBuffer);
+
+	hr = device->CreateBuffer(&bd, nullptr, &mDirectionLightBuffer);
 
 	// Initialize the world matrix
 	mWorld = DirectX::XMMatrixIdentity();
@@ -99,6 +104,15 @@ void Game::run()
 		deviceContext->UpdateSubresource(mCameraBuffer, 0, nullptr, &cb, 0, 0);
 
 		deviceContext->VSSetConstantBuffers(0, 1, &mCameraBuffer);
+
+		DirectionalLightBuffer db;
+
+		db.mColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+		db.mDirection = DirectX::XMFLOAT3(0.0f, 0.0f, -1.0f);
+		db.mIsUsed = true;
+
+		deviceContext->UpdateSubresource(mDirectionLightBuffer, 0, nullptr, &db, 0, 0);
+		deviceContext->PSSetConstantBuffers(0, 1, &mDirectionLightBuffer);
 
 		DirectX::XMFLOAT4X4 world;
 		XMStoreFloat4x4(&world, DirectX::XMMatrixIdentity());

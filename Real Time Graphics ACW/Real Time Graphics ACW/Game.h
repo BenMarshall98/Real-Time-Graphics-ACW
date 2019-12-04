@@ -4,8 +4,8 @@
 #include <d3d11_1.h>
 #include "Model.h"
 #include "Camera.h"
-#include "Shader.h"
 #include "SceneGraphNode.h"
+
 
 struct CameraBuffer
 {
@@ -17,6 +17,7 @@ class Game
 {
 	LARGE_INTEGER mTimer;
 	ID3D11Buffer * mCameraBuffer = nullptr;
+	ID3D11Buffer * mDirectionLightBuffer = nullptr;
 	DirectX::XMMATRIX mWorld;
 	DirectX::XMMATRIX mProjection;
 	double mFreq;

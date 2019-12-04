@@ -1,39 +1,21 @@
 #include "ObjectManager.h"
 #include "IdentityNode.h"
 #include "GourandShading.h"
+#include <fstream>
 
 ObjectManager * ObjectManager::mInstance = nullptr;
 
 ObjectManager::ObjectManager()
 {
-	mNode = std::make_unique<IdentityNode>();
-	
-	std::ifstream in("Configuration.txt");
-	
-	if (in.good())
-	{
-		in >> *mNode;
-	}
-	
-	in.close();
-	
 	staticTechnique = std::make_unique<GourandShading>();
-	dynamicTechniques.emplace_back(std::make_unique<GourandShading>();
-}
-
-void ObjectManager::update()
-{
-	DirectX::XMFLOAT4X4 world;
-	XMStoreFloat4x4(&world, DirectX::XMMatrixIdentity());
-	
-	node->update(world);
+	dynamicTechniques.emplace_back(std::make_unique<GourandShading>());
 }
 
 void ObjectManager::render()
 {
-	for (int i = 0; i < dynamicObjects; i++)
+	for (int i = 0; i < dynamicObjects.size(); i++)
 	{
-		staticTechnique.render(dynamicObjects[i], false);
+		staticTechnique->render(dynamicObjects[i], false);
 	}
 }
 

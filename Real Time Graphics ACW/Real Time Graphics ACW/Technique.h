@@ -13,6 +13,6 @@ public:
 	Technique(std::shared_ptr<Shader> pShader, std::shared_ptr<Shader> pDeferredShader);
 	~Technique();
 
-	virtual void render(Object * pObject, bool pDeferred) = 0;
+	virtual void render(std::shared_ptr<Object> & pObject, bool pDeferred) = 0;
 };
 

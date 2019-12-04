@@ -9,7 +9,7 @@ GourandShading::~GourandShading()
 {
 }
 
-void GourandShading::render(Object * pObject, bool pDeferred)
+void GourandShading::render(std::shared_ptr<Object> & pObject, bool pDeferred)
 {
 	mShader->useShader();
 	pObject->render();

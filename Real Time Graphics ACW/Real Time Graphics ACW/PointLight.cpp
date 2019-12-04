@@ -6,30 +6,23 @@ PointLight::PointLight(DirectX::XMFLOAT4 pColor, DirectX::XMFLOAT3 pPosition) :
 {
 }
 
-void PointLight::use(PointLight* pPointLight, ID3D11Buffer* pDeviceBuffer)
+void PointLight::use(ID3D11Buffer * pDeviceBuffer)
 {
 	static 
 	PointLightBuffer pb;
 	ZeroMemory(&pb, sizeof(pb));
 
-	if (pPointLight)
+	if (mDirty)
 	{
-		if (pPointLight->mDirty)
-		{
-			pb.mPosition = pPointLight->mPosition;
-			pb.mColor = pPointLight->mColor;
-			pb.mIsUsed = true;
+		pb.mPosition = mPosition;
+		pb.mColor = mColor;
+		pb.mIsUsed = true;
 
-			pPointLight->mDirty = false;
-		}
-		else
-		{
-			return;
-		}
+		mDirty = false;
 	}
 	else
 	{
-		pb.mIsUsed = false;
+		return;
 	}
 
 	auto deviceContext = Dx11Render::instance()->getDeviceContext();

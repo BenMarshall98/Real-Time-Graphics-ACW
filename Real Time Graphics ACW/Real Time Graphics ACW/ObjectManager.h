@@ -14,7 +14,6 @@ class ObjectManager final
 	
 	std::unique_ptr<Technique> staticTechnique;
 	std::vector<std::unique_ptr<Technique>> dynamicTechniques;
-	std::unique_ptr<SceneGraphNode> node;
 	
 	std::vector<std::shared_ptr<Object>> staticObjects;
 	std::vector<std::shared_ptr<Object>> dynamicObjects;
@@ -28,12 +27,11 @@ public:
 	{
 		if (!mInstance)
 		{
-			mInstance = new Instance();
+			mInstance = new ObjectManager();
 		}
-		return instance;
+		return mInstance;
 	}
 	
-	void update();
 	void render();
 	
 	void addStaticObject(std::shared_ptr<Object> pObject);

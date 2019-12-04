@@ -141,6 +141,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="ObjectNode.h" />
     <ClInclude Include="PhongShading.h" />
     <ClInclude Include="PointLight.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="ObjectNode.cpp" />
     <ClCompile Include="PhongShading.cpp" />
     <ClCompile Include="PointLight.cpp" />

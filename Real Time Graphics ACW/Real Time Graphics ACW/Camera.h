@@ -8,8 +8,8 @@ class Camera
 	DirectX::XMFLOAT3 mUpDirection;
 	DirectX::XMFLOAT3 mEyePosition;
 	DirectX::XMFLOAT3 mTargetPosition;
-	float mAngleSpeed = 360.0f;
-	float mMovementSpeed = 1000.0f;
+	float mAngleSpeed = 1.0f;
+	float mMovementSpeed = 10.0f;
 	
 	bool mRotateLeft = false;
 	bool mRotateRight = false;
@@ -77,14 +77,14 @@ public:
 		mPanDown = pPan;
 	}
 	
-	void panForwards(const bool & pPan)
+	void panForward(const bool & pPan)
 	{
-		mPanForwards = pPan;
+		mPanForward = pPan;
 	}
 	
-	void panBackwards(cosnt bool & pPan)
+	void panBackward(const bool & pPan)
 	{
-		mPanBackwards = pPan;
+		mPanBackward = pPan;
 	}
 
 	void update();

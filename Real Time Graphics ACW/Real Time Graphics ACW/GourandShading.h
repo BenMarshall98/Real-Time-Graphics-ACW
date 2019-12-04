@@ -7,6 +7,6 @@ public:
 	GourandShading();
 	~GourandShading();
 
-	void render(Object * pObject, bool pDeferred) override;
+	void render(std::shared_ptr<Object> & pObject, bool pDeferred) override;
 };
 

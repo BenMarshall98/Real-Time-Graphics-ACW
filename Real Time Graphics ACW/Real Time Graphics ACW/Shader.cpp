@@ -3,6 +3,7 @@
 #include "DX11Render.h"
 #include <locale>
 #include <codecvt>
+#include <wrl/client.h>
 
 //https://riptutorial.com/cplusplus/example/4190/conversion-to-std--wstring
 
@@ -12,14 +13,10 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 	auto device = Dx11Render::instance()->getDevice();
 
 	{
-		ID3DBlob * vsBlob = nullptr;
+		Microsoft::WRL::ComPtr<ID3DBlob> vsBlob = nullptr;
 		auto result = compileShaderFromFile(converter.from_bytes(pVertexFile), "vs_4_0", &vsBlob);
 		if (FAILED(result))
 		{
-			if (vsBlob)
-			{
-				vsBlob->Release();
-			}
 			return false;
 		}
 

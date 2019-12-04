@@ -12,6 +12,7 @@
 #include <string>
 #include "IdentityNode.h"
 #include <fstream>
+#include "ObjectManager.h"
 
 double Game::mDt = 0.0f;
 Camera * Game::mCamera = nullptr;
@@ -69,6 +70,7 @@ void Game::run()
 {
 	while(Win32Window::instance()->windowEvents())
 	{
+		mCamera->update();
 		Dx11Render::instance()->clearRenderTargetView(DirectX::Colors::MidnightBlue);
 
 		auto deviceContext = Dx11Render::instance()->getDeviceContext();
@@ -102,7 +104,8 @@ void Game::run()
 		XMStoreFloat4x4(&world, DirectX::XMMatrixIdentity());
 		
 		mNode->update(world);
-		mNode->render();
+
+		ObjectManager::instance()->render();
 		
 		//
 		// Present our back buffer to our front buffer

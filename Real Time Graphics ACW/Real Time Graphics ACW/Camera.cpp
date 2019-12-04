@@ -28,8 +28,6 @@ void Camera::rotateLeftRight(const bool pLeft)
 	const auto leftRightMat = DirectX::XMMatrixRotationNormal(yAxis, angleChange);
 
 	XMStoreFloat3(&mTargetPosition, DirectX::XMVectorAdd(eyeTemp, XMVector3Transform(zAxis, leftRightMat)));
-
-	update();
 }
 
 void Camera::rotateUpDown(const bool pUp)
@@ -52,8 +50,6 @@ void Camera::rotateUpDown(const bool pUp)
 	
 	XMStoreFloat3(&mTargetPosition, DirectX::XMVectorAdd(eyeTemp, XMVector3Transform(zAxis, leftRightMat)));
 	XMStoreFloat3(&mUpDirection, XMVector3Transform(upTemp, leftRightMat));
-
-	update();
 }
 
 void Camera::panLeftRight(const bool pLeft)
@@ -76,8 +72,6 @@ void Camera::panLeftRight(const bool pLeft)
 
 	XMStoreFloat3(&mEyePosition, DirectX::XMVectorAdd(eyeTemp, movement));
 	XMStoreFloat3(&mTargetPosition, DirectX::XMVectorAdd(targetTemp, movement));
-
-	update();
 }
 
 void Camera::panForwardBackward(const bool pForward)
@@ -98,8 +92,6 @@ void Camera::panForwardBackward(const bool pForward)
 
 	XMStoreFloat3(&mEyePosition, DirectX::XMVectorAdd(eyeTemp, movement));
 	XMStoreFloat3(&mTargetPosition, DirectX::XMVectorAdd(targetTemp, movement));
-
-	update();
 }
 
 void Camera::panUpDown(const bool pUp)
@@ -123,8 +115,6 @@ void Camera::panUpDown(const bool pUp)
 
 	XMStoreFloat3(&mEyePosition,DirectX::XMVectorAdd(eyeTemp, movement));
 	XMStoreFloat3(&mTargetPosition, DirectX::XMVectorAdd(targetTemp, movement));
-
-	update();
 }
 
 void Camera::update()
@@ -169,7 +159,7 @@ void Camera::update()
 	{
 		panForwardBackward(true);
 	}
-	else if (!mPanForward && mPanbackward)
+	else if (!mPanForward && mPanBackward)
 	{
 		panForwardBackward(false);
 	}

@@ -98,39 +98,6 @@ bool Model::loadModel(const std::vector<DirectX::XMFLOAT3> & pPositions, const s
 	return true;
 }
 
-Model::~Model()
-{
-	if (mPositionBuffer)
-	{
-		mPositionBuffer->Release();
-	}
-
-	if (mNormalBuffer)
-	{
-		mNormalBuffer->Release();
-	}
-
-	if (mTexCoordBuffer)
-	{
-		mTexCoordBuffer->Release();
-	}
-	
-	if (mTangentBuffer)
-	{
-		mTangentBuffer->Release();
-	}
-
-	if (mBiTangentBuffer)
-	{
-		mBiTangentBuffer->Release();
-	}
-
-	if (mIndicesBuffer)
-	{
-		mIndicesBuffer->Release();
-	}
-}
-
 void Model::render()
 {
 	auto deviceContext = Dx11Render::instance()->getDeviceContext();
@@ -141,7 +108,7 @@ void Model::render()
 	{
 		ID3D11Buffer * bufferArray[2] =
 		{
-			mPositionBuffer, mNormalBuffer//, texCoordBuffer
+			mPositionBuffer.Get(), mNormalBuffer.Get()//, texCoordBuffer
 		};
 
 		UINT strideArray[2] =
@@ -155,7 +122,7 @@ void Model::render()
 		};
 
 		deviceContext->IASetVertexBuffers(0, 2, bufferArray, strideArray, offsetArray);
-		deviceContext->IASetIndexBuffer(mIndicesBuffer, DXGI_FORMAT_R16_UINT, 0);
+		deviceContext->IASetIndexBuffer(mIndicesBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		lastModel = this;
 	}

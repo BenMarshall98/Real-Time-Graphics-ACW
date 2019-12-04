@@ -80,11 +80,13 @@ LRESULT CALLBACK Win32Window::windowProcedure(HWND pHwnd, UINT pMessage, WPARAM 
 		case 'J':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::mCamera->panLeftRight(false);
+				Game::mCamera->panLeft(true);
+				Game::mCamera->rotateLeft(false);
 			}
 			else
 			{
-				Game::mCamera->rotateLeftRight();
+				Game::mCamera->rotateLeft(true);
+				Game::mCamera->panLeft(false);
 			}
 			break;
 		case VK_RIGHT:
@@ -92,11 +94,13 @@ LRESULT CALLBACK Win32Window::windowProcedure(HWND pHwnd, UINT pMessage, WPARAM 
 		case 'L':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::mCamera->panLeftRight();
+				Game::mCamera->panRight(true);
+				Game::mCamera->rotateRight(false);
 			}
 			else
 			{
-				Game::mCamera->rotateLeftRight(false);
+				Game::mCamera->rotateRight(true);
+				Game::mCamera->panRight(false);
 			}
 			break;
 		case VK_UP:
@@ -104,11 +108,13 @@ LRESULT CALLBACK Win32Window::windowProcedure(HWND pHwnd, UINT pMessage, WPARAM 
 		case 'I':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::mCamera->panForwardBackward();
+				Game::mCamera->panForward(true);
+				Game::mCamera->rotateUp(false);
 			}
 			else
 			{
-				Game::mCamera->rotateUpDown();
+				Game::mCamera->rotateUp(true);
+				Game::mCamera->panForward(false);
 			}
 			break;
 		case VK_DOWN:
@@ -116,18 +122,90 @@ LRESULT CALLBACK Win32Window::windowProcedure(HWND pHwnd, UINT pMessage, WPARAM 
 		case 'K':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::mCamera->panForwardBackward(false);
+				Game::mCamera->panBackward(true);
+				Game::mCamera->rotateDown(false);
 			}
 			else
 			{
-				Game::mCamera->rotateUpDown(false);
+				Game::mCamera->rotateDown(true);
+				Game::mCamera->panBackward(false);
 			}
 			break;
 		case VK_PRIOR:
-			Game::mCamera->panUpDown();
+			Game::mCamera->panUp(true);
 			break;
 		case VK_NEXT:
-			Game::mCamera->panUpDown(false);
+			Game::mCamera->panDown(true);
+			break;
+		}
+	}
+	break;
+	case WM_KEYUP:
+	{
+		switch(pWParam)
+		{
+		case VK_LEFT:
+		case 'A':
+		case 'J':
+			Game::mCamera->panLeft(false);
+			Game::mCamera->rotateLeft(false);
+			break;
+		case VK_RIGHT:
+		case 'D':
+		case 'L':
+			Game::mCamera->panRight(false);
+			Game::mCamera->rotateRight(false);
+			break;
+		case VK_UP:
+		case 'W':
+		case 'I':
+			Game::mCamera->panForward(false);
+			Game::mCamera->rotateUp(false);
+			break;
+		case VK_DOWN:
+		case 'S':
+		case 'K':
+			Game::mCamera->panBackward(false);
+			Game::mCamera->rotateDown(false);
+			break;
+		case VK_PRIOR:
+			Game::mCamera->panUp(false);
+			break;
+		case VK_NEXT:
+			Game::mCamera->panDown(false);
+			break;
+		case VK_CONTROL:
+			if (GetKeyState(VK_LEFT) < 0 ||
+				GetKeyState('A') < 0 ||
+				GetKeyState('J') < 0)
+			{
+				Game::mCamera->rotateLeft(true);
+				Game::mCamera->panLeft(false);
+			}
+
+			if (GetKeyState(VK_RIGHT) < 0 ||
+				GetKeyState('A') < 0 ||
+				GetKeyState('J') < 0)
+			{
+				Game::mCamera->rotateRight(true);
+				Game::mCamera->panRight(false);
+			}
+
+			if (GetKeyState(VK_UP) < 0 ||
+				GetKeyState('W') < 0 ||
+				GetKeyState('I') < 0)
+			{
+				Game::mCamera->rotateUp(true);
+				Game::mCamera->panForward(false);
+			}
+
+			if (GetKeyState(VK_DOWN) < 0 ||
+				GetKeyState('S') < 0 ||
+				GetKeyState('K') < 0)
+			{
+				Game::mCamera->rotateDown(true);
+				Game::mCamera->panBackward(false);
+			}
 			break;
 		}
 	}

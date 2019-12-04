@@ -120,6 +120,12 @@
     <ClInclude Include="GlowingShading.h">
       <Filter>Technique</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModelLoader.cpp">
@@ -218,6 +224,12 @@
     <ClCompile Include="GlowingShading.cpp">
       <Filter>Technique</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Tutorial04.fx">
@@ -229,12 +241,6 @@
     <FxCompile Include="PixelShader.hlsl">
       <Filter>Resource Files</Filter>
     </FxCompile>
-    <FxCompile Include="GourandFragmentShader.hlsl">
-      <Filter>Resource Files\GourandShading</Filter>
-    </FxCompile>
-    <FxCompile Include="GourandVertexShader.hlsl">
-      <Filter>Resource Files\GourandShading</Filter>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Configuration.txt" />
@@ -242,6 +248,8 @@
     <Text Include="sphere.obj">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="GourandFragmentShader.hlsl" />
+    <Text Include="GourandVertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

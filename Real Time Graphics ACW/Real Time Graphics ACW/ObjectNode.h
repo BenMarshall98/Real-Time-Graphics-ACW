@@ -4,7 +4,7 @@
 
 class ObjectNode final : public SceneGraphNode
 {
-	Object * mObject;
+	std::shared_ptr<Object> mObject;
 	
 public:
 	explicit ObjectNode(Object * pObject);

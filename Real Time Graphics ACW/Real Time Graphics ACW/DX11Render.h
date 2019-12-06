@@ -2,6 +2,7 @@
 
 #include <d3d11_1.h>
 #include <DirectXMath.h>
+#include <WRL/client.h>
 
 struct ModelBuffer
 {
@@ -16,16 +17,15 @@ class Dx11Render
 
 	D3D_DRIVER_TYPE mDriverType;
 	D3D_FEATURE_LEVEL mFeatureLevel;
-	ID3D11Device * mDevice;
-	ID3D11DeviceContext * mDeviceContext;
-	ID3D11DeviceContext1 * mDeviceContext1;
-	IDXGISwapChain * mSwapChain;
-	IDXGISwapChain1 * mSwapChain1;
-	ID3D11RenderTargetView * mRenderTargetView;
-	ID3D11DepthStencilView * mDepthView;
-	ID3D11RasterizerState * mRasterizerState;
+	Microsoft::WRL::ComPtr<ID3D11Device> mDevice;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> mDeviceContext;
+	Microsoft::WRL::ComPtr<IDXGISwapChain> mSwapChain;
+	Microsoft::WRL::ComPtr<IDXGISwapChain1> mSwapChain1;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mRenderTargetView;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> mDepthView;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> mRasterizerState;
 
-	ID3D11Buffer * mModelBuffer = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> mModelBuffer = nullptr;
 
 	Dx11Render();
 	
@@ -34,8 +34,8 @@ public:
 
 	void clearRenderTargetView(const float pColor[4]) const
 	{
-		mDeviceContext->ClearRenderTargetView(mRenderTargetView, pColor);
-		mDeviceContext->ClearDepthStencilView(mDepthView, D3D11_CLEAR_DEPTH, 1.0f, 0.0f);
+		mDeviceContext->ClearRenderTargetView(mRenderTargetView.Get(), pColor);
+		mDeviceContext->ClearDepthStencilView(mDepthView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0.0f);
 	}
 
 	void present() const
@@ -43,12 +43,12 @@ public:
 		mSwapChain->Present(0, 0);
 	}
 
-	ID3D11Device * getDevice() const
+	Microsoft::WRL::ComPtr<ID3D11Device> getDevice() const
 	{
 		return mDevice;
 	}
 
-	ID3D11DeviceContext * getDeviceContext() const
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> getDeviceContext() const
 	{
 		return mDeviceContext;
 	}

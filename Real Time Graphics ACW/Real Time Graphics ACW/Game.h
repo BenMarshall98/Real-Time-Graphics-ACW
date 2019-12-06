@@ -6,6 +6,14 @@
 #include "Camera.h"
 #include "SceneGraphNode.h"
 
+struct MaterialBuffer
+{
+	DirectX::XMFLOAT4 mAmbient;
+	DirectX::XMFLOAT4 mDiffuse;
+	DirectX::XMFLOAT4 mSpecular;
+	float mShininess;
+	DirectX::XMFLOAT3 mPadding;
+};
 
 struct CameraBuffer
 {
@@ -18,6 +26,7 @@ class Game
 	LARGE_INTEGER mTimer;
 	ID3D11Buffer * mCameraBuffer = nullptr;
 	ID3D11Buffer * mDirectionLightBuffer = nullptr;
+	ID3D11Buffer * mMaterialBuffer = nullptr;
 	DirectX::XMMATRIX mWorld;
 	DirectX::XMMATRIX mProjection;
 	double mFreq;

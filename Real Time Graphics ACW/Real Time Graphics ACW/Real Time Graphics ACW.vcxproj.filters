@@ -232,24 +232,21 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Tutorial04.fx">
+    <CopyFileToFolders Include="VertexShader.hlsl">
       <Filter>Resource Files</Filter>
-    </FxCompile>
-    <FxCompile Include="VertexShader.hlsl">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="PixelShader.hlsl">
       <Filter>Resource Files</Filter>
-    </FxCompile>
-    <FxCompile Include="PixelShader.hlsl">
-      <Filter>Resource Files</Filter>
-    </FxCompile>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Configuration.txt" />
+    <CopyFileToFolders Include="Configuration.txt" />
     <Text Include="Notes.txt" />
-    <Text Include="sphere.obj">
+    <CopyFileToFolders Include="sphere.obj">
       <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="GourandFragmentShader.hlsl" />
-    <Text Include="GourandVertexShader.hlsl" />
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="GourandFragmentShader.hlsl" />
+    <CopyFileToFolders Include="GourandVertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

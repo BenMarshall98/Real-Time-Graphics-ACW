@@ -2,16 +2,17 @@
 
 #include <string>
 #include <d3d11_1.h>
+#include <WRL/client.h>
 
 class Shader
 {
-	ID3D11VertexShader * mVertexShader = nullptr;
-	ID3D11PixelShader * mPixelShader = nullptr;
-	ID3D11GeometryShader * mGeometryShader = nullptr;
-	ID3D11HullShader * mHullShader = nullptr;
-	ID3D11DomainShader * mDomainShader = nullptr;
-	ID3D11ComputeShader * mComputeShader = nullptr;
-	ID3D11InputLayout * mInputLayout = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> mVertexShader = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> mPixelShader = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11GeometryShader> mGeometryShader = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11HullShader> mHullShader = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11DomainShader> mDomainShader = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11ComputeShader> mComputeShader = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> mInputLayout = nullptr;
 
 	static HRESULT compileShaderFromFile(const std::wstring & pFileName, const char * pTarget, ID3DBlob** pShaderBlob);
 	

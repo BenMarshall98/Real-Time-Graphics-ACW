@@ -4,7 +4,7 @@
 Dx11Render * Dx11Render::mInstance = nullptr;
 
 Dx11Render::Dx11Render() : mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullptr), mDeviceContext(nullptr),
-	mDeviceContext1(nullptr), mSwapChain(nullptr), mSwapChain1(nullptr), mRenderTargetView(nullptr), mDepthView(nullptr),
+	mSwapChain(nullptr), mSwapChain1(nullptr), mRenderTargetView(nullptr), mDepthView(nullptr),
 	mRasterizerState(nullptr)
 {
 	auto window = Win32Window::instance();
@@ -21,20 +21,17 @@ Dx11Render::Dx11Render() : mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullpt
 
 	auto result = D3D11CreateDevice(nullptr, mDriverType, nullptr, 0, featureLevels, 4, D3D11_SDK_VERSION, &mDevice, &mFeatureLevel, &mDeviceContext);
 
-	IDXGIDevice * dxgiDevice = nullptr;
-	result = mDevice->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void **>(&dxgiDevice));
+	Microsoft::WRL::ComPtr<IDXGIDevice> dxgiDevice = nullptr;
+	result = mDevice.As(&dxgiDevice);
 
-	IDXGIAdapter * dxgiAdapter = nullptr;
+	Microsoft::WRL::ComPtr<IDXGIAdapter> dxgiAdapter = nullptr;
 	result = dxgiDevice->GetAdapter(&dxgiAdapter);
 
-	IDXGIFactory1 * dxgiFactory1 = nullptr;
-	result = dxgiAdapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void **>(&dxgiFactory1));
+	Microsoft::WRL::ComPtr<IDXGIFactory1> dxgiFactory1 = nullptr;
+	result = dxgiAdapter->GetParent(IID_PPV_ARGS(&dxgiFactory1));
 
-	IDXGIFactory2 * dxgiFactory2 = nullptr;
-	result = dxgiFactory1->QueryInterface(__uuidof(IDXGIFactory1), reinterpret_cast<void **>(&dxgiFactory2));
-
-	result = mDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void **>(&mDeviceContext1));
-	result = mDeviceContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void **>(&mDeviceContext1));
+	Microsoft::WRL::ComPtr<IDXGIFactory2> dxgiFactory2 = nullptr;
+	result = dxgiFactory1.As(&dxgiFactory2);
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc;
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
@@ -47,15 +44,15 @@ Dx11Render::Dx11Render() : mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullpt
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.BufferCount = 1;
 
-	dxgiFactory2->CreateSwapChainForHwnd(mDevice, window->getHwnd(), &swapChainDesc, nullptr, nullptr, &mSwapChain1);
+	dxgiFactory2->CreateSwapChainForHwnd(mDevice.Get(), window->getHwnd(), &swapChainDesc, nullptr, nullptr, &mSwapChain1);
 
-	result = mSwapChain1->QueryInterface(__uuidof(IDXGISwapChain), reinterpret_cast<void **>(&mSwapChain));
+	result = mSwapChain1->QueryInterface(IID_PPV_ARGS(&mSwapChain));
 
 	//Create Color Backbuffer
-	ID3D11Texture2D * backBuffer;
-	result = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void **>(&backBuffer));
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> backBuffer;
+	result = mSwapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer));
 
-	mDevice->CreateRenderTargetView(backBuffer, nullptr, &mRenderTargetView);
+	result = mDevice->CreateRenderTargetView(backBuffer.Get(), nullptr, mRenderTargetView.ReleaseAndGetAddressOf());
 
 	//Create Depth / Stencil BackBuffer
 	D3D11_TEXTURE2D_DESC depthTextureDesc;
@@ -71,8 +68,8 @@ Dx11Render::Dx11Render() : mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullpt
 	depthTextureDesc.CPUAccessFlags = 0;
 	depthTextureDesc.MiscFlags = 0;
 
-	ID3D11Texture2D * depthStencil = nullptr;
-	result = mDevice->CreateTexture2D(&depthTextureDesc, nullptr, &depthStencil);
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencil = nullptr;
+	result = mDevice->CreateTexture2D(&depthTextureDesc, nullptr, depthStencil.ReleaseAndGetAddressOf());
 
 	D3D11_DEPTH_STENCIL_DESC depthStateDesc;
 	depthStateDesc.DepthEnable = true;
@@ -93,11 +90,11 @@ Dx11Render::Dx11Render() : mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullpt
 	depthStateDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	depthStateDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
 
-	ID3D11DepthStencilState * depthState;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthState = nullptr;
 
-	result = mDevice->CreateDepthStencilState(&depthStateDesc, &depthState);
+	result = mDevice->CreateDepthStencilState(&depthStateDesc, depthState.GetAddressOf());
 
-	mDeviceContext->OMSetDepthStencilState(depthState, 1);
+	mDeviceContext->OMSetDepthStencilState(depthState.Get(), 1);
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthViewDesc;
 	depthViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
@@ -105,9 +102,9 @@ Dx11Render::Dx11Render() : mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullpt
 	depthViewDesc.Flags = 0;
 	depthViewDesc.Texture2D.MipSlice = 0;
 
-	result = mDevice->CreateDepthStencilView(depthStencil, &depthViewDesc, &mDepthView);
+	result = mDevice->CreateDepthStencilView(depthStencil.Get(), &depthViewDesc, mDepthView.GetAddressOf());
 
-	mDeviceContext->OMSetRenderTargets(1, &mRenderTargetView, mDepthView);
+	mDeviceContext->OMSetRenderTargets(1, mRenderTargetView.GetAddressOf(), mDepthView.Get());
 
 	D3D11_VIEWPORT viewport;
 	viewport.Width = static_cast<float>(window->getWidth());
@@ -129,8 +126,8 @@ Dx11Render::Dx11Render() : mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullpt
 	rasterizerDesc.MultisampleEnable = false;
 	rasterizerDesc.SlopeScaledDepthBias = 0.0f;
 
-	result = mDevice->CreateRasterizerState(&rasterizerDesc, &mRasterizerState);
-	mDeviceContext->RSSetState(mRasterizerState);
+	result = mDevice->CreateRasterizerState(&rasterizerDesc, mRasterizerState.ReleaseAndGetAddressOf());
+	mDeviceContext->RSSetState(mRasterizerState.Get());
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof bd);
@@ -140,13 +137,13 @@ Dx11Render::Dx11Render() : mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullpt
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd.CPUAccessFlags = 0;
 
-	result = mDevice->CreateBuffer(&bd, nullptr, &mModelBuffer);
+	result = mDevice->CreateBuffer(&bd, nullptr, mModelBuffer.ReleaseAndGetAddressOf());
 }
 
 void Dx11Render::useModelBuffer(const ModelBuffer& pModelBuffer) const
 {
-	mDeviceContext->UpdateSubresource(mModelBuffer, 0, nullptr, &pModelBuffer, 0, 0);
-	mDeviceContext->VSSetConstantBuffers(1, 1, &mModelBuffer);
+	mDeviceContext->UpdateSubresource(mModelBuffer.Get(), 0, nullptr, &pModelBuffer, 0, 0);
+	mDeviceContext->VSSetConstantBuffers(1, 1, mModelBuffer.GetAddressOf());
 }
 
 void Dx11Render::resize(int pWidth, int pHeight)

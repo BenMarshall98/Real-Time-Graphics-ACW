@@ -51,6 +51,10 @@ Game::Game()
 
 	hr = device->CreateBuffer(&bd, nullptr, &mDirectionLightBuffer);
 
+	bd.ByteWidth = sizeof(MaterialBuffer);
+
+	hr = device->CreateBuffer(&bd, nullptr, &mMaterialBuffer);
+
 	// Initialize the world matrix
 	mWorld = DirectX::XMMatrixIdentity();
 
@@ -108,12 +112,24 @@ void Game::run()
 		DirectionalLightBuffer db;
 
 		db.mColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-		db.mDirection = DirectX::XMFLOAT3(0.0f, 0.0f, -1.0f);
+		db.mDirection = DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f);
 		db.mIsUsed = true;
 
 		deviceContext->UpdateSubresource(mDirectionLightBuffer, 0, nullptr, &db, 0, 0);
-		deviceContext->PSSetConstantBuffers(0, 1, &mDirectionLightBuffer);
+		deviceContext->PSSetConstantBuffers(2, 1, &mDirectionLightBuffer);
 
+		
+		
+		MaterialBuffer mb;
+		
+		mb.mAmbient = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
+		mb.mDiffuse = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+		mb.mSpecular = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+		mb.mShininess = 32.0f;
+
+		deviceContext->UpdateSubresource(mMaterialBuffer, 0, nullptr, &mb, 0, 0);
+		deviceContext->PSSetConstantBuffers(1, 1, &mMaterialBuffer);
+		
 		DirectX::XMFLOAT4X4 world;
 		XMStoreFloat4x4(&world, DirectX::XMMatrixIdentity());
 		

@@ -37,6 +37,11 @@ public:
 	Camera & operator= (const Camera &) = delete;
 	Camera & operator= (Camera &&) = delete;
 
+	DirectX::XMFLOAT3 getViewPosition() const
+	{
+		return mEyePosition;
+	}
+	
 	void rotateLeft(const bool & pRotate)
 	{
 		mRotateLeft = pRotate;

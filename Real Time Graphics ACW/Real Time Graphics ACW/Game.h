@@ -15,17 +15,25 @@ struct MaterialBuffer
 	DirectX::XMFLOAT3 mPadding;
 };
 
-struct CameraBuffer
+struct CameraVertexBuffer
 {
 	DirectX::XMMATRIX mView;
 	DirectX::XMMATRIX mProjection;
 };
 
+struct CameraFragmentBuffer
+{
+	DirectX::XMVECTOR mViewPosition;
+};
+
 class Game
 {
 	LARGE_INTEGER mTimer;
-	ID3D11Buffer * mCameraBuffer = nullptr;
+	ID3D11Buffer * mCameraVertexBuffer = nullptr;
+	ID3D11Buffer * mCameraFragmentBuffer = nullptr;
 	ID3D11Buffer * mDirectionLightBuffer = nullptr;
+	ID3D11Buffer * mPointLightBuffer = nullptr;
+	ID3D11Buffer * mSpotLightBuffer = nullptr;
 	ID3D11Buffer * mMaterialBuffer = nullptr;
 	DirectX::XMMATRIX mWorld;
 	DirectX::XMMATRIX mProjection;
@@ -35,8 +43,7 @@ class Game
 	__int64 mStop;
 
 	std::unique_ptr<SceneGraphNode> mNode;
-
-	Model * mModel;
+	
 public:
 	Game();
 	~Game() = default;

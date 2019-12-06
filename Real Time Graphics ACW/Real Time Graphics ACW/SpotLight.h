@@ -4,10 +4,13 @@
 struct SpotLightBuffer
 {
 	DirectX::XMFLOAT4 mColor[4];
-	DirectX::XMFLOAT3 mPosition[4];
-	DirectX::XMFLOAT3 mDirection[4];
+	DirectX::XMFLOAT4 mPosition[4];
+	DirectX::XMFLOAT4 mDirection[4];
 	float mInnerAngle[4];
 	float mOuterAngle[4];
+	float mAttenuationConstant[4];
+	float mAttenuationLinear[4];
+	float mAttenuationQuad[4];
 	int mIsUsed[4];
 };
 

@@ -5,7 +5,10 @@
 struct PointLightBuffer
 {
 	DirectX::XMFLOAT4 mColor;
-	DirectX::XMFLOAT3 mPosition;
+	DirectX::XMFLOAT4 mPosition;
+	float mAttenuationConstant;
+	float mAttenuationLinear;
+	float mAttenuationQuad;
 	int mIsUsed;
 };
 

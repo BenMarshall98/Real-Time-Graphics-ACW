@@ -33,12 +33,12 @@ cbuffer spotBuffer : register(b4)
 	float4 SpotColor[4];
 	float4 SpotPosition[4];
 	float4 SpotDirection[4];
-	float SpotInnerAngle[4];
-	float SpotOuterAngle[4];
-	float SpotAttenuationConstant[4];
-	float SpotAttenuationLinear[4];
-	float SpotAttenuationQuad[4];
-	int SpotUsed[4];
+	float4 SpotInnerAngle;
+	float4 SpotOuterAngle;
+	float4 SpotAttenuationConstant;
+	float4 SpotAttenuationLinear;
+	float4 SpotAttenuationQuad;
+	int4 SpotUsed;
 }
 
 struct VS_OUTPUT

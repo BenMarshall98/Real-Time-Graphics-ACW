@@ -14,7 +14,7 @@ void PointLight::use(ID3D11Buffer * pDeviceBuffer)
 
 	if (mDirty)
 	{
-		pb.mPosition = mPosition;
+		//pb.mPosition = mPosition;
 		pb.mColor = mColor;
 		pb.mIsUsed = true;
 

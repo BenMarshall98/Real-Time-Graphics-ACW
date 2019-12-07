@@ -1,75 +1,110 @@
 #include "LightingManager.h"
 #include "DX11Render.h"
 
+LightingManager * LightingManager::mInstance = nullptr;
+
 LightingManager::LightingManager()
 {
-	auto device = Dx11Render::instance()->getDevice();
-
-	D3D11_BUFFER_DESC bufferDesc;
-	ZeroMemory(&bufferDesc, sizeof(bufferDesc));
-
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.ByteWidth = sizeof(DirectionalLightBuffer);
-	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	bufferDesc.CPUAccessFlags = 0;
-
-	device->CreateBuffer(&bufferDesc, nullptr, &mDirectionalLightBuffer);
-
-	bufferDesc.ByteWidth = sizeof(PointLightBuffer);
-
-	device->CreateBuffer(&bufferDesc, nullptr, &mPointLightBuffer);
-	
-	bufferDesc.ByteWidth = sizeof(SpotLightBuffer);
-
-	device->CreateBuffer(&bufferDesc, nullptr, &mSpotLightBuffer);
 }
 
-void LightingManager::setDirectionalLight(DirectionalLight* pDirectionalLight)
+void LightingManager::addDirectionalLight(std::shared_ptr<DirectionalLight> & pDirectionalLight)
 {
-	delete mDirectionalLight;
-
 	mDirectionalLight = pDirectionalLight;
 }
 
-void LightingManager::setPointLight(PointLight* pPointLight)
+void LightingManager::addPointLight(std::shared_ptr<PointLight> & pPointLight)
 {
-	delete mPointLight;
-
 	mPointLight = pPointLight;
 }
 
-void LightingManager::addSpotLight(SpotLight* pSpotLight)
+void LightingManager::addSpotLight(std::shared_ptr<SpotLight> & pSpotLight)
 {
 	if (mSpotLights.size() == 4)
 	{
-		delete mSpotLights[0];
 		mSpotLights.erase(mSpotLights.begin());
 	}
 
 	mSpotLights.push_back(pSpotLight);
 }
 
+void LightingManager::removeDirectionalLight(std::shared_ptr<DirectionalLight>& pDirectionalLight)
+{
+	if (mDirectionalLight == pDirectionalLight)
+	{
+		mDirectionalLight.reset();
+	}
+}
+
+void LightingManager::removePointLight(std::shared_ptr<PointLight>& pPointLight)
+{
+	if (mPointLight == pPointLight)
+	{
+		mPointLight.reset();
+	}
+}
+
+void LightingManager::removeSpotLight(std::shared_ptr<SpotLight>& pSpotLight)
+{
+	const auto it = std::find(mSpotLights.begin(), mSpotLights.end(), pSpotLight);
+
+	if (it != mSpotLights.end())
+	{
+		mSpotLights.erase(it);
+	}
+}
+
 void LightingManager::update() const
 {
-	DirectionalLight::use(mDirectionalLight, mDirectionalLightBuffer);
-	
+	const auto render = Dx11Render::instance();
+	/*{
+		DirectionalLightBuffer db;
+		ZeroMemory(&db, sizeof DirectionalLightBuffer);
 
-	if (mPointLight)
+		if (mDirectionalLight)
+		{
+			mDirectionalLight->use(db);
+		}
+		else
+		{
+			db.mIsUsed = false;
+		}
+
+		render->useDirectionalLightBuffer(db);
+	}*/
+
 	{
-		//TODO
-		//mPointLight->use(mPointLightBuffer);
+		PointLightBuffer pb;
+		ZeroMemory(&pb, sizeof PointLightBuffer);
+
+		if (mPointLight)
+		{
+			mPointLight->use(pb);
+		}
+		else
+		{
+			pb.mIsUsed = false;
+		}
+
+		render->usePointLightBuffer(pb);
 	}
 
-	SpotLightBuffer spotLightBuffer;
-	
-	for (auto i = 0u; i < mSpotLights.size(); i++)
-	{
-		//TODO
-		//mSpotLights[i]->use(&spotLightBuffer, i);
-	}
+	/*{
+		SpotLightBuffer sb;
+		ZeroMemory(&sb, sizeof SpotLightBuffer);
 
-	auto deviceContext = Dx11Render::instance()->getDeviceContext();
-	
-	deviceContext->UpdateSubresource(mSpotLightBuffer, 0, nullptr, &spotLightBuffer, 0, 0);
-	deviceContext->PSSetConstantBuffers(2, 1, &mSpotLightBuffer);
+		auto i = 0u;
+
+		for (; i < mSpotLights.size(); i++)
+		{
+			mSpotLights[i]->use(sb, i);
+		}
+
+		for (; i < 4; i++)
+		{
+			sb.mIsUsed[i] = false;
+		}
+
+		render->useSpotLightBuffer(sb);
+	}*/
 }
+

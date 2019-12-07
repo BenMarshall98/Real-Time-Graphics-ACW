@@ -1,5 +1,6 @@
 #pragma once
 #include <directxmath.h>
+#include <iostream>
 
 struct SpotLightBuffer
 {
@@ -16,20 +17,56 @@ struct SpotLightBuffer
 
 class SpotLight
 {
-	DirectX::XMFLOAT4 mColor;
+	DirectX::XMFLOAT3 mColor;
 	DirectX::XMFLOAT3 mPosition;
 	DirectX::XMFLOAT3 mDirection;
 	float mInnerAngle;
 	float mOuterAngle;
-	bool mDirty;
+	float mAttenuationConstant;
+	float mAttenuationLinear;
+	float mAttenuationQuad;
 	
 public:
-	SpotLight();
+	SpotLight(const DirectX::XMFLOAT3 & pColor, const DirectX::XMFLOAT3 pPosition, const DirectX::XMFLOAT3 pDirection, float pInnerAngle, float pOuterAngle, float pAttenuationConstant, float pAttenuationLinear, float pAttenuationQuad);
+	SpotLight() = default;
 	~SpotLight() = default;
 
 	SpotLight(const SpotLight &) = delete;
 	SpotLight(SpotLight &&) = delete;
 	SpotLight & operator= (const SpotLight &) = delete;
 	SpotLight & operator= (SpotLight &&) = delete;
+
+	void setColor(DirectX::XMFLOAT3 pColor)
+	{
+		mColor = pColor;
+	}
+
+	void setPosition(DirectX::XMFLOAT3 pPosition)
+	{
+		mPosition = pPosition;
+	}
+
+	void setDirection(DirectX::XMFLOAT3 pDirection)
+	{
+		mDirection = pDirection;
+	}
+
+	void setConeAngles(float pInnerAngle, float pOuterAngle)
+	{
+		mInnerAngle = pInnerAngle;
+		mOuterAngle = pOuterAngle;
+	}
+
+	void setAttenuation(float pConstant, float pLinear, float pQuad)
+	{
+		mAttenuationConstant = pConstant;
+		mAttenuationLinear = pLinear;
+		mAttenuationQuad = pQuad;
+	}
+
+	void use(SpotLightBuffer & pLightBuffer, unsigned int pIndex);
+	void update(DirectX::XMFLOAT4X4 & pMatrix);
 };
+
+std::istream& operator>>(std::istream & pIn, SpotLight & pLight);
 

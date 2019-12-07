@@ -1,32 +1,47 @@
 #include "PointLight.h"
-#include "DX11Render.h"
+#include <string>
 
-PointLight::PointLight(DirectX::XMFLOAT4 pColor, DirectX::XMFLOAT3 pPosition) :
-	mColor(pColor), mPosition(pPosition), mDirty(true)
+PointLight::PointLight(DirectX::XMFLOAT3 pColor, DirectX::XMFLOAT3 pPosition,
+	float pAttenuationConstant, float pAttenuationLinear, float pAttenuationQuad) :
+	mColor(pColor), mPosition(pPosition), mAttenuationConstant(pAttenuationConstant),
+	mAttenuationLinear(pAttenuationLinear), mAttenuationQuad(pAttenuationQuad)
 {
 }
 
-void PointLight::use(ID3D11Buffer * pDeviceBuffer)
+void PointLight::use(PointLightBuffer & pLightBuffer)
 {
-	static 
-	PointLightBuffer pb;
-	ZeroMemory(&pb, sizeof(pb));
+	pLightBuffer.mColor = DirectX::XMFLOAT4(mColor.x, mColor.y, mColor.z, 0.0f);
+	pLightBuffer.mPosition = DirectX::XMFLOAT4(mPosition.x, mPosition.y, mPosition.z, 0.0f);
+	pLightBuffer.mAttenuationConstant = mAttenuationConstant;
+	pLightBuffer.mAttenuationLinear = mAttenuationLinear;
+	pLightBuffer.mAttenuationQuad = mAttenuationQuad;
+	pLightBuffer.mIsUsed = true;
+}
 
-	if (mDirty)
-	{
-		//pb.mPosition = mPosition;
-		pb.mColor = mColor;
-		pb.mIsUsed = true;
+void PointLight::update(DirectX::XMFLOAT4X4& pMatrix)
+{
+	auto center = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+	const auto matrix = XMLoadFloat4x4(&pMatrix);
 
-		mDirty = false;
-	}
-	else
-	{
-		return;
-	}
+	center = XMVector3Transform(center, matrix);
 
-	auto deviceContext = Dx11Render::instance()->getDeviceContext();
+	XMStoreFloat3(&mPosition, center);
+}
 
-	deviceContext->UpdateSubresource(pDeviceBuffer, 0, nullptr, &pb, 0, 0);
-	deviceContext->PSSetConstantBuffers(0, 1, &pDeviceBuffer);
+std::istream& operator>>(std::istream& pIn, PointLight& pLight)
+{
+	std::string s;
+	char c;
+
+	float x, y, z;
+	pIn >> s >> x >> c >> y >> c >> z;
+	pLight.setColor(DirectX::XMFLOAT3(x, y, z));
+
+	pIn >> s >> x >> c >> y >> c >> z;
+	pLight.setPosition(DirectX::XMFLOAT3(x, y, z));
+
+	pIn >> s >> x >> s >> y >> s >> z;
+	pLight.setAttenuation(x, y, z);
+
+	return pIn;
 }

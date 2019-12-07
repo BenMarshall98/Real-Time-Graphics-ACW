@@ -1,38 +1,43 @@
 #include "DirectionalLight.h"
-#include "DX11Render.h"
+#include <string>
 
 DirectionalLight::DirectionalLight(const DirectX::XMFLOAT4 & pColor, const DirectX::XMFLOAT3 & pDirection) :
-	mColor(pColor), mDirection(pDirection), mDirty(true)
+	mColor(pColor), mDirection(pDirection)
 {
 }
 
-void DirectionalLight::use(DirectionalLight* pDirectionalLight, ID3D11Buffer* pDeviceBuffer)
+void DirectionalLight::use(DirectionalLightBuffer& pLightBuffer) const
 {
-	DirectionalLightBuffer db;
-	ZeroMemory(&db, sizeof db);
+	pLightBuffer.mColor = mColor;
+	pLightBuffer.mDirection = mDirection;
+	pLightBuffer.mIsUsed = true;
+}
 
-	if (pDirectionalLight)
-	{
-		if (pDirectionalLight->mDirty)
-		{
-			db.mDirection = pDirectionalLight->mDirection;
-			db.mColor = pDirectionalLight->mColor;
-			db.mIsUsed = true;
-			
-			pDirectionalLight->mDirty = false;
-		}
-		else
-		{
-			return;
-		}
-	}
-	else
-	{
-		db.mIsUsed = false;
-	}
+void DirectionalLight::update(DirectX::XMFLOAT4X4& pMatrix)
+{
+	auto center = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+	auto direction = XMLoadFloat3(&mDirection);
+	const auto matrix = XMLoadFloat4x4(&pMatrix);
 
-	auto deviceContext = Dx11Render::instance()->getDeviceContext();
+	center = XMVector3Transform(center, matrix);
+	direction = XMVector3Transform(direction, matrix);
 
-	deviceContext->UpdateSubresource(pDeviceBuffer, 0, nullptr, &db, 0, 0);
-	deviceContext->PSSetConstantBuffers(0, 1, &pDeviceBuffer);
+	direction = DirectX::XMVectorSubtract(direction, center);
+
+	XMStoreFloat3(&mDirection, direction);
+}
+
+std::istream& operator>>(std::istream& pIn, DirectionalLight& pLight)
+{
+	std::string s;
+	char c;
+
+	float x, y, z;
+	pIn >> s >> x >> c >> y >> c >> z;
+	pLight.setColor(DirectX::XMFLOAT4(x, y, z, 1.0f));
+
+	pIn >> s >> x >> c >> y >> c >> z;
+	pLight.setDirection(DirectX::XMFLOAT3(x, y, z));
+
+	return pIn;
 }

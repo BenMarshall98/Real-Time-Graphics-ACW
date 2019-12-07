@@ -1,6 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
-#include <d3d11_1.h>
+#include <iostream>
 
 struct DirectionalLightBuffer
 {
@@ -13,15 +13,28 @@ class DirectionalLight
 {
 	DirectX::XMFLOAT4 mColor;
 	DirectX::XMFLOAT3 mDirection;
-	bool mDirty;
 	
 public:
 	DirectionalLight(const DirectX::XMFLOAT4 & pColor, const DirectX::XMFLOAT3 & pDirection);
+	DirectionalLight() = default;
 	~DirectionalLight() = default;
 	DirectionalLight(const DirectionalLight&) = delete;
 	DirectionalLight(DirectionalLight &&) = delete;
 	DirectionalLight & operator= (const DirectionalLight &) = delete;
 	DirectionalLight & operator= (DirectionalLight &&) = delete;
 
-	static void use(DirectionalLight * pDirectionalLight, ID3D11Buffer * pDeviceBuffer);
+	void setColor(DirectX::XMFLOAT4 pColor)
+	{
+		mColor = pColor;
+	}
+	
+	void setDirection(DirectX::XMFLOAT3 pDirection)
+	{
+		mDirection = pDirection;
+	}
+	
+	void use(DirectionalLightBuffer & pLightBuffer) const;
+	void update(DirectX::XMFLOAT4X4 & pMatrix);
 };
+
+std::istream& operator>>(std::istream & pIn, DirectionalLight & pLight);

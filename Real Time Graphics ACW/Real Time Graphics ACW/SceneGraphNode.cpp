@@ -5,6 +5,9 @@
 #include "RotationNode.h"
 #include "ScaleNode.h"
 #include "ObjectNode.h"
+#include "DirectionalLightnode.h"
+#include "PointLightNode.h"
+#include "SpotLightNode.h"
 
 SceneGraphNode::SceneGraphNode(const DirectX::XMFLOAT4X4& pMatrix) : mMatrix(pMatrix)
 {
@@ -31,14 +34,6 @@ void SceneGraphNode::update(DirectX::XMFLOAT4X4 pMatrix)
 	for (const auto& child : mChildren)
 	{
 		child->update(matrix);
-	}
-}
-
-void SceneGraphNode::render()
-{
-	for (const auto& child : mChildren)
-	{
-		child->render();
 	}
 }
 
@@ -75,6 +70,18 @@ std::istream& operator>>(std::istream & pIn, SceneGraphNode & pNode)
 		else if (nodeType == "Object")
 		{
 			child = std::make_shared<ObjectNode>();
+		}
+		else if (nodeType == "DirectionalLight")
+		{
+			child = std::make_shared<DirectionalLightNode>();
+		}
+		else if (nodeType == "PointLight")
+		{
+			child = std::make_shared<PointLightNode>();
+		}
+		else if (nodeType == "SpotLight")
+		{
+			child = std::make_shared<SpotLightNode>();
 		}
 		else if (nodeType == "}")
 		{

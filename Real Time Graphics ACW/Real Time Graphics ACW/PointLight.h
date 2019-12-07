@@ -1,6 +1,6 @@
 #pragma once
 #include <directxmath.h>
-#include <d3d11_1.h>
+#include <istream>
 
 struct PointLightBuffer
 {
@@ -14,14 +14,37 @@ struct PointLightBuffer
 
 class PointLight
 {
-	DirectX::XMFLOAT4 mColor;
+	DirectX::XMFLOAT3 mColor;
 	DirectX::XMFLOAT3 mPosition;
-	bool mDirty;
+	float mAttenuationConstant;
+	float mAttenuationLinear;
+	float mAttenuationQuad;
 	
 public:
-	PointLight(DirectX::XMFLOAT4 pColor, DirectX::XMFLOAT3 pDirection);
+	PointLight(DirectX::XMFLOAT3 pColor, DirectX::XMFLOAT3 pPosition, float pAttenuationConstant, float pAttenuationLinear, float pAttenuationQuad);
+	PointLight() = default;
 	~PointLight() = default;
 
-	void use(ID3D11Buffer * pDeviceBuffer);
+	void setColor(DirectX::XMFLOAT3 pColor)
+	{
+		mColor = pColor;
+	}
+
+	void setPosition(DirectX::XMFLOAT3 pPosition)
+	{
+		mPosition = pPosition;
+	}
+
+	void setAttenuation(float pConstant, float pLinear, float pQuad)
+	{
+		mAttenuationConstant = pConstant;
+		mAttenuationLinear = pLinear;
+		mAttenuationQuad = pQuad;
+	}
+
+	void use(PointLightBuffer & pLightBuffer);
+	void update(DirectX::XMFLOAT4X4 & pMatrix);
 };
+
+std::istream& operator>>(std::istream & pIn, PointLight & pLight);
 

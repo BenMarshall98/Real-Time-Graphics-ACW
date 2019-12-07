@@ -2,7 +2,6 @@
 #include <DirectXMath.h>
 #include <vector>
 #include <iostream>
-#include "Object.h"
 
 class SceneGraphNode
 {
@@ -27,9 +26,6 @@ public:
 	}
 
 	virtual void update(DirectX::XMFLOAT4X4 pMatrix);
-	
-	virtual void render();
-	
 	virtual void read(std::istream & pIn) = 0;
 };
 

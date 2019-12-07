@@ -16,6 +16,7 @@
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
+#include "LightingManager.h"
 
 double Game::mDt = 0.0f;
 Camera * Game::mCamera = nullptr;
@@ -90,42 +91,6 @@ void Game::run()
 		cb.mProjection = XMMatrixTranspose(mProjection);
 
 		inst->useCameraBuffer(cb);
-
-		DirectionalLightBuffer db;
-
-		db.mColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-		db.mDirection = DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f);
-		db.mIsUsed = false;
-
-		inst->useDirectionalLightBuffer(db);
-
-		PointLightBuffer pb;
-
-		pb.mColor = DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
-		pb.mPosition = DirectX::XMFLOAT4(1.0, 1.0f, 1.0f, 0.0f);
-		pb.mAttenuationConstant = 1.0f;
-		pb.mAttenuationLinear = 0.0f;
-		pb.mAttenuationQuad = 0.1f;
-		pb.mIsUsed = true;
-
-		inst->usePointLightBuffer(pb);
-
-		SpotLightBuffer sb;
-		ZeroMemory(&sb, sizeof SpotLightBuffer);
-		sb.mColor[0] = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-		sb.mPosition[0] = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 0.0f);
-		sb.mDirection[0] = DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.0f);
-		sb.mInnerAngle[0] = DirectX::XMConvertToRadians(5.0f);
-		sb.mInnerAngle[1] = DirectX::XMConvertToRadians(5.0f);
-		sb.mInnerAngle[2] = DirectX::XMConvertToRadians(5.0f);
-		sb.mInnerAngle[3] = DirectX::XMConvertToRadians(5.0f);
-		sb.mOuterAngle[0] = DirectX::XMConvertToRadians(10.0f);
-		sb.mAttenuationConstant[0] = 1.0f;
-		sb.mAttenuationLinear[0] = 0.0f;
-		sb.mAttenuationQuad[0] = 0.1f;
-		sb.mIsUsed[0] = false;
-
-		inst->useSpotLightBuffer(sb);
 		
 		MaterialBuffer mb;
 		
@@ -140,6 +105,8 @@ void Game::run()
 		XMStoreFloat4x4(&world, DirectX::XMMatrixIdentity());
 		
 		mNode->update(world);
+
+		LightingManager::instance()->update();
 
 		ObjectManager::instance()->render();
 		

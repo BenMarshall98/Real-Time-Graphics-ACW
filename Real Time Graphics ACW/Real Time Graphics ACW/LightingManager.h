@@ -5,20 +5,31 @@
 #include "PointLight.h"
 #include "DirectionalLight.h"
 #include "SpotLight.h"
+#include <memory>
 
 
 class LightingManager
 {
-	ID3D11Buffer * mDirectionalLightBuffer = nullptr;
-	ID3D11Buffer * mPointLightBuffer = nullptr;
-	ID3D11Buffer * mSpotLightBuffer = nullptr;
+	std::shared_ptr<DirectionalLight> mDirectionalLight = nullptr;
+	std::shared_ptr<PointLight> mPointLight = nullptr;
+	std::vector<std::shared_ptr<SpotLight>> mSpotLights;
 
-	DirectionalLight * mDirectionalLight = nullptr;
-	PointLight * mPointLight = nullptr;
-	std::vector<SpotLight *> mSpotLights;
+	static LightingManager * mInstance;
+	
+	LightingManager();
 
 public:
-	LightingManager();
+
+	static LightingManager * instance()
+	{
+		if (!mInstance)
+		{
+			mInstance = new LightingManager();
+		}
+
+		return mInstance;
+	}
+	
 	~LightingManager() = default;
 
 	LightingManager(const LightingManager&) = delete;
@@ -26,9 +37,13 @@ public:
 	LightingManager & operator= (const LightingManager &) = delete;
 	LightingManager & operator= (LightingManager &&) = delete;
 
-	void setDirectionalLight(DirectionalLight * pDirectionalLight);
-	void setPointLight(PointLight * pPointLight);
-	void addSpotLight(SpotLight * pSpotLight);
+	void addDirectionalLight(std::shared_ptr<DirectionalLight> & pDirectionalLight);
+	void addPointLight(std::shared_ptr<PointLight> & pPointLight);
+	void addSpotLight(std::shared_ptr<SpotLight> & pSpotLight);
+
+	void removeDirectionalLight(std::shared_ptr<DirectionalLight> & pDirectionalLight);
+	void removePointLight(std::shared_ptr<PointLight> & pPointLight);
+	void removeSpotLight(std::shared_ptr<SpotLight> & pSpotLight);
 
 	void update() const;
 };

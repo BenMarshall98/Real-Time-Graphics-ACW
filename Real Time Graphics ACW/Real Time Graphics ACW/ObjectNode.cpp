@@ -3,6 +3,7 @@
 
 ObjectNode::ObjectNode(Object * pObject) : mObject(pObject)
 {
+	ObjectManager::instance()->addDynamicObject(mObject);
 }
 
 ObjectNode::ObjectNode() : mObject(nullptr)
@@ -24,9 +25,4 @@ void ObjectNode::read(std::istream& pIn)
 void ObjectNode::update(DirectX::XMFLOAT4X4 pMatrix)
 {
 	mObject->setMatrix(pMatrix);
-}
-
-void ObjectNode::render()
-{
-	mObject->render();
 }

@@ -1,8 +1,3 @@
-cbuffer cameraBuffer : register(b0)
-{
-	float3 ViewPosition;
-}
-
 cbuffer materialBuffer : register(b1)
 {
 	float4 MaterialAmbient;
@@ -46,12 +41,13 @@ struct VS_OUTPUT
 	float4 Pos : SV_POSITION;
 	float4 FragmentPos : POSITION0;
 	float4 Normal : NORMAL0;
+    float3 ViewPosition : POSITION1;
 };
 
 float4 main(VS_OUTPUT input) : SV_Target
 {
 	float3 normal = normalize(input.Normal.xyz);
-	float3 viewDirection = normalize(ViewPosition - input.FragmentPos.xyz);
+	float3 viewDirection = normalize(input.ViewPosition - input.FragmentPos.xyz);
 
 	float3 color = float3(0.0f, 0.0f, 0.0f);
 
@@ -106,7 +102,8 @@ float4 main(VS_OUTPUT input) : SV_Target
 			float distance = length(PointPosition.xyz - input.FragmentPos.xyz);
 			float attenuation = 1.0f / (SpotAttenuationConstant[i] + SpotAttenuationLinear[i] * distance + SpotAttenuationQuad[i] * distance * distance);
 
-			float intensity = clamp((dot(lightDirection, normalize(-SpotDirection[i].xyz)) - SpotOuterAngle[i]) / (SpotInnerAngle[i] - SpotOuterAngle[i]), 0.0f, 1.0f);
+            float theta = dot(lightDirection, normalize(-SpotDirection[i].xyz));
+			float intensity = clamp((theta - SpotOuterAngle[i]) / (SpotInnerAngle[i] - SpotOuterAngle[i]), 0.0f, 1.0f);
 			
 			color += MaterialAmbient * SpotColor[i] * attenuation * intensity;
 			color += MaterialDiffuse * SpotColor[i] * diffuse * attenuation * intensity;

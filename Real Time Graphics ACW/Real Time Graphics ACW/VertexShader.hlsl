@@ -2,6 +2,7 @@ cbuffer cameraBuffer : register(b0)
 {
 	matrix View;
 	matrix Projection;
+    float3 ViewPosition;
 }
 
 cbuffer modelBuffer : register(b1)
@@ -16,6 +17,7 @@ struct VS_OUTPUT
 	float4 Pos : SV_POSITION;
 	float4 FragmentPos : POSITION0;
 	float4 Normal : NORMAL0;
+    float3 ViewPosition : POSITION1;
 };
 
 VS_OUTPUT main(float4 Pos : POSITION, float4 Normal : NORMAL)
@@ -26,5 +28,6 @@ VS_OUTPUT main(float4 Pos : POSITION, float4 Normal : NORMAL)
 	output.Pos = mul(output.Pos, Projection);
 	output.FragmentPos = mul(Pos, World);
 	output.Normal = mul(Normal, InverseWorld);
+    output.ViewPosition = ViewPosition;
 	return output;
 }

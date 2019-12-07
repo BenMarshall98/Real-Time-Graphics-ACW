@@ -1,5 +1,10 @@
 #include "DX11Render.h"
 #include "Win32Window.h"
+#include "Object.h"
+#include "Camera.h"
+#include "PointLight.h"
+#include "SpotLight.h"
+#include "DirectionalLight.h"
 
 Dx11Render * Dx11Render::mInstance = nullptr;
 
@@ -117,7 +122,7 @@ Dx11Render::Dx11Render() : mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullpt
 	mDeviceContext->RSSetViewports(1, &viewport);
 
 	D3D11_RASTERIZER_DESC rasterizerDesc;
-	rasterizerDesc.CullMode = D3D11_CULL_NONE;
+	rasterizerDesc.CullMode = D3D11_CULL_FRONT;
 	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
 	rasterizerDesc.ScissorEnable = false;
 	rasterizerDesc.DepthBias = 0;
@@ -138,12 +143,62 @@ Dx11Render::Dx11Render() : mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullpt
 	bd.CPUAccessFlags = 0;
 
 	result = mDevice->CreateBuffer(&bd, nullptr, mModelBuffer.ReleaseAndGetAddressOf());
+
+	bd.ByteWidth = sizeof(MaterialBuffer);
+
+	result = mDevice->CreateBuffer(&bd, nullptr, mMaterialBuffer.ReleaseAndGetAddressOf());
+	
+	bd.ByteWidth = sizeof(CameraBuffer);
+
+	result = mDevice->CreateBuffer(&bd, nullptr, mCameraBuffer.ReleaseAndGetAddressOf());
+
+	bd.ByteWidth = sizeof(DirectionalLightBuffer);
+
+	result = mDevice->CreateBuffer(&bd, nullptr, mDirectionalLightBuffer.ReleaseAndGetAddressOf());
+
+	bd.ByteWidth = sizeof(PointLightBuffer);
+
+	result = mDevice->CreateBuffer(&bd, nullptr, mPointLightBuffer.ReleaseAndGetAddressOf());
+
+	bd.ByteWidth = sizeof(SpotLightBuffer);
+
+	result = mDevice->CreateBuffer(&bd, nullptr, mSpotLightBuffer.ReleaseAndGetAddressOf());
 }
 
 void Dx11Render::useModelBuffer(const ModelBuffer& pModelBuffer) const
 {
 	mDeviceContext->UpdateSubresource(mModelBuffer.Get(), 0, nullptr, &pModelBuffer, 0, 0);
 	mDeviceContext->VSSetConstantBuffers(1, 1, mModelBuffer.GetAddressOf());
+}
+
+void Dx11Render::useMaterialBuffer(const MaterialBuffer& pMaterialBuffer) const
+{
+	mDeviceContext->UpdateSubresource(mMaterialBuffer.Get(), 0, nullptr, &pMaterialBuffer, 0, 0);
+	mDeviceContext->PSSetConstantBuffers(1, 1, mMaterialBuffer.GetAddressOf());
+}
+
+void Dx11Render::useCameraBuffer(const CameraBuffer& pCameraBuffer) const
+{
+	mDeviceContext->UpdateSubresource(mCameraBuffer.Get(), 0, nullptr, &pCameraBuffer, 0, 0);
+	mDeviceContext->VSSetConstantBuffers(0, 1, mCameraBuffer.GetAddressOf());
+}
+
+void Dx11Render::useDirectionalLightBuffer(const DirectionalLightBuffer& pDirectionalLightBuffer) const
+{
+	mDeviceContext->UpdateSubresource(mDirectionalLightBuffer.Get(), 0, nullptr, &pDirectionalLightBuffer, 0, 0);
+	mDeviceContext->PSSetConstantBuffers(2, 1, mDirectionalLightBuffer.GetAddressOf());
+}
+
+void Dx11Render::usePointLightBuffer(const PointLightBuffer& pPointLightBuffer) const
+{
+	mDeviceContext->UpdateSubresource(mPointLightBuffer.Get(), 0, nullptr, &pPointLightBuffer, 0, 0);
+	mDeviceContext->PSSetConstantBuffers(3, 1, mPointLightBuffer.GetAddressOf());
+}
+
+void Dx11Render::useSpotLightBuffer(const SpotLightBuffer& pSpotLightBuffer) const
+{
+	mDeviceContext->UpdateSubresource(mSpotLightBuffer.Get(), 0, nullptr, &pSpotLightBuffer, 0, 0);
+	mDeviceContext->PSSetConstantBuffers(4, 1, mSpotLightBuffer.GetAddressOf());
 }
 
 void Dx11Render::resize(int pWidth, int pHeight)

@@ -3,6 +3,21 @@
 #include "Model.h"
 #include <memory>
 
+struct ModelBuffer
+{
+	DirectX::XMMATRIX mModel;
+	DirectX::XMMATRIX mModelInverse;
+};
+
+struct MaterialBuffer
+{
+	DirectX::XMFLOAT4 mAmbient;
+	DirectX::XMFLOAT4 mDiffuse;
+	DirectX::XMFLOAT4 mSpecular;
+	float mShininess;
+	DirectX::XMFLOAT3 mPadding;
+};
+
 class Object
 {
 	std::shared_ptr<Model> mModel;

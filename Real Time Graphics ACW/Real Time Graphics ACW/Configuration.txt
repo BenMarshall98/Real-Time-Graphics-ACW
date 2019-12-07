@@ -53,5 +53,81 @@ Identity
 			}
 		}
 	}
-
+	Translation
+	{
+		Pos: 1.0, 1.0, 1.0
+		PointLight
+		{
+			Color: 1.0, 1.0, 1.0
+			Position: 0.0, 0.0, 0.0
+			AttenuationConstant: 1.0
+			AttenuationLinear: 0.0
+			AttenuationQuad: 0.1
+		}
+	}
+	Translation
+	{
+		Pos: 1.0, 1.0, 1.0
+		SpotLight
+		{
+			Color: 1.0, 1.0, 1.0
+			Position: 0.0, 0.0, 0.0
+			Direction: 0.0, 1.0, 0.0
+			InnerAngle: 5.0
+			OuterAngle: 15.0
+			AttenuationConstant: 1.0
+			AttenuationLinear: 0.0
+			AttenuationQuad: 0.1
+		}
+	}
+	Translation
+	{
+		Pos: 1.0, 1.0, 1.0
+		SpotLight
+		{
+			Color: 1.0, 1.0, 1.0
+			Position: 0.0, 0.0, 0.0
+			Direction: 0.0, -1.0, 0.0
+			InnerAngle: 5.0
+			OuterAngle: 15.0
+			AttenuationConstant: 1.0
+			AttenuationLinear: 0.0
+			AttenuationQuad: 0.1
+		}
+	}
+	Translation
+	{
+		Pos: 1.0, 1.0, 1.0
+		SpotLight
+		{
+			Color: 1.0, 1.0, 1.0
+			Position: 0.0, 0.0, 0.0
+			Direction: 0.0, 0.0, 1.0
+			InnerAngle: 5.0
+			OuterAngle: 15.0
+			AttenuationConstant: 1.0
+			AttenuationLinear: 0.0
+			AttenuationQuad: 0.1
+		}
+	}
+	Translation
+	{
+		Pos: 1.0, 1.0, 1.0
+		SpotLight
+		{
+			Color: 1.0, 1.0, 1.0
+			Position: 0.0, 0.0, 0.0
+			Direction: 0.0, 0.0, -1.0
+			InnerAngle: 5.0
+			OuterAngle: 15.0
+			AttenuationConstant: 1.0
+			AttenuationLinear: 0.0
+			AttenuationQuad: 0.1
+		}
+	}
+	DirectionalLight
+	{
+		Color: 1.0, 1.0, 1.0
+		Direction: 0.0, 0.0, 1.0
+	}
 }

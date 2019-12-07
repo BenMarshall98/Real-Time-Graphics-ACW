@@ -1,15 +1,14 @@
 #pragma once
 
 #include <d3d11_1.h>
-#include <DirectXMath.h>
 #include <WRL/client.h>
 
-struct ModelBuffer
-{
-	DirectX::XMMATRIX mModel;
-	DirectX::XMMATRIX mModelInverse;
-	DirectX::XMVECTOR mColor;
-};
+struct ModelBuffer;
+struct MaterialBuffer;
+struct CameraBuffer;
+struct DirectionalLightBuffer;
+struct PointLightBuffer;
+struct SpotLightBuffer;
 
 class Dx11Render
 {
@@ -26,6 +25,11 @@ class Dx11Render
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> mRasterizerState;
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mModelBuffer = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> mCameraBuffer = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> mDirectionalLightBuffer = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> mPointLightBuffer = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> mSpotLightBuffer = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> mMaterialBuffer = nullptr;
 
 	Dx11Render();
 	
@@ -54,7 +58,12 @@ public:
 	}
 
 	void useModelBuffer(const ModelBuffer & pModelBuffer) const;
-
+	void useMaterialBuffer(const MaterialBuffer & pMaterialBuffer) const;
+	void useCameraBuffer(const CameraBuffer & pCameraBuffer) const;
+	void useDirectionalLightBuffer(const DirectionalLightBuffer & pDirectionalLightBuffer) const;
+	void usePointLightBuffer(const PointLightBuffer & pPointLightBuffer) const;
+	void useSpotLightBuffer(const SpotLightBuffer & pSPotLightBuffer) const;
+	
 	void resize(int pWidth, int pHeight);
 	
 	~Dx11Render() = default;

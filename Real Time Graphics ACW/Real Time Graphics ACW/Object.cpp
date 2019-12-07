@@ -24,7 +24,6 @@ void Object::render()
 	ModelBuffer mb;
 	mb.mModel = XMMatrixTranspose(matrix);
 	mb.mModelInverse = XMMatrixInverse(nullptr, matrix);
-	mb.mColor = XMLoadFloat3(&mDiffuse);
 
 	Dx11Render::instance()->useModelBuffer(mb);
 

@@ -2,6 +2,13 @@
 
 #include <DirectXMath.h>
 
+struct CameraBuffer
+{
+	DirectX::XMMATRIX mView;
+	DirectX::XMMATRIX mProjection;
+	DirectX::XMVECTOR mViewPosition;
+};
+
 class Camera
 {
 	DirectX::XMFLOAT4X4 mViewMatrix;
@@ -93,6 +100,7 @@ public:
 	}
 
 	void update();
+	void render();
 
 	DirectX::XMFLOAT4X4 getViewMatrix() const
 	{

@@ -25,6 +25,12 @@
     <Filter Include="Resource Files\GourandShading">
       <UniqueIdentifier>{2e165121-fd2b-4605-ad4c-3b9d09ff144b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\PhongShading">
+      <UniqueIdentifier>{5eb750a7-bf71-4497-a6b0-9af15b9a675a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\TextureShading">
+      <UniqueIdentifier>{f26ab8a5-ba74-4329-bec3-ba3f8d32487a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -250,11 +256,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="VertexShader.hlsl">
-      <Filter>Resource Files</Filter>
+    <CopyFileToFolders Include="GourandFragmentShader.hlsl">
+      <Filter>Resource Files\GourandShading</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="PixelShader.hlsl">
-      <Filter>Resource Files</Filter>
+    <CopyFileToFolders Include="GourandVertexShader.hlsl">
+      <Filter>Resource Files\GourandShading</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
@@ -263,10 +269,16 @@
     <CopyFileToFolders Include="sphere.obj">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="GourandFragmentShader.hlsl" />
-    <CopyFileToFolders Include="GourandVertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="PhongFragmentShader.hlsl">
+      <Filter>Resource Files\PhongShading</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongVertexShader.hlsl">
+      <Filter>Resource Files\PhongShading</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

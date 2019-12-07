@@ -1,17 +1,4 @@
-cbuffer cameraBuffer : register(b0)
-{
-    matrix View;
-    matrix Projection;
-    float3 ViewPosition;
-}
-
-cbuffer modelBuffer : register(b1)
-{
-    matrix World;
-    matrix InverseWorld;
-}
-
-cbuffer materialBuffer : register(b2)
+cbuffer materialBuffer : register(b1)
 {
     float4 MaterialAmbient;
     float4 MaterialDiffuse;
@@ -19,14 +6,14 @@ cbuffer materialBuffer : register(b2)
     float MaterialShininess;
 }
 
-cbuffer directionalBuffer : register(b3)
+cbuffer directionalBuffer : register(b2)
 {
     float4 DirectionalColor;
     float3 DirectionalDirection;
     int DirectionalUsed;
 }
 
-cbuffer pointBuffer : register(b4)
+cbuffer pointBuffer : register(b3)
 {
     float4 PointColor;
     float4 PointPosition;
@@ -36,7 +23,7 @@ cbuffer pointBuffer : register(b4)
     int PointUsed;
 }
 
-cbuffer spotBuffer : register(b5)
+cbuffer spotBuffer : register(b4)
 {
     float4 SpotColor[4];
     float4 SpotPosition[4];
@@ -49,29 +36,18 @@ cbuffer spotBuffer : register(b5)
     int4 SpotUsed;
 }
 
-struct VS_INPUT
-{
-    float4 Pos : POSITION;
-    float4 Normal : NORMAL;
-};
-
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
-    float4 Color : COLOR;
+    float4 FragmentPos : POSITION0;
+    float4 Normal : NORMAL0;
+    float3 ViewPosition : POSITION1;
 };
 
-VS_OUTPUT main(VS_INPUT input)
+float4 main(VS_OUTPUT input) : SV_Target
 {
-    VS_OUTPUT output = (VS_OUTPUT) 0;
-    output.Pos = mul(input.Pos, World);
-    output.Pos = mul(output.Pos, View);
-    output.Pos = mul(output.Pos, Projection);
-    
-    float4 fragmentPos = mul(input.Pos, World);
-    
-    float3 normal = normalize(mul(input.Normal, InverseWorld));
-    float3 viewDirection = normalize(ViewPosition - fragmentPos.xyz);
+    float3 normal = normalize(input.Normal.xyz);
+    float3 viewDirection = normalize(input.ViewPosition - input.FragmentPos.xyz);
 
     float3 color = float3(0.0f, 0.0f, 0.0f);
 
@@ -94,7 +70,7 @@ VS_OUTPUT main(VS_INPUT input)
 	//Point Light
     if (PointUsed)
     {
-        float3 lightDirection = normalize(PointPosition.xyz - fragmentPos.xyz);
+        float3 lightDirection = normalize(PointPosition.xyz - input.FragmentPos.xyz);
 
         float diffuse = max(dot(normal, lightDirection), 0.0f);
 
@@ -102,7 +78,7 @@ VS_OUTPUT main(VS_INPUT input)
 
         float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), MaterialShininess);
 
-        float distance = length(PointPosition.xyz - fragmentPos.xyz);
+        float distance = length(PointPosition.xyz - input.FragmentPos.xyz);
         float attenuation = 1.0f / (PointAttenuationConstant + PointAttenuationLinear * distance + PointAttenuationQuad * distance * distance);
 
         color += MaterialAmbient * PointColor * attenuation;
@@ -115,7 +91,7 @@ VS_OUTPUT main(VS_INPUT input)
     {
         if (SpotUsed[i])
         {
-            float3 lightDirection = normalize(SpotPosition[i].xyz - fragmentPos.xyz);
+            float3 lightDirection = normalize(SpotPosition[i].xyz - input.FragmentPos.xyz);
 			
             float diffuse = max(dot(normal, lightDirection), 0.0f);
 			
@@ -123,7 +99,7 @@ VS_OUTPUT main(VS_INPUT input)
 			
             float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), MaterialShininess);
 			
-            float distance = length(PointPosition.xyz - fragmentPos.xyz);
+            float distance = length(PointPosition.xyz - input.FragmentPos.xyz);
             float attenuation = 1.0f / (SpotAttenuationConstant[i] + SpotAttenuationLinear[i] * distance + SpotAttenuationQuad[i] * distance * distance);
 
             float theta = dot(lightDirection, normalize(-SpotDirection[i].xyz));
@@ -134,8 +110,6 @@ VS_OUTPUT main(VS_INPUT input)
             color += MaterialSpecular * SpotColor[i] * specular * attenuation * intensity;
         }
     }
-    
-    output.Color = float4(color, 1.0f);
-    
-    return output;
+
+    return float4(color.x, color.y, color.z, 1.0f);
 }

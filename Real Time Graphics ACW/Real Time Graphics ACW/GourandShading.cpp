@@ -1,7 +1,8 @@
 #include "GourandShading.h"
 #include "ResourceManager.h"
 
-GourandShading::GourandShading() : Technique(ResourceManager::instance()->loadShader("VertexShader.hlsl", "PixelShader.hlsl"), nullptr)
+GourandShading::GourandShading() :
+	Technique(ResourceManager::instance()->loadShader("GourandVertexShader.hlsl", "GourandFragmentShader.hlsl"), nullptr)
 {
 }
 

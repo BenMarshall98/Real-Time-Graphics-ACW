@@ -1,13 +1,13 @@
 #include "ObjectManager.h"
-#include "IdentityNode.h"
 #include "GourandShading.h"
-#include <fstream>
+#include "PhongShading.h"
 
 ObjectManager * ObjectManager::mInstance = nullptr;
 
 ObjectManager::ObjectManager()
 {
-	staticTechnique = std::make_unique<GourandShading>();
+	//staticTechnique = std::make_unique<GourandShading>();
+	staticTechnique = std::make_unique<PhongShading>();
 	dynamicTechniques.emplace_back(std::make_unique<GourandShading>());
 }
 

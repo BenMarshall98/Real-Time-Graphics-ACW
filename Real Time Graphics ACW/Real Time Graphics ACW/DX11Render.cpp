@@ -175,6 +175,7 @@ void Dx11Render::useMaterialBuffer(const MaterialBuffer& pMaterialBuffer) const
 {
 	mDeviceContext->UpdateSubresource(mMaterialBuffer.Get(), 0, nullptr, &pMaterialBuffer, 0, 0);
 	mDeviceContext->PSSetConstantBuffers(1, 1, mMaterialBuffer.GetAddressOf());
+	mDeviceContext->VSSetConstantBuffers(2, 1, mMaterialBuffer.GetAddressOf());
 }
 
 void Dx11Render::useCameraBuffer(const CameraBuffer& pCameraBuffer) const
@@ -187,18 +188,21 @@ void Dx11Render::useDirectionalLightBuffer(const DirectionalLightBuffer& pDirect
 {
 	mDeviceContext->UpdateSubresource(mDirectionalLightBuffer.Get(), 0, nullptr, &pDirectionalLightBuffer, 0, 0);
 	mDeviceContext->PSSetConstantBuffers(2, 1, mDirectionalLightBuffer.GetAddressOf());
+	mDeviceContext->VSSetConstantBuffers(3, 1, mDirectionalLightBuffer.GetAddressOf());
 }
 
 void Dx11Render::usePointLightBuffer(const PointLightBuffer& pPointLightBuffer) const
 {
 	mDeviceContext->UpdateSubresource(mPointLightBuffer.Get(), 0, nullptr, &pPointLightBuffer, 0, 0);
 	mDeviceContext->PSSetConstantBuffers(3, 1, mPointLightBuffer.GetAddressOf());
+	mDeviceContext->VSSetConstantBuffers(4, 1, mPointLightBuffer.GetAddressOf());
 }
 
 void Dx11Render::useSpotLightBuffer(const SpotLightBuffer& pSpotLightBuffer) const
 {
 	mDeviceContext->UpdateSubresource(mSpotLightBuffer.Get(), 0, nullptr, &pSpotLightBuffer, 0, 0);
 	mDeviceContext->PSSetConstantBuffers(4, 1, mSpotLightBuffer.GetAddressOf());
+	mDeviceContext->VSSetConstantBuffers(5, 1, mSpotLightBuffer.GetAddressOf());
 }
 
 void Dx11Render::resize(int pWidth, int pHeight)

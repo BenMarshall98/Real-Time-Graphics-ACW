@@ -46,10 +46,10 @@ Texture::~Texture()
 	}
 }
 
-void Texture::use() const
+void Texture::use(unsigned int pIndex) const
 {
 	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
 
-	deviceContext->PSSetShaderResources(0, 1, &mTexture);
-	deviceContext->PSSetSamplers(0, 1, &mSampler);
+	deviceContext->PSSetShaderResources(pIndex, 1, &mTexture);
+	deviceContext->PSSetSamplers(pIndex, 1, &mSampler);
 }

@@ -14,6 +14,6 @@ public:
 	Texture & operator= (const Texture & pTexture) = delete;
 
 	bool loadTexture(const std::string & pTextureFile);
-	void use() const;
+	void use(unsigned int pIndex) const;
 };
 

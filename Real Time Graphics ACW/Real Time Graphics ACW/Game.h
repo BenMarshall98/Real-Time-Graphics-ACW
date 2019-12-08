@@ -5,6 +5,7 @@
 #include "Model.h"
 #include "Camera.h"
 #include "SceneGraphNode.h"
+#include "Texture.h"
 
 class Game
 {
@@ -18,6 +19,8 @@ class Game
 	__int64 mStop;
 
 	std::unique_ptr<SceneGraphNode> mNode;
+	std::shared_ptr<Texture> mBase;
+	std::shared_ptr<Texture> mSpec;
 	
 public:
 	Game();

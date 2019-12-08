@@ -262,6 +262,12 @@
     <CopyFileToFolders Include="GourandVertexShader.hlsl">
       <Filter>Resource Files\GourandShading</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="PhongFragmentShader.hlsl">
+      <Filter>Resource Files\PhongShading</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="PhongVertexShader.hlsl">
+      <Filter>Resource Files\PhongShading</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />
@@ -274,11 +280,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="PhongFragmentShader.hlsl">
-      <Filter>Resource Files\PhongShading</Filter>
+    <Image Include="tyre_normal.dds" />
+    <Image Include="tyre_spec.dds" />
+    <Image Include="tyre_base.dds" />
+    <Image Include="tyre_height.dds" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="TextureFragmentShader.hlsl">
+      <Filter>Resource Files\TextureShading</Filter>
     </FxCompile>
-    <FxCompile Include="PhongVertexShader.hlsl">
-      <Filter>Resource Files\PhongShading</Filter>
+    <FxCompile Include="TextureVertexShader.hlsl">
+      <Filter>Resource Files\TextureShading</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

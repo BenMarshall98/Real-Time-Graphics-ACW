@@ -2,7 +2,8 @@
 #include "ResourceManager.h"
 
 PhongShading::PhongShading() :
-	Technique(ResourceManager::instance()->loadShader("PhongVertexShader.hlsl", "PhongFragmentShader.hlsl"), nullptr)
+	Technique(ResourceManager::instance()->loadShader(
+		"PhongVertexShader.hlsl", "PhongFragmentShader.hlsl"), nullptr)
 {
 }
 

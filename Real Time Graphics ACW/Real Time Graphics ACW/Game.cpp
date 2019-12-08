@@ -13,10 +13,8 @@
 #include "IdentityNode.h"
 #include <fstream>
 #include "ObjectManager.h"
-#include "DirectionalLight.h"
-#include "PointLight.h"
-#include "SpotLight.h"
 #include "LightingManager.h"
+#include "ResourceManager.h"
 
 double Game::mDt = 0.0f;
 Camera * Game::mCamera = nullptr;
@@ -49,6 +47,9 @@ Game::Game()
 	// Initialize the projection matrix
 	mProjection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, Win32Window::instance()->getWidth() / (FLOAT)Win32Window::instance()->getHeight(), 0.01f, 100.0f);
 
+	mBase = ResourceManager::instance()->loadTexture("tyre_base.dds");
+	mSpec = ResourceManager::instance()->loadTexture("tyre_spec.dds");
+	
 	QueryPerformanceFrequency(&mTimer);
 	mFreq = double(mTimer.QuadPart);
 
@@ -107,6 +108,9 @@ void Game::run()
 		mNode->update(world);
 
 		LightingManager::instance()->update();
+
+		mBase->use(0);
+		mSpec->use(1);
 
 		ObjectManager::instance()->render();
 		

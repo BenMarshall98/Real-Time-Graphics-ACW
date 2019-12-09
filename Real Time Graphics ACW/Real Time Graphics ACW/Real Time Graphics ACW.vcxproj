@@ -160,6 +160,7 @@
     <ClInclude Include="ToonShading.h" />
     <ClInclude Include="TranslationNode.h" />
     <ClInclude Include="TransparencyShading.h" />
+    <ClInclude Include="VectorAnimation.h" />
     <ClInclude Include="Win32Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +200,7 @@
     <ClCompile Include="ToonShading.cpp" />
     <ClCompile Include="TranslationNode.cpp" />
     <ClCompile Include="TransparencyShading.cpp" />
+    <ClCompile Include="VectorAnimation.cpp" />
     <ClCompile Include="Win32Window.cpp" />
   </ItemGroup>
   <ItemGroup>

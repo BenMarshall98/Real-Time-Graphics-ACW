@@ -141,6 +141,9 @@
     <ClInclude Include="DirectionalLightNode.h">
       <Filter>SceneGraph</Filter>
     </ClInclude>
+    <ClInclude Include="VectorAnimation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModelLoader.cpp">
@@ -254,6 +257,9 @@
     <ClCompile Include="SpotLightNode.cpp">
       <Filter>SceneGraph</Filter>
     </ClCompile>
+    <ClCompile Include="VectorAnimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="GourandFragmentShader.hlsl">
@@ -268,6 +274,8 @@
     <CopyFileToFolders Include="PhongVertexShader.hlsl">
       <Filter>Resource Files\PhongShading</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="TextureFragmentShader.hlsl" />
+    <CopyFileToFolders Include="TextureVertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />
@@ -284,13 +292,5 @@
     <Image Include="tyre_spec.dds" />
     <Image Include="tyre_base.dds" />
     <Image Include="tyre_height.dds" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="TextureFragmentShader.hlsl">
-      <Filter>Resource Files\TextureShading</Filter>
-    </FxCompile>
-    <FxCompile Include="TextureVertexShader.hlsl">
-      <Filter>Resource Files\TextureShading</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>

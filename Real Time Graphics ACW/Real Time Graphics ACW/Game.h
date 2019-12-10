@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "SceneGraphNode.h"
 #include "Texture.h"
+#include "Framebuffer.h"
 
 class Game
 {
@@ -21,6 +22,8 @@ class Game
 	std::unique_ptr<SceneGraphNode> mNode;
 	std::shared_ptr<Texture> mBase;
 	std::shared_ptr<Texture> mSpec;
+
+	Framebuffer * mFramebuffer;
 	
 public:
 	Game();

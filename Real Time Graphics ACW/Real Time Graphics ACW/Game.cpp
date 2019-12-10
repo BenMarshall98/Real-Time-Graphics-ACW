@@ -45,7 +45,7 @@ Game::Game()
 	mCamera = new Camera(eye, up, at);
 
 	// Initialize the projection matrix
-	mProjection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, Win32Window::instance()->getWidth() / (FLOAT)Win32Window::instance()->getHeight(), 0.01f, 100.0f);
+	mProjection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, Win32Window::instance()->getWidth() / (FLOAT)Win32Window::instance()->getHeight(), 0.01f, 20.0f);
 
 	mBase = ResourceManager::instance()->loadTexture("tyre_base.dds");
 	mSpec = ResourceManager::instance()->loadTexture("tyre_spec.dds");
@@ -55,6 +55,8 @@ Game::Game()
 
 	QueryPerformanceCounter(&mTimer);
 	mStart = mTimer.QuadPart;
+	mFramebuffer = new Framebuffer();
+	mFramebuffer->loadFramebuffer(true, true);
 }
 
 void Game::run()
@@ -111,6 +113,8 @@ void Game::run()
 
 		mBase->use(0);
 		mSpec->use(1);
+
+		mFramebuffer->useFramebuffer();
 
 		ObjectManager::instance()->render();
 		

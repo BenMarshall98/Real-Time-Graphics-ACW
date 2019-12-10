@@ -274,8 +274,12 @@
     <CopyFileToFolders Include="PhongVertexShader.hlsl">
       <Filter>Resource Files\PhongShading</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="TextureFragmentShader.hlsl" />
-    <CopyFileToFolders Include="TextureVertexShader.hlsl" />
+    <CopyFileToFolders Include="TextureFragmentShader.hlsl">
+      <Filter>Resource Files\TextureShading</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TextureVertexShader.hlsl">
+      <Filter>Resource Files\TextureShading</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />

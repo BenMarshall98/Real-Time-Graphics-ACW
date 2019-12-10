@@ -42,6 +42,11 @@ public:
 		mDeviceContext->ClearDepthStencilView(mDepthView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0.0f);
 	}
 
+	void bindDefaultFramebuffer() const
+	{
+		mDeviceContext->OMSetRenderTargets(1, mRenderTargetView.GetAddressOf(), mDepthView.Get());
+	}
+
 	void present() const
 	{
 		mSwapChain->Present(0, 0);

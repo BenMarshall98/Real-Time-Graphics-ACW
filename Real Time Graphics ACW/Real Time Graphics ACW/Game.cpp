@@ -114,7 +114,11 @@ void Game::run()
 		mBase->use(0);
 		mSpec->use(1);
 
-		mFramebuffer->useFramebuffer();
+		//mFramebuffer->useFramebuffer();
+
+		//ObjectManager::instance()->render();
+
+		Dx11Render::instance()->bindDefaultFramebuffer();
 
 		ObjectManager::instance()->render();
 		

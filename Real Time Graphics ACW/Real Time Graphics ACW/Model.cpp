@@ -104,24 +104,26 @@ void Model::render()
 
 	static Model * lastModel = nullptr;
 
+	const auto numberBuffers = 5;
+
 	if (this != lastModel)
 	{
-		ID3D11Buffer * bufferArray[3] =
+		ID3D11Buffer * bufferArray[numberBuffers] =
 		{
-			mPositionBuffer.Get(), mNormalBuffer.Get(), mTexCoordBuffer.Get()
+			mPositionBuffer.Get(), mNormalBuffer.Get(), mTexCoordBuffer.Get(), mTangentBuffer.Get(), mBiTangentBuffer.Get()
 		};
 
-		UINT strideArray[3] =
+		UINT strideArray[numberBuffers] =
 		{
-			sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT2)
+			sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT2), sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT3)
 		};
 
-		UINT offsetArray[3] =
+		UINT offsetArray[numberBuffers] =
 		{
-			0, 0, 0
+			0, 0, 0, 0, 0
 		};
 
-		deviceContext->IASetVertexBuffers(0, 3, bufferArray, strideArray, offsetArray);
+		deviceContext->IASetVertexBuffers(0, numberBuffers, bufferArray, strideArray, offsetArray);
 		deviceContext->IASetIndexBuffer(mIndicesBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		lastModel = this;

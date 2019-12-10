@@ -31,6 +31,9 @@
     <Filter Include="Resource Files\TextureShading">
       <UniqueIdentifier>{f26ab8a5-ba74-4329-bec3-ba3f8d32487a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\BumpShading">
+      <UniqueIdentifier>{748215ad-f39a-4c90-9d03-e79e0378fc34}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -296,5 +299,13 @@
     <Image Include="tyre_spec.dds" />
     <Image Include="tyre_base.dds" />
     <Image Include="tyre_height.dds" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="BumpVertexShader.hlsl">
+      <Filter>Resource Files\BumpShading</Filter>
+    </FxCompile>
+    <FxCompile Include="BumpFragmentShader.hlsl">
+      <Filter>Resource Files\BumpShading</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

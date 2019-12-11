@@ -65,7 +65,7 @@ public:
 		mShininess = pShininess;
 	}
 
-	void render();
+	void render(bool tesselated = false);
 };
 
 std::istream& operator>>(std::istream& pIn, Object & pObject);

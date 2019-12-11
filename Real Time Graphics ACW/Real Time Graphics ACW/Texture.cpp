@@ -46,10 +46,18 @@ Texture::~Texture()
 	}
 }
 
-void Texture::use(unsigned int pIndex) const
+void Texture::useFragment(unsigned int pIndex) const
 {
 	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
 
 	deviceContext->PSSetShaderResources(pIndex, 1, &mTexture);
 	deviceContext->PSSetSamplers(pIndex, 1, &mSampler);
+}
+
+void Texture::useDomain(unsigned int pIndex) const
+{
+	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
+
+	deviceContext->DSSetShaderResources(pIndex, 1, &mTexture);
+	deviceContext->DSSetSamplers(pIndex, 1, &mSampler);
 }

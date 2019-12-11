@@ -123,7 +123,7 @@ Dx11Render::Dx11Render() : mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullpt
 
 	D3D11_RASTERIZER_DESC rasterizerDesc;
 	rasterizerDesc.CullMode = D3D11_CULL_FRONT;
-	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
 	rasterizerDesc.ScissorEnable = false;
 	rasterizerDesc.DepthBias = 0;
 	rasterizerDesc.DepthBiasClamp = 0.0f;
@@ -169,6 +169,7 @@ void Dx11Render::useModelBuffer(const ModelBuffer& pModelBuffer) const
 {
 	mDeviceContext->UpdateSubresource(mModelBuffer.Get(), 0, nullptr, &pModelBuffer, 0, 0);
 	mDeviceContext->VSSetConstantBuffers(1, 1, mModelBuffer.GetAddressOf());
+	mDeviceContext->DSSetConstantBuffers(1, 1, mModelBuffer.GetAddressOf());
 }
 
 void Dx11Render::useMaterialBuffer(const MaterialBuffer& pMaterialBuffer) const
@@ -182,6 +183,7 @@ void Dx11Render::useCameraBuffer(const CameraBuffer& pCameraBuffer) const
 {
 	mDeviceContext->UpdateSubresource(mCameraBuffer.Get(), 0, nullptr, &pCameraBuffer, 0, 0);
 	mDeviceContext->VSSetConstantBuffers(0, 1, mCameraBuffer.GetAddressOf());
+	mDeviceContext->DSSetConstantBuffers(0, 1, mCameraBuffer.GetAddressOf());
 }
 
 void Dx11Render::useDirectionalLightBuffer(const DirectionalLightBuffer& pDirectionalLightBuffer) const

@@ -17,7 +17,7 @@ Object::Object() : mModel(nullptr), mMatrix(), mAmbient(), mDiffuse(), mSpecular
 {
 }
 
-void Object::render()
+void Object::render(bool tesselated)
 {
 	const auto matrix = XMLoadFloat4x4(&mMatrix);
 	
@@ -29,7 +29,7 @@ void Object::render()
 
 	if (mModel)
 	{
-		mModel->render();
+		mModel->render(tesselated);
 	}
 }
 

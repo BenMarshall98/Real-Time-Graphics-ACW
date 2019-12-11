@@ -98,7 +98,7 @@ bool Model::loadModel(const std::vector<DirectX::XMFLOAT3> & pPositions, const s
 	return true;
 }
 
-void Model::render()
+void Model::render(bool tessellated)
 {
 	auto deviceContext = Dx11Render::instance()->getDeviceContext();
 
@@ -125,8 +125,34 @@ void Model::render()
 
 		deviceContext->IASetVertexBuffers(0, numberBuffers, bufferArray, strideArray, offsetArray);
 		deviceContext->IASetIndexBuffer(mIndicesBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
-		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		lastModel = this;
+	}
+
+	static auto lastTessellated = tessellated;
+	static auto firstTime = true;
+
+	if (firstTime)
+	{
+		if (tessellated)
+		{
+			deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
+		}
+		else
+		{
+			deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		}
+	}
+	else if (lastTessellated != tessellated)
+	{
+		if (tessellated)
+		{
+			deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
+		}
+		else
+		{
+			deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		}
+		lastTessellated = tessellated;
 	}
 
 	deviceContext->DrawIndexed(mIndicesSize, 0, 0);

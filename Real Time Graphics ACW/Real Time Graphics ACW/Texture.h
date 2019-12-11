@@ -14,6 +14,7 @@ public:
 	Texture & operator= (const Texture & pTexture) = delete;
 
 	bool loadTexture(const std::string & pTextureFile);
-	void use(unsigned int pIndex) const;
+	void useFragment(unsigned int pIndex) const;
+	void useDomain(unsigned int pIndex) const;
 };
 

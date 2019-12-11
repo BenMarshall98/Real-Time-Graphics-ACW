@@ -141,7 +141,7 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> vsBlob = nullptr;
-		auto result = compileShaderFromFile(converter.from_bytes(pVertexFile), "vs_4_0", &vsBlob);
+		auto result = compileShaderFromFile(converter.from_bytes(pVertexFile), "vs_5_0", &vsBlob);
 		if (FAILED(result))
 		{
 			return false;
@@ -173,7 +173,7 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> psBlob = nullptr;
-		auto result = compileShaderFromFile(converter.from_bytes(pFragmentFile), "ps_4_0", &psBlob);
+		auto result = compileShaderFromFile(converter.from_bytes(pFragmentFile), "ps_5_0", &psBlob);
 		if (FAILED(result))
 		{
 			return false;
@@ -203,7 +203,7 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> dsBlob = nullptr;
-		auto result = compileShaderFromFile(converter.from_bytes(pDomainFile), "ds_4_0", &dsBlob);
+		auto result = compileShaderFromFile(converter.from_bytes(pDomainFile), "ds_5_0", &dsBlob);
 		if (FAILED(result))
 		{
 			return false;

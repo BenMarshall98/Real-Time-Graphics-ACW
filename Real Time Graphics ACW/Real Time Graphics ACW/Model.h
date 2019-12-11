@@ -28,6 +28,6 @@ public:
 	Model & operator= (const Model &) = delete;
 	Model & operator= (Model &&) = delete;
 
-	void render();
+	void render(bool tessellated = false);
 };
 

@@ -22,6 +22,7 @@ class Game
 	std::unique_ptr<SceneGraphNode> mNode;
 	std::shared_ptr<Texture> mBase;
 	std::shared_ptr<Texture> mSpec;
+	std::shared_ptr<Texture> mDisp;
 
 	Framebuffer * mFramebuffer;
 	

@@ -34,6 +34,9 @@
     <Filter Include="Resource Files\BumpShading">
       <UniqueIdentifier>{748215ad-f39a-4c90-9d03-e79e0378fc34}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\DisplacementShading">
+      <UniqueIdentifier>{46a01d18-4055-4ed8-9fca-93efa5f7d8d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -282,6 +285,18 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="TextureVertexShader.hlsl">
       <Filter>Resource Files\TextureShading</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DisplacementDomainShader.hlsl">
+      <Filter>Resource Files\DisplacementShading</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DisplacementFragmentShader.hlsl">
+      <Filter>Resource Files\DisplacementShading</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DisplacementHullShader.hlsl">
+      <Filter>Resource Files\DisplacementShading</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DisplacementVertexShader.hlsl">
+      <Filter>Resource Files\DisplacementShading</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>

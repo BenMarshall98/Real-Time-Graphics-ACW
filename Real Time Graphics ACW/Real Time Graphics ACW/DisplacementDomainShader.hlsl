@@ -13,8 +13,8 @@ cbuffer modelBuffer : register(b1)
     matrix InverseWorld;
 }
 
-Texture2D baseTexture : register(t0);
-SamplerState baseSampler : register(s0);
+Texture2D heightTexture : register(t0);
+SamplerState heightSampler : register(s0);
 
 struct PatchTess
 {
@@ -24,19 +24,20 @@ struct PatchTess
 
 struct HS_OUTPUT
 {
-    float4 Pos : POSITION0;
-    float4 FragmentPos : POSITION1;
-    float4 Normal : NORMAL0;
-    float3 ViewPosition : POSITION2;
+    float3 Pos : POSITION0;
+    float3 Normal : NORMAL0;
     float2 TexCoord : TEXCOORD0;
+    float3 Tangent : TANGENT0;
+    float3 BiTangent : BITANGENT0;
 };
 
 struct DS_OUTPUT
 {
     float4 Pos : SV_POSITION;
-    float4 FragmentPos : POSITION0;
-    float4 Normal : NORMAL0;
+    float3 FragmentPos : POSITION0;
     float3 ViewPosition : POSITION1;
+    float2 TexCoord : TEXCOORD0;
+    float3x3 TBN : POSITION2;
 };
 
 [domain("tri")]
@@ -44,31 +45,48 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
 {
     DS_OUTPUT output = (DS_OUTPUT) 0;
     
-    //Position
-    output.Pos = uvw[0] * tri[0].Pos;
-    output.Pos += uvw[1] * tri[1].Pos;
-    output.Pos += uvw[2] * tri[2].Pos;
+    output.TexCoord = uvw[0] * tri[0].TexCoord;
+    output.TexCoord += uvw[1] * tri[1].TexCoord;
+    output.TexCoord += uvw[2] * tri[2].TexCoord;
     
-    output.Pos = mul(output.Pos, World);
+    float height = heightTexture.SampleLevel(heightSampler, output.TexCoord, 0).x * 0.1;
+    
+    //Position
+    float3 pos = uvw[0] * tri[0].Pos;
+    pos += uvw[1] * tri[1].Pos;
+    pos += uvw[2] * tri[2].Pos;
+    
+    //Normal
+    float3 normal = uvw[0] * tri[0].Normal;
+    normal += uvw[1] * tri[1].Normal;
+    normal += uvw[2] * tri[2].Normal;
+    
+    pos += normalize(normal) * height;
+    
+    //FragmentPosition
+    output.Pos = mul(float4(pos, 1.0f), World);
+    
+    output.FragmentPos = output.Pos.xyz;
+    
     output.Pos = mul(output.Pos, View);
     output.Pos = mul(output.Pos, Projection);
     
-    //FragmentPosition
-    output.FragmentPos = uvw[0] * tri[0].FragmentPos;
-    output.FragmentPos += uvw[1] * tri[1].FragmentPos;
-    output.FragmentPos += uvw[2] * tri[2].FragmentPos;
+    //Tangent
+    float3 tangent = uvw[0] * tri[0].Tangent;
+    tangent += uvw[1] * tri[1].Tangent;
+    tangent += uvw[2] * tri[2].Tangent;
     
-    output.FragmentPos = mul(output.FragmentPos, World);
+    //BiTangent
+    float3 biTangent = uvw[0] * tri[0].BiTangent;
+    biTangent += uvw[1] * tri[1].BiTangent;
+    biTangent += uvw[2] * tri[2].BiTangent;
     
-    //Normal
-    output.Normal = uvw[0] * tri[0].Normal;
-    output.Normal += uvw[1] * tri[1].Normal;
-    output.Normal += uvw[2] * tri[2].Normal;
-    
-    output.Normal = mul(output.Normal, InverseWorld);
+    output.TBN = float3x3(normalize(mul(World, float4(tangent, 1.0f)).xyz),
+                        normalize(mul(World, float4(biTangent, 1.0f)).xyz),
+                        normalize(mul(World, float4(normal, 1.0f)).xyz));
     
     //ViewPosition
-    output.ViewPosition = tri[0].ViewPosition;
+    output.ViewPosition = ViewPosition;
     
     return output;
 }

@@ -36,80 +36,101 @@ cbuffer spotBuffer : register(b4)
 	int4 SpotUsed;
 }
 
+Texture2D baseTexture : register(t0);
+SamplerState baseSampler : register(s0);
+
+Texture2D specTexture : register(t1);
+SamplerState specSampler : register(s1);
+
+Texture2D normTexture : register(t2);
+SamplerState normSampler : register(s2);
+
 struct VS_OUTPUT
 {
-	float4 Pos : SV_POSITION;
-	float4 FragmentPos : POSITION0;
-	float4 Normal : NORMAL0;
-	float3 ViewPosition : POSITION1;
+    float4 Pos : SV_POSITION;
+    float3 FragmentPos : POSITION0;
+    float3 Normal : NORMAL0;
+    float2 TexCoord : TEXCOORD0;
+    float3 ViewPosition : POSITION1;
+    float3 Tangent : TANGENT0;
+    float3 BiTangent : BITANGENT0;
+    float3x3 TBN : POSITION2;
 };
 
 float4 main(VS_OUTPUT input) : SV_Target
 {
-	float3 normal = normalize(input.Normal.xyz);
-	float3 viewDirection = normalize(input.ViewPosition - input.FragmentPos.xyz);
+	//float3 normal = normalize(input.Normal.xyz);
+    float3 norm = normTexture.Sample(normSampler, input.TexCoord).xyz;
+    
+    norm = 2.0f * norm - 1.0f;
+    
+    float3 normal = normalize(mul(norm, input.TBN));
+    float3 viewDirection = normalize(input.ViewPosition - input.FragmentPos.xyz);
+    
+    float3 baseColor = specTexture.Sample(specSampler, input.TexCoord).xyz;
+    float spec = specTexture.Sample(specSampler, input.TexCoord).x * 256;
 
-	float3 color = float3(0.0f, 0.0f, 0.0f);
+    float3 color = float3(0.0f, 0.0f, 0.0f);
 
 	//Directional Light
-	if (DirectionalUsed)
-	{
-		float3 lightDirection = normalize(-DirectionalDirection);
+    if (DirectionalUsed)
+    {
+        float3 lightDirection = normalize(-DirectionalDirection);
 
-		float diffuse = max(dot(normal, lightDirection), 0.0f);
+        float diffuse = max(dot(normal, lightDirection), 0.0f);
 
-		float3 reflectDirection = reflect(-lightDirection, normal);
+        float3 reflectDirection = reflect(-lightDirection, normal);
+		
+        float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), spec);
 
-		float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), MaterialShininess);
-
-		color += MaterialAmbient * DirectionalColor;
-		color += MaterialDiffuse * DirectionalColor * diffuse;
-		color += MaterialSpecular * DirectionalColor * specular;
-	}
+        color += baseColor * DirectionalColor.xyz * float3(0.1f, 0.1f, 0.1f);
+        color += baseColor * DirectionalColor.xyz * diffuse;
+        color += baseColor * DirectionalColor.xyz * specular;
+    }
 
 	//Point Light
-	if (PointUsed)
-	{
-		float3 lightDirection = normalize(PointPosition.xyz - input.FragmentPos.xyz);
+    if (PointUsed)
+    {
+        float3 lightDirection = normalize(PointPosition.xyz - input.FragmentPos.xyz);
 
-		float diffuse = max(dot(normal, lightDirection), 0.0f);
+        float diffuse = max(dot(normal, lightDirection), 0.0f);
 
-		float3 reflectDirection = reflect(-lightDirection, normal);
+        float3 reflectDirection = reflect(-lightDirection, normal);
 
-		float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), MaterialShininess);
+        float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), spec);
 
-		float distance = length(PointPosition.xyz - input.FragmentPos.xyz);
-		float attenuation = 1.0f / (PointAttenuationConstant + PointAttenuationLinear * distance + PointAttenuationQuad * distance * distance);
+        float distance = length(PointPosition.xyz - input.FragmentPos.xyz);
+        float attenuation = 1.0f / (PointAttenuationConstant + PointAttenuationLinear * distance + PointAttenuationQuad * distance * distance);
 
-		color += MaterialAmbient * PointColor * attenuation;
-		color += MaterialDiffuse * PointColor * diffuse * attenuation;
-		color += MaterialSpecular * PointColor * specular * attenuation;
-	}
+        color += baseColor * PointColor.xyz * float3(0.1f, 0.1f, 0.1f) * attenuation;
+        color += baseColor * PointColor.xyz * diffuse * attenuation;
+        color += baseColor * PointColor.xyz * specular * attenuation;
+    }
 
 	//Spot Light
-	for (int i = 0; i < 4; i++)
-	{
-		if (SpotUsed[i])
-		{
-			float3 lightDirection = normalize(SpotPosition[i].xyz - input.FragmentPos.xyz);
+    for (int i = 0; i < 4; i++)
+    {
+        if (SpotUsed[i])
+        {
+            float3 lightDirection = normalize(SpotPosition[i].xyz - input.FragmentPos.xyz);
+			
+            float diffuse = max(dot(normal, lightDirection), 0.0f);
+			
+            float3 reflectDirection = reflect(-lightDirection, normal);
+			
+            float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), spec);
+			
+            float distance = length(PointPosition.xyz - input.FragmentPos.xyz);
+            float attenuation = 1.0f / (SpotAttenuationConstant[i] + SpotAttenuationLinear[i] * distance + SpotAttenuationQuad[i] * distance * distance);
 
-			float diffuse = max(dot(normal, lightDirection), 0.0f);
+            float theta = dot(lightDirection, normalize(-SpotDirection[i].xyz));
+            float intensity = clamp((theta - SpotOuterAngle[i]) / (SpotInnerAngle[i] - SpotOuterAngle[i]), 0.0f, 1.0f);
+			
+            color += baseColor * SpotColor[i].xyz * float3(0.1f, 0.1f, 0.1f) * attenuation * intensity;
+            color += baseColor * SpotColor[i].xyz * diffuse * attenuation * intensity;
+            color += baseColor * SpotColor[i].xyz * specular * attenuation * intensity;
+        }
+    }
 
-			float3 reflectDirection = reflect(-lightDirection, normal);
-
-			float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), MaterialShininess);
-
-			float distance = length(PointPosition.xyz - input.FragmentPos.xyz);
-			float attenuation = 1.0f / (SpotAttenuationConstant[i] + SpotAttenuationLinear[i] * distance + SpotAttenuationQuad[i] * distance * distance);
-
-			float theta = dot(lightDirection, normalize(-SpotDirection[i].xyz));
-			float intensity = clamp((theta - SpotOuterAngle[i]) / (SpotInnerAngle[i] - SpotOuterAngle[i]), 0.0f, 1.0f);
-
-			color += MaterialAmbient * SpotColor[i] * attenuation * intensity;
-			color += MaterialDiffuse * SpotColor[i] * diffuse * attenuation * intensity;
-			color += MaterialSpecular * SpotColor[i] * specular * attenuation * intensity;
-		}
-	}
-
-	return float4(color.x, color.y, color.z, 1.0f);
+    return float4(color, 1.0f);
 }

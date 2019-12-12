@@ -7,23 +7,32 @@ cbuffer cameraBuffer : register(b0)
     float3 ViewPosition;
 }
 
-struct VS_OUTPUT
+struct VS_INPUT
 {
-    float4 Pos : POSITION0;
-    float4 FragmentPos : POSITION1;
-    float4 Normal : NORMAL0;
-    float3 ViewPosition : POSITION2;
-    float2 TexCoord : TEXCOORD0;
+    float3 Pos : POSITION;
+    float3 Normal : NORMAL;
+    float2 TexCoord : TEXCOORD;
+    float3 Tangent : TANGENT;
+    float3 BiTangent : BITANGENT;
 };
 
-VS_OUTPUT main(float4 Pos: POSITION, float4 Normal : NORMAL, float2 TexCoord : TEXCOORD)
+struct VS_OUTPUT
+{
+    float3 Pos : POSITION0;
+    float3 Normal : NORMAL0;
+    float2 TexCoord : TEXCOORD0;
+    float3 Tangent : TANGENT0;
+    float3 BiTangent : BITANGENT0;
+};
+
+VS_OUTPUT main(VS_INPUT input)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
-    output.Pos = Pos;
-    output.Normal = Normal;
-    output.FragmentPos = Pos;
-    output.ViewPosition = ViewPosition;
-    output.TexCoord = TexCoord;
+    output.Pos = input.Pos;
+    output.Normal = input.Normal;
+    output.TexCoord = input.TexCoord;
+    output.Tangent = input.Tangent;
+    output.BiTangent = input.BiTangent;
 
     return output;
 }

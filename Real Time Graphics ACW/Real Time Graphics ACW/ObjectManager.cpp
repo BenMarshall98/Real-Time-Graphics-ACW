@@ -3,6 +3,7 @@
 #include "PhongShading.h"
 #include "TextureMapping.h"
 #include "DisplacementMapping.h"
+#include "BumpMapping.h"
 
 ObjectManager * ObjectManager::mInstance = nullptr;
 
@@ -11,6 +12,7 @@ ObjectManager::ObjectManager()
 	//staticTechnique = std::make_unique<GourandShading>();
 	//staticTechnique = std::make_unique<PhongShading>();
 	//staticTechnique = std::make_unique<TextureMapping>();
+	//staticTechnique = std::make_unique<BumpMapping>();
 	staticTechnique = std::make_unique<DisplacementMapping>();
 	dynamicTechniques.emplace_back(std::make_unique<GourandShading>());
 }

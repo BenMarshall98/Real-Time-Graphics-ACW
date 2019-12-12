@@ -50,6 +50,7 @@ Game::Game()
 	mBase = ResourceManager::instance()->loadTexture("tyre_base.dds");
 	mSpec = ResourceManager::instance()->loadTexture("tyre_spec.dds");
 	mDisp = ResourceManager::instance()->loadTexture("tyre_height.dds");
+	mNorm = ResourceManager::instance()->loadTexture("tyre_normal.dds");
 	
 	QueryPerformanceFrequency(&mTimer);
 	mFreq = double(mTimer.QuadPart);
@@ -114,6 +115,7 @@ void Game::run()
 
 		mBase->useFragment(0);
 		mSpec->useFragment(1);
+		mNorm->useFragment(2);
 		mDisp->useDomain(0);
 
 		//mFramebuffer->useFramebuffer();

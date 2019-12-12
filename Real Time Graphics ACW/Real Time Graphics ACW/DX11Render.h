@@ -49,8 +49,8 @@ public:
 
 	void present() const
 	{
-		auto result =mSwapChain->Present(0, 0);
-		result = mDevice->GetDeviceRemovedReason();
+		auto result = mSwapChain->Present(1, 0);
+		//result = mDevice->GetDeviceRemovedReason();
 	}
 
 	Microsoft::WRL::ComPtr<ID3D11Device> getDevice() const

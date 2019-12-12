@@ -8,31 +8,33 @@ struct PatchTess
 
 struct VS_OUTPUT
 {
-    float4 Pos : POSITION0;
-    float4 FragmentPos : POSITION1;
-    float4 Normal : NORMAL0;
-    float3 ViewPosition : POSITION2;
+    float3 Pos : POSITION0;
+    float3 Normal : NORMAL0;
     float2 TexCoord : TEXCOORD0;
+    float3 Tangent : TANGENT0;
+    float3 BiTangent : BITANGENT0;
 };
+
+//TODO: Look at the distance from the camera
 
 PatchTess ConstantHS(InputPatch<VS_OUTPUT, 3> inPatch, uint patchID: SV_PrimitiveID)
 {
     PatchTess outPatch;
-    outPatch.EdgeTess[0] = 3;
-    outPatch.EdgeTess[1] = 3;
-    outPatch.EdgeTess[2] = 3;
-    outPatch.InsideTess = 3;
+    outPatch.EdgeTess[0] = 64;
+    outPatch.EdgeTess[1] = 64;
+    outPatch.EdgeTess[2] = 64;
+    outPatch.InsideTess = 64;
     
     return outPatch;
 }
 
 struct HS_OUTPUT
 {
-    float4 Pos : POSITION0;
-    float4 FragmentPos : POSITION1;
-    float4 Normal : NORMAL0;
-    float3 ViewPosition : POSITION2;
+    float3 Pos : POSITION0;
+    float3 Normal : NORMAL0;
     float2 TexCoord : TEXCOORD0;
+    float3 Tangent : TANGENT0;
+    float3 BiTangent : BITANGENT0;
 };
 
 [domain("tri")]
@@ -48,9 +50,9 @@ HS_OUTPUT main(InputPatch<VS_OUTPUT, 3> patch, uint i : SV_OutputControlPointID,
     
     output.Pos = patch[i].Pos;
     output.Normal = patch[i].Normal;
-    output.FragmentPos = patch[i].FragmentPos;
-    output.ViewPosition = patch[i].ViewPosition;
     output.TexCoord = patch[i].TexCoord;
+    output.Tangent = patch[i].Tangent;
+    output.BiTangent = patch[i].BiTangent;
     
     return output;
 }

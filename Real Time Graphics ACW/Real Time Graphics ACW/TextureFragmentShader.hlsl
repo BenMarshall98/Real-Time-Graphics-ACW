@@ -48,7 +48,7 @@ float4 main(VS_OUTPUT input) : SV_Target
     float3 normal = normalize(input.Normal.xyz);
     float3 viewDirection = normalize(input.ViewPosition - input.FragmentPos.xyz);
     
-    float4 baseColor = specTexture.Sample(specSampler, input.TexCoord);
+    float3 baseColor = specTexture.Sample(specSampler, input.TexCoord).xyz;
     float spec = specTexture.Sample(specSampler, input.TexCoord).x * 256;
 
     float3 color = float3(0.0f, 0.0f, 0.0f);
@@ -64,9 +64,9 @@ float4 main(VS_OUTPUT input) : SV_Target
 		
         float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), spec);
 
-        color += baseColor * DirectionalColor;
-        color += baseColor * DirectionalColor * diffuse;
-        color += baseColor * DirectionalColor * specular;
+        color += baseColor * DirectionalColor.xyz * float3(0.1f, 0.1f, 0.1f);
+        color += baseColor * DirectionalColor.xyz * diffuse;
+        color += baseColor * DirectionalColor.xyz * specular;
     }
 
 	//Point Light
@@ -83,9 +83,9 @@ float4 main(VS_OUTPUT input) : SV_Target
         float distance = length(PointPosition.xyz - input.FragmentPos.xyz);
         float attenuation = 1.0f / (PointAttenuationConstant + PointAttenuationLinear * distance + PointAttenuationQuad * distance * distance);
 
-        color += baseColor * PointColor * attenuation;
-        color += baseColor * PointColor * diffuse * attenuation;
-        color += baseColor * PointColor * specular * attenuation;
+        color += baseColor * PointColor.xyz * float3(0.1f, 0.1f, 0.1f) * attenuation;
+        color += baseColor * PointColor.xyz * diffuse * attenuation;
+        color += baseColor * PointColor.xyz * specular * attenuation;
     }
 
 	//Spot Light
@@ -107,11 +107,11 @@ float4 main(VS_OUTPUT input) : SV_Target
             float theta = dot(lightDirection, normalize(-SpotDirection[i].xyz));
             float intensity = clamp((theta - SpotOuterAngle[i]) / (SpotInnerAngle[i] - SpotOuterAngle[i]), 0.0f, 1.0f);
 			
-            color += baseColor * SpotColor[i] * attenuation * intensity;
-            color += baseColor * SpotColor[i] * diffuse * attenuation * intensity;
-            color += baseColor * SpotColor[i] * specular * attenuation * intensity;
+            color += baseColor * SpotColor[i].xyz * float3(0.1f, 0.1f, 0.1f) * attenuation * intensity;
+            color += baseColor * SpotColor[i].xyz * diffuse * attenuation * intensity;
+            color += baseColor * SpotColor[i].xyz * specular * attenuation * intensity;
         }
     }
 
-    return float4(color.x, color.y, color.z, 1.0f);
+    return float4(color, 1.0f);
 }

@@ -122,8 +122,8 @@ Dx11Render::Dx11Render() : mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullpt
 	mDeviceContext->RSSetViewports(1, &viewport);
 
 	D3D11_RASTERIZER_DESC rasterizerDesc;
-	rasterizerDesc.CullMode = D3D11_CULL_FRONT;
-	rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
+	rasterizerDesc.CullMode = D3D11_CULL_NONE;
+	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
 	rasterizerDesc.ScissorEnable = false;
 	rasterizerDesc.DepthBias = 0;
 	rasterizerDesc.DepthBiasClamp = 0.0f;

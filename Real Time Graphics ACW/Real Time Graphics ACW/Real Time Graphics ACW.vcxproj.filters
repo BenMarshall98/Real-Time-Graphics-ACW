@@ -37,6 +37,18 @@
     <Filter Include="Resource Files\DisplacementShading">
       <UniqueIdentifier>{46a01d18-4055-4ed8-9fca-93efa5f7d8d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\TransparencyShading">
+      <UniqueIdentifier>{bfce7370-d794-4686-89d4-93dccd66f141}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\ToonShading">
+      <UniqueIdentifier>{8e3c781f-481c-4507-94b8-ddd650d5d956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\EnvironmentShading">
+      <UniqueIdentifier>{b6259068-ed3c-4443-b68f-daed99d43243}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\GlowingShading">
+      <UniqueIdentifier>{2751b83d-2b0b-4fce-ae1c-21e8bd2f9872}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -320,5 +332,13 @@
     <Image Include="tyre_spec.dds" />
     <Image Include="tyre_base.dds" />
     <Image Include="tyre_height.dds" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="ToonFragmentShader.hlsl">
+      <Filter>Resource Files\ToonShading</Filter>
+    </FxCompile>
+    <FxCompile Include="ToonVertexShader.hlsl">
+      <Filter>Resource Files\ToonShading</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

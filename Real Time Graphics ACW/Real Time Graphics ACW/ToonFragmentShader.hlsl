@@ -79,17 +79,9 @@ float4 main(VS_OUTPUT input) : SV_Target
             diffuse = 0.0f;
         }
         
-        if (specular > 0.9f)
+        if (specular > 0.5f)
         {
-            specular = 0.9f;
-        }
-        else if (specular > 0.5f)
-        {
-            specular = 0.5f;
-        }
-        else if (specular > 0.25f)
-        {
-            specular = 0.25f;
+            specular = 1.0f;
         }
         else
         {
@@ -132,17 +124,9 @@ float4 main(VS_OUTPUT input) : SV_Target
             diffuse = 0.0f;
         }
         
-        if (specular > 0.9f)
+        if (specular > 0.5f)
         {
-            specular = 0.9f;
-        }
-        else if (specular > 0.5f)
-        {
-            specular = 0.5f;
-        }
-        else if (specular > 0.25f)
-        {
-            specular = 0.25f;
+            specular = 1.0f;
         }
         else
         {
@@ -190,17 +174,9 @@ float4 main(VS_OUTPUT input) : SV_Target
                 diffuse = 0.0f;
             }
             
-            if (specular > 0.9f)
+            if (specular > 0.5f)
             {
-                specular = 0.9f;
-            }
-            else if (specular > 0.5f)
-            {
-                specular = 0.5f;
-            }
-            else if (specular > 0.25f)
-            {
-                specular = 0.25f;
+                specular = 1.0f;
             }
             else
             {

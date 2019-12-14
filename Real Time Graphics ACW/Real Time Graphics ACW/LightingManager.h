@@ -7,7 +7,6 @@
 #include "SpotLight.h"
 #include <memory>
 
-
 class LightingManager
 {
 	std::shared_ptr<DirectionalLight> mDirectionalLight = nullptr;
@@ -44,6 +43,15 @@ public:
 	void removeDirectionalLight(std::shared_ptr<DirectionalLight> & pDirectionalLight);
 	void removePointLight(std::shared_ptr<PointLight> & pPointLight);
 	void removeSpotLight(std::shared_ptr<SpotLight> & pSpotLight);
+
+	bool updateDirectionalLightShadow() const;
+	bool updatePointLightShadow() const;
+	void updateSpotLightShadow(unsigned int pLight) const;
+	
+	unsigned int getNumberOfSpotLights() const
+	{
+		return mSpotLights.size();
+	}
 
 	void update() const;
 };

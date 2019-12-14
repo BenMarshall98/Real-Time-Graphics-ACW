@@ -66,6 +66,7 @@ public:
 
 	void use(SpotLightBuffer & pLightBuffer, unsigned int pIndex);
 	void update(DirectX::XMFLOAT4X4 & pMatrix);
+	void updateShadow();
 };
 
 std::istream& operator>>(std::istream & pIn, SpotLight & pLight);

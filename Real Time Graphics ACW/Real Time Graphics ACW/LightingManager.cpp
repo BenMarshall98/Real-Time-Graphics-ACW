@@ -108,3 +108,27 @@ void LightingManager::update() const
 	}*/
 }
 
+bool LightingManager::updateDirectionalLightShadow() const
+{
+	if (mDirectionalLight)
+	{
+		mDirectionalLight->updateShadow();
+		return true;
+	}
+	return false;
+}
+
+bool LightingManager::updatePointLightShadow() const
+{
+	if (mPointLight)
+	{
+		mPointLight->updateShadow();
+		return true;
+	}
+	return false;
+}
+
+void LightingManager::updateSpotLightShadow(unsigned pLight) const
+{
+	mSpotLights[pLight]->updateShadow();
+}

@@ -44,6 +44,7 @@ public:
 
 	void use(PointLightBuffer & pLightBuffer);
 	void update(DirectX::XMFLOAT4X4 & pMatrix);
+	void updateShadow();
 };
 
 std::istream& operator>>(std::istream & pIn, PointLight & pLight);

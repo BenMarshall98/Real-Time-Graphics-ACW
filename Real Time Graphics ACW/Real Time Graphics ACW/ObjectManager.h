@@ -33,6 +33,7 @@ public:
 	}
 	
 	void render();
+	void renderShadows();
 	
 	void addStaticObject(std::shared_ptr<Object> pObject);
 	void addDynamicObject(std::shared_ptr<Object> pObject);

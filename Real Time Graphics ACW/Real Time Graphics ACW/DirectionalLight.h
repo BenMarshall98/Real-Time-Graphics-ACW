@@ -35,6 +35,7 @@ public:
 	
 	void use(DirectionalLightBuffer & pLightBuffer) const;
 	void update(DirectX::XMFLOAT4X4 & pMatrix);
+	void updateShadow();
 };
 
 std::istream& operator>>(std::istream & pIn, DirectionalLight & pLight);

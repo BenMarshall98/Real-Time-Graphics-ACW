@@ -22,50 +22,59 @@
     <Filter Include="Technique">
       <UniqueIdentifier>{70df6ff8-86b0-4778-86a5-0b231b9c32b1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\GourandShading">
-      <UniqueIdentifier>{2e165121-fd2b-4605-ad4c-3b9d09ff144b}</UniqueIdentifier>
+    <Filter Include="Resource Files\Models">
+      <UniqueIdentifier>{4cce21ff-123b-4a12-94ae-61c3b6ca0a2a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\PhongShading">
-      <UniqueIdentifier>{5eb750a7-bf71-4497-a6b0-9af15b9a675a}</UniqueIdentifier>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{7508c0d9-5bc3-4afa-b630-dcdb52de3ff6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\TextureShading">
-      <UniqueIdentifier>{f26ab8a5-ba74-4329-bec3-ba3f8d32487a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\BumpShading">
+    <Filter Include="Resource Files\Shaders\BumpShading">
       <UniqueIdentifier>{748215ad-f39a-4c90-9d03-e79e0378fc34}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\DisplacementShading">
+    <Filter Include="Resource Files\Shaders\DisplacementShading">
       <UniqueIdentifier>{46a01d18-4055-4ed8-9fca-93efa5f7d8d8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\TransparencyShading">
-      <UniqueIdentifier>{bfce7370-d794-4686-89d4-93dccd66f141}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\ToonShading">
-      <UniqueIdentifier>{8e3c781f-481c-4507-94b8-ddd650d5d956}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\EnvironmentShading">
+    <Filter Include="Resource Files\Shaders\EnvironmentShading">
       <UniqueIdentifier>{b6259068-ed3c-4443-b68f-daed99d43243}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\GlowingShading">
+    <Filter Include="Resource Files\Shaders\GlowingShading">
       <UniqueIdentifier>{2751b83d-2b0b-4fce-ae1c-21e8bd2f9872}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\DirectionalShadowShading">
+    <Filter Include="Resource Files\Shaders\GourandShading">
+      <UniqueIdentifier>{2e165121-fd2b-4605-ad4c-3b9d09ff144b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\DirectionalShadowShading">
       <UniqueIdentifier>{ad3a6333-9b89-4d6e-88f7-615164419549}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\OmniDirectionalShadowShading">
-      <UniqueIdentifier>{49cb7abf-fbff-42ac-a6cf-b49567935e0e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\DirectionalShadowShading\Displacement">
-      <UniqueIdentifier>{6b7cd078-a4f3-4d84-b7b7-94f000fd5d4b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\DirectionalShadowShading\Normal">
+    <Filter Include="Resource Files\Shaders\DirectionalShadowShading\Normal">
       <UniqueIdentifier>{e6a7e94b-4519-4fe8-aeff-6f02e74d634e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\OmniDirectionalShadowShading\Displacement">
+    <Filter Include="Resource Files\Shaders\DirectionalShadowShading\Displacement">
+      <UniqueIdentifier>{6b7cd078-a4f3-4d84-b7b7-94f000fd5d4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\OmniDirectionalShadowShading">
+      <UniqueIdentifier>{49cb7abf-fbff-42ac-a6cf-b49567935e0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\OmniDirectionalShadowShading\Displacement">
       <UniqueIdentifier>{e4b91e0b-5730-4dab-a4c6-78280ea1f49d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\OmniDirectionalShadowShading\Normal">
+    <Filter Include="Resource Files\Shaders\OmniDirectionalShadowShading\Normal">
       <UniqueIdentifier>{f679520f-0df5-4bac-ba6b-3624043fa6f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\PhongShading">
+      <UniqueIdentifier>{5eb750a7-bf71-4497-a6b0-9af15b9a675a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\TextureShading">
+      <UniqueIdentifier>{f26ab8a5-ba74-4329-bec3-ba3f8d32487a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\ToonShading">
+      <UniqueIdentifier>{8e3c781f-481c-4507-94b8-ddd650d5d956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\TransparencyShading">
+      <UniqueIdentifier>{bfce7370-d794-4686-89d4-93dccd66f141}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Textures">
+      <UniqueIdentifier>{500b5297-51ca-4cc2-b5ee-dde99c74c396}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -299,104 +308,120 @@
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="GourandFragmentShader.hlsl">
-      <Filter>Resource Files\GourandShading</Filter>
+      <Filter>Resource Files\Shaders\GourandShading</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="GourandVertexShader.hlsl">
-      <Filter>Resource Files\GourandShading</Filter>
+      <Filter>Resource Files\Shaders\GourandShading</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="PhongFragmentShader.hlsl">
-      <Filter>Resource Files\PhongShading</Filter>
+      <Filter>Resource Files\Shaders\PhongShading</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="PhongVertexShader.hlsl">
-      <Filter>Resource Files\PhongShading</Filter>
+      <Filter>Resource Files\Shaders\PhongShading</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="TextureFragmentShader.hlsl">
-      <Filter>Resource Files\TextureShading</Filter>
+      <Filter>Resource Files\Shaders\TextureShading</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="TextureVertexShader.hlsl">
-      <Filter>Resource Files\TextureShading</Filter>
+      <Filter>Resource Files\Shaders\TextureShading</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="DisplacementDomainShader.hlsl">
-      <Filter>Resource Files\DisplacementShading</Filter>
+      <Filter>Resource Files\Shaders\DisplacementShading</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="DisplacementFragmentShader.hlsl">
-      <Filter>Resource Files\DisplacementShading</Filter>
+      <Filter>Resource Files\Shaders\DisplacementShading</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="DisplacementHullShader.hlsl">
-      <Filter>Resource Files\DisplacementShading</Filter>
+      <Filter>Resource Files\Shaders\DisplacementShading</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="DisplacementVertexShader.hlsl">
-      <Filter>Resource Files\DisplacementShading</Filter>
+      <Filter>Resource Files\Shaders\DisplacementShading</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="BumpFragmentShader.hlsl">
-      <Filter>Resource Files\BumpShading</Filter>
+      <Filter>Resource Files\Shaders\BumpShading</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="BumpVertexShader.hlsl">
-      <Filter>Resource Files\BumpShading</Filter>
+      <Filter>Resource Files\Shaders\BumpShading</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="ToonFragmentShader.hlsl" />
-    <CopyFileToFolders Include="ToonVertexShader.hlsl" />
-    <CopyFileToFolders Include="cube.obj" />
-    <CopyFileToFolders Include="plane.obj" />
+    <CopyFileToFolders Include="sphere.obj">
+      <Filter>Resource Files\Models</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="cube.obj">
+      <Filter>Resource Files\Models</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="plane.obj">
+      <Filter>Resource Files\Models</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="ToonVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\ToonShading</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="ToonFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\ToonShading</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />
     <Text Include="Notes.txt" />
-    <CopyFileToFolders Include="sphere.obj">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="tyre_normal.dds" />
-    <Image Include="tyre_spec.dds" />
-    <Image Include="tyre_base.dds" />
-    <Image Include="tyre_height.dds" />
+    <Image Include="tyre_base.dds">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="tyre_height.dds">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="tyre_normal.dds">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="tyre_spec.dds">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="DisplacementDirectionalShadowVertexShader.hlsl">
-      <Filter>Resource Files\DirectionalShadowShading\Displacement</Filter>
+      <Filter>Resource Files\Shaders\DirectionalShadowShading\Displacement</Filter>
     </FxCompile>
     <FxCompile Include="DisplacementDirectionalShadowHullShader.hlsl">
-      <Filter>Resource Files\DirectionalShadowShading\Displacement</Filter>
+      <Filter>Resource Files\Shaders\DirectionalShadowShading\Displacement</Filter>
     </FxCompile>
     <FxCompile Include="DisplacementDirectionalShadowDomainShader.hlsl">
-      <Filter>Resource Files\DirectionalShadowShading\Displacement</Filter>
+      <Filter>Resource Files\Shaders\DirectionalShadowShading\Displacement</Filter>
     </FxCompile>
     <FxCompile Include="DisplacementDirectionalShadowFragmentShader.hlsl">
-      <Filter>Resource Files\DirectionalShadowShading\Displacement</Filter>
+      <Filter>Resource Files\Shaders\DirectionalShadowShading\Displacement</Filter>
     </FxCompile>
     <FxCompile Include="NormalDirectionalShadowVertexShader.hlsl">
-      <Filter>Resource Files\DirectionalShadowShading\Normal</Filter>
+      <Filter>Resource Files\Shaders\DirectionalShadowShading\Normal</Filter>
     </FxCompile>
     <FxCompile Include="NormalDirectionalShadowFragmentShader.hlsl">
-      <Filter>Resource Files\DirectionalShadowShading\Normal</Filter>
+      <Filter>Resource Files\Shaders\DirectionalShadowShading\Normal</Filter>
     </FxCompile>
     <FxCompile Include="DisplacementOmniShadowDomainShader.hlsl">
-      <Filter>Resource Files\OmniDirectionalShadowShading\Displacement</Filter>
+      <Filter>Resource Files\Shaders\OmniDirectionalShadowShading\Displacement</Filter>
     </FxCompile>
     <FxCompile Include="DisplacementOmniShadowFragmentShader.hlsl">
-      <Filter>Resource Files\OmniDirectionalShadowShading\Displacement</Filter>
+      <Filter>Resource Files\Shaders\OmniDirectionalShadowShading\Displacement</Filter>
     </FxCompile>
     <FxCompile Include="DisplacementOmniShadowHullShader.hlsl">
-      <Filter>Resource Files\OmniDirectionalShadowShading\Displacement</Filter>
+      <Filter>Resource Files\Shaders\OmniDirectionalShadowShading\Displacement</Filter>
     </FxCompile>
     <FxCompile Include="DisplacementOmniShadowVertexShader.hlsl">
-      <Filter>Resource Files\OmniDirectionalShadowShading\Displacement</Filter>
+      <Filter>Resource Files\Shaders\OmniDirectionalShadowShading\Displacement</Filter>
     </FxCompile>
     <FxCompile Include="DisplacementOmniShadowGeometryShader.hlsl">
-      <Filter>Resource Files\OmniDirectionalShadowShading\Displacement</Filter>
+      <Filter>Resource Files\Shaders\OmniDirectionalShadowShading\Displacement</Filter>
     </FxCompile>
     <FxCompile Include="NormalOmniShadowFragmentShader.hlsl">
-      <Filter>Resource Files\OmniDirectionalShadowShading\Normal</Filter>
+      <Filter>Resource Files\Shaders\OmniDirectionalShadowShading\Normal</Filter>
     </FxCompile>
     <FxCompile Include="NormalOmniShadowVertexShader.hlsl">
-      <Filter>Resource Files\OmniDirectionalShadowShading\Normal</Filter>
+      <Filter>Resource Files\Shaders\OmniDirectionalShadowShading\Normal</Filter>
     </FxCompile>
     <FxCompile Include="NormalOmniShadowGeometryShader.hlsl">
-      <Filter>Resource Files\OmniDirectionalShadowShading\Normal</Filter>
+      <Filter>Resource Files\Shaders\OmniDirectionalShadowShading\Normal</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

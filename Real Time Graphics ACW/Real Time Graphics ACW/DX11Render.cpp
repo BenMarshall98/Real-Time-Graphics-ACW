@@ -207,9 +207,77 @@ void Dx11Render::useSpotLightBuffer(const SpotLightBuffer& pSpotLightBuffer) con
 	mDeviceContext->VSSetConstantBuffers(5, 1, mSpotLightBuffer.GetAddressOf());
 }
 
-void Dx11Render::resize(int pWidth, int pHeight)
+bool Dx11Render::resize(int pWidth, int pHeight)
 {
-	//swapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_UNKNOWN, 0);
+	mRenderTargetView.Reset();
+	mDepthView.Reset();
+	
+	mSwapChain->ResizeBuffers(1, pWidth, pHeight, DXGI_FORMAT_UNKNOWN, 0);
+
+	//Recreate Color Backbuffer
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> backBuffer;
+	auto result = mSwapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer));
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	result = mDevice->CreateRenderTargetView(backBuffer.Get(), nullptr, mRenderTargetView.ReleaseAndGetAddressOf());
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	//Create Depth / Stencil BackBuffer
+	D3D11_TEXTURE2D_DESC depthTextureDesc;
+	depthTextureDesc.Width = pWidth;
+	depthTextureDesc.Height = pHeight;
+	depthTextureDesc.MipLevels = 1;
+	depthTextureDesc.ArraySize = 1;
+	depthTextureDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthTextureDesc.SampleDesc.Count = 1;
+	depthTextureDesc.SampleDesc.Quality = 0;
+	depthTextureDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthTextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthTextureDesc.CPUAccessFlags = 0;
+	depthTextureDesc.MiscFlags = 0;
+
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencil = nullptr;
+	result = mDevice->CreateTexture2D(&depthTextureDesc, nullptr, depthStencil.ReleaseAndGetAddressOf());
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthViewDesc;
+	depthViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	depthViewDesc.Flags = 0;
+	depthViewDesc.Texture2D.MipSlice = 0;
+
+	result = mDevice->CreateDepthStencilView(depthStencil.Get(), &depthViewDesc, mDepthView.GetAddressOf());
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	mDeviceContext->OMSetRenderTargets(1, mRenderTargetView.GetAddressOf(), mDepthView.Get());
+
+	D3D11_VIEWPORT viewport;
+	viewport.Width = static_cast<float>(pWidth);
+	viewport.Height = static_cast<float>(pHeight);
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+
+	mDeviceContext->RSSetViewports(1, &viewport);
+
+	return true;
 }
 
 Dx11Render * Dx11Render::instance()

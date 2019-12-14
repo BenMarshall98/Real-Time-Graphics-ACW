@@ -50,7 +50,7 @@ public:
 	void present() const
 	{
 		auto result = mSwapChain->Present(1, 0);
-		//result = mDevice->GetDeviceRemovedReason();
+		result = mDevice->GetDeviceRemovedReason();
 	}
 
 	Microsoft::WRL::ComPtr<ID3D11Device> getDevice() const
@@ -70,7 +70,7 @@ public:
 	void usePointLightBuffer(const PointLightBuffer & pPointLightBuffer) const;
 	void useSpotLightBuffer(const SpotLightBuffer & pSPotLightBuffer) const;
 	
-	void resize(int pWidth, int pHeight);
+	bool resize(int pWidth, int pHeight);
 	
 	~Dx11Render() = default;
 	Dx11Render(const Dx11Render&) = delete;

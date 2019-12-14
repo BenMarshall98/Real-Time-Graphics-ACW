@@ -49,6 +49,24 @@
     <Filter Include="Resource Files\GlowingShading">
       <UniqueIdentifier>{2751b83d-2b0b-4fce-ae1c-21e8bd2f9872}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\DirectionalShadowShading">
+      <UniqueIdentifier>{ad3a6333-9b89-4d6e-88f7-615164419549}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\OmniDirectionalShadowShading">
+      <UniqueIdentifier>{49cb7abf-fbff-42ac-a6cf-b49567935e0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\DirectionalShadowShading\Displacement">
+      <UniqueIdentifier>{6b7cd078-a4f3-4d84-b7b7-94f000fd5d4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\DirectionalShadowShading\Normal">
+      <UniqueIdentifier>{e6a7e94b-4519-4fe8-aeff-6f02e74d634e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\OmniDirectionalShadowShading\Displacement">
+      <UniqueIdentifier>{e4b91e0b-5730-4dab-a4c6-78280ea1f49d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\OmniDirectionalShadowShading\Normal">
+      <UniqueIdentifier>{f679520f-0df5-4bac-ba6b-3624043fa6f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -316,6 +334,10 @@
     <CopyFileToFolders Include="BumpVertexShader.hlsl">
       <Filter>Resource Files\BumpShading</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="ToonFragmentShader.hlsl" />
+    <CopyFileToFolders Include="ToonVertexShader.hlsl" />
+    <CopyFileToFolders Include="cube.obj" />
+    <CopyFileToFolders Include="plane.obj" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />
@@ -334,15 +356,47 @@
     <Image Include="tyre_height.dds" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="ToonFragmentShader.hlsl">
-      <Filter>Resource Files\ToonShading</Filter>
+    <FxCompile Include="DisplacementDirectionalShadowVertexShader.hlsl">
+      <Filter>Resource Files\DirectionalShadowShading\Displacement</Filter>
     </FxCompile>
-    <FxCompile Include="ToonVertexShader.hlsl">
-      <Filter>Resource Files\ToonShading</Filter>
+    <FxCompile Include="DisplacementDirectionalShadowHullShader.hlsl">
+      <Filter>Resource Files\DirectionalShadowShading\Displacement</Filter>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="cube.obj" />
-    <Object Include="plane.obj" />
+    <FxCompile Include="DisplacementDirectionalShadowDomainShader.hlsl">
+      <Filter>Resource Files\DirectionalShadowShading\Displacement</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementDirectionalShadowFragmentShader.hlsl">
+      <Filter>Resource Files\DirectionalShadowShading\Displacement</Filter>
+    </FxCompile>
+    <FxCompile Include="NormalDirectionalShadowVertexShader.hlsl">
+      <Filter>Resource Files\DirectionalShadowShading\Normal</Filter>
+    </FxCompile>
+    <FxCompile Include="NormalDirectionalShadowFragmentShader.hlsl">
+      <Filter>Resource Files\DirectionalShadowShading\Normal</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementOmniShadowDomainShader.hlsl">
+      <Filter>Resource Files\OmniDirectionalShadowShading\Displacement</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementOmniShadowFragmentShader.hlsl">
+      <Filter>Resource Files\OmniDirectionalShadowShading\Displacement</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementOmniShadowHullShader.hlsl">
+      <Filter>Resource Files\OmniDirectionalShadowShading\Displacement</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementOmniShadowVertexShader.hlsl">
+      <Filter>Resource Files\OmniDirectionalShadowShading\Displacement</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementOmniShadowGeometryShader.hlsl">
+      <Filter>Resource Files\OmniDirectionalShadowShading\Displacement</Filter>
+    </FxCompile>
+    <FxCompile Include="NormalOmniShadowFragmentShader.hlsl">
+      <Filter>Resource Files\OmniDirectionalShadowShading\Normal</Filter>
+    </FxCompile>
+    <FxCompile Include="NormalOmniShadowVertexShader.hlsl">
+      <Filter>Resource Files\OmniDirectionalShadowShading\Normal</Filter>
+    </FxCompile>
+    <FxCompile Include="NormalOmniShadowGeometryShader.hlsl">
+      <Filter>Resource Files\OmniDirectionalShadowShading\Normal</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

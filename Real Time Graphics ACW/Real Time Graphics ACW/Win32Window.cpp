@@ -184,8 +184,8 @@ LRESULT CALLBACK Win32Window::windowProcedure(HWND pHwnd, UINT pMessage, WPARAM 
 			}
 
 			if (GetKeyState(VK_RIGHT) < 0 ||
-				GetKeyState('A') < 0 ||
-				GetKeyState('J') < 0)
+				GetKeyState('D') < 0 ||
+				GetKeyState('L') < 0)
 			{
 				Game::mCamera->rotateRight(true);
 				Game::mCamera->panRight(false);
@@ -214,7 +214,10 @@ LRESULT CALLBACK Win32Window::windowProcedure(HWND pHwnd, UINT pMessage, WPARAM 
 	{
 		const int width = LOWORD(pLParam);
 		const int height = HIWORD(pLParam);
-		Dx11Render::instance()->resize(width, height);
+		if(!Dx11Render::instance()->resize(width, height))
+		{
+			PostMessage(pHwnd, WM_CLOSE, 0, 0);
+		}
 	}
 	break;
 	case WM_DESTROY:

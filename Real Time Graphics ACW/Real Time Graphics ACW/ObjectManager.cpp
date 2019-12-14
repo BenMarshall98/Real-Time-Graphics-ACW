@@ -11,16 +11,21 @@ ObjectManager * ObjectManager::mInstance = nullptr;
 ObjectManager::ObjectManager()
 {
 	//staticTechnique = std::make_unique<GourandShading>();
-	//staticTechnique = std::make_unique<PhongShading>();
+	staticTechnique = std::make_unique<PhongShading>();
 	//staticTechnique = std::make_unique<TextureMapping>();
 	//staticTechnique = std::make_unique<BumpMapping>();
 	//staticTechnique = std::make_unique<DisplacementMapping>();
-	staticTechnique = std::make_unique<ToonShading>();
+	//staticTechnique = std::make_unique<ToonShading>();
 	dynamicTechniques.emplace_back(std::make_unique<GourandShading>());
 }
 
 void ObjectManager::render()
 {
+	for (int i = 0; i < staticObjects.size(); i++)
+	{
+		staticTechnique->render(staticObjects[i], false);
+	}
+	
 	for (int i = 0; i < dynamicObjects.size(); i++)
 	{
 		staticTechnique->render(dynamicObjects[i], false);

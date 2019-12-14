@@ -341,4 +341,8 @@
       <Filter>Resource Files\ToonShading</Filter>
     </FxCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Object Include="cube.obj" />
+    <Object Include="plane.obj" />
+  </ItemGroup>
 </Project>

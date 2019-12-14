@@ -6,6 +6,7 @@
 
 class Shader
 {
+	static const D3D11_INPUT_ELEMENT_DESC mLayout[];
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> mVertexShader = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> mPixelShader = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11GeometryShader> mGeometryShader = nullptr;
@@ -28,6 +29,7 @@ public:
 	bool loadShader(const std::string & pVertexFile, const std::string & pFragmentFile);
 	bool loadShader(const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pGeometryFile);
 	bool loadShader(const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pHullFile, const std::string & pDomainFile);
+	bool loadShader(const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pGeometryFile, const std::string & pHullFile, const std::string & pDomainFile);
 	bool loadShader(const std::string & pComputeFile);
 
 	void useShader();

@@ -5,6 +5,15 @@
 #include <codecvt>
 #include <wrl/client.h>
 
+const D3D11_INPUT_ELEMENT_DESC Shader::mLayout[] =
+{
+	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 2, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 3, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	{ "BITANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 4, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
+};
+
 //https://riptutorial.com/cplusplus/example/4190/conversion-to-std--wstring
 
 bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFragmentFile)
@@ -80,21 +89,12 @@ bool Shader::loadShader(const std::string & pVertexFile, const std::string & pFr
 		{
 			return false;
 		}
-
-		D3D11_INPUT_ELEMENT_DESC layout[] =
-		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 2, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 3, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{ "BITANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 4, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
-		};
 		
-		const UINT numElements = ARRAYSIZE(layout);
+		const UINT numElements = ARRAYSIZE(mLayout);
 
 		//Look at the warning code and see if the layout can be made to match exactly
 
-		result = device->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
+		result = device->CreateInputLayout(mLayout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
 		if (FAILED(result))
 		{
 			return false;
@@ -152,19 +152,10 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 		{
 			return false;
 		}
-
-		D3D11_INPUT_ELEMENT_DESC layout[] =
-		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 2, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 3, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{ "BITANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 4, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
-		};
 		
-		const UINT numElements = ARRAYSIZE(layout);
+		const UINT numElements = ARRAYSIZE(mLayout);
 
-		result = device->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
+		result = device->CreateInputLayout(mLayout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
 		if (FAILED(result))
 		{
 			return false;
@@ -219,13 +210,104 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 	return true;
 }
 
+bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFragmentFile, const std::string& pGeometryFile, const std::string& pHullFile, const std::string& pDomainFile)
+{
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	auto device = Dx11Render::instance()->getDevice();
+
+	{
+		Microsoft::WRL::ComPtr<ID3DBlob> vsBlob = nullptr;
+		auto result = compileShaderFromFile(converter.from_bytes(pVertexFile), "vs_5_0", &vsBlob);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		result = device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &mVertexShader);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		const UINT numElements = ARRAYSIZE(mLayout);
+
+		result = device->CreateInputLayout(mLayout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
+		if (FAILED(result))
+		{
+			return false;
+		}
+	}
+
+	{
+		Microsoft::WRL::ComPtr<ID3DBlob> psBlob = nullptr;
+		auto result = compileShaderFromFile(converter.from_bytes(pFragmentFile), "ps_5_0", &psBlob);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		result = device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &mPixelShader);
+		if (FAILED(result))
+		{
+			return false;
+		}
+	}
+
+	{
+		Microsoft::WRL::ComPtr<ID3DBlob> hsBlob = nullptr;
+		auto result = compileShaderFromFile(converter.from_bytes(pHullFile), "hs_5_0", &hsBlob);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		result = device->CreateHullShader(hsBlob->GetBufferPointer(), hsBlob->GetBufferSize(), nullptr, &mHullShader);
+		if (FAILED(result))
+		{
+			return false;
+		}
+	}
+
+	{
+		Microsoft::WRL::ComPtr<ID3DBlob> dsBlob = nullptr;
+		auto result = compileShaderFromFile(converter.from_bytes(pDomainFile), "ds_5_0", &dsBlob);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		result = device->CreateDomainShader(dsBlob->GetBufferPointer(), dsBlob->GetBufferSize(), nullptr, &mDomainShader);
+		if (FAILED(result))
+		{
+			return false;
+		}
+	}
+
+	{
+		Microsoft::WRL::ComPtr<ID3DBlob> gsBlob = nullptr;
+		auto result = compileShaderFromFile(converter.from_bytes(pGeometryFile), "gs_5_0", &gsBlob);
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		result = device->CreateGeometryShader(gsBlob->GetBufferPointer(), gsBlob->GetBufferSize(), nullptr, &mGeometryShader);
+		if (FAILED(result))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
 bool Shader::loadShader(const std::string& pComputeFile)
 {
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
 	auto device = Dx11Render::instance()->getDevice();
 
 	Microsoft::WRL::ComPtr<ID3DBlob> csBlob = nullptr;
-	auto result = compileShaderFromFile(converter.from_bytes(pComputeFile), "vs_4_0", &csBlob);
+	auto result = compileShaderFromFile(converter.from_bytes(pComputeFile), "cs_5_0", &csBlob);
 	if (FAILED(result))
 	{
 		return false;

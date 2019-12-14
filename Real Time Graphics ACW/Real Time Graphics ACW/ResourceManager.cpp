@@ -101,6 +101,26 @@ std::shared_ptr<Shader> ResourceManager::loadShader(const std::string & pVertexF
 	return nullptr;
 }
 
+std::shared_ptr<Shader> ResourceManager::loadShader(const std::string& pVertexFile, const std::string& pFragmentFile, const std::string& pGeometryFile, const std::string& pHullFile, const std::string& pDomainFile)
+{
+	const auto concat = pVertexFile + pFragmentFile + pGeometryFile + pHullFile + pDomainFile;
+	const auto result = mVfghdShaders.find(concat);
+
+	if (result != mVfghdShaders.end())
+	{
+		return result->second;
+	}
+
+	auto shader = std::make_shared<Shader>();
+
+	if (shader->loadShader(pVertexFile, pFragmentFile, pGeometryFile, pHullFile, pDomainFile))
+	{
+		mVfghdShaders.insert(std::pair<std::string, std::shared_ptr<Shader>>(concat, shader));
+		return shader;
+	}
+	return nullptr;
+}
+
 std::shared_ptr<Shader> ResourceManager::loadShader(const std::string & pComputeFile)
 {
 	const auto result = mCShaders.find(pComputeFile);

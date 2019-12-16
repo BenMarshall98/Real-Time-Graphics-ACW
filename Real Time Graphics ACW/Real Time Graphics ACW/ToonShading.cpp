@@ -15,20 +15,20 @@ ToonShading::~ToonShading()
 {
 }
 
-void ToonShading::render(std::shared_ptr<Object>& pObject, bool pDeferred)
+void ToonShading::render(std::shared_ptr<Shape>& pShape, bool pDeferred)
 {
 	mNormalShader->useShader();
-	pObject->render();
+	pShape->render();
 }
 
-void ToonShading::renderDirectionalShadow(std::shared_ptr<Object>& pObject)
+void ToonShading::renderDirectionalShadow(std::shared_ptr<Shape>& pShape)
 {
 	mDirectionalShader->useShader();
-	pObject->render();
+	pShape->render();
 }
 
-void ToonShading::renderOmniDirectionalShadow(std::shared_ptr<Object>& pObject)
+void ToonShading::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape)
 {
 	mOmniDirectionalShader->useShader();
-	pObject->render();
+	pShape->render();
 }

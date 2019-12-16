@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Object.h"
+#include "Shape.h"
 #include "Shader.h"
 
 class Technique
@@ -15,8 +15,8 @@ public:
 	Technique(std::shared_ptr<Shader> pNormalShader, std::shared_ptr<Shader> pDeferredShader, std::shared_ptr<Shader> pDirectionalShader, std::shared_ptr<Shader> pOmniDirectionalShader);
 	virtual ~Technique();
 
-	virtual void render(std::shared_ptr<Object> & pObject, bool pDeferred) = 0;
-	virtual void renderDirectionalShadow(std::shared_ptr<Object> & pObject) = 0;
-	virtual void renderOmniDirectionalShadow(std::shared_ptr<Object> & pObject) = 0;
+	virtual void render(std::shared_ptr<Shape>& pShape, bool pDeferred) = 0;
+	virtual void renderDirectionalShadow(std::shared_ptr<Shape>& pShape) = 0;
+	virtual void renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape) = 0;
 };
 

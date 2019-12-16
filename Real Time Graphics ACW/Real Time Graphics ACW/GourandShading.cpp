@@ -15,20 +15,20 @@ GourandShading::~GourandShading()
 {
 }
 
-void GourandShading::render(std::shared_ptr<Object> & pObject, bool pDeferred)
+void GourandShading::render(std::shared_ptr<Shape>& pShape, bool pDeferred)
 {
 	mNormalShader->useShader();
-	pObject->render();
+	pShape->render();
 }
 
-void GourandShading::renderDirectionalShadow(std::shared_ptr<Object>& pObject)
+void GourandShading::renderDirectionalShadow(std::shared_ptr<Shape>& pShape)
 {
 	mDirectionalShader->useShader();
-	pObject->render();
+	pShape->render();
 }
 
-void GourandShading::renderOmniDirectionalShadow(std::shared_ptr<Object>& pObject)
+void GourandShading::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape)
 {
 	mOmniDirectionalShader->useShader();
-	pObject->render();
+	pShape->render();
 }

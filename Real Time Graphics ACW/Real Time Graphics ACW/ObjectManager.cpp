@@ -27,14 +27,14 @@ ObjectManager::ObjectManager()
 
 void ObjectManager::render()
 {
-	for (int i = 0; i < staticObjects.size(); i++)
+	for (int i = 0; i < staticShapes.size(); i++)
 	{
-		staticTechnique->render(staticObjects[i], false);
+		staticTechnique->render(staticShapes[i], false);
 	}
 	
-	for (int i = 0; i < dynamicObjects.size(); i++)
+	for (int i = 0; i < dynamicShapes.size(); i++)
 	{
-		staticTechnique->render(dynamicObjects[i], false);
+		staticTechnique->render(dynamicShapes[i], false);
 	}
 }
 
@@ -45,27 +45,27 @@ void ObjectManager::renderShadows()
 
 	if (lightManager->updateDirectionalLightShadow())
 	{
-		for (int i = 0; i < staticObjects.size(); i++)
+		for (int i = 0; i < staticShapes.size(); i++)
 		{
-			staticTechnique->renderDirectionalShadow(staticObjects[i]);
+			staticTechnique->renderDirectionalShadow(staticShapes[i]);
 		}
 
-		for (int i = 0; i < dynamicObjects.size(); i++)
+		for (int i = 0; i < dynamicShapes.size(); i++)
 		{
-			staticTechnique->renderDirectionalShadow(dynamicObjects[i]);
+			staticTechnique->renderDirectionalShadow(dynamicShapes[i]);
 		}
 	}
 
 	if (lightManager->updatePointLightShadow())
 	{
-		for (int i = 0; i < staticObjects.size(); i++)
+		for (int i = 0; i < staticShapes.size(); i++)
 		{
-			staticTechnique->renderOmniDirectionalShadow(staticObjects[i]);
+			staticTechnique->renderOmniDirectionalShadow(staticShapes[i]);
 		}
 
-		for (int i = 0; i < dynamicObjects.size(); i++)
+		for (int i = 0; i < dynamicShapes.size(); i++)
 		{
-			staticTechnique->renderOmniDirectionalShadow(dynamicObjects[i]);
+			staticTechnique->renderOmniDirectionalShadow(dynamicShapes[i]);
 		}
 	}
 
@@ -73,24 +73,24 @@ void ObjectManager::renderShadows()
 	{
 		lightManager->updateSpotLightShadow(i);
 		
-		for (int j = 0; j < staticObjects.size(); j++)
+		for (int j = 0; j < staticShapes.size(); j++)
 		{
-			staticTechnique->renderOmniDirectionalShadow(staticObjects[j]);
+			staticTechnique->renderOmniDirectionalShadow(staticShapes[j]);
 		}
 
-		for (int j = 0; j < dynamicObjects.size(); j++)
+		for (int j = 0; j < dynamicShapes.size(); j++)
 		{
-			staticTechnique->renderOmniDirectionalShadow(staticObjects[j]);
+			staticTechnique->renderOmniDirectionalShadow(staticShapes[j]);
 		}
 	}
 }
 
-void ObjectManager::addStaticObject(std::shared_ptr<Object> pObject)
+void ObjectManager::addStaticShape(std::shared_ptr<Shape> pObject)
 {
-	staticObjects.push_back(pObject);
+	staticShapes.push_back(pObject);
 }
 
-void ObjectManager::addDynamicObject(std::shared_ptr<Object> pObject)
+void ObjectManager::addDynamicShape(std::shared_ptr<Shape> pObject)
 {
-	dynamicObjects.push_back(pObject);
+	dynamicShapes.push_back(pObject);
 }

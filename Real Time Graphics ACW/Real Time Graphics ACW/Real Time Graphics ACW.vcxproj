@@ -127,6 +127,7 @@
   <ItemGroup>
     <ClInclude Include="BumpMapping.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Cuboid.h" />
     <ClInclude Include="DDSTextureLoader.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="DirectionalLightNode.h" />
@@ -138,13 +139,16 @@
     <ClInclude Include="GlowingShading.h" />
     <ClInclude Include="GourandShading.h" />
     <ClInclude Include="IdentityNode.h" />
+    <ClInclude Include="IExplode.h" />
     <ClInclude Include="LightingManager.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
-    <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="ObjectNode.h" />
+    <ClInclude Include="Particle.h" />
     <ClInclude Include="PhongShading.h" />
+    <ClInclude Include="Plane.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PointLightNode.h" />
     <ClInclude Include="ResourceManager.h" />
@@ -152,11 +156,14 @@
     <ClInclude Include="ScaleNode.h" />
     <ClInclude Include="SceneGraphNode.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Shape.h" />
+    <ClInclude Include="Sphere.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="SpotLightNode.h" />
     <ClInclude Include="Technique.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureMapping.h" />
+    <ClInclude Include="TexturePack.h" />
     <ClInclude Include="ToonShading.h" />
     <ClInclude Include="TranslationNode.h" />
     <ClInclude Include="TransparencyShading.h" />
@@ -166,6 +173,7 @@
   <ItemGroup>
     <ClCompile Include="BumpMapping.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Cuboid.cpp" />
     <ClCompile Include="DDSTextureLoader.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="DirectionalLightNode.cpp" />
@@ -179,12 +187,14 @@
     <ClCompile Include="IdentityNode.cpp" />
     <ClCompile Include="LightingManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
-    <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="ObjectNode.cpp" />
+    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PhongShading.cpp" />
+    <ClCompile Include="Plane.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="PointLightNode.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
@@ -192,11 +202,14 @@
     <ClCompile Include="ScaleNode.cpp" />
     <ClCompile Include="SceneGraphNode.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="SpotLightNode.cpp" />
     <ClCompile Include="Technique.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureMapping.cpp" />
+    <ClCompile Include="TexturePack.cpp" />
     <ClCompile Include="ToonShading.cpp" />
     <ClCompile Include="TranslationNode.cpp" />
     <ClCompile Include="TransparencyShading.cpp" />

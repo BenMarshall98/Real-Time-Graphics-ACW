@@ -1,6 +1,7 @@
 #include "DX11Render.h"
 #include "Win32Window.h"
-#include "Object.h"
+#include "Material.h"
+#include "Shape.h"
 #include "Camera.h"
 #include "PointLight.h"
 #include "SpotLight.h"

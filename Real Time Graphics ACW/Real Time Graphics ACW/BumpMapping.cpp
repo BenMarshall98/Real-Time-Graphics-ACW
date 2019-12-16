@@ -15,20 +15,20 @@ BumpMapping::~BumpMapping()
 {
 }
 
-void BumpMapping::render(std::shared_ptr<Object>& pObject, bool pDeferred)
+void BumpMapping::render(std::shared_ptr<Shape>& pShape, bool pDeferred)
 {
 	mNormalShader->useShader();
-	pObject->render();
+	pShape->render();
 }
 
-void BumpMapping::renderDirectionalShadow(std::shared_ptr<Object>& pObject)
+void BumpMapping::renderDirectionalShadow(std::shared_ptr<Shape>& pShape)
 {
 	mDirectionalShader->useShader();
-	pObject->render();
+	pShape->render();
 }
 
-void BumpMapping::renderOmniDirectionalShadow(std::shared_ptr<Object>& pObject)
+void BumpMapping::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape)
 {
 	mOmniDirectionalShader->useShader();
-	pObject->render();
+	pShape->render();
 }

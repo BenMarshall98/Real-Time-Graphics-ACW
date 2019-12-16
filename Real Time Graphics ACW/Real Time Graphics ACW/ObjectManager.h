@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Object.h"
+#include "Shape.h"
 #include "SceneGraphNode.h"
 #include "Technique.h"
 #include <map>
@@ -15,10 +15,10 @@ class ObjectManager final
 	std::unique_ptr<Technique> staticTechnique;
 	std::vector<std::unique_ptr<Technique>> dynamicTechniques;
 	
-	std::vector<std::shared_ptr<Object>> staticObjects;
-	std::vector<std::shared_ptr<Object>> dynamicObjects;
+	std::vector<std::shared_ptr<Shape>> staticShapes;
+	std::vector<std::shared_ptr<Shape>> dynamicShapes;
 	
-	std::map<std::unique_ptr<Technique>, std::shared_ptr<Object>> renderTechnique;
+	std::map<std::unique_ptr<Technique>, std::shared_ptr<Shape>> renderTechnique;
 	
 public:
 	~ObjectManager();
@@ -35,6 +35,6 @@ public:
 	void render();
 	void renderShadows();
 	
-	void addStaticObject(std::shared_ptr<Object> pObject);
-	void addDynamicObject(std::shared_ptr<Object> pObject);
+	void addStaticShape(std::shared_ptr<Shape> pShape);
+	void addDynamicShape(std::shared_ptr<Shape> pShape);
 };

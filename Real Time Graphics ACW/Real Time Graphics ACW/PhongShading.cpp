@@ -15,20 +15,20 @@ PhongShading::~PhongShading()
 {
 }
 
-void PhongShading::render(std::shared_ptr<Object>& pObject, bool pDeferred)
+void PhongShading::render(std::shared_ptr<Shape>& pShape, bool pDeferred)
 {
 	mNormalShader->useShader();
-	pObject->render();
+	pShape->render();
 }
 
-void PhongShading::renderDirectionalShadow(std::shared_ptr<Object>& pObject)
+void PhongShading::renderDirectionalShadow(std::shared_ptr<Shape>& pShape)
 {
 	mDirectionalShader->useShader();
-	pObject->render();
+	pShape->render();
 }
 
-void PhongShading::renderOmniDirectionalShadow(std::shared_ptr<Object>& pObject)
+void PhongShading::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape)
 {
 	mOmniDirectionalShader->useShader();
-	pObject->render();
+	pShape->render();
 }

@@ -15,20 +15,20 @@ DisplacementMapping::~DisplacementMapping()
 {
 }
 
-void DisplacementMapping::render(std::shared_ptr<Object> & pObject, bool pDeferred)
+void DisplacementMapping::render(std::shared_ptr<Shape>& pShape, bool pDeferred)
 {
 	mNormalShader->useShader();
-	pObject->render(true);
+	pShape->render(true);
 }
 
-void DisplacementMapping::renderDirectionalShadow(std::shared_ptr<Object>& pObject)
+void DisplacementMapping::renderDirectionalShadow(std::shared_ptr<Shape>& pShape)
 {
 	mDirectionalShader->useShader();
-	pObject->render(true);
+	pShape->render(true);
 }
 
-void DisplacementMapping::renderOmniDirectionalShadow(std::shared_ptr<Object>& pObject)
+void DisplacementMapping::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape)
 {
 	mOmniDirectionalShader->useShader();
-	pObject->render(true);
+	pShape->render(true);
 }

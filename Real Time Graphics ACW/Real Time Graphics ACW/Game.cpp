@@ -97,15 +97,6 @@ void Game::run()
 
 		inst->useCameraBuffer(cb);
 		
-		MaterialBuffer mb;
-		
-		mb.mAmbient = DirectX::XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f);
-		mb.mDiffuse = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-		mb.mSpecular = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-		mb.mShininess = 32.0f;
-
-		inst->useMaterialBuffer(mb);
-		
 		DirectX::XMFLOAT4X4 world;
 		XMStoreFloat4x4(&world, DirectX::XMMatrixIdentity());
 		

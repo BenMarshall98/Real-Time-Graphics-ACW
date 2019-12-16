@@ -5,7 +5,7 @@
 
 Win32Window * Win32Window::mInstance = nullptr;
 
-Win32Window::Win32Window(HINSTANCE pHInstance, int pCmdShow) : mCmdShow(pCmdShow)
+Win32Window::Win32Window(const HINSTANCE pHInstance, const int pCmdShow) : mCmdShow(pCmdShow)
 {
 	WNDCLASSEX wndClassEx;
 	wndClassEx.cbSize = sizeof(WNDCLASSEX);
@@ -16,7 +16,7 @@ Win32Window::Win32Window(HINSTANCE pHInstance, int pCmdShow) : mCmdShow(pCmdShow
 	wndClassEx.hInstance = pHInstance;
 	wndClassEx.hIcon = LoadIcon(pHInstance, IDI_APPLICATION);
 	wndClassEx.hCursor = LoadCursor(nullptr, IDC_ARROW);
-	wndClassEx.hbrBackground = NULL;
+	wndClassEx.hbrBackground = nullptr;
 	wndClassEx.lpszMenuName = nullptr;
 	wndClassEx.lpszClassName = mClassName;
 	wndClassEx.hIconSm = LoadIcon(pHInstance, IDI_APPLICATION);
@@ -45,7 +45,7 @@ Win32Window * Win32Window::instance()
 	return mInstance;
 }
 
-Win32Window * Win32Window::instance(HINSTANCE pHInstance, int pCmdShow)
+Win32Window * Win32Window::instance(const HINSTANCE pHInstance, const int pCmdShow)
 {
 	if (!mInstance)
 	{
@@ -55,7 +55,7 @@ Win32Window * Win32Window::instance(HINSTANCE pHInstance, int pCmdShow)
 	return mInstance;
 }
 
-LRESULT CALLBACK Win32Window::windowProcedure(HWND pHwnd, UINT pMessage, WPARAM pWParam, LPARAM pLParam)
+LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMessage, const WPARAM pWParam, const LPARAM pLParam)
 {
 	PAINTSTRUCT paintStruct;
 	HDC hdc;
@@ -136,6 +136,8 @@ LRESULT CALLBACK Win32Window::windowProcedure(HWND pHwnd, UINT pMessage, WPARAM 
 			break;
 		case VK_NEXT:
 			Game::mCamera->panDown(true);
+			break;
+		default:
 			break;
 		}
 	}

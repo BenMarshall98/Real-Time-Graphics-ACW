@@ -1,18 +1,18 @@
 #include "Win32Window.h"
 #include "DX11Render.h"
 #include "Game.h"
-#include "IdentityNode.h"
-#include <fstream>
-#include "TranslationNode.h"
-#include <memory>
 
-int WINAPI wWinMain(HINSTANCE pHInstance, HINSTANCE pPrevInstance, LPWSTR pCmdLine, int pCmdShow)
+// ReSharper disable CppParameterNamesMismatch
+// ReSharper disable CppParameterMayBeConst
+int WINAPI wWinMain(HINSTANCE pHInstance, HINSTANCE, LPWSTR, int pCmdShow)
+// ReSharper restore CppParameterMayBeConst
+// ReSharper restore CppParameterNamesMismatch
 {
 	
 	
-	auto window = Win32Window::instance(pHInstance, pCmdShow);
+	const auto window = Win32Window::instance(pHInstance, pCmdShow);
 	window->run();
-	auto render = Dx11Render::instance();
+	const auto render = Dx11Render::instance();
 	
 	auto game = new Game();
 	game->run();
@@ -20,4 +20,6 @@ int WINAPI wWinMain(HINSTANCE pHInstance, HINSTANCE pPrevInstance, LPWSTR pCmdLi
 	delete game;
 	delete render;
 	delete window;
+
+	return 1;
 }

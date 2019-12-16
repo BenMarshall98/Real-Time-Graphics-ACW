@@ -169,3 +169,8 @@ void Camera::update()
 	const auto upTemp = XMLoadFloat3(&mUpDirection);
 	XMStoreFloat4x4(&mViewMatrix, DirectX::XMMatrixLookAtLH(eyeTemp, targetTemp, upTemp));
 }
+
+void Camera::render()
+{
+	//TODO: Implement
+}

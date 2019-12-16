@@ -27,7 +27,7 @@ class SpotLight
 	float mAttenuationQuad;
 	
 public:
-	SpotLight(const DirectX::XMFLOAT3 & pColor, const DirectX::XMFLOAT3 pPosition, const DirectX::XMFLOAT3 pDirection, float pInnerAngle, float pOuterAngle, float pAttenuationConstant, float pAttenuationLinear, float pAttenuationQuad);
+	SpotLight(const DirectX::XMFLOAT3 & pColor, const DirectX::XMFLOAT3 & pPosition, const DirectX::XMFLOAT3 & pDirection, float pInnerAngle, float pOuterAngle, float pAttenuationConstant, float pAttenuationLinear, float pAttenuationQuad);
 	SpotLight() = default;
 	~SpotLight() = default;
 
@@ -36,35 +36,35 @@ public:
 	SpotLight & operator= (const SpotLight &) = delete;
 	SpotLight & operator= (SpotLight &&) = delete;
 
-	void setColor(DirectX::XMFLOAT3 pColor)
+	void setColor(const DirectX::XMFLOAT3 pColor)
 	{
 		mColor = pColor;
 	}
 
-	void setPosition(DirectX::XMFLOAT3 pPosition)
+	void setPosition(const DirectX::XMFLOAT3 pPosition)
 	{
 		mPosition = pPosition;
 	}
 
-	void setDirection(DirectX::XMFLOAT3 pDirection)
+	void setDirection(const DirectX::XMFLOAT3 pDirection)
 	{
 		mDirection = pDirection;
 	}
 
-	void setConeAngles(float pInnerAngle, float pOuterAngle)
+	void setConeAngles(const float pInnerAngle, const float pOuterAngle)
 	{
 		mInnerAngle = pInnerAngle;
 		mOuterAngle = pOuterAngle;
 	}
 
-	void setAttenuation(float pConstant, float pLinear, float pQuad)
+	void setAttenuation(const float pConstant, const float pLinear, const float pQuad)
 	{
 		mAttenuationConstant = pConstant;
 		mAttenuationLinear = pLinear;
 		mAttenuationQuad = pQuad;
 	}
 
-	void use(SpotLightBuffer & pLightBuffer, unsigned int pIndex);
+	void use(SpotLightBuffer & pLightBuffer, unsigned int pIndex) const;
 	void update(DirectX::XMFLOAT4X4 & pMatrix);
 	void updateShadow();
 };

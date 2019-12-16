@@ -10,8 +10,11 @@ class Texture
 public:
 	Texture() = default;
 	~Texture();
-	Texture(const Texture & pTexture) = delete;
-	Texture & operator= (const Texture & pTexture) = delete;
+	
+	Texture(const Texture &) = delete;
+	Texture(Texture &&) = delete;
+	Texture & operator= (const Texture &) = delete;
+	Texture & operator= (Texture &&) = delete;
 
 	bool loadTexture(const std::string & pTextureFile);
 	void useFragment(unsigned int pIndex) const;

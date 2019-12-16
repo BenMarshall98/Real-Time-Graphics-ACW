@@ -1,15 +1,8 @@
 #include "VectorAnimation.h"
+#include <utility>
 
-VectorAnimation::VectorAnimation(std::vector<VectorNode> pNodes, float pEndTime)
-	: mNodes(pNodes), mEndTime(pEndTime)
-{
-}
-
-VectorAnimation::VectorAnimation()
-{
-}
-
-VectorAnimation::~VectorAnimation()
+VectorAnimation::VectorAnimation(std::vector<VectorNode> pNodes, const float pEndTime)
+	: mNodes(std::move(pNodes)), mEndTime(pEndTime)
 {
 }
 
@@ -61,7 +54,7 @@ void VectorAnimation::calculateTangents()
 	}
 }
 
-DirectX::XMFLOAT4X4 VectorAnimation::animate(const float deltaTime)
+DirectX::XMFLOAT4X4 VectorAnimation::animate(const float pDeltaTime)
 {
 	if (mNodes.empty())
 	{
@@ -83,7 +76,7 @@ DirectX::XMFLOAT4X4 VectorAnimation::animate(const float deltaTime)
 	if (mNodes.size() == 2)
 	{
 		const auto lastTime = mCurrentTime;
-		mCurrentTime += deltaTime;
+		mCurrentTime += pDeltaTime;
 
 		if (mCurrentTime >= mEndTime)
 		{

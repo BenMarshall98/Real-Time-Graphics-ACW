@@ -2,7 +2,12 @@
 class EnvironmentMapping
 {
 public:
-	EnvironmentMapping();
-	~EnvironmentMapping();
+	EnvironmentMapping() = default;
+	~EnvironmentMapping() = default;
+
+	EnvironmentMapping(const EnvironmentMapping &) = delete;
+	EnvironmentMapping(EnvironmentMapping &&) = delete;
+	EnvironmentMapping & operator= (const EnvironmentMapping &) = delete;
+	EnvironmentMapping & operator= (EnvironmentMapping &&) = delete;
 };
 

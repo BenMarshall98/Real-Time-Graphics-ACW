@@ -1,40 +1,41 @@
 #pragma once
 #include <d3d11.h>
 #include <vector>
+#include <wrl/client.h>
 
 enum class TextureType
 {
-	Texture2D,
-	TextureCube
+	TEXTURE_2D,
+	TEXTURE_CUBE
 };
 
 class Framebuffer
 {
-	ID3D11Texture2D * mColorTexture = nullptr;
-	std::vector<ID3D11RenderTargetView *> mColorTextureTargetViews;
-	std::vector<ID3D11ShaderResourceView *> mColorTextureResourceViews;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> mColorTexture = nullptr;
+	std::vector<Microsoft::WRL::ComPtr<ID3D11RenderTargetView>> mColorTextureTargetViews;
+	std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> mColorTextureResourceViews;
 
-	ID3D11Texture2D * mDepthTexture = nullptr;
-	ID3D11DepthStencilState * mDepthState = nullptr;
-	ID3D11DepthStencilView * mDepthTextureTargetView = nullptr;
-	ID3D11ShaderResourceView * mDepthTextureResourceView = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> mDepthTexture = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> mDepthState = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> mDepthTextureTargetView = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mDepthTextureResourceView = nullptr;
 
-	ID3D11SamplerState * mSampler = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> mSampler = nullptr;
 
-	TextureType mType;
+	TextureType mType = TextureType::TEXTURE_2D;
 
 	bool mUpdateResize = false;
 	
 public:
 	Framebuffer() = default;
-	void loadFramebuffer(bool pColour, bool pDepth, TextureType pType = TextureType::Texture2D, unsigned int pNumberOfBuffers = 1u);
-	void loadFramebuffer(bool pColour, bool pDepth, int pWidth, int pHeight, TextureType pType = TextureType::Texture2D, unsigned int pNumberOfBuffers = 1u);
+	bool loadFramebuffer(bool pColour, bool pDepth, TextureType pType = TextureType::TEXTURE_2D, unsigned int pNumberOfBuffers = 1u);
+	bool loadFramebuffer(bool pColour, bool pDepth, int pWidth, int pHeight, TextureType pType = TextureType::TEXTURE_2D, unsigned int pNumberOfBuffers = 1u);
 	~Framebuffer() = default;
 
 	Framebuffer(const Framebuffer & pFramebuffer) = delete;
 	Framebuffer & operator= (const Framebuffer & pFramebuffer) = delete;
 
 	void useFramebuffer() const;
-	void useTexture(unsigned int & pSlot);
+	void useTexture(unsigned int pSlot);
 };
 

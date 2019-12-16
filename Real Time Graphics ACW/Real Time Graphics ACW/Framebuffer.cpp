@@ -2,17 +2,18 @@
 #include "DX11Render.h"
 #include <directxcolors.h>
 #include "Win32Window.h"
+#include <algorithm>
 
-void Framebuffer::loadFramebuffer(bool pColour, bool pDepth, TextureType pType, unsigned pNumberOfBuffers)
+bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, const TextureType pType, const unsigned int pNumberOfBuffers)
 {
 	//TODO: Register framebuffer to be resized
 	mUpdateResize = true;
 	const auto height = Win32Window::instance()->getHeight();
 	const auto width = Win32Window::instance()->getWidth();
-	loadFramebuffer(pColour, pDepth, width, height, pType, pNumberOfBuffers);
+	return loadFramebuffer(pColour, pDepth, width, height, pType, pNumberOfBuffers);
 }
 
-void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWidth, int pHeight, TextureType pType, unsigned int pNumberOfBuffers)
+bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWidth, int pHeight, TextureType pType, unsigned int pNumberOfBuffers)
 {
 	const auto device = Dx11Render::instance()->getDevice();
 
@@ -24,7 +25,7 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 		renderTextureDesc.Height = pHeight;
 		renderTextureDesc.MipLevels = 1;
 
-		if (pType == TextureType::Texture2D)
+		if (pType == TextureType::TEXTURE_2D)
 		{
 			if (pNumberOfBuffers == 1)
 			{
@@ -47,21 +48,32 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 		renderTextureDesc.CPUAccessFlags = 0;
 		renderTextureDesc.MiscFlags = 0;
 
-		auto result = device->CreateTexture2D(&renderTextureDesc, nullptr, &mColorTexture);
+		auto result = device->CreateTexture2D(&renderTextureDesc, nullptr, mColorTexture.ReleaseAndGetAddressOf());
+
+		if (FAILED(result))
+		{
+			return false;
+		}
 
 		D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
 		ZeroMemory(&renderTargetViewDesc, sizeof D3D11_RENDER_TARGET_VIEW_DESC);
 		renderTargetViewDesc.Format = renderTextureDesc.Format;
 
-		if (pType == TextureType::Texture2D)
+		if (pType == TextureType::TEXTURE_2D)
 		{
 			if (pNumberOfBuffers == 1)
 			{
 				renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 				renderTargetViewDesc.Texture2D.MipSlice = 0;
 
-				ID3D11RenderTargetView * renderTargetView = nullptr;
-				device->CreateRenderTargetView(mColorTexture, &renderTargetViewDesc, &renderTargetView);
+				Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView = nullptr;
+				result = device->CreateRenderTargetView(mColorTexture.Get(), &renderTargetViewDesc, renderTargetView.ReleaseAndGetAddressOf());
+
+				if (FAILED(result))
+				{
+					return false;
+				}
+				
 				mColorTextureTargetViews.push_back(renderTargetView);
 			}
 			else
@@ -70,12 +82,18 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 				renderTargetViewDesc.Texture2DArray.MipSlice = 0;
 				renderTargetViewDesc.Texture2DArray.ArraySize = 1;
 				
-				for (int i = 0; i < pNumberOfBuffers; i++)
+				for (auto i = 0u; i < pNumberOfBuffers; i++)
 				{
 					renderTargetViewDesc.Texture2DArray.FirstArraySlice = i;
 
-					ID3D11RenderTargetView * renderTargetView = nullptr;
-					device->CreateRenderTargetView(mColorTexture, &renderTargetViewDesc, &renderTargetView);
+					Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView = nullptr;
+					result = device->CreateRenderTargetView(mColorTexture.Get(), &renderTargetViewDesc, renderTargetView.ReleaseAndGetAddressOf());
+
+					if (FAILED(result))
+					{
+						return false;
+					}
+					
 					mColorTextureTargetViews.push_back(renderTargetView);
 				}
 			}
@@ -86,12 +104,18 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 			renderTargetViewDesc.Texture2DArray.MipSlice = 0;
 			renderTargetViewDesc.Texture2DArray.ArraySize = 1;
 
-			for (int i = 0; i < pNumberOfBuffers * 6; i++)
+			for (auto i = 0u; i < pNumberOfBuffers * 6; i++)
 			{
 				renderTargetViewDesc.Texture2DArray.FirstArraySlice = i;
 
-				ID3D11RenderTargetView * renderTargetView = nullptr;
-				device->CreateRenderTargetView(mColorTexture, &renderTargetViewDesc, &renderTargetView);
+				Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView = nullptr;
+				result = device->CreateRenderTargetView(mColorTexture.Get(), &renderTargetViewDesc, renderTargetView.ReleaseAndGetAddressOf());
+
+				if (FAILED(result))
+				{
+					return false;
+				}
+				
 				mColorTextureTargetViews.push_back(renderTargetView);
 			}
 		}
@@ -100,7 +124,7 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 		ZeroMemory(&shaderResourceViewDesc, sizeof D3D11_SHADER_RESOURCE_VIEW_DESC);
 		shaderResourceViewDesc.Format = renderTextureDesc.Format;
 
-		if (pType == TextureType::Texture2D)
+		if (pType == TextureType::TEXTURE_2D)
 		{
 			if (pNumberOfBuffers == 1)
 			{
@@ -108,8 +132,14 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 				shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
 				shaderResourceViewDesc.Texture2D.MipLevels = 1;
 
-				ID3D11ShaderResourceView * shaderResourceView = nullptr;
-				device->CreateShaderResourceView(mColorTexture, &shaderResourceViewDesc, &shaderResourceView);
+				Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView = nullptr;
+				result = device->CreateShaderResourceView(mColorTexture.Get(), &shaderResourceViewDesc, shaderResourceView.ReleaseAndGetAddressOf());
+
+				if (FAILED(result))
+				{
+					return false;
+				}
+				
 				mColorTextureResourceViews.push_back(shaderResourceView);
 			}
 			else
@@ -119,12 +149,18 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 				shaderResourceViewDesc.Texture2DArray.MipLevels = 1;
 				shaderResourceViewDesc.Texture2DArray.ArraySize = 1;
 
-				for (int i = 0; i < pNumberOfBuffers; i++)
+				for (auto i = 0u; i < pNumberOfBuffers; i++)
 				{
 					shaderResourceViewDesc.Texture2DArray.FirstArraySlice = i;
 
-					ID3D11ShaderResourceView * shaderResourceView = nullptr;
-					device->CreateShaderResourceView(mColorTexture, &shaderResourceViewDesc, &shaderResourceView);
+					Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView = nullptr;
+					result = device->CreateShaderResourceView(mColorTexture.Get(), &shaderResourceViewDesc, shaderResourceView.ReleaseAndGetAddressOf());
+
+					if (FAILED(result))
+					{
+						return false;
+					}
+					
 					mColorTextureResourceViews.push_back(shaderResourceView);
 				}
 			}
@@ -137,8 +173,14 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 				shaderResourceViewDesc.TextureCube.MostDetailedMip = 0;
 				shaderResourceViewDesc.TextureCube.MipLevels = 1;
 
-				ID3D11ShaderResourceView * shaderResourceView = nullptr;
-				device->CreateShaderResourceView(mColorTexture, &shaderResourceViewDesc, &shaderResourceView);
+				Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView = nullptr;
+				result = device->CreateShaderResourceView(mColorTexture.Get(), &shaderResourceViewDesc, shaderResourceView.ReleaseAndGetAddressOf());
+
+				if (FAILED(result))
+				{
+					return false;
+				}
+				
 				mColorTextureResourceViews.push_back(shaderResourceView);
 			}
 			else
@@ -148,12 +190,18 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 				shaderResourceViewDesc.TextureCubeArray.MipLevels = 1;
 				shaderResourceViewDesc.TextureCubeArray.NumCubes = 1;
 
-				for (int i = 0; i < pNumberOfBuffers; i++)
+				for (auto i = 0u; i < pNumberOfBuffers; i++)
 				{
 					shaderResourceViewDesc.TextureCubeArray.First2DArrayFace = i * 6;
 
-					ID3D11ShaderResourceView * shaderResourceView = nullptr;
-					device->CreateShaderResourceView(mColorTexture, &shaderResourceViewDesc, &shaderResourceView);
+					Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView = nullptr;
+					result = device->CreateShaderResourceView(mColorTexture.Get(), &shaderResourceViewDesc, shaderResourceView.ReleaseAndGetAddressOf());
+
+					if (FAILED(result))
+					{
+						return false;
+					}
+					
 					mColorTextureResourceViews.push_back(shaderResourceView);
 				}
 			}
@@ -166,7 +214,7 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 	depthTextureDesc.Height = pHeight;
 	depthTextureDesc.MipLevels = 1;
 
-	if (pType == TextureType::Texture2D)
+	if (pType == TextureType::TEXTURE_2D)
 	{
 		depthTextureDesc.ArraySize = 1;
 	}
@@ -183,7 +231,12 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 	depthTextureDesc.CPUAccessFlags = 0;
 	depthTextureDesc.MiscFlags = 0;
 
-	auto result = device->CreateTexture2D(&depthTextureDesc, nullptr, &mDepthTexture);
+	auto result = device->CreateTexture2D(&depthTextureDesc, nullptr, mDepthTexture.ReleaseAndGetAddressOf());
+
+	if (FAILED(result))
+	{
+		return false;
+	}
 
 	D3D11_DEPTH_STENCIL_DESC depthStateDesc;
 	ZeroMemory(&depthStateDesc, sizeof D3D11_DEPTH_STENCIL_DESC);
@@ -205,14 +258,19 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 	depthStateDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	depthStateDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
 
-	result = device->CreateDepthStencilState(&depthStateDesc, &mDepthState);
+	result = device->CreateDepthStencilState(&depthStateDesc, mDepthState.ReleaseAndGetAddressOf());
+
+	if (FAILED(result))
+	{
+		return false;
+	}
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthViewDesc;
 	ZeroMemory(&depthViewDesc, sizeof D3D11_DEPTH_STENCIL_VIEW_DESC);
 	depthViewDesc.Format = depthTextureDesc.Format;
 	depthViewDesc.Flags = 0;
 
-	if (pType == TextureType::Texture2D)
+	if (pType == TextureType::TEXTURE_2D)
 	{
 		depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 		depthViewDesc.Texture2D.MipSlice = 0;
@@ -225,7 +283,12 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 		depthViewDesc.Texture2DArray.ArraySize = 6;
 	}
 
-	result = device->CreateDepthStencilView(mDepthTexture, &depthViewDesc, &mDepthTextureTargetView);
+	result = device->CreateDepthStencilView(mDepthTexture.Get(), &depthViewDesc, mDepthTextureTargetView.ReleaseAndGetAddressOf());
+
+	if (FAILED(result))
+	{
+		return false;
+	}
 
 	if (pDepth)
 	{
@@ -233,7 +296,7 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 		ZeroMemory(&shaderResourceViewDesc, sizeof D3D11_SHADER_RESOURCE_VIEW_DESC);
 		shaderResourceViewDesc.Format = depthTextureDesc.Format;
 
-		if (pType == TextureType::Texture2D)
+		if (pType == TextureType::TEXTURE_2D)
 		{
 			shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 			shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
@@ -246,7 +309,12 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 			shaderResourceViewDesc.TextureCube.MipLevels = 1;
 		}
 
-		result = device->CreateShaderResourceView(mDepthTexture, &shaderResourceViewDesc, &mDepthTextureResourceView);
+		result = device->CreateShaderResourceView(mDepthTexture.Get(), &shaderResourceViewDesc, &mDepthTextureResourceView.ReleaseAndGetAddressOf());
+
+		if (FAILED(result))
+		{
+			return false;
+		}
 	}
 
 	D3D11_SAMPLER_DESC samplerDesc;
@@ -258,18 +326,37 @@ void Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 
 	result = device->CreateSamplerState(&samplerDesc, &mSampler);
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	return true;
 }
 
 void Framebuffer::useFramebuffer() const
 {
 	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
 
-	for (int i = 0; i < mColorTextureResourceViews.size(); i++)
+	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
 	{
-		deviceContext->ClearRenderTargetView(mColorTextureTargetViews[i], DirectX::Colors::MidnightBlue);
+		deviceContext->ClearRenderTargetView(mColorTextureTargetViews[i].Get(), DirectX::Colors::MidnightBlue);
 	}
 	
-	deviceContext->ClearDepthStencilView(mDepthTextureTargetView, D3D11_CLEAR_DEPTH, 1.0f, 0.0f);
+	deviceContext->ClearDepthStencilView(mDepthTextureTargetView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0.0f);
+
+	std::vector<ID3D11RenderTargetView * > views;
+	views.reserve(mColorTextureTargetViews.size());
+
+	std::transform(mColorTextureTargetViews.begin(), mColorTextureTargetViews.end(), views,
+		[](const Microsoft::WRL::ComPtr<ID3D11RenderTargetView> & pView) { return pView.Get(); });
 	
-	deviceContext->OMSetRenderTargets(mColorTextureResourceViews.size(), mColorTextureTargetViews.data(), mDepthTextureTargetView);
+	
+	deviceContext->OMSetRenderTargets(mColorTextureTargetViews.size(), views.data(), mDepthTextureTargetView.Get());
+}
+
+void Framebuffer::useTexture(unsigned int)
+{
+	//TODO: Implement
 }

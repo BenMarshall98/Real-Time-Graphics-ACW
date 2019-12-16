@@ -15,7 +15,7 @@ class LightingManager
 
 	static LightingManager * mInstance;
 	
-	LightingManager();
+	LightingManager() = default;
 
 public:
 

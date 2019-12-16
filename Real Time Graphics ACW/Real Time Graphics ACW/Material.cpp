@@ -2,10 +2,9 @@
 #include <string>
 #include "DX11Render.h"
 
-Material::Material(const DirectX::XMFLOAT3& pAmbient, const DirectX::XMFLOAT3& pDiffuse, const DirectX::XMFLOAT3& pSpecular, float pShininess) :
+Material::Material(const DirectX::XMFLOAT3& pAmbient, const DirectX::XMFLOAT3& pDiffuse, const DirectX::XMFLOAT3& pSpecular, const float pShininess) :
 	mAmbient(pAmbient), mDiffuse(pDiffuse), mSpecular(pSpecular), mShininess(pShininess)
 {
-	
 }
 
 Material::Material() : mAmbient(), mDiffuse(), mSpecular(), mShininess()
@@ -13,18 +12,15 @@ Material::Material() : mAmbient(), mDiffuse(), mSpecular(), mShininess()
 	
 }
 
-Material::~Material()
-{
-	
-}
-
 void Material::use() const
 {
-	MaterialBuffer mb;
-	mb.mAmbient = DirectX::XMFLOAT4(mAmbient.x, mAmbient.y, mAmbient.z, 1.0f);
-	mb.mDiffuse = DirectX::XMFLOAT4(mDiffuse.x, mDiffuse.y, mDiffuse.z, 1.0f);
-	mb.mSpecular = DirectX::XMFLOAT4(mSpecular.x, mSpecular.y, mSpecular.z, 1.0f);
-	mb.mShininess = mShininess;
+	const MaterialBuffer mb = {
+		DirectX::XMFLOAT4(mAmbient.x, mAmbient.y, mAmbient.z, 1.0f),
+		DirectX::XMFLOAT4(mDiffuse.x, mDiffuse.y, mDiffuse.z, 1.0f),
+		DirectX::XMFLOAT4(mSpecular.x, mSpecular.y, mSpecular.z, 1.0f),
+		mShininess,
+		DirectX::XMFLOAT3()
+	};
 
 	Dx11Render::instance()->useMaterialBuffer(mb);
 }

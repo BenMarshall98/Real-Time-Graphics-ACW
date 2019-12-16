@@ -11,11 +11,7 @@ BumpMapping::BumpMapping() :
 {
 }
 
-BumpMapping::~BumpMapping()
-{
-}
-
-void BumpMapping::render(std::shared_ptr<Shape>& pShape, bool pDeferred)
+void BumpMapping::render(std::shared_ptr<Shape>& pShape, bool)
 {
 	mNormalShader->useShader();
 	pShape->render();

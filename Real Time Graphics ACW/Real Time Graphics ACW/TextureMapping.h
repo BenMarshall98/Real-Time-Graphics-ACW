@@ -5,7 +5,12 @@ class TextureMapping final : public Technique
 {
 public:
 	TextureMapping();
-	~TextureMapping();
+	~TextureMapping() = default;
+
+	TextureMapping(const TextureMapping&) = delete;
+	TextureMapping(TextureMapping &&) = delete;
+	TextureMapping & operator= (const TextureMapping &) = delete;
+	TextureMapping & operator= (TextureMapping &&) = delete;
 
 	void render(std::shared_ptr<Shape>& pShape, bool pDeferred) override;
 	void renderDirectionalShadow(std::shared_ptr<Shape>& pShape) override;

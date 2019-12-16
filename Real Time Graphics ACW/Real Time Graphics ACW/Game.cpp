@@ -45,7 +45,7 @@ Game::Game()
 	mCamera = new Camera(eye, up, at);
 
 	// Initialize the projection matrix
-	mProjection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, Win32Window::instance()->getWidth() / (FLOAT)Win32Window::instance()->getHeight(), 0.01f, 20.0f);
+	mProjection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, static_cast<float>(Win32Window::instance()->getWidth()) / static_cast<float>(Win32Window::instance()->getHeight()), 0.01f, 20.0f);
 
 	mBase = ResourceManager::instance()->loadTexture("tyre_base.dds");
 	mSpec = ResourceManager::instance()->loadTexture("tyre_spec.dds");
@@ -63,7 +63,7 @@ Game::Game()
 
 void Game::run()
 {
-	while(Win32Window::instance()->windowEvents())
+	while(Win32Window::windowEvents())
 	{
 		mCamera->update();
 		Dx11Render::instance()->clearRenderTargetView(DirectX::Colors::MidnightBlue);

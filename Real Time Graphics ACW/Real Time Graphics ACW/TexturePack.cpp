@@ -1,7 +1,8 @@
 #include "TexturePack.h"
+#include <utility>
 
-TexturePack::TexturePack(const std::shared_ptr<Texture>& pDiffuseTexture, const std::shared_ptr<Texture>& pSpecularTexture, const std::shared_ptr<Texture>& pNormalTexture, const std::shared_ptr<Texture>& pHeightTexture) :
-	mDiffuseTexture(pDiffuseTexture), mSpecularTexture(pSpecularTexture), mNormalTexture(pNormalTexture), mHeightTexture(pHeightTexture)
+TexturePack::TexturePack(std::shared_ptr<Texture> pDiffuseTexture, std::shared_ptr<Texture> pSpecularTexture, std::shared_ptr<Texture> pNormalTexture, std::shared_ptr<Texture> pHeightTexture) :
+	mDiffuseTexture(std::move(pDiffuseTexture)), mSpecularTexture(std::move(pSpecularTexture)), mNormalTexture(std::move(pNormalTexture)), mHeightTexture(std::move(pHeightTexture))
 {
 }
 

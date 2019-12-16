@@ -2,24 +2,20 @@
 #include "ObjectManager.h"
 #include <string>
 
-ObjectNode::ObjectNode(Object * pObject, ObjectType pType) : mObject(pObject)
+ObjectNode::ObjectNode(Shape * pShape, const ObjectType pType) : mShape(pShape)
 {
-	if (pType == Static)
+	if (pType == STATIC)
 	{
-		ObjectManager::instance()->addStaticObject(mObject);
+		ObjectManager::instance()->addStaticShape(mShape);
 	}
 	else
 	{
-		ObjectManager::instance()->addDynamicObject(mObject);
+		ObjectManager::instance()->addDynamicShape(mShape);
 	}
 	
 }
 
-ObjectNode::ObjectNode() : mObject(nullptr)
-{
-}
-
-ObjectNode::~ObjectNode()
+ObjectNode::ObjectNode() : mShape(nullptr)
 {
 }
 
@@ -27,20 +23,20 @@ void ObjectNode::read(std::istream& pIn)
 {
 	std::string s, type;
 	pIn >> s >> type;
-	mObject = std::make_shared<Object>();
-	pIn >> *mObject;
+	mShape = std::make_shared<Shape>();
+	pIn >> *mShape;
 
 	if (type == "Static")
 	{
-		ObjectManager::instance()->addStaticObject(mObject);
+		ObjectManager::instance()->addStaticShape(mShape);
 	}
 	else
 	{
-		ObjectManager::instance()->addDynamicObject(mObject);
+		ObjectManager::instance()->addDynamicShape(mShape);
 	}
 }
 
-void ObjectNode::update(DirectX::XMFLOAT4X4 pMatrix)
+void ObjectNode::update(const DirectX::XMFLOAT4X4 pMatrix)
 {
-	mObject->setMatrix(pMatrix);
+	mShape->setMatrix(pMatrix);
 }

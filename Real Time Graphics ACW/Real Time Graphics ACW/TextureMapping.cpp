@@ -11,11 +11,7 @@ TextureMapping::TextureMapping() :
 {
 }
 
-TextureMapping::~TextureMapping()
-{
-}
-
-void TextureMapping::render(std::shared_ptr<Shape>& pShape, bool pDeferred)
+void TextureMapping::render(std::shared_ptr<Shape>& pShape, bool)
 {
 	mNormalShader->useShader();
 	pShape->render();

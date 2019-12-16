@@ -10,7 +10,12 @@ class PointLightNode final : public SceneGraphNode
 public:
 	explicit PointLightNode(PointLight * pPointLight);
 	PointLightNode();
-	~PointLightNode();
+	~PointLightNode() = default;
+
+	PointLightNode(const PointLightNode &) = delete;
+	PointLightNode(PointLightNode &&) = delete;
+	PointLightNode & operator= (const PointLightNode &) = delete;
+	PointLightNode & operator= (PointLightNode &&) = delete;
 
 	void read(std::istream& pIn) override;
 	void update(DirectX::XMFLOAT4X4 pMatrix) override;

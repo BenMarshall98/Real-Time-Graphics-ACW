@@ -3,10 +3,6 @@
 
 LightingManager * LightingManager::mInstance = nullptr;
 
-LightingManager::LightingManager()
-{
-}
-
 void LightingManager::addDirectionalLight(std::shared_ptr<DirectionalLight> & pDirectionalLight)
 {
 	mDirectionalLight = pDirectionalLight;
@@ -128,7 +124,7 @@ bool LightingManager::updatePointLightShadow() const
 	return false;
 }
 
-void LightingManager::updateSpotLightShadow(unsigned pLight) const
+void LightingManager::updateSpotLightShadow(const unsigned int pLight) const
 {
 	mSpotLights[pLight]->updateShadow();
 }

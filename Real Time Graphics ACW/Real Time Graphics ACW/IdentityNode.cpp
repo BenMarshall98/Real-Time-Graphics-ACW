@@ -1,6 +1,6 @@
 #include "IdentityNode.h"
 
-void IdentityNode::read(std::istream & pIn)
+void IdentityNode::read(std::istream &)
 {
 	//Do nothing
 }

@@ -25,24 +25,29 @@ public:
 	PointLight() = default;
 	~PointLight() = default;
 
-	void setColor(DirectX::XMFLOAT3 pColor)
+	PointLight(const PointLight &) = delete;
+	PointLight(PointLight &&) = delete;
+	PointLight & operator= (const PointLight &) = delete;
+	PointLight & operator= (PointLight &&) = delete;
+
+	void setColor(const DirectX::XMFLOAT3 pColor)
 	{
 		mColor = pColor;
 	}
 
-	void setPosition(DirectX::XMFLOAT3 pPosition)
+	void setPosition(const DirectX::XMFLOAT3 pPosition)
 	{
 		mPosition = pPosition;
 	}
 
-	void setAttenuation(float pConstant, float pLinear, float pQuad)
+	void setAttenuation(const float pConstant, const float pLinear, const float pQuad)
 	{
 		mAttenuationConstant = pConstant;
 		mAttenuationLinear = pLinear;
 		mAttenuationQuad = pQuad;
 	}
 
-	void use(PointLightBuffer & pLightBuffer);
+	void use(PointLightBuffer & pLightBuffer) const;
 	void update(DirectX::XMFLOAT4X4 & pMatrix);
 	void updateShadow();
 };

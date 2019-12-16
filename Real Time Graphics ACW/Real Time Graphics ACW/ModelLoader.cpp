@@ -9,9 +9,6 @@
 #include "assimp/Importer.hpp"
 #include "assimp/postprocess.h"
 
-
-#define PI 3.14159265358979323846
-
 class std::shared_ptr<Model> ModelLoader::loadModelFromFile(const std::string& pModelFile)
 {
 	Assimp::Importer importer;

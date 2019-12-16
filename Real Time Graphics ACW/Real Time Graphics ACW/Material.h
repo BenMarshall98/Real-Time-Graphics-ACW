@@ -21,7 +21,12 @@ class Material
 public:
 	Material(const DirectX::XMFLOAT3 & pAmbient, const DirectX::XMFLOAT3 & pDiffuse, const DirectX::XMFLOAT3 & pSpecular, float pShininess);
 	Material();
-	~Material();
+	~Material() = default;
+
+	Material(const Material &) = delete;
+	Material(Material &&) = delete;
+	Material & operator= (const Material &) = delete;
+	Material & operator= (Material &&) = delete;
 
 	void setAmbient(const DirectX::XMFLOAT3 & pAmbient)
 	{

@@ -5,7 +5,7 @@
 #include "RotationNode.h"
 #include "ScaleNode.h"
 #include "ObjectNode.h"
-#include "DirectionalLightnode.h"
+#include "DirectionalLightNode.h"
 #include "PointLightNode.h"
 #include "SpotLightNode.h"
 
@@ -29,7 +29,7 @@ SceneGraphNode::~SceneGraphNode()
 void SceneGraphNode::update(DirectX::XMFLOAT4X4 pMatrix)
 {
 	DirectX::XMFLOAT4X4 matrix;
-	XMStoreFloat4x4(&matrix, DirectX::XMMatrixMultiply(DirectX::XMLoadFloat4x4(&mMatrix), XMLoadFloat4x4(&pMatrix)));
+	XMStoreFloat4x4(&matrix, XMMatrixMultiply(XMLoadFloat4x4(&mMatrix), XMLoadFloat4x4(&pMatrix)));
 
 	for (const auto& child : mChildren)
 	{

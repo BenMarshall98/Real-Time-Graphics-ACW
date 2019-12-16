@@ -6,7 +6,8 @@
 
 class Shader
 {
-	static const D3D11_INPUT_ELEMENT_DESC mLayout[];
+	static const D3D11_INPUT_ELEMENT_DESC layout[];
+	
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> mVertexShader = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> mPixelShader = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11GeometryShader> mGeometryShader = nullptr;

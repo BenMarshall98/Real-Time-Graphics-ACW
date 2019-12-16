@@ -7,14 +7,6 @@ DirectionalLightNode::DirectionalLightNode(DirectionalLight * pDirectionalLight)
 	LightingManager::instance()->addDirectionalLight(mDirectionalLight);
 }
 
-DirectionalLightNode::DirectionalLightNode() : mDirectionalLight(nullptr)
-{
-}
-
-DirectionalLightNode::~DirectionalLightNode()
-{
-}
-
 void DirectionalLightNode::read(std::istream& pIn)
 {
 	if (mDirectionalLight)

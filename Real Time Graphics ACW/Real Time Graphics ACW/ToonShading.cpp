@@ -11,11 +11,7 @@ ToonShading::ToonShading() :
 {
 }
 
-ToonShading::~ToonShading()
-{
-}
-
-void ToonShading::render(std::shared_ptr<Shape>& pShape, bool pDeferred)
+void ToonShading::render(std::shared_ptr<Shape>& pShape, bool)
 {
 	mNormalShader->useShader();
 	pShape->render();

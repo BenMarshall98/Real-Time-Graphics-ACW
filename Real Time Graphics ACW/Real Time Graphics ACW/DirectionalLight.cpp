@@ -27,6 +27,11 @@ void DirectionalLight::update(DirectX::XMFLOAT4X4& pMatrix)
 	XMStoreFloat3(&mDirection, direction);
 }
 
+void DirectionalLight::updateShadow()
+{
+	//TODO: Implement
+}
+
 std::istream& operator>>(std::istream& pIn, DirectionalLight& pLight)
 {
 	std::string s;
@@ -41,3 +46,4 @@ std::istream& operator>>(std::istream& pIn, DirectionalLight& pLight)
 
 	return pIn;
 }
+

@@ -12,16 +12,20 @@ class ObjectManager final
 	
 	ObjectManager();
 	
-	std::unique_ptr<Technique> staticTechnique;
-	std::vector<std::unique_ptr<Technique>> dynamicTechniques;
+	std::unique_ptr<Technique> mStaticTechnique;
+	std::vector<std::unique_ptr<Technique>> mDynamicTechniques;
 	
-	std::vector<std::shared_ptr<Shape>> staticShapes;
-	std::vector<std::shared_ptr<Shape>> dynamicShapes;
+	std::vector<std::shared_ptr<Shape>> mStaticShapes;
+	std::vector<std::shared_ptr<Shape>> mDynamicShapes;
 	
-	std::map<std::unique_ptr<Technique>, std::shared_ptr<Shape>> renderTechnique;
+	std::map<std::unique_ptr<Technique>, std::shared_ptr<Shape>> mRenderTechnique;
 	
 public:
-	~ObjectManager();
+	~ObjectManager() = default;
+	ObjectManager(const ObjectManager&) = delete;
+	ObjectManager(ObjectManager &&) = delete;
+	ObjectManager & operator= (const ObjectManager &) = delete;
+	ObjectManager & operator= (ObjectManager &&) = delete;
 	
 	static ObjectManager * instance()
 	{
@@ -35,6 +39,6 @@ public:
 	void render();
 	void renderShadows();
 	
-	void addStaticShape(std::shared_ptr<Shape> pShape);
-	void addDynamicShape(std::shared_ptr<Shape> pShape);
+	void addStaticShape(const std::shared_ptr<Shape>& pShape);
+	void addDynamicShape(const std::shared_ptr<Shape>& pShape);
 };

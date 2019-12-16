@@ -9,5 +9,10 @@ public:
 	ScaleNode() = default;
 	~ScaleNode() = default;
 
+	ScaleNode(const ScaleNode&) = delete;
+	ScaleNode(ScaleNode &&) = delete;
+	ScaleNode & operator= (const ScaleNode &) = delete;
+	ScaleNode & operator= (ScaleNode &&) = delete;
+
 	void read(std::istream& pIn) override;
 };

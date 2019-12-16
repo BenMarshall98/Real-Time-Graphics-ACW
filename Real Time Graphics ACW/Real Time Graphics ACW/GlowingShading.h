@@ -2,7 +2,12 @@
 class GlowingShading
 {
 public:
-	GlowingShading();
-	~GlowingShading();
+	GlowingShading() = default;
+	~GlowingShading() = default;
+
+	GlowingShading(const GlowingShading &) = delete;
+	GlowingShading(GlowingShading &&) = delete;
+	GlowingShading & operator= (const GlowingShading &) = delete;
+	GlowingShading & operator= (GlowingShading &&) = delete;
 };
 

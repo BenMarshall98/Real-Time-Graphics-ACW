@@ -11,11 +11,7 @@ PhongShading::PhongShading() :
 {
 }
 
-PhongShading::~PhongShading()
-{
-}
-
-void PhongShading::render(std::shared_ptr<Shape>& pShape, bool pDeferred)
+void PhongShading::render(std::shared_ptr<Shape>& pShape, bool)
 {
 	mNormalShader->useShader();
 	pShape->render();

@@ -11,14 +11,14 @@ bool Model::loadModel(const std::vector<DirectX::XMFLOAT3> & pPositions, const s
 
 	//None changing data for buffers;
 	D3D11_BUFFER_DESC bufferDesc;
-	ZeroMemory(&bufferDesc, sizeof(bufferDesc));
+	ZeroMemory(&bufferDesc, sizeof bufferDesc);
 
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bufferDesc.CPUAccessFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA initData;
-	ZeroMemory(&initData, sizeof(initData));
+	ZeroMemory(&initData, sizeof initData);
 
 	//Create Position Buffer
 	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * pPositions.size();
@@ -84,7 +84,7 @@ bool Model::loadModel(const std::vector<DirectX::XMFLOAT3> & pPositions, const s
 	bufferDesc.ByteWidth = sizeof(WORD) * pIndices.size();
 	bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	
-	ZeroMemory(&initData, sizeof(initData));
+	ZeroMemory(&initData, sizeof initData);
 	initData.pSysMem = pIndices.data();
 
 	result = device->CreateBuffer(&bufferDesc, &initData, &mIndicesBuffer);
@@ -98,7 +98,7 @@ bool Model::loadModel(const std::vector<DirectX::XMFLOAT3> & pPositions, const s
 	return true;
 }
 
-void Model::render(bool tessellated)
+void Model::render(const bool pTessellated)
 {
 	auto deviceContext = Dx11Render::instance()->getDeviceContext();
 
@@ -128,12 +128,12 @@ void Model::render(bool tessellated)
 		lastModel = this;
 	}
 
-	static auto lastTessellated = tessellated;
+	static auto lastTessellated = pTessellated;
 	static auto firstTime = true;
 
 	if (firstTime)
 	{
-		if (tessellated)
+		if (pTessellated)
 		{
 			deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
 		}
@@ -142,9 +142,9 @@ void Model::render(bool tessellated)
 			deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		}
 	}
-	else if (lastTessellated != tessellated)
+	else if (lastTessellated != pTessellated)
 	{
-		if (tessellated)
+		if (pTessellated)
 		{
 			deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
 		}
@@ -152,7 +152,7 @@ void Model::render(bool tessellated)
 		{
 			deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		}
-		lastTessellated = tessellated;
+		lastTessellated = pTessellated;
 	}
 
 	deviceContext->DrawIndexed(mIndicesSize, 0, 0);

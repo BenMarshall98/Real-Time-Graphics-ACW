@@ -12,8 +12,14 @@ protected:
 	std::shared_ptr<Shader> mOmniDirectionalShader;
 	
 public:
-	Technique(std::shared_ptr<Shader> pNormalShader, std::shared_ptr<Shader> pDeferredShader, std::shared_ptr<Shader> pDirectionalShader, std::shared_ptr<Shader> pOmniDirectionalShader);
-	virtual ~Technique();
+	Technique(std::shared_ptr<Shader> pNormalShader, std::shared_ptr<Shader> pDeferredShader,
+		std::shared_ptr<Shader> pDirectionalShader, std::shared_ptr<Shader> pOmniDirectionalShader);
+	virtual ~Technique() = default;
+
+	Technique(const Technique &) = delete;
+	Technique(Technique &&) = delete;
+	Technique & operator= (const Technique &) = delete;
+	Technique & operator= (Technique &&) = delete;
 
 	virtual void render(std::shared_ptr<Shape>& pShape, bool pDeferred) = 0;
 	virtual void renderDirectionalShadow(std::shared_ptr<Shape>& pShape) = 0;

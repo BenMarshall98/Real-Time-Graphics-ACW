@@ -19,22 +19,27 @@ class VectorAnimation
 	
 public:
 	VectorAnimation(std::vector<VectorNode> pNodes, float pEndTime);
-	VectorAnimation();
-	~VectorAnimation();
+	VectorAnimation() = default;
+	~VectorAnimation() = default;
 
-	void addNode(VectorNode pNode)
+	VectorAnimation(const VectorAnimation &) = delete;
+	VectorAnimation(VectorAnimation &&) = delete;
+	VectorAnimation & operator= (const VectorAnimation &) = delete;
+	VectorAnimation & operator= (VectorAnimation &&) = delete;
+
+	void addNode(const VectorNode pNode)
 	{
 		mNodes.push_back(pNode);
 	}
 
-	void setEndTime(float pEndTime)
+	void setEndTime(const float pEndTime)
 	{
 		mEndTime = pEndTime;
 	}
 
 	void calculateTangents();
 	
-	DirectX::XMFLOAT4X4 animate(const float deltaTime);
+	DirectX::XMFLOAT4X4 animate(float pDeltaTime);
 };
 
 std::istream& operator>>(std::istream& pIn, VectorAnimation & pNode);

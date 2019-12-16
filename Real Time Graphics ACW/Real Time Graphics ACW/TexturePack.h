@@ -10,10 +10,15 @@ class TexturePack
 	std::shared_ptr<Texture> mHeightTexture;
 	
 public:
-	TexturePack(const std::shared_ptr<Texture> & pDiffuseTexture, const std::shared_ptr<Texture> & pSpecularTexture,
-		const std::shared_ptr<Texture> & pNormalTexture, const std::shared_ptr<Texture> & pHeightTexture);
+	TexturePack(std::shared_ptr<Texture> pDiffuseTexture, std::shared_ptr<Texture> pSpecularTexture,
+	            std::shared_ptr<Texture> pNormalTexture, std::shared_ptr<Texture> pHeightTexture);
 	TexturePack() = default;
 	~TexturePack() = default;
+
+	TexturePack(const TexturePack&) = delete;
+	TexturePack(TexturePack &&) = delete;
+	TexturePack & operator= (const TexturePack &) = delete;
+	TexturePack & operator= (TexturePack &&) = delete;
 
 	void setDiffuseTexture(const std::shared_ptr<Texture> & pDiffuseTexture)
 	{

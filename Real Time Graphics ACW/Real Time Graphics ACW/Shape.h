@@ -25,8 +25,8 @@ protected:
 	
 public:
 	Shape(std::shared_ptr<Model> pModel, std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial);
-	Shape() = default;
-	~Shape() = default;
+	Shape();
+	virtual ~Shape() = default;
 
 	void setModel(const std::shared_ptr<Model> & pModel)
 	{

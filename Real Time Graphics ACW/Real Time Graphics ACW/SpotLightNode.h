@@ -10,7 +10,12 @@ class SpotLightNode final : public SceneGraphNode
 public:
 	explicit SpotLightNode(SpotLight * pSpotLight);
 	SpotLightNode();
-	~SpotLightNode();
+	~SpotLightNode() = default;
+
+	SpotLightNode(const SpotLightNode&) = delete;
+	SpotLightNode(SpotLightNode &&) = delete;
+	SpotLightNode & operator= (const SpotLightNode &) = delete;
+	SpotLightNode & operator= (SpotLightNode &&) = delete;
 	
 	void read(std::istream &pIn) override;
 	void update(DirectX::XMFLOAT4X4 pMatrix) override;

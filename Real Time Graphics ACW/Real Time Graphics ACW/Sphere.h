@@ -10,6 +10,11 @@ public:
 	Sphere() = default;
 	~Sphere() = default;
 
+	Sphere(const Sphere&) = delete;
+	Sphere(Sphere &&) = delete;
+	Sphere & operator= (const Sphere &) = delete;
+	Sphere & operator= (Sphere &&) = delete;
+
 	void explode() override;
 	void collideWith(Particle pParticle) override;
 };

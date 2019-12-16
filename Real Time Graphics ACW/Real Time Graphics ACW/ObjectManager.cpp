@@ -12,29 +12,29 @@ ObjectManager * ObjectManager::mInstance = nullptr;
 ObjectManager::ObjectManager()
 {
 	//staticTechnique = std::make_unique<GourandShading>();
-	staticTechnique = std::make_unique<PhongShading>();
+	mStaticTechnique = std::make_unique<PhongShading>();
 	//staticTechnique = std::make_unique<TextureMapping>();
 	//staticTechnique = std::make_unique<BumpMapping>();
 	//staticTechnique = std::make_unique<DisplacementMapping>();
 	//staticTechnique = std::make_unique<ToonShading>();
-	dynamicTechniques.emplace_back(std::make_unique<GourandShading>());
-	dynamicTechniques.emplace_back(std::make_unique<PhongShading>());
-	dynamicTechniques.emplace_back(std::make_unique<TextureMapping>());
-	dynamicTechniques.emplace_back(std::make_unique<DisplacementMapping>());
-	dynamicTechniques.emplace_back(std::make_unique<BumpMapping>());
-	dynamicTechniques.emplace_back(std::make_unique<ToonShading>());
+	mDynamicTechniques.emplace_back(std::make_unique<GourandShading>());
+	mDynamicTechniques.emplace_back(std::make_unique<PhongShading>());
+	mDynamicTechniques.emplace_back(std::make_unique<TextureMapping>());
+	mDynamicTechniques.emplace_back(std::make_unique<DisplacementMapping>());
+	mDynamicTechniques.emplace_back(std::make_unique<BumpMapping>());
+	mDynamicTechniques.emplace_back(std::make_unique<ToonShading>());
 }
 
 void ObjectManager::render()
 {
-	for (int i = 0; i < staticShapes.size(); i++)
+	for (auto& staticShape : mStaticShapes)
 	{
-		staticTechnique->render(staticShapes[i], false);
+		mStaticTechnique->render(staticShape, false);
 	}
 	
-	for (int i = 0; i < dynamicShapes.size(); i++)
+	for (auto& dynamicShape : mDynamicShapes)
 	{
-		staticTechnique->render(dynamicShapes[i], false);
+		mStaticTechnique->render(dynamicShape, false);
 	}
 }
 
@@ -45,52 +45,52 @@ void ObjectManager::renderShadows()
 
 	if (lightManager->updateDirectionalLightShadow())
 	{
-		for (int i = 0; i < staticShapes.size(); i++)
+		for (auto& staticShape : mStaticShapes)
 		{
-			staticTechnique->renderDirectionalShadow(staticShapes[i]);
+			mStaticTechnique->renderDirectionalShadow(staticShape);
 		}
 
-		for (int i = 0; i < dynamicShapes.size(); i++)
+		for (auto& dynamicShape : mDynamicShapes)
 		{
-			staticTechnique->renderDirectionalShadow(dynamicShapes[i]);
+			mStaticTechnique->renderDirectionalShadow(dynamicShape);
 		}
 	}
 
 	if (lightManager->updatePointLightShadow())
 	{
-		for (int i = 0; i < staticShapes.size(); i++)
+		for (auto& staticShape : mStaticShapes)
 		{
-			staticTechnique->renderOmniDirectionalShadow(staticShapes[i]);
+			mStaticTechnique->renderOmniDirectionalShadow(staticShape);
 		}
 
-		for (int i = 0; i < dynamicShapes.size(); i++)
+		for (auto& dynamicShape : mDynamicShapes)
 		{
-			staticTechnique->renderOmniDirectionalShadow(dynamicShapes[i]);
+			mStaticTechnique->renderOmniDirectionalShadow(dynamicShape);
 		}
 	}
 
-	for (int i = 0; i < lightManager->getNumberOfSpotLights(); i++)
+	for (auto i = 0u; i < lightManager->getNumberOfSpotLights(); i++)
 	{
 		lightManager->updateSpotLightShadow(i);
 		
-		for (int j = 0; j < staticShapes.size(); j++)
+		for (auto& staticShape : mStaticShapes)
 		{
-			staticTechnique->renderOmniDirectionalShadow(staticShapes[j]);
+			mStaticTechnique->renderOmniDirectionalShadow(staticShape);
 		}
 
-		for (int j = 0; j < dynamicShapes.size(); j++)
+		for (auto& dynamicShape : mDynamicShapes)
 		{
-			staticTechnique->renderOmniDirectionalShadow(staticShapes[j]);
+			mStaticTechnique->renderOmniDirectionalShadow(dynamicShape);
 		}
 	}
 }
 
-void ObjectManager::addStaticShape(std::shared_ptr<Shape> pObject)
+void ObjectManager::addStaticShape(const std::shared_ptr<Shape>& pShape)
 {
-	staticShapes.push_back(pObject);
+	mStaticShapes.push_back(pShape);
 }
 
-void ObjectManager::addDynamicShape(std::shared_ptr<Shape> pObject)
+void ObjectManager::addDynamicShape(const std::shared_ptr<Shape>& pShape)
 {
-	dynamicShapes.push_back(pObject);
+	mDynamicShapes.push_back(pShape);
 }

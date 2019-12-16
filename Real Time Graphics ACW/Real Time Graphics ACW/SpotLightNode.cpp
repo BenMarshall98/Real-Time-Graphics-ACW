@@ -10,10 +10,6 @@ SpotLightNode::SpotLightNode() : mSpotLight(nullptr)
 {
 }
 
-SpotLightNode::~SpotLightNode()
-{
-}
-
 void SpotLightNode::read(std::istream& pIn)
 {
 	if (mSpotLight)

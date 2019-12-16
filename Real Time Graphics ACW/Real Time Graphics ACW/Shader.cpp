@@ -5,7 +5,7 @@
 #include <codecvt>
 #include <wrl/client.h>
 
-const D3D11_INPUT_ELEMENT_DESC Shader::mLayout[] =
+const D3D11_INPUT_ELEMENT_DESC Shader::layout[] =
 {
 	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -90,11 +90,11 @@ bool Shader::loadShader(const std::string & pVertexFile, const std::string & pFr
 			return false;
 		}
 		
-		const UINT numElements = ARRAYSIZE(mLayout);
+		const UINT numElements = ARRAYSIZE(layout);
 
 		//Look at the warning code and see if the layout can be made to match exactly
 
-		result = device->CreateInputLayout(mLayout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
+		result = device->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
 		if (FAILED(result))
 		{
 			return false;
@@ -153,9 +153,9 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 			return false;
 		}
 		
-		const UINT numElements = ARRAYSIZE(mLayout);
+		const UINT numElements = ARRAYSIZE(layout);
 
-		result = device->CreateInputLayout(mLayout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
+		result = device->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
 		if (FAILED(result))
 		{
 			return false;
@@ -229,9 +229,9 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 			return false;
 		}
 
-		const UINT numElements = ARRAYSIZE(mLayout);
+		const UINT numElements = ARRAYSIZE(layout);
 
-		result = device->CreateInputLayout(mLayout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
+		result = device->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
 		if (FAILED(result))
 		{
 			return false;

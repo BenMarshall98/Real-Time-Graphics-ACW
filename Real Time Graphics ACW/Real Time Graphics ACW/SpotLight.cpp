@@ -1,16 +1,16 @@
 #include "SpotLight.h"
 #include <string>
 
-SpotLight::SpotLight(const DirectX::XMFLOAT3& pColor, const DirectX::XMFLOAT3 pPosition,
-	const DirectX::XMFLOAT3 pDirection, float pInnerAngle, float pOuterAngle,
-	float pAttenuationConstant, float pAttenuationLinear, float pAttenuationQuad) :
+SpotLight::SpotLight(const DirectX::XMFLOAT3& pColor, const DirectX::XMFLOAT3 & pPosition,
+	const DirectX::XMFLOAT3 & pDirection, const float pInnerAngle, const float pOuterAngle,
+	const float pAttenuationConstant, const float pAttenuationLinear, const float pAttenuationQuad) :
 	mColor(pColor), mPosition(pPosition), mDirection(pDirection),
 	mInnerAngle(pInnerAngle), mOuterAngle(pOuterAngle), mAttenuationConstant(pAttenuationConstant),
 	mAttenuationLinear(pAttenuationLinear), mAttenuationQuad(pAttenuationQuad)
 {
 }
 
-void SpotLight::use(SpotLightBuffer& pLightBuffer, unsigned pIndex)
+void SpotLight::use(SpotLightBuffer& pLightBuffer, const unsigned int pIndex) const
 {
 	pLightBuffer.mColor[pIndex] = DirectX::XMFLOAT4(mColor.x, mColor.y, mColor.z, 0.0f);
 	pLightBuffer.mPosition[pIndex] = DirectX::XMFLOAT4(mPosition.x, mPosition.y, mPosition.z, 0.0f);
@@ -38,6 +38,11 @@ void SpotLight::update(DirectX::XMFLOAT4X4& pMatrix)
 
 	XMStoreFloat3(&mPosition, center);
 	XMStoreFloat3(&mDirection, direction);
+}
+
+void SpotLight::updateShadow()
+{
+	//TODO: Implement	
 }
 
 std::istream& operator>>(std::istream& pIn, SpotLight& pLight)

@@ -23,12 +23,12 @@ public:
 	DirectionalLight & operator= (const DirectionalLight &) = delete;
 	DirectionalLight & operator= (DirectionalLight &&) = delete;
 
-	void setColor(DirectX::XMFLOAT4 pColor)
+	void setColor(const DirectX::XMFLOAT4 & pColor)
 	{
 		mColor = pColor;
 	}
 	
-	void setDirection(DirectX::XMFLOAT3 pDirection)
+	void setDirection(const DirectX::XMFLOAT3 & pDirection)
 	{
 		mDirection = pDirection;
 	}

@@ -10,10 +10,6 @@ PointLightNode::PointLightNode() : mPointLight(nullptr)
 {
 }
 
-PointLightNode::~PointLightNode()
-{
-}
-
 void PointLightNode::read(std::istream& pIn)
 {
 	if (mPointLight)

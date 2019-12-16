@@ -32,6 +32,7 @@ class Dx11Render
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mMaterialBuffer = nullptr;
 
 	Dx11Render();
+	bool loadRender();
 	
 public:
 	static Dx11Render * instance();
@@ -49,8 +50,7 @@ public:
 
 	void present() const
 	{
-		auto result = mSwapChain->Present(1, 0);
-		result = mDevice->GetDeviceRemovedReason();
+		mSwapChain->Present(1, 0);
 	}
 
 	Microsoft::WRL::ComPtr<ID3D11Device> getDevice() const
@@ -68,7 +68,7 @@ public:
 	void useCameraBuffer(const CameraBuffer & pCameraBuffer) const;
 	void useDirectionalLightBuffer(const DirectionalLightBuffer & pDirectionalLightBuffer) const;
 	void usePointLightBuffer(const PointLightBuffer & pPointLightBuffer) const;
-	void useSpotLightBuffer(const SpotLightBuffer & pSPotLightBuffer) const;
+	void useSpotLightBuffer(const SpotLightBuffer & pSpotLightBuffer) const;
 	
 	bool resize(int pWidth, int pHeight);
 	

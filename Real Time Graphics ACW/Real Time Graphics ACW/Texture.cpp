@@ -46,7 +46,7 @@ Texture::~Texture()
 	}
 }
 
-void Texture::useFragment(unsigned int pIndex) const
+void Texture::useFragment(const unsigned int pIndex) const
 {
 	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
 
@@ -54,7 +54,7 @@ void Texture::useFragment(unsigned int pIndex) const
 	deviceContext->PSSetSamplers(pIndex, 1, &mSampler);
 }
 
-void Texture::useDomain(unsigned int pIndex) const
+void Texture::useDomain(const unsigned int pIndex) const
 {
 	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
 

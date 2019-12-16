@@ -1,14 +1,14 @@
 #include "PointLight.h"
 #include <string>
 
-PointLight::PointLight(DirectX::XMFLOAT3 pColor, DirectX::XMFLOAT3 pPosition,
-	float pAttenuationConstant, float pAttenuationLinear, float pAttenuationQuad) :
+PointLight::PointLight(const DirectX::XMFLOAT3 pColor, const DirectX::XMFLOAT3 pPosition,
+	const float pAttenuationConstant, const float pAttenuationLinear, const float pAttenuationQuad) :
 	mColor(pColor), mPosition(pPosition), mAttenuationConstant(pAttenuationConstant),
 	mAttenuationLinear(pAttenuationLinear), mAttenuationQuad(pAttenuationQuad)
 {
 }
 
-void PointLight::use(PointLightBuffer & pLightBuffer)
+void PointLight::use(PointLightBuffer & pLightBuffer) const
 {
 	pLightBuffer.mColor = DirectX::XMFLOAT4(mColor.x, mColor.y, mColor.z, 0.0f);
 	pLightBuffer.mPosition = DirectX::XMFLOAT4(mPosition.x, mPosition.y, mPosition.z, 0.0f);

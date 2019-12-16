@@ -4,7 +4,6 @@
 
 class Win32Window
 {
-private:
 	const char * mClassName = "RealTimeGraphics";
 	int mWidth = 800;
 	int mHeight = 600;
@@ -22,7 +21,7 @@ public:
 	static Win32Window * instance();
 	static Win32Window * instance(HINSTANCE pHInstance, int pCmdShow);
 
-	bool windowEvents();
+	static bool windowEvents();
 
 	int getWidth() const
 	{

@@ -11,11 +11,7 @@ GourandShading::GourandShading() :
 {
 }
 
-GourandShading::~GourandShading()
-{
-}
-
-void GourandShading::render(std::shared_ptr<Shape>& pShape, bool pDeferred)
+void GourandShading::render(std::shared_ptr<Shape>& pShape, bool)
 {
 	mNormalShader->useShader();
 	pShape->render();

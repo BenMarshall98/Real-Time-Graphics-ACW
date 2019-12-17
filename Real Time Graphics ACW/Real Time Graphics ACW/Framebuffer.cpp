@@ -66,8 +66,8 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 				renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 				renderTargetViewDesc.Texture2D.MipSlice = 0;
 
-				Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView = nullptr;
-				result = device->CreateRenderTargetView(mColorTexture.Get(), &renderTargetViewDesc, renderTargetView.ReleaseAndGetAddressOf());
+				ID3D11RenderTargetView * renderTargetView = nullptr;
+				result = device->CreateRenderTargetView(mColorTexture.Get(), &renderTargetViewDesc, &renderTargetView);
 
 				if (FAILED(result))
 				{
@@ -86,8 +86,8 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 				{
 					renderTargetViewDesc.Texture2DArray.FirstArraySlice = i;
 
-					Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView = nullptr;
-					result = device->CreateRenderTargetView(mColorTexture.Get(), &renderTargetViewDesc, renderTargetView.ReleaseAndGetAddressOf());
+					ID3D11RenderTargetView * renderTargetView = nullptr;
+					result = device->CreateRenderTargetView(mColorTexture.Get(), &renderTargetViewDesc, &renderTargetView);
 
 					if (FAILED(result))
 					{
@@ -108,8 +108,8 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 			{
 				renderTargetViewDesc.Texture2DArray.FirstArraySlice = i;
 
-				Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView = nullptr;
-				result = device->CreateRenderTargetView(mColorTexture.Get(), &renderTargetViewDesc, renderTargetView.ReleaseAndGetAddressOf());
+				ID3D11RenderTargetView * renderTargetView = nullptr;
+				result = device->CreateRenderTargetView(mColorTexture.Get(), &renderTargetViewDesc, &renderTargetView);
 
 				if (FAILED(result))
 				{
@@ -132,8 +132,8 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 				shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
 				shaderResourceViewDesc.Texture2D.MipLevels = 1;
 
-				Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView = nullptr;
-				result = device->CreateShaderResourceView(mColorTexture.Get(), &shaderResourceViewDesc, shaderResourceView.ReleaseAndGetAddressOf());
+				ID3D11ShaderResourceView * shaderResourceView = nullptr;
+				result = device->CreateShaderResourceView(mColorTexture.Get(), &shaderResourceViewDesc, &shaderResourceView);
 
 				if (FAILED(result))
 				{
@@ -153,8 +153,8 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 				{
 					shaderResourceViewDesc.Texture2DArray.FirstArraySlice = i;
 
-					Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView = nullptr;
-					result = device->CreateShaderResourceView(mColorTexture.Get(), &shaderResourceViewDesc, shaderResourceView.ReleaseAndGetAddressOf());
+					ID3D11ShaderResourceView * shaderResourceView = nullptr;
+					result = device->CreateShaderResourceView(mColorTexture.Get(), &shaderResourceViewDesc, &shaderResourceView);
 
 					if (FAILED(result))
 					{
@@ -173,8 +173,8 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 				shaderResourceViewDesc.TextureCube.MostDetailedMip = 0;
 				shaderResourceViewDesc.TextureCube.MipLevels = 1;
 
-				Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView = nullptr;
-				result = device->CreateShaderResourceView(mColorTexture.Get(), &shaderResourceViewDesc, shaderResourceView.ReleaseAndGetAddressOf());
+				ID3D11ShaderResourceView * shaderResourceView = nullptr;
+				result = device->CreateShaderResourceView(mColorTexture.Get(), &shaderResourceViewDesc, &shaderResourceView);
 
 				if (FAILED(result))
 				{
@@ -194,8 +194,8 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 				{
 					shaderResourceViewDesc.TextureCubeArray.First2DArrayFace = i * 6;
 
-					Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView = nullptr;
-					result = device->CreateShaderResourceView(mColorTexture.Get(), &shaderResourceViewDesc, shaderResourceView.ReleaseAndGetAddressOf());
+					ID3D11ShaderResourceView * shaderResourceView = nullptr;
+					result = device->CreateShaderResourceView(mColorTexture.Get(), &shaderResourceViewDesc, &shaderResourceView);
 
 					if (FAILED(result))
 					{
@@ -309,7 +309,7 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 			shaderResourceViewDesc.TextureCube.MipLevels = 1;
 		}
 
-		result = device->CreateShaderResourceView(mDepthTexture.Get(), &shaderResourceViewDesc, &mDepthTextureResourceView.ReleaseAndGetAddressOf());
+		result = device->CreateShaderResourceView(mDepthTexture.Get(), &shaderResourceViewDesc, mDepthTextureResourceView.ReleaseAndGetAddressOf());
 
 		if (FAILED(result))
 		{
@@ -341,19 +341,12 @@ void Framebuffer::useFramebuffer() const
 
 	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
 	{
-		deviceContext->ClearRenderTargetView(mColorTextureTargetViews[i].Get(), DirectX::Colors::MidnightBlue);
+		deviceContext->ClearRenderTargetView(mColorTextureTargetViews[i], DirectX::Colors::MidnightBlue);
 	}
 	
 	deviceContext->ClearDepthStencilView(mDepthTextureTargetView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0.0f);
 
-	std::vector<ID3D11RenderTargetView * > views;
-	views.reserve(mColorTextureTargetViews.size());
-
-	std::transform(mColorTextureTargetViews.begin(), mColorTextureTargetViews.end(), views,
-		[](const Microsoft::WRL::ComPtr<ID3D11RenderTargetView> & pView) { return pView.Get(); });
-	
-	
-	deviceContext->OMSetRenderTargets(mColorTextureTargetViews.size(), views.data(), mDepthTextureTargetView.Get());
+	deviceContext->OMSetRenderTargets(mColorTextureTargetViews.size(), mColorTextureTargetViews.data(), mDepthTextureTargetView.Get());
 }
 
 void Framebuffer::useTexture(unsigned int)

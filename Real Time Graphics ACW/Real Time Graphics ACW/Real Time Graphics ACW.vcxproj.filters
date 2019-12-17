@@ -132,9 +132,6 @@
     <ClInclude Include="IdentityNode.h">
       <Filter>SceneGraph</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectNode.h">
-      <Filter>SceneGraph</Filter>
-    </ClInclude>
     <ClInclude Include="RotationNode.h">
       <Filter>SceneGraph</Filter>
     </ClInclude>
@@ -216,6 +213,12 @@
     <ClInclude Include="Particle.h">
       <Filter>Particles</Filter>
     </ClInclude>
+    <ClInclude Include="ConfigLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeNode.h">
+      <Filter>SceneGraph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModelLoader.cpp">
@@ -267,9 +270,6 @@
       <Filter>SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="IdentityNode.cpp">
-      <Filter>SceneGraph</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectNode.cpp">
       <Filter>SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="RotationNode.cpp">
@@ -349,6 +349,12 @@
     </ClCompile>
     <ClCompile Include="Particle.cpp">
       <Filter>Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeNode.cpp">
+      <Filter>SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

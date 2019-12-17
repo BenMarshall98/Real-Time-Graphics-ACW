@@ -1,14 +1,19 @@
-Identity
+Scene
 {
-	Object
+	Shape
 	{
 		Type: Dynamic
-		Model: sphere.obj
-		Ambient: 0.1, 0.1, 0.1
-		Diffuse: 1.0, 0.0, 0.0
-		Specular: 1.0, 1.0, 1.0
-		Shininess: 32.0
-		NoTexture
+		Sphere
+		{
+			Material
+			{
+				Ambient: 0.1, 0.1, 0.1
+				Diffuse: 1.0, 0.0, 0.0
+				Specular: 1.0, 1.0, 1.0
+				Shininess: 32.0
+			}
+			NoTexture
+		}
 	}
 	Rotation
 	{
@@ -20,15 +25,20 @@ Identity
 			Scale
 			{
 				Size: 0.5, 0.5, 0.5
-				Object
+				Shape
 				{
 					Type: Dynamic
-					Model: sphere.obj
-					Ambient: 0.1, 0.1, 0.1
-					Diffuse: 0.0, 1.0, 0.0
-					Specular: 1.0, 1.0, 1.0
-					Shininess: 32.0
-					NoTexture
+					Sphere
+					{
+						Material
+						{
+							Ambient: 0.1, 0.1, 0.1
+							Diffuse: 0.0, 1.0, 0.0
+							Specular: 1.0, 1.0, 1.0
+							Shininess: 32.0
+						}
+						NoTexture
+					}
 				}
 			}
 			Rotation
@@ -41,15 +51,20 @@ Identity
 					Scale
 					{
 						Size: 0.25, 0.25, 0.25
-						Object
+						Shape
 						{
 							Type: Dynamic
-							Model: sphere.obj
-							Ambient: 0.1, 0.1, 0.1
-							Diffuse: 0.0, 0.0, 1.0
-							Specular: 1.0, 1.0, 1.0
-							Shininess: 32.0
-							NoTexture
+							Sphere
+							{
+								Material
+								{
+									Ambient: 0.1, 0.1, 0.1
+									Diffuse: 0.0, 0.0, 1.0
+									Specular: 1.0, 1.0, 1.0
+									Shininess: 32.0
+								}
+								NoTexture
+							}
 						}
 					}
 				}
@@ -66,15 +81,20 @@ Identity
 			Scale
 			{
 				Size: 5.0, 5.0, 5.0
-				Object
+				Shape
 				{
 					Type: Static
-					Model: plane.obj
-					Ambient: 0.1, 0.1, 0.1
-					Diffuse: 1.0, 1.0, 1.0
-					Specular: 1.0, 1.0, 1.0
-					Shininess: 32.0
-					NoTexture
+					Plane
+					{
+						Material
+						{
+							Ambient: 0.1, 0.1, 0.1
+							Diffuse: 1.0, 1.0, 1.0
+							Specular: 1.0, 1.0, 1.0
+							Shininess: 32.0
+						}
+						NoTexture
+					}
 				}
 			}
 		}
@@ -89,15 +109,20 @@ Identity
 			Scale
 			{
 				Size: 5.0, 5.0, 5.0
-				Object
+				Shape
 				{
 					Type: Static
-					Model: plane.obj
-					Ambient: 0.1, 0.1, 0.1
-					Diffuse: 1.0, 1.0, 1.0
-					Specular: 1.0, 1.0, 1.0
-					Shininess: 32.0
-					NoTexture
+					Plane
+					{
+						Material
+						{
+							Ambient: 0.1, 0.1, 0.1
+							Diffuse: 1.0, 1.0, 1.0
+							Specular: 1.0, 1.0, 1.0
+							Shininess: 32.0
+						}
+						NoTexture
+					}
 				}
 			}
 		}
@@ -112,15 +137,20 @@ Identity
 			Scale
 			{
 				Size: 5.0, 5.0, 5.0
-				Object
+				Shape
 				{
 					Type: Static
-					Model: plane.obj
-					Ambient: 0.1, 0.1, 0.1
-					Diffuse: 1.0, 1.0, 1.0
-					Specular: 1.0, 1.0, 1.0
-					Shininess: 32.0
-					NoTexture
+					Plane
+					{
+						Material
+						{
+							Ambient: 0.1, 0.1, 0.1
+							Diffuse: 1.0, 1.0, 1.0
+							Specular: 1.0, 1.0, 1.0
+							Shininess: 32.0
+						}
+						NoTexture
+					}
 				}
 			}
 		}
@@ -135,15 +165,20 @@ Identity
 			Scale
 			{
 				Size: 5.0, 5.0, 5.0
-				Object
+				Shape
 				{
 					Type: Static
-					Model: plane.obj
-					Ambient: 0.1, 0.1, 0.1
-					Diffuse: 1.0, 1.0, 1.0
-					Specular: 1.0, 1.0, 1.0
-					Shininess: 32.0
-					NoTexture
+					Plane
+					{
+						Material
+						{
+							Ambient: 0.1, 0.1, 0.1
+							Diffuse: 1.0, 1.0, 1.0
+							Specular: 1.0, 1.0, 1.0
+							Shininess: 32.0
+						}
+						NoTexture
+					}
 				}
 			}
 		}
@@ -158,15 +193,20 @@ Identity
 			Scale
 			{
 				Size: 5.0, 5.0, 5.0
-				Object
+				Shape
 				{
 					Type: Static
-					Model: plane.obj
-					Ambient: 0.1, 0.1, 0.1
-					Diffuse: 1.0, 1.0, 1.0
-					Specular: 1.0, 1.0, 1.0
-					Shininess: 32.0
-					NoTexture
+					Plane
+					{
+						Material
+						{
+							Ambient: 0.1, 0.1, 0.1
+							Diffuse: 1.0, 1.0, 1.0
+							Specular: 1.0, 1.0, 1.0
+							Shininess: 32.0
+						}
+						NoTexture
+					}
 				}
 			}
 		}
@@ -181,15 +221,20 @@ Identity
 			Scale
 			{
 				Size: 5.0, 5.0, 5.0
-				Object
+				Shape
 				{
 					Type: Static
-					Model: plane.obj
-					Ambient: 0.1, 0.1, 0.1
-					Diffuse: 1.0, 1.0, 1.0
-					Specular: 1.0, 1.0, 1.0
-					Shininess: 32.0
-					NoTexture
+					Plane
+					{
+						Material
+						{
+							Ambient: 0.1, 0.1, 0.1
+							Diffuse: 1.0, 1.0, 1.0
+							Specular: 1.0, 1.0, 1.0
+							Shininess: 32.0
+						}
+						NoTexture
+					}
 				}
 			}
 		}

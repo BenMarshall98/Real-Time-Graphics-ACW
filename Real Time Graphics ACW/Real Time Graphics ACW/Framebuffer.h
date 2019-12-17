@@ -11,9 +11,10 @@ enum class TextureType
 
 class Framebuffer
 {
+	//TODO: Look at away of using comptr with vector
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> mColorTexture = nullptr;
-	std::vector<Microsoft::WRL::ComPtr<ID3D11RenderTargetView>> mColorTextureTargetViews;
-	std::vector<Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> mColorTextureResourceViews;
+	std::vector<ID3D11RenderTargetView *> mColorTextureTargetViews;
+	std::vector<ID3D11ShaderResourceView *> mColorTextureResourceViews;
 
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> mDepthTexture = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> mDepthState = nullptr;

@@ -1,13 +1,54 @@
 #pragma once
+
+#include <DirectXMath.h>
+
+struct State
+{
+	DirectX::XMVECTOR mPosition;
+	DirectX::XMVECTOR mVelocity;
+};
+
+struct Derivative
+{
+	DirectX::XMVECTOR mVelocity;
+	DirectX::XMVECTOR mAcceleration;
+};
+
 class Particle
 {
+	DirectX::XMFLOAT3 mPreviousPosition;
+	DirectX::XMFLOAT3 mCurrentPosition;
+	DirectX::XMFLOAT3 mVelocity;
+
+	static void integrate(State & pState, float pDt);
+	static Derivative evaluate(const State & pInitial, float pDt, const Derivative & pDerivative);
+	static DirectX::XMVECTOR acceleration(const State & pState);
+	
 public:
-	Particle() = default;
+	Particle(const DirectX::XMFLOAT3 & pPosition, const DirectX::XMFLOAT3 & pVelocity);
 	~Particle() = default;
 
 	Particle(const Particle &) = delete;
 	Particle(Particle &&) = delete;
 	Particle & operator= (const Particle &) = delete;
 	Particle & operator= (Particle &&) = delete;
+
+	void calculatePhysics(float pDt);
+	void update();
+
+	DirectX::XMFLOAT3 getPreviousPosition() const
+	{
+		return mPreviousPosition;
+	}
+
+	DirectX::XMFLOAT3 getCurrentPosition() const
+	{
+		return mCurrentPosition;
+	}
+
+	DirectX::XMFLOAT3 getVelocity() const
+	{
+		return mVelocity;
+	}
 };
 

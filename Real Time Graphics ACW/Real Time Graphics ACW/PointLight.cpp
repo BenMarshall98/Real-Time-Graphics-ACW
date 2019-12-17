@@ -28,6 +28,11 @@ void PointLight::update(DirectX::XMFLOAT4X4& pMatrix)
 	XMStoreFloat3(&mPosition, center);
 }
 
+void PointLight::updateShadow()
+{
+	//TODO: Implement
+}
+
 std::istream& operator>>(std::istream& pIn, PointLight& pLight)
 {
 	std::string s;

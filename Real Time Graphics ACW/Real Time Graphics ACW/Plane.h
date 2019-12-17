@@ -6,7 +6,7 @@ class Plane final : public Shape
 {
 public:
 	Plane(std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial);
-	Plane() = default;
+	Plane();
 	~Plane() = default;
 
 	Plane(const Plane&) = delete;

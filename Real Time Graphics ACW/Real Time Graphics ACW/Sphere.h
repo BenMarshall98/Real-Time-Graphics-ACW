@@ -7,7 +7,7 @@ class Sphere final : public Shape, IExplode
 {
 public:
 	Sphere(std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial);
-	Sphere() = default;
+	Sphere();
 	~Sphere() = default;
 
 	Sphere(const Sphere&) = delete;

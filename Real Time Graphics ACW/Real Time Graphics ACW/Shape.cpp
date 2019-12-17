@@ -36,3 +36,35 @@ void Shape::render(const bool pTesselated) const
 		mModel->render(pTesselated);
 	}
 }
+
+std::istream& operator>>(std::istream& pIn, std::shared_ptr<Shape>& pShape)
+{
+	char c;
+	std::string s;
+
+	pIn >> c;
+
+	pIn >> s;
+
+	if (s == "Material")
+	{
+		auto material = std::make_unique<Material>();
+		pIn >> material;
+
+		pShape->setMaterial(std::move(material));
+	}
+
+	pIn >> s;
+
+	if (s == "Texture")
+	{
+		auto texture = std::make_unique<TexturePack>();
+		pIn >> texture;
+
+		pShape->setTexturePack(std::move(texture));
+	}
+
+	pIn >> c;
+
+	return pIn;
+}

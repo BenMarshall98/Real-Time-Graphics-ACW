@@ -53,3 +53,5 @@ public:
 
 	virtual void collideWith(Particle pParticle) = 0;
 };
+
+std::istream & operator>>(std::istream & pIn, std::shared_ptr<Shape> & pShape);

@@ -15,6 +15,7 @@
 #include "ObjectManager.h"
 #include "LightingManager.h"
 #include "ResourceManager.h"
+#include "ConfigLoader.h"
 
 double Game::mDt = 0.0f;
 Camera * Game::mCamera = nullptr;
@@ -29,7 +30,7 @@ Game::Game()
 
 	if (in.good())
 	{
-		in >> *mNode;
+		ConfigLoader::readScene(in, mNode);
 	}
 
 	in.close();

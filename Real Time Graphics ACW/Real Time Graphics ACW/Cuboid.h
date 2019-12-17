@@ -3,7 +3,7 @@
 #include "Shape.h"
 #include "IExplode.h"
 
-class Cuboid final : public Shape, IExplode
+class Cuboid final : public Shape, public IExplode
 {
 public:
 	Cuboid(std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial);

@@ -1,10 +1,11 @@
 #pragma once
 class IExplode
 {
-public:
+protected:
 	IExplode() = default;
 	virtual ~IExplode() = default;
-
+	
+public:
 	IExplode(const IExplode &) = delete;
 	IExplode(IExplode &&) = delete;
 	IExplode & operator= (const IExplode &) = delete;

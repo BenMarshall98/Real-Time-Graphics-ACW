@@ -4,16 +4,17 @@
 #include "Sphere.h"
 #include "Cuboid.h"
 #include "Plane.h"
+#include "RenderManager.h"
 
 ShapeNode::ShapeNode(Shape * pShape, const ObjectType pType) : mShape(pShape)
 {
 	if (pType == STATIC)
 	{
-		ObjectManager::instance()->addStaticShape(mShape);
+		RenderManager::instance()->addStaticShape(mShape);
 	}
 	else
 	{
-		ObjectManager::instance()->addDynamicShape(mShape);
+		RenderManager::instance()->addDynamicShape(mShape);
 	}
 	
 }
@@ -45,13 +46,15 @@ void ShapeNode::read(std::istream& pIn)
 
 	pIn >> mShape;
 
+	ObjectManager::instance()->addShape(mShape);
+
 	if (type == "Static")
 	{
-		ObjectManager::instance()->addStaticShape(mShape);
+		RenderManager::instance()->addStaticShape(mShape);
 	}
 	else
 	{
-		ObjectManager::instance()->addDynamicShape(mShape);
+		RenderManager::instance()->addDynamicShape(mShape);
 	}
 }
 

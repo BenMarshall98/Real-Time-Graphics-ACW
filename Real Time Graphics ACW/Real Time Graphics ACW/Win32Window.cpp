@@ -2,6 +2,7 @@
 #include "DX11Render.h"
 #include "Game.h"
 #include <string>
+#include "ObjectManager.h"
 
 Win32Window * Win32Window::mInstance = nullptr;
 
@@ -136,6 +137,17 @@ LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMess
 			break;
 		case VK_NEXT:
 			Game::mCamera->panDown(true);
+			break;
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			ObjectManager::instance()->explode(pWParam - '0');
 			break;
 		default:
 			break;

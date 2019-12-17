@@ -15,6 +15,8 @@ struct ModelBuffer
 
 class Shape
 {
+	//TODO: Temp
+public:
 	std::shared_ptr<Model> mModel;
 	std::unique_ptr<TexturePack> mTexturePack;
 	std::unique_ptr<Material> mMaterial;

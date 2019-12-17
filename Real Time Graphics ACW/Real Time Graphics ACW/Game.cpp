@@ -16,6 +16,7 @@
 #include "LightingManager.h"
 #include "ResourceManager.h"
 #include "ConfigLoader.h"
+#include "RenderManager.h"
 
 double Game::mDt = 0.0f;
 Camera * Game::mCamera = nullptr;
@@ -116,7 +117,7 @@ void Game::run()
 
 		Dx11Render::instance()->bindDefaultFramebuffer();
 
-		ObjectManager::instance()->render();
+		RenderManager::instance()->render();
 		
 		//
 		// Present our back buffer to our front buffer

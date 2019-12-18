@@ -92,8 +92,8 @@ bool ParticleRender::loadParticles()
 	//Create Index Buffer
 	WORD index [] =
 	{
-		0, 1, 2,
-		1, 2, 3
+		2, 1, 0,
+		0, 3, 2
 	};
 
 	mIndicesSize = ARRAYSIZE(index);
@@ -129,26 +129,26 @@ void ParticleRender::render(const std::vector<DirectX::XMFLOAT3>& pParticlePosit
 	//Map Particle Positions
 	ZeroMemory(&mappedData, sizeof mappedData);
 
-	auto result = deviceContext->Map(mParticlePositionBuffer.Get(), 0, D3D11_MAP_WRITE, D3D11_MAP_FLAG_DO_NOT_WAIT, &mappedData);
+	auto result = deviceContext->Map(mParticlePositionBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
 
 	//TODO: Check if this loop get called
 	while(result == DXGI_ERROR_WAS_STILL_DRAWING)
 	{
-		result = deviceContext->Map(mParticlePositionBuffer.Get(), 0, D3D11_MAP_WRITE, D3D11_MAP_FLAG_DO_NOT_WAIT, &mappedData);
+		result = deviceContext->Map(mParticlePositionBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
 	}
 	
 	memcpy(mappedData.pData, pParticlePositions.data(), sizeof(DirectX::XMFLOAT3) * pParticlePositions.size());
 
-	deviceContext->Unmap(mParticleTimeBuffer.Get(), 0);
+	deviceContext->Unmap(mParticlePositionBuffer.Get(), 0);
 
 	//Map Particle Time
 	ZeroMemory(&mappedData, sizeof mappedData);
 
-	result = deviceContext->Map(mParticleTimeBuffer.Get(), 0, D3D11_MAP_WRITE, D3D11_MAP_FLAG_DO_NOT_WAIT, &mappedData);
+	result = deviceContext->Map(mParticleTimeBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
 
 	while(result == DXGI_ERROR_WAS_STILL_DRAWING)
 	{
-		result = deviceContext->Map(mParticleTimeBuffer.Get(), 0, D3D11_MAP_WRITE, D3D11_MAP_FLAG_DO_NOT_WAIT, &mappedData);
+		result = deviceContext->Map(mParticleTimeBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
 	}
 
 	memcpy(mappedData.pData, pParticleTimes.data(), sizeof(float) * pParticleTimes.size());

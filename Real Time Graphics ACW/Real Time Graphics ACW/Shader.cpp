@@ -14,6 +14,14 @@ const D3D11_INPUT_ELEMENT_DESC Shader::layout[] =
 	{ "BITANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 4, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
 };
 
+const D3D11_INPUT_ELEMENT_DESC Shader::particle_layout[] =
+{
+	{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	{ "PARTICLEPOSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 2, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1},
+	{ "PARTICLETIME", 0, DXGI_FORMAT_R32_FLOAT, 3, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1}
+};
+
 //https://riptutorial.com/cplusplus/example/4190/conversion-to-std--wstring
 
 bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFragmentFile)
@@ -23,7 +31,7 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> vsBlob = nullptr;
-		auto result = compileShaderFromFile(converter.from_bytes(pVertexFile), "vs_4_0", vsBlob.ReleaseAndGetAddressOf());
+		auto result = compileShaderFromFile(converter.from_bytes(pVertexFile), "vs_5_0", vsBlob.ReleaseAndGetAddressOf());
 		if (FAILED(result))
 		{
 			return false;
@@ -34,15 +42,6 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 		{
 			return false;
 		}
-
-		D3D11_INPUT_ELEMENT_DESC layout[] =
-		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 2, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 3, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			{ "BITANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 4, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
-		};
 		
 		const UINT numElements = ARRAYSIZE(layout);
 
@@ -55,7 +54,7 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> psBlob = nullptr;
-		auto result = compileShaderFromFile(converter.from_bytes(pFragmentFile), "ps_4_0", psBlob.ReleaseAndGetAddressOf());
+		auto result = compileShaderFromFile(converter.from_bytes(pFragmentFile), "ps_5_0", psBlob.ReleaseAndGetAddressOf());
 		if (FAILED(result))
 		{
 			return false;
@@ -78,7 +77,7 @@ bool Shader::loadShader(const std::string & pVertexFile, const std::string & pFr
 
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> vsBlob = nullptr;
-		auto result = compileShaderFromFile(converter.from_bytes(pVertexFile), "vs_4_0", &vsBlob);
+		auto result = compileShaderFromFile(converter.from_bytes(pVertexFile), "vs_5_0", &vsBlob);
 		if (FAILED(result))
 		{
 			return false;
@@ -103,7 +102,7 @@ bool Shader::loadShader(const std::string & pVertexFile, const std::string & pFr
 
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> psBlob = nullptr;
-		auto result = compileShaderFromFile(converter.from_bytes(pFragmentFile), "ps_4_0", &psBlob);
+		auto result = compileShaderFromFile(converter.from_bytes(pFragmentFile), "ps_5_0", &psBlob);
 		if (FAILED(result))
 		{
 			return false;
@@ -118,7 +117,7 @@ bool Shader::loadShader(const std::string & pVertexFile, const std::string & pFr
 
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> gsBlob = nullptr;
-		auto result = compileShaderFromFile(converter.from_bytes(pGeometryFile), "gs_4_0", &gsBlob);
+		auto result = compileShaderFromFile(converter.from_bytes(pGeometryFile), "gs_5_0", &gsBlob);
 		if (FAILED(result))
 		{
 			return false;
@@ -319,6 +318,52 @@ bool Shader::loadShader(const std::string& pComputeFile)
 		return false;
 	}
 	
+	return true;
+}
+
+bool Shader::loadParticleShader(const std::string& pVertexFile, const std::string& pFragmentFile)
+{
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	auto device = Dx11Render::instance()->getDevice();
+
+	{
+		Microsoft::WRL::ComPtr<ID3DBlob> vsBlob = nullptr;
+		auto result = compileShaderFromFile(converter.from_bytes(pVertexFile), "vs_5_0", vsBlob.ReleaseAndGetAddressOf());
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		result = device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, mVertexShader.ReleaseAndGetAddressOf());
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		const UINT numElements = ARRAYSIZE(particle_layout);
+
+		result = device->CreateInputLayout(particle_layout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), mInputLayout.ReleaseAndGetAddressOf());
+		if (FAILED(result))
+		{
+			return false;
+		}
+	}
+
+	{
+		Microsoft::WRL::ComPtr<ID3DBlob> psBlob = nullptr;
+		auto result = compileShaderFromFile(converter.from_bytes(pFragmentFile), "ps_5_0", psBlob.ReleaseAndGetAddressOf());
+		if (FAILED(result))
+		{
+			return false;
+		}
+
+		result = device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, mPixelShader.ReleaseAndGetAddressOf());
+		if (FAILED(result))
+		{
+			return false;
+		}
+	}
+
 	return true;
 }
 

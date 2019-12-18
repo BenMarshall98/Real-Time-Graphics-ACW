@@ -4,6 +4,7 @@
 #include <vector>
 #include "ParticleRender.h"
 #include <memory>
+#include "Shader.h"
 
 class ParticleManager final
 {
@@ -11,6 +12,7 @@ class ParticleManager final
 	
 	std::vector<Particle> mParticles;
 	std::unique_ptr<ParticleRender> mParticleRender;
+	std::shared_ptr<Shader> mParticleShader;
 
 	ParticleManager();
 	

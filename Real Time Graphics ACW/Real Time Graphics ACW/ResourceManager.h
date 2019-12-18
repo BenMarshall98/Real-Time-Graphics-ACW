@@ -20,6 +20,7 @@ class ResourceManager
 	std::map<std::string, std::shared_ptr<Shader>> mVfhdShaders;
 	std::map<std::string, std::shared_ptr<Shader>> mVfghdShaders;
 	std::map<std::string, std::shared_ptr<Shader>> mCShaders;
+	std::map<std::string, std::shared_ptr<Shader>> mParticleShader;
 	
 public:
 	~ResourceManager() = default;
@@ -45,4 +46,5 @@ public:
 	std::shared_ptr<Shader> loadShader(const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pHullFile, const std::string & pDomainFile);
 	std::shared_ptr<Shader> loadShader(const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pGeometryFile, const std::string & pHullFile, const std::string & pDomainFile);
 	std::shared_ptr<Shader> loadShader(const std::string & pComputeFile);
+	std::shared_ptr<Shader> loadParticleShader(const std::string & pVertexFile, const std::string & pFragmentFile);
 };

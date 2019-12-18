@@ -82,6 +82,9 @@
     <Filter Include="Particles">
       <UniqueIdentifier>{b69eb496-59ac-4049-b090-b208e5aa7570}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders\ParticleShader">
+      <UniqueIdentifier>{951c17ad-3a32-4786-9dca-2462caef7a74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -490,5 +493,13 @@
     <Image Include="tyre_spec.dds">
       <Filter>Resource Files\Textures</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="ParticleVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\ParticleShader</Filter>
+    </FxCompile>
+    <FxCompile Include="ParticleFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\ParticleShader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

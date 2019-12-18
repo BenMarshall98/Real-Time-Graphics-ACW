@@ -188,6 +188,8 @@ bool Dx11Render::loadRender()
 	rasterizerDesc.DepthClipEnable = true;
 	rasterizerDesc.MultisampleEnable = false;
 	rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+	rasterizerDesc.AntialiasedLineEnable = true;
+	rasterizerDesc.FrontCounterClockwise = true;
 
 	result = mDevice->CreateRasterizerState(&rasterizerDesc, mRasterizerState.ReleaseAndGetAddressOf());
 

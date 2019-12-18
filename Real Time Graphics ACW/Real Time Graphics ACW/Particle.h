@@ -28,10 +28,10 @@ public:
 	Particle(const DirectX::XMFLOAT3 & pPosition, const DirectX::XMFLOAT3 & pVelocity);
 	~Particle() = default;
 
-	Particle(const Particle &) = delete;
-	Particle(Particle &&) = delete;
-	Particle & operator= (const Particle &) = delete;
-	Particle & operator= (Particle &&) = delete;
+	Particle(const Particle &) = default;
+	Particle(Particle &&) = default;
+	Particle & operator= (const Particle &) = default;
+	Particle & operator= (Particle &&) = default;
 
 	void calculatePhysics(float pDt);
 	void update();

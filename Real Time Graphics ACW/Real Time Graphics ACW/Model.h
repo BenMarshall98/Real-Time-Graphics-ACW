@@ -18,15 +18,16 @@ class Model
 
 public:
 	Model() = default;
-	bool loadModel(const std::vector<DirectX::XMFLOAT3> & pPositions, const std::vector<DirectX::XMFLOAT3> & pNormals,
-		const std::vector<DirectX::XMFLOAT2> & pTexCoords, const std::vector<DirectX::XMFLOAT3> & pTangents,
-		const std::vector<DirectX::XMFLOAT3> & pBiTangents, const std::vector<WORD> & pIndices);
 	~Model() = default;
 
 	Model(const Model&) = delete;
 	Model(Model &&) = delete;
 	Model & operator= (const Model &) = delete;
 	Model & operator= (Model &&) = delete;
+
+	bool loadModel(const std::vector<DirectX::XMFLOAT3> & pPositions, const std::vector<DirectX::XMFLOAT3> & pNormals,
+		const std::vector<DirectX::XMFLOAT2> & pTexCoords, const std::vector<DirectX::XMFLOAT3> & pTangents,
+		const std::vector<DirectX::XMFLOAT3> & pBiTangents, const std::vector<WORD> & pIndices);
 
 	void render(bool pTessellated = false);
 };

@@ -1,0 +1,204 @@
+#include "ParticleRender.h"
+#include "DX11Render.h"
+#include "ParticleManager.h"
+
+bool ParticleRender::loadParticles()
+{
+	auto device = Dx11Render::instance()->getDevice();
+
+	//None changing data for Vertex Buffers;
+	D3D11_BUFFER_DESC bufferDesc;
+	ZeroMemory(&bufferDesc, sizeof bufferDesc);
+
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA initData;
+	ZeroMemory(&initData, sizeof initData);
+
+	//Create Position Buffer
+	DirectX::XMFLOAT2 vertices[] =
+	{
+		DirectX::XMFLOAT2(-1.0f, -1.0f),
+		DirectX::XMFLOAT2(1.0f, -1.0f),
+		DirectX::XMFLOAT2(1.0f, 1.0f),
+		DirectX::XMFLOAT2(-1.0f, 1.0f)
+	};
+
+	const auto vertexSize = ARRAYSIZE(vertices);
+	
+	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT2) * vertexSize;
+	initData.pSysMem = vertices;
+
+	auto result = device->CreateBuffer(&bufferDesc, &initData, &mPositionBuffer);
+
+	if (FAILED(result))
+	{
+		//TODO: Log error
+		return false;
+	}
+
+	//Create TexCoord Buffer
+	DirectX::XMFLOAT2 texCoords[] =
+	{
+		DirectX::XMFLOAT2(0.0f, 0.0f),
+		DirectX::XMFLOAT2(1.0f, 0.0f),
+		DirectX::XMFLOAT2(1.0f, 1.0f),
+		DirectX::XMFLOAT2(0.0f, 1.0f)
+	};
+
+	const auto texSize = ARRAYSIZE(texCoords);
+
+	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT2) * texSize;
+	initData.pSysMem = texCoords;
+
+	result = device->CreateBuffer(&bufferDesc, &initData, &mTexCoordBuffer);
+
+	if (FAILED(result))
+	{
+		//TODO: Log error
+		return false;
+	}
+
+	//None changing data for Vertex Buffers;
+	ZeroMemory(&bufferDesc, sizeof bufferDesc);
+	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+	//Create Particle Position Buffer
+	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT3) * ParticleManager::max_particles;
+
+	result = device->CreateBuffer(&bufferDesc, nullptr, &mParticlePositionBuffer);
+
+	if (FAILED(result))
+	{
+		//TODO: Log error
+		return false;
+	}
+
+	//Create Particle Time Buffer
+	bufferDesc.ByteWidth = sizeof(float) * ParticleManager::max_particles;
+
+	result = device->CreateBuffer(&bufferDesc, nullptr, &mParticleTimeBuffer);
+
+	if (FAILED(result))
+	{
+		//TODO: Log error
+		return false;
+	}
+
+	//Create Index Buffer
+	WORD index [] =
+	{
+		0, 1, 2,
+		1, 2, 3
+	};
+
+	mIndicesSize = ARRAYSIZE(index);
+	
+	ZeroMemory(&bufferDesc, sizeof bufferDesc);
+
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+
+	bufferDesc.ByteWidth = sizeof(WORD) * mIndicesSize;
+	
+	ZeroMemory(&initData, sizeof initData);
+	initData.pSysMem = index;
+
+	result = device->CreateBuffer(&bufferDesc, &initData, &mIndicesBuffer);
+
+	if (FAILED(result))
+	{
+		//TODO: Log error
+		return false;
+	}
+
+	return true;
+}
+
+void ParticleRender::render(const std::vector<DirectX::XMFLOAT3>& pParticlePositions, const std::vector<float>& pParticleTimes) const
+{
+	auto deviceContext = Dx11Render::instance()->getDeviceContext();
+
+	D3D11_MAPPED_SUBRESOURCE mappedData;
+
+	//Map Particle Positions
+	ZeroMemory(&mappedData, sizeof mappedData);
+
+	auto result = deviceContext->Map(mParticlePositionBuffer.Get(), 0, D3D11_MAP_WRITE, D3D11_MAP_FLAG_DO_NOT_WAIT, &mappedData);
+
+	//TODO: Check if this loop get called
+	while(result == DXGI_ERROR_WAS_STILL_DRAWING)
+	{
+		result = deviceContext->Map(mParticlePositionBuffer.Get(), 0, D3D11_MAP_WRITE, D3D11_MAP_FLAG_DO_NOT_WAIT, &mappedData);
+	}
+	
+	memcpy(mappedData.pData, pParticlePositions.data(), sizeof(DirectX::XMFLOAT3) * pParticlePositions.size());
+
+	deviceContext->Unmap(mParticleTimeBuffer.Get(), 0);
+
+	//Map Particle Time
+	ZeroMemory(&mappedData, sizeof mappedData);
+
+	result = deviceContext->Map(mParticleTimeBuffer.Get(), 0, D3D11_MAP_WRITE, D3D11_MAP_FLAG_DO_NOT_WAIT, &mappedData);
+
+	while(result == DXGI_ERROR_WAS_STILL_DRAWING)
+	{
+		result = deviceContext->Map(mParticleTimeBuffer.Get(), 0, D3D11_MAP_WRITE, D3D11_MAP_FLAG_DO_NOT_WAIT, &mappedData);
+	}
+
+	memcpy(mappedData.pData, pParticleTimes.data(), sizeof(float) * pParticleTimes.size());
+
+	deviceContext->Unmap(mParticleTimeBuffer.Get(), 0);
+
+	//Get current model data
+
+	ID3D11Buffer * bufferArray[5];
+	UINT strideArray[5];
+	UINT offsetArray[5];
+
+	ID3D11Buffer * indexBuffer;
+	DXGI_FORMAT format;
+	UINT offset;
+
+	D3D11_PRIMITIVE_TOPOLOGY topology;
+
+	deviceContext->IAGetVertexBuffers(0, 5, bufferArray, strideArray, offsetArray);
+	deviceContext->IAGetIndexBuffer(&indexBuffer, &format, &offset);
+	deviceContext->IAGetPrimitiveTopology(&topology);
+
+	//Draw particles
+
+	const auto numberBuffers = 4u;
+	
+	ID3D11Buffer * particleBufferArray[numberBuffers] =
+	{
+		mPositionBuffer.Get(), mTexCoordBuffer.Get(), mParticlePositionBuffer.Get(), mParticleTimeBuffer.Get()
+	};
+
+	UINT particleStrideArray[numberBuffers] =
+	{
+		sizeof(DirectX::XMFLOAT2), sizeof(DirectX::XMFLOAT2), sizeof(DirectX::XMFLOAT3), sizeof(float)
+	};
+
+	UINT particleOffsetArray[numberBuffers] =
+	{
+		0, 0, 0, 0
+	};
+	
+	deviceContext->IASetVertexBuffers(0, numberBuffers, particleBufferArray, particleStrideArray, particleOffsetArray);
+	deviceContext->IASetIndexBuffer(mIndicesBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	deviceContext->DrawIndexedInstanced(mIndicesSize, pParticlePositions.size(), 0, 0, 0);
+
+	//Set previous model data
+
+	deviceContext->IASetVertexBuffers(0, 5, bufferArray, strideArray, offsetArray);
+	deviceContext->IASetIndexBuffer(indexBuffer, format, offset);
+	deviceContext->IASetPrimitiveTopology(topology);
+}

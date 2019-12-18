@@ -26,7 +26,7 @@ void ObjectManager::explode(unsigned pKey)
 
 		if (const auto ptr = std::dynamic_pointer_cast<IExplode>(shape))
 		{
-			ptr->explode;
+			ptr->explode();
 		}
 
 		RenderManager::instance()->removeShape(shape);

@@ -1,6 +1,7 @@
 #include "ObjectManager.h"
 #include "IExplode.h"
 #include "Sphere.h"
+#include "RenderManager.h"
 
 ObjectManager * ObjectManager::mInstance = nullptr;
 
@@ -17,12 +18,26 @@ void ObjectManager::addShape(const std::shared_ptr<Shape>& pShape)
 
 void ObjectManager::explode(unsigned pKey)
 {
-	const auto it = mExplodingShapes.find(pKey);
+	const auto eIt = mExplodingShapes.find(pKey);
 
-	if(it != mExplodingShapes.end())
+	if(eIt != mExplodingShapes.end())
 	{
-		const auto shape = it->second;
+		const auto shape = eIt->second;
 
-		//TODO: Make explode
+		if (const auto ptr = std::dynamic_pointer_cast<IExplode>(shape))
+		{
+			ptr->explode;
+		}
+
+		RenderManager::instance()->removeShape(shape);
+
+		const auto sIt = std::find(mShapes.begin(), mShapes.end(), shape);
+
+		if (sIt != mShapes.end())
+		{
+			mShapes.erase(sIt);
+		}
+
+		mExplodingShapes.erase(eIt);
 	}
 }

@@ -146,6 +146,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="ParticleManager.h" />
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="ShapeNode.h" />
     <ClInclude Include="Particle.h" />
@@ -194,6 +195,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
+    <ClCompile Include="ParticleManager.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="ShapeNode.cpp" />
     <ClCompile Include="Particle.cpp" />

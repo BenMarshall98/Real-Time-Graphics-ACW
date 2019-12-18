@@ -95,3 +95,22 @@ void RenderManager::addDynamicShape(const std::shared_ptr<Shape>& pShape)
 {
 	mDynamicShapes.push_back(pShape);
 }
+
+void RenderManager::removeShape(const std::shared_ptr<Shape>& pShape)
+{
+	auto it = std::find(mStaticShapes.begin(), mStaticShapes.end(), pShape);
+
+	if (it != mStaticShapes.end())
+	{
+		mStaticShapes.erase(it);
+	}
+
+	it = std::find(mDynamicShapes.begin(), mDynamicShapes.end(), pShape);
+
+	if (it != mDynamicShapes.end())
+	{
+		mDynamicShapes.erase(it);
+	}
+
+	//TODO: Deal with dynamic technique map
+}

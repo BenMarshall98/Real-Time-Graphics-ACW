@@ -41,4 +41,6 @@ public:
 
 	void addStaticShape(const std::shared_ptr<Shape>& pShape);
 	void addDynamicShape(const std::shared_ptr<Shape>& pShape);
+
+	void removeShape(const std::shared_ptr<Shape> & pShape);
 };

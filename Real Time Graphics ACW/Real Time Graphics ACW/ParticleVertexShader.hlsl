@@ -27,12 +27,12 @@ VS_OUTPUT main(VS_INPUT input)
     float3 cameraLeft = float3(View[0][0], View[1][0], View[2][0]);
     float3 cameraUp = float3(View[0][1], View[1][1], View[2][1]);
     
-    float3 pos = input.position.x * cameraLeft + input.position.y * cameraUp;
+    float3 pos = input.position.x * 0.1f * cameraLeft + input.position.y * 0.1f * cameraUp;
     pos += input.particlePosition;
     
     output.pos = mul(float4(pos, 1.0f), View);
     output.pos = mul(output.pos, Projection);
-    output.texCoord = cameraLeft.xz;
+    output.texCoord = input.texCoord;
     output.particleTime = input.particleTime;
     
     return output;

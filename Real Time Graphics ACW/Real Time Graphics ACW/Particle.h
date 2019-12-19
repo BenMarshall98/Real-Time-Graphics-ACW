@@ -19,6 +19,7 @@ class Particle
 	DirectX::XMFLOAT3 mPreviousPosition;
 	DirectX::XMFLOAT3 mCurrentPosition;
 	DirectX::XMFLOAT3 mVelocity;
+	float mTime;
 
 	static void integrate(State & pState, float pDt);
 	static Derivative evaluate(const State & pInitial, float pDt, const Derivative & pDerivative);
@@ -49,6 +50,16 @@ public:
 	DirectX::XMFLOAT3 getVelocity() const
 	{
 		return mVelocity;
+	}
+
+	void setTime(const float pTime)
+	{
+		mTime = pTime;
+	}
+
+	float getTime() const
+	{
+		return mTime;
 	}
 };
 

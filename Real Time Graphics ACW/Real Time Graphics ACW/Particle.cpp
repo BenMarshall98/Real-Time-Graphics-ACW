@@ -24,6 +24,13 @@ void Particle::calculatePhysics(float pDt)
 
 	XMStoreFloat3(&mCurrentPosition, state.mPosition);
 	XMStoreFloat3(&mVelocity, state.mVelocity);
+
+	mTime -= pDt;
+
+	if (mTime < 0.0f)
+	{
+		mTime = 0.0f;
+	}
 }
 
 void Particle::integrate(State& pState, float pDt)

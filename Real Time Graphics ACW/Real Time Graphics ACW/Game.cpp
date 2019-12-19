@@ -89,6 +89,8 @@ void Game::run()
 		//
 		// Update variables
 		//
+		//
+		ParticleManager::instance()->update(mDt);
 		CameraBuffer cb;
 		//cb.mWorld = XMMatrixTranspose(g_World);
 		const auto viewMatrix = mCamera->getViewMatrix();

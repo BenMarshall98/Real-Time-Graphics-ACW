@@ -472,6 +472,12 @@
     <CopyFileToFolders Include="NormalOmniShadowVertexShader.hlsl">
       <Filter>Resource Files\Shaders\OmniDirectionalShadowShading\Normal</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="ParticleFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\ParticleShader</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="ParticleVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\ParticleShader</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />
@@ -493,13 +499,5 @@
     <Image Include="tyre_spec.dds">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="ParticleVertexShader.hlsl">
-      <Filter>Resource Files\Shaders\ParticleShader</Filter>
-    </FxCompile>
-    <FxCompile Include="ParticleFragmentShader.hlsl">
-      <Filter>Resource Files\Shaders\ParticleShader</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>

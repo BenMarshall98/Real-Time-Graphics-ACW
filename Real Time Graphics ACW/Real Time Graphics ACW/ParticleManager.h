@@ -11,13 +11,13 @@ class ParticleManager final
 	static ParticleManager * mInstance;
 	
 	std::vector<Particle> mParticles;
-	std::unique_ptr<ParticleRender> mParticleRender;
+	std::vector<std::unique_ptr<ParticleRender>> mParticleRenders;
 	std::shared_ptr<Shader> mParticleShader;
 
 	ParticleManager();
 	
 public:
-	static const unsigned int max_particles = 1000;
+	static const unsigned int max_particles = 2000;
 	
 	~ParticleManager() = default;
 	ParticleManager(const ParticleManager&) = delete;
@@ -34,7 +34,7 @@ public:
 		return mInstance;
 	}
 
-	void addParticles(const std::vector<Particle> & pParticles);
+	void addParticles(std::vector<Particle> & pParticles);
 	void update(float pDt);
 	void render();
 };

@@ -130,12 +130,6 @@ void ParticleRender::render(const std::vector<DirectX::XMFLOAT3>& pParticlePosit
 	ZeroMemory(&mappedData, sizeof mappedData);
 
 	auto result = deviceContext->Map(mParticlePositionBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
-
-	//TODO: Check if this loop get called
-	while(result == DXGI_ERROR_WAS_STILL_DRAWING)
-	{
-		result = deviceContext->Map(mParticlePositionBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
-	}
 	
 	memcpy(mappedData.pData, pParticlePositions.data(), sizeof(DirectX::XMFLOAT3) * pParticlePositions.size());
 
@@ -145,11 +139,6 @@ void ParticleRender::render(const std::vector<DirectX::XMFLOAT3>& pParticlePosit
 	ZeroMemory(&mappedData, sizeof mappedData);
 
 	result = deviceContext->Map(mParticleTimeBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
-
-	while(result == DXGI_ERROR_WAS_STILL_DRAWING)
-	{
-		result = deviceContext->Map(mParticleTimeBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData);
-	}
 
 	memcpy(mappedData.pData, pParticleTimes.data(), sizeof(float) * pParticleTimes.size());
 

@@ -5,19 +5,34 @@ ParticleManager * ParticleManager::mInstance = nullptr;
 
 ParticleManager::ParticleManager()
 {
-	mParticleRender = std::make_unique<ParticleRender>();
+	mParticleRenders.emplace_back(std::make_unique<ParticleRender>());
 	
-	if (!mParticleRender->loadParticles())
+	if (!mParticleRenders[0]->loadParticles())
 	{
-		mParticleRender.reset();
+		mParticleRenders.erase(mParticleRenders.begin() + 0);
 	}
 
 	mParticleShader = ResourceManager::instance()->loadParticleShader("ParticleVertexShader.hlsl", "ParticleFragmentShader.hlsl");
 }
 
-void ParticleManager::addParticles(const std::vector<Particle>& pParticles)
+void ParticleManager::addParticles(std::vector<Particle>& pParticles)
 {
+	for (auto& particle : pParticles)
+	{
+		particle.setTime(1.0f);
+	}
+	
 	mParticles.insert(mParticles.end(), pParticles.begin(), pParticles.end());
+
+	if (mParticles.size() > max_particles * mParticleRenders.size())
+	{
+		mParticleRenders.emplace_back(std::make_unique<ParticleRender>());
+
+		if (!mParticleRenders[mParticleRenders.size() - 1]->loadParticles())
+		{
+			mParticleRenders.pop_back();
+		}
+	}
 }
 
 void ParticleManager::update(float pDt)
@@ -30,19 +45,25 @@ void ParticleManager::update(float pDt)
 
 void ParticleManager::render()
 {
-	const std::vector<DirectX::XMFLOAT3> mPositions =
-	{
-		DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f),
-		DirectX::XMFLOAT3(4.0f, 4.0f, 4.0f),
-		DirectX::XMFLOAT3(-3.0f, 2.0f, 4.0f),
-		DirectX::XMFLOAT3(2.0f, 4.5f, 2.5f)
-	};
-
-	const std::vector<float> mTimes =
-	{
-		0.0f, 0.0f, 0.0f, 0.0f
-	};
-
 	mParticleShader->useShader();
-	mParticleRender->render(mPositions, mTimes);
+
+	std::vector<DirectX::XMFLOAT3> positions;
+	std::vector<float> times;
+
+	positions.reserve(1000);
+	times.reserve(1000);
+
+	for (auto i = 0u; i < mParticleRenders.size(); i ++)
+	{
+		positions.clear();
+		times.clear();
+		
+		for (auto j = i * max_particles; j < (i + 1) * max_particles && j < mParticles.size(); j++)
+		{
+			positions.push_back(mParticles[j].getCurrentPosition());
+			times.push_back(mParticles[j].getTime());
+		}
+
+		mParticleRenders[i]->render(positions, times);
+	}
 }

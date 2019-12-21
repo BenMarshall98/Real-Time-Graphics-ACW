@@ -17,7 +17,7 @@ struct VS_OUTPUT
 
 //TODO: Look at the distance from the camera
 
-PatchTess ConstantHS(InputPatch<VS_OUTPUT, 3> inPatch, uint patchID: SV_PrimitiveID)
+PatchTess ConstantHS(InputPatch<VS_OUTPUT, 3> inPatch, uint patchID : SV_PrimitiveID)
 {
     PatchTess outPatch;
     outPatch.EdgeTess[0] = 64;

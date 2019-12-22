@@ -1,5 +1,4 @@
 //TODO: Note based on frank luna book
-//TODO: Sort out normal in this shader
 cbuffer cameraBuffer : register(b0)
 {
     matrix View;

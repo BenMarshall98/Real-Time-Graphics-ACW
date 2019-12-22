@@ -1,12 +1,5 @@
 //TODO: Note base on Frank Luna book
 
-cbuffer cameraBuffer : register(b0)
-{
-    matrix View;
-    matrix Projection;
-    float3 ViewPosition;
-}
-
 struct VS_INPUT
 {
     float3 Pos : POSITION;

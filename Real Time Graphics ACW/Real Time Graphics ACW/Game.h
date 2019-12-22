@@ -23,8 +23,6 @@ class Game
 	std::shared_ptr<Texture> mSpec;
 	std::shared_ptr<Texture> mDisp;
 	std::shared_ptr<Texture> mNorm;
-
-	Framebuffer * mFramebuffer;
 	
 public:
 	Game();

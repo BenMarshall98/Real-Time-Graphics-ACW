@@ -1,16 +1,45 @@
 #include "DirectionalLight.h"
 #include <string>
+#include "DX11Render.h"
+#include "Game.h"
 
 DirectionalLight::DirectionalLight(const DirectX::XMFLOAT4 & pColor, const DirectX::XMFLOAT3 & pDirection) :
 	mColor(pColor), mDirection(pDirection)
 {
+	mFramebuffer = std::make_unique<Framebuffer>();
+
+	if (!mFramebuffer->loadFramebuffer(false, true, 1024, 1024))
+	{
+		mFramebuffer.reset();
+	}
 }
+
+DirectionalLight::DirectionalLight() : mColor(), mDirection()
+{
+	mFramebuffer = std::make_unique<Framebuffer>();
+
+	if (!mFramebuffer->loadFramebuffer(false, true, 1024, 1024))
+	{
+		mFramebuffer.reset();
+	}
+}
+
 
 void DirectionalLight::use(DirectionalLightBuffer& pLightBuffer) const
 {
 	pLightBuffer.mColor = mColor;
 	pLightBuffer.mDirection = mDirection;
 	pLightBuffer.mIsUsed = true;
+	const auto pos = Game::mCamera->getViewPosition();
+	const auto eye = DirectX::XMLoadFloat3(&pos);
+	const auto target = DirectX::XMVectorAdd(eye, DirectX::XMLoadFloat3(&mDirection));
+	const auto up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	
+	const auto view = XMMatrixTranspose(DirectX::XMMatrixLookAtLH(eye, target, up));
+	XMStoreFloat4x4(&pLightBuffer.mViewMatrix, view);
+
+	const auto projection = XMMatrixTranspose(DirectX::XMMatrixOrthographicLH(10.0f, 10.0f, 0.1f, 100.0f));
+	XMStoreFloat4x4(&pLightBuffer.mProjectionMatrix, projection);
 }
 
 void DirectionalLight::update(DirectX::XMFLOAT4X4& pMatrix)
@@ -29,7 +58,7 @@ void DirectionalLight::update(DirectX::XMFLOAT4X4& pMatrix)
 
 void DirectionalLight::updateShadow()
 {
-	//TODO: Implement
+	mFramebuffer->useFramebuffer();
 }
 
 std::istream& operator>>(std::istream& pIn, DirectionalLight& pLight)

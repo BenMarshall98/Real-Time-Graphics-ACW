@@ -2,6 +2,7 @@
 
 #include <d3d11_1.h>
 #include <WRL/client.h>
+#include "Win32Window.h"
 
 struct ModelBuffer;
 struct MaterialBuffer;
@@ -61,6 +62,32 @@ public:
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> getDeviceContext() const
 	{
 		return mDeviceContext;
+	}
+
+	void setViewport(const unsigned int pWidth, const unsigned int pHeight)
+	{
+		D3D11_VIEWPORT viewport;
+		viewport.Width = static_cast<float>(pWidth);
+		viewport.Height = static_cast<float>(pHeight);
+		viewport.MinDepth = 0.0f;
+		viewport.MaxDepth = 1.0f;
+		viewport.TopLeftX = 0;
+		viewport.TopLeftY = 0;
+
+		mDeviceContext->RSSetViewports(1, &viewport);
+	}
+
+	void defaultViewport()
+	{
+		D3D11_VIEWPORT viewport;
+		viewport.Width = static_cast<float>(Win32Window::instance()->getWidth());
+		viewport.Height = static_cast<float>(Win32Window::instance()->getHeight());
+		viewport.MinDepth = 0.0f;
+		viewport.MaxDepth = 1.0f;
+		viewport.TopLeftX = 0;
+		viewport.TopLeftY = 0;
+
+		mDeviceContext->RSSetViewports(1, &viewport);
 	}
 
 	void useModelBuffer(const ModelBuffer & pModelBuffer) const;

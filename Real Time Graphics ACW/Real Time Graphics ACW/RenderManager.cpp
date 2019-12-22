@@ -46,10 +46,10 @@ void RenderManager::renderShadows()
 
 	if (lightManager->updateDirectionalLightShadow())
 	{
-		for (auto& staticShape : mStaticShapes)
+		/*for (auto& staticShape : mStaticShapes)
 		{
 			mStaticTechnique->renderDirectionalShadow(staticShape);
-		}
+		}*/
 
 		for (auto& dynamicShape : mDynamicShapes)
 		{
@@ -57,7 +57,7 @@ void RenderManager::renderShadows()
 		}
 	}
 
-	if (lightManager->updatePointLightShadow())
+	/*if (lightManager->updatePointLightShadow())
 	{
 		for (auto& staticShape : mStaticShapes)
 		{
@@ -83,7 +83,7 @@ void RenderManager::renderShadows()
 		{
 			mStaticTechnique->renderOmniDirectionalShadow(dynamicShape);
 		}
-	}
+	}*/
 }
 
 void RenderManager::addStaticShape(const std::shared_ptr<Shape>& pShape)

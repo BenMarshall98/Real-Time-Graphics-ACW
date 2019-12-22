@@ -24,7 +24,8 @@ class Framebuffer
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> mSampler = nullptr;
 
 	TextureType mType = TextureType::TEXTURE_2D;
-
+	unsigned int mWidth;
+	unsigned int mHeight;
 	bool mUpdateResize = false;
 	
 public:
@@ -38,5 +39,15 @@ public:
 
 	void useFramebuffer() const;
 	void useTexture(unsigned int pSlot);
+
+	float getHeight()
+	{
+		return mHeight;
+	}
+
+	float getWidth()
+	{
+		return mWidth;
+	}
 };
 

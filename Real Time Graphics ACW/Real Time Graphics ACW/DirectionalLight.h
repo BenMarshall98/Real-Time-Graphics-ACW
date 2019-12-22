@@ -1,22 +1,26 @@
 #pragma once
 #include <DirectXMath.h>
 #include <iostream>
+#include "Framebuffer.h"
 
 struct DirectionalLightBuffer
 {
 	DirectX::XMFLOAT4 mColor;
 	DirectX::XMFLOAT3 mDirection;
 	int mIsUsed;
+	DirectX::XMFLOAT4X4 mViewMatrix;
+	DirectX::XMFLOAT4X4 mProjectionMatrix;
 };
 
 class DirectionalLight
 {
 	DirectX::XMFLOAT4 mColor;
 	DirectX::XMFLOAT3 mDirection;
+	std::unique_ptr<Framebuffer> mFramebuffer;
 	
 public:
 	DirectionalLight(const DirectX::XMFLOAT4 & pColor, const DirectX::XMFLOAT3 & pDirection);
-	DirectionalLight() = default;
+	DirectionalLight();
 	~DirectionalLight() = default;
 	DirectionalLight(const DirectionalLight&) = delete;
 	DirectionalLight(DirectionalLight &&) = delete;
@@ -36,6 +40,7 @@ public:
 	void use(DirectionalLightBuffer & pLightBuffer) const;
 	void update(DirectX::XMFLOAT4X4 & pMatrix);
 	void updateShadow();
+	void useShadow();
 };
 
 std::istream& operator>>(std::istream & pIn, DirectionalLight & pLight);

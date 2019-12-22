@@ -15,6 +15,9 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, const T
 
 bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWidth, int pHeight, TextureType pType, unsigned int pNumberOfBuffers)
 {
+	mWidth = pWidth;
+	mHeight = pHeight;
+	
 	const auto device = Dx11Render::instance()->getDevice();
 
 	if (pColour)
@@ -223,11 +226,11 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 		depthTextureDesc.ArraySize = 6;
 	}
 	
-	depthTextureDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthTextureDesc.Format = DXGI_FORMAT_R32_TYPELESS;
 	depthTextureDesc.SampleDesc.Count = 1;
 	depthTextureDesc.SampleDesc.Quality = 0;
 	depthTextureDesc.Usage = D3D11_USAGE_DEFAULT;
-	depthTextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthTextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
 	depthTextureDesc.CPUAccessFlags = 0;
 	depthTextureDesc.MiscFlags = 0;
 
@@ -267,7 +270,7 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthViewDesc;
 	ZeroMemory(&depthViewDesc, sizeof D3D11_DEPTH_STENCIL_VIEW_DESC);
-	depthViewDesc.Format = depthTextureDesc.Format;
+	depthViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
 	depthViewDesc.Flags = 0;
 
 	if (pType == TextureType::TEXTURE_2D)
@@ -294,7 +297,7 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 	{
 		D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
 		ZeroMemory(&shaderResourceViewDesc, sizeof D3D11_SHADER_RESOURCE_VIEW_DESC);
-		shaderResourceViewDesc.Format = depthTextureDesc.Format;
+		shaderResourceViewDesc.Format = DXGI_FORMAT_R32_FLOAT;
 
 		if (pType == TextureType::TEXTURE_2D)
 		{
@@ -337,6 +340,8 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 
 void Framebuffer::useFramebuffer() const
 {
+	Dx11Render::instance()->setViewport(mWidth, mHeight);
+	
 	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
 
 	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)

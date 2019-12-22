@@ -52,7 +52,7 @@ void LightingManager::removeSpotLight(std::shared_ptr<SpotLight>& pSpotLight)
 void LightingManager::update() const
 {
 	const auto render = Dx11Render::instance();
-	/*{
+	{
 		DirectionalLightBuffer db;
 		ZeroMemory(&db, sizeof DirectionalLightBuffer);
 
@@ -66,7 +66,7 @@ void LightingManager::update() const
 		}
 
 		render->useDirectionalLightBuffer(db);
-	}*/
+	}
 
 	{
 		PointLightBuffer pb;
@@ -84,7 +84,7 @@ void LightingManager::update() const
 		render->usePointLightBuffer(pb);
 	}
 
-	/*{
+	{
 		SpotLightBuffer sb;
 		ZeroMemory(&sb, sizeof SpotLightBuffer);
 
@@ -101,7 +101,7 @@ void LightingManager::update() const
 		}
 
 		render->useSpotLightBuffer(sb);
-	}*/
+	}
 }
 
 bool LightingManager::updateDirectionalLightShadow() const

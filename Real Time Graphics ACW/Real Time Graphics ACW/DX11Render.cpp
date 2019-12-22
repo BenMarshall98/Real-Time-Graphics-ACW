@@ -27,7 +27,9 @@ bool Dx11Render::loadRender()
 		D3D_FEATURE_LEVEL_10_0
 	};
 
-	auto result = D3D11CreateDevice(nullptr, mDriverType, nullptr, 0, featureLevels, 4, D3D11_SDK_VERSION, &mDevice, &mFeatureLevel, &mDeviceContext);
+	UINT flags = D3D11_CREATE_DEVICE_DEBUG;
+
+	auto result = D3D11CreateDevice(nullptr, mDriverType, nullptr, flags, featureLevels, 4, D3D11_SDK_VERSION, &mDevice, &mFeatureLevel, &mDeviceContext);
 
 	if (FAILED(result))
 	{

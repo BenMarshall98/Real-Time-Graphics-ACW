@@ -51,3 +51,4 @@ ModelLoader
 * loads in a model
 
 //TODO: https://halisavakis.com/write-up-tornado-explosion/
+//TODO: need to look at UV for planes

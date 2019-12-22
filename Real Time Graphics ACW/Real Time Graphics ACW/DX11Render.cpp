@@ -291,6 +291,7 @@ void Dx11Render::useDirectionalLightBuffer(const DirectionalLightBuffer& pDirect
 	mDeviceContext->UpdateSubresource(mDirectionalLightBuffer.Get(), 0, nullptr, &pDirectionalLightBuffer, 0, 0);
 	mDeviceContext->PSSetConstantBuffers(2, 1, mDirectionalLightBuffer.GetAddressOf());
 	mDeviceContext->VSSetConstantBuffers(3, 1, mDirectionalLightBuffer.GetAddressOf());
+	mDeviceContext->DSSetConstantBuffers(2, 1, mDirectionalLightBuffer.GetAddressOf());
 }
 
 void Dx11Render::usePointLightBuffer(const PointLightBuffer& pPointLightBuffer) const

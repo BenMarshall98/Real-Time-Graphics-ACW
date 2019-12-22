@@ -49,7 +49,6 @@ Game::Game()
 
 	// Initialize the projection matrix
 	mProjection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, static_cast<float>(Win32Window::instance()->getWidth()) / static_cast<float>(Win32Window::instance()->getHeight()), 0.01f, 20.0f);
-	mProjection = DirectX::XMMatrixOrthographicLH(20.0f, 20.0f, 0.1f, 100.0f);
 	
 	mBase = ResourceManager::instance()->loadTexture("tyre_base.dds");
 	mSpec = ResourceManager::instance()->loadTexture("tyre_spec.dds");

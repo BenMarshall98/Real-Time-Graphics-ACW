@@ -10,7 +10,7 @@ struct VS_OUTPUT
 {
     float3 Pos : POSITION0;
     float3 Normal : NORMAL0;
-    float3 TexCoord : TEXCOORD0;
+    float2 TexCoord : TEXCOORD0;
 };
 
 //TODO: Look at the distance from the camera

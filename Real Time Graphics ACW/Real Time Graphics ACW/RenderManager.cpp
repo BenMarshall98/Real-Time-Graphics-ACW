@@ -12,12 +12,7 @@ RenderManager * RenderManager::mInstance = nullptr;
 
 RenderManager::RenderManager()
 {
-	//staticTechnique = std::make_unique<GourandShading>();
-	mStaticTechnique = std::make_unique<PhongShading>();
-	//staticTechnique = std::make_unique<TextureMapping>();
-	//staticTechnique = std::make_unique<BumpMapping>();
-	//staticTechnique = std::make_unique<DisplacementMapping>();
-	//staticTechnique = std::make_unique<ToonShading>();
+	mStaticTechnique = std::make_unique<TextureMapping>();
 	mDynamicTechniques.emplace_back(std::make_unique<GourandShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<PhongShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<TextureMapping>());
@@ -35,7 +30,7 @@ void RenderManager::render()
 
 	for (auto& dynamicShape : mDynamicShapes)
 	{
-		mStaticTechnique->render(dynamicShape, false);
+		mDynamicTechniques[1]->render(dynamicShape, false);
 	}
 }
 

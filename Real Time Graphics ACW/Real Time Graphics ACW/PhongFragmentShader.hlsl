@@ -51,7 +51,11 @@ struct VS_OUTPUT
 Texture2D directionalShadowTexture : register(t0);
 SamplerState directionalShadowSampler : register(s0);
 
+TextureCube pointShadowTexture : register(t1);
+SamplerState pointShadowSampler : register(s1);
+
 float DirectionalShadowCalculation(float4 lightPos);
+float PointShadowCalculation(float3 pFragPos, float3 pLightPos, TextureCube pTexture, SamplerState pSampler);
 
 float4 main(VS_OUTPUT input) : SV_Target
 {
@@ -92,10 +96,12 @@ float4 main(VS_OUTPUT input) : SV_Target
 
         float distance = length(PointPosition.xyz - input.FragmentPos.xyz);
         float attenuation = 1.0f / (PointAttenuationConstant + PointAttenuationLinear * distance + PointAttenuationQuad * distance * distance);
+        
+        float shadow = PointShadowCalculation(input.FragmentPos.xyz, PointPosition.xyz, pointShadowTexture, pointShadowSampler);
 
         color += MaterialAmbient * PointColor * attenuation;
-        color += MaterialDiffuse * PointColor * diffuse * attenuation;
-        color += MaterialSpecular * PointColor * specular * attenuation;
+        color += MaterialDiffuse * PointColor * diffuse * shadow * attenuation;
+        color += MaterialSpecular * PointColor * specular * shadow * attenuation;
     }
 
 	//Spot Light
@@ -140,5 +146,19 @@ float DirectionalShadowCalculation(float4 lightPos)
     
     float shadow = currentDepth > closestDepth ? 1.0f : 0.0f;
     
+    return (1.0 - shadow);
+}
+
+float PointShadowCalculation(float3 pFragPos, float3 pLightPos, TextureCube pTexture, SamplerState pSampler)
+{
+    float3 vec = pFragPos - pLightPos;
+    float closestDepth = pTexture.Sample(pSampler, vec).r;
+    
+    closestDepth *= FarPlane;
+    
+    float currentDepth = length(vec);
+    
+    float shadow = currentDepth > closestDepth ? 1.0f : 0.0f;
+
     return (1.0 - shadow);
 }

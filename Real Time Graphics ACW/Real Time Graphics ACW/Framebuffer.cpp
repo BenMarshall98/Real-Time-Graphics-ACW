@@ -220,10 +220,12 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 	if (pType == TextureType::TEXTURE_2D)
 	{
 		depthTextureDesc.ArraySize = 1;
+		depthTextureDesc.MiscFlags = 0;
 	}
 	else
 	{
 		depthTextureDesc.ArraySize = 6;
+		depthTextureDesc.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
 	}
 	
 	depthTextureDesc.Format = DXGI_FORMAT_R32_TYPELESS;
@@ -232,7 +234,6 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 	depthTextureDesc.Usage = D3D11_USAGE_DEFAULT;
 	depthTextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
 	depthTextureDesc.CPUAccessFlags = 0;
-	depthTextureDesc.MiscFlags = 0;
 
 	auto result = device->CreateTexture2D(&depthTextureDesc, nullptr, mDepthTexture.ReleaseAndGetAddressOf());
 

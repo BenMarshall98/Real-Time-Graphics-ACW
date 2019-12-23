@@ -29,11 +29,12 @@ cbuffer directionalBuffer : register(b3)
 cbuffer pointBuffer : register(b4)
 {
     float4 PointColor;
-    float4 PointPosition;
+    float3 PointPosition;
     float PointAttenuationConstant;
     float PointAttenuationLinear;
     float PointAttenuationQuad;
     int PointUsed;
+    float PointFarPlane;
 }
 
 cbuffer spotBuffer : register(b5)

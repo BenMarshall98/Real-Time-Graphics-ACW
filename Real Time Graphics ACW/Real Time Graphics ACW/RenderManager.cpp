@@ -12,7 +12,7 @@ RenderManager * RenderManager::mInstance = nullptr;
 
 RenderManager::RenderManager()
 {
-	mStaticTechnique = std::make_unique<TextureMapping>();
+	mStaticTechnique = std::make_unique<PhongShading>();
 	mDynamicTechniques.emplace_back(std::make_unique<GourandShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<PhongShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<TextureMapping>());
@@ -28,9 +28,9 @@ void RenderManager::render()
 		mStaticTechnique->render(staticShape, false);
 	}
 
-	for (auto& dynamicShape : mDynamicShapes)
+	for (auto i = 0u; i < mDynamicShapes.size(); i++)
 	{
-		mDynamicTechniques[1]->render(dynamicShape, false);
+		mDynamicTechniques[i]->render(mDynamicShapes[i], false);
 	}
 }
 
@@ -41,44 +41,29 @@ void RenderManager::renderShadows()
 
 	if (lightManager->updateDirectionalLightShadow())
 	{
-		/*for (auto& staticShape : mStaticShapes)
+		for (auto i = 0u; i < mDynamicShapes.size(); i++)
 		{
-			mStaticTechnique->renderDirectionalShadow(staticShape);
-		}*/
-
-		for (auto& dynamicShape : mDynamicShapes)
-		{
-			mStaticTechnique->renderDirectionalShadow(dynamicShape);
+			mDynamicTechniques[i]->renderDirectionalShadow(mDynamicShapes[i]);
 		}
 	}
 
-	/*if (lightManager->updatePointLightShadow())
+	if (lightManager->updatePointLightShadow())
 	{
-		for (auto& staticShape : mStaticShapes)
+		for (auto i = 0; i < mDynamicShapes.size(); i++)
 		{
-			mStaticTechnique->renderOmniDirectionalShadow(staticShape);
-		}
-
-		for (auto& dynamicShape : mDynamicShapes)
-		{
-			mStaticTechnique->renderOmniDirectionalShadow(dynamicShape);
+			mDynamicTechniques[i + 1]->renderOmniDirectionalShadow(mDynamicShapes[i]);
 		}
 	}
-
+	
 	for (auto i = 0u; i < lightManager->getNumberOfSpotLights(); i++)
 	{
 		lightManager->updateSpotLightShadow(i);
 
-		for (auto& staticShape : mStaticShapes)
-		{
-			mStaticTechnique->renderOmniDirectionalShadow(staticShape);
-		}
-
 		for (auto& dynamicShape : mDynamicShapes)
 		{
 			mStaticTechnique->renderOmniDirectionalShadow(dynamicShape);
 		}
-	}*/
+	}
 }
 
 void RenderManager::addStaticShape(const std::shared_ptr<Shape>& pShape)

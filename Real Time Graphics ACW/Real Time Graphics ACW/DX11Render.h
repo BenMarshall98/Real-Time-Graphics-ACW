@@ -10,6 +10,8 @@ struct CameraBuffer;
 struct DirectionalLightBuffer;
 struct PointLightBuffer;
 struct SpotLightBuffer;
+struct ShadowMatrixBuffer;
+struct ShadowLightBuffer;
 
 class Dx11Render
 {
@@ -31,6 +33,8 @@ class Dx11Render
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mPointLightBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mSpotLightBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mMaterialBuffer = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> mShadowMatrixBuffer = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> mShadowLightBuffer = nullptr;
 
 	Dx11Render();
 	bool loadRender();
@@ -96,6 +100,8 @@ public:
 	void useDirectionalLightBuffer(const DirectionalLightBuffer & pDirectionalLightBuffer) const;
 	void usePointLightBuffer(const PointLightBuffer & pPointLightBuffer) const;
 	void useSpotLightBuffer(const SpotLightBuffer & pSpotLightBuffer) const;
+	void useShadowMatrixBuffer(const ShadowMatrixBuffer & pShadowMatrixBuffer) const;
+	void useShadowLightBuffer(const ShadowLightBuffer & pShadowLightBuffer) const;
 	
 	bool resize(int pWidth, int pHeight);
 	

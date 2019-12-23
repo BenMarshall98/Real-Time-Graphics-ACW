@@ -1,9 +1,9 @@
 //TODO: Source
 
-cbuffer pointLightMatrixBufffer : register(b0)
+cbuffer shadowMatrixBufffer : register(b0)
 {
-    matrix PointLightPerspective;
-    matrix PointLightView[6];
+    matrix ShadowPerspective;
+    matrix ShadowView[6];
 }
 
 struct VS_OUTPUT
@@ -30,8 +30,8 @@ void main(triangle VS_OUTPUT input[3], inout TriangleStream<GS_OUTPUT> output)
             
             temp.Layer = i;
             temp.FragPos = input[j].Pos.xyz;
-            temp.Pos = mul(input[j].Pos, PointLightView[i]);
-            temp.Pos = mul(temp.Pos, PointLightPerspective);
+            temp.Pos = mul(input[j].Pos, ShadowView[i]);
+            temp.Pos = mul(temp.Pos, ShadowPerspective);
             output.Append(temp);
         }
         output.RestartStrip();

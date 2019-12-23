@@ -6,6 +6,7 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "DirectionalLight.h"
+#include "Shadow.h"
 
 Dx11Render * Dx11Render::mInstance = nullptr;
 
@@ -262,6 +263,24 @@ bool Dx11Render::loadRender()
 		return false;
 	}
 
+	bd.ByteWidth = sizeof(ShadowMatrixBuffer);
+
+	result = mDevice->CreateBuffer(&bd, nullptr, mShadowMatrixBuffer.ReleaseAndGetAddressOf());
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	bd.ByteWidth = sizeof(ShadowLightBuffer);
+
+	result = mDevice->CreateBuffer(&bd, nullptr, mShadowLightBuffer.ReleaseAndGetAddressOf());
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -306,6 +325,18 @@ void Dx11Render::useSpotLightBuffer(const SpotLightBuffer& pSpotLightBuffer) con
 	mDeviceContext->UpdateSubresource(mSpotLightBuffer.Get(), 0, nullptr, &pSpotLightBuffer, 0, 0);
 	mDeviceContext->PSSetConstantBuffers(4, 1, mSpotLightBuffer.GetAddressOf());
 	mDeviceContext->VSSetConstantBuffers(5, 1, mSpotLightBuffer.GetAddressOf());
+}
+
+void Dx11Render::useShadowMatrixBuffer(const ShadowMatrixBuffer& pShadowMatrixBuffer) const
+{
+	mDeviceContext->UpdateSubresource(mShadowMatrixBuffer.Get(), 0, nullptr, &pShadowMatrixBuffer, 0, 0);
+	mDeviceContext->GSSetConstantBuffers(0, 1, mShadowMatrixBuffer.GetAddressOf());
+}
+
+void Dx11Render::useShadowLightBuffer(const ShadowLightBuffer& pShadowLightBuffer) const
+{
+	mDeviceContext->UpdateSubresource(mShadowLightBuffer.Get(), 0, nullptr, &pShadowLightBuffer, 0, 0);
+	mDeviceContext->PSSetConstantBuffers(5, 1, mShadowLightBuffer.GetAddressOf());
 }
 
 bool Dx11Render::resize(const int pWidth, const int pHeight)

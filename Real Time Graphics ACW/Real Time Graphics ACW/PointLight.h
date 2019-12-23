@@ -1,15 +1,17 @@
 #pragma once
 #include <directxmath.h>
 #include <istream>
+#include "Framebuffer.h"
 
 struct PointLightBuffer
 {
 	DirectX::XMFLOAT4 mColor;
-	DirectX::XMFLOAT4 mPosition;
+	DirectX::XMFLOAT3 mPosition;
 	float mAttenuationConstant;
 	float mAttenuationLinear;
 	float mAttenuationQuad;
 	int mIsUsed;
+	float mFarPlane;
 };
 
 class PointLight
@@ -19,10 +21,11 @@ class PointLight
 	float mAttenuationConstant;
 	float mAttenuationLinear;
 	float mAttenuationQuad;
+	std::unique_ptr<Framebuffer> mFramebuffer;
 	
 public:
 	PointLight(DirectX::XMFLOAT3 pColor, DirectX::XMFLOAT3 pPosition, float pAttenuationConstant, float pAttenuationLinear, float pAttenuationQuad);
-	PointLight() = default;
+	PointLight();
 	~PointLight() = default;
 
 	PointLight(const PointLight &) = delete;

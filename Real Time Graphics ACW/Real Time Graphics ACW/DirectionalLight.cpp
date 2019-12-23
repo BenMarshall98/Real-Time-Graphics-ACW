@@ -38,7 +38,7 @@ void DirectionalLight::use(DirectionalLightBuffer& pLightBuffer) const
 	const auto view = XMMatrixTranspose(DirectX::XMMatrixLookAtLH(eye, target, up));
 	XMStoreFloat4x4(&pLightBuffer.mViewMatrix, view);
 
-	const auto projection = XMMatrixTranspose(DirectX::XMMatrixOrthographicLH(10.0f, 10.0f, 0.1f, 100.0f));
+	const auto projection = DirectX::XMMatrixTranspose(DirectX::XMMatrixOrthographicOffCenterLH(-10.0f, 10.0f, -10.0f, 10.0f, -10.0f, 10.0f));
 	XMStoreFloat4x4(&pLightBuffer.mProjectionMatrix, projection);
 }
 
@@ -59,6 +59,16 @@ void DirectionalLight::update(DirectX::XMFLOAT4X4& pMatrix)
 void DirectionalLight::updateShadow()
 {
 	mFramebuffer->useFramebuffer();
+}
+
+void DirectionalLight::useShadow(unsigned pTextureSlot)
+{
+	mFramebuffer->useTexture(pTextureSlot);
+}
+
+void DirectionalLight::releaseShadow(unsigned pTextureSlot)
+{
+	mFramebuffer->releaseTexture(pTextureSlot);
 }
 
 std::istream& operator>>(std::istream& pIn, DirectionalLight& pLight)

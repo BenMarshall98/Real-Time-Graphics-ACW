@@ -1,5 +1,7 @@
 #include "SpotLight.h"
 #include <string>
+#include "Shadow.h"
+#include "DX11Render.h"
 
 SpotLight::SpotLight(const DirectX::XMFLOAT3& pColor, const DirectX::XMFLOAT3 & pPosition,
 	const DirectX::XMFLOAT3 & pDirection, const float pInnerAngle, const float pOuterAngle,
@@ -8,6 +10,22 @@ SpotLight::SpotLight(const DirectX::XMFLOAT3& pColor, const DirectX::XMFLOAT3 & 
 	mInnerAngle(pInnerAngle), mOuterAngle(pOuterAngle), mAttenuationConstant(pAttenuationConstant),
 	mAttenuationLinear(pAttenuationLinear), mAttenuationQuad(pAttenuationQuad)
 {
+	mFramebuffer = std::make_unique<Framebuffer>();
+
+	if (mFramebuffer->loadFramebuffer(false, true, 1024, 1024, TextureType::TEXTURE_CUBE))
+	{
+		mFramebuffer.reset();
+	}
+}
+
+SpotLight::SpotLight()
+{
+	mFramebuffer = std::make_unique<Framebuffer>();
+
+	if (!mFramebuffer->loadFramebuffer(false, true, 1024, 1024, TextureType::TEXTURE_CUBE))
+	{
+		mFramebuffer.reset();
+	}
 }
 
 void SpotLight::use(SpotLightBuffer& pLightBuffer, const unsigned int pIndex) const
@@ -21,6 +39,7 @@ void SpotLight::use(SpotLightBuffer& pLightBuffer, const unsigned int pIndex) co
 	pLightBuffer.mAttenuationLinear[pIndex] = mAttenuationLinear;
 	pLightBuffer.mAttenuationQuad[pIndex] = mAttenuationQuad;
 	pLightBuffer.mIsUsed[pIndex] = true;
+	pLightBuffer.mFarPlane[pIndex] = 20.0f;
 }
 
 void SpotLight::update(DirectX::XMFLOAT4X4& pMatrix)
@@ -42,7 +61,36 @@ void SpotLight::update(DirectX::XMFLOAT4X4& pMatrix)
 
 void SpotLight::updateShadow()
 {
-	//TODO: Implement	
+	ShadowMatrixBuffer mb;
+
+	XMStoreFloat4x4(&mb.mShadowPerspective, XMMatrixTranspose(DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, static_cast<float>(mFramebuffer->getWidth()) / static_cast<float>(mFramebuffer->getHeight()), 0.01f, 20.0f)));
+	XMStoreFloat4x4(&mb.mShadowView[0], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 1.0f, mPosition.y + 0.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f))));
+	XMStoreFloat4x4(&mb.mShadowView[1], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x - 1.0f, mPosition.y + 0.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f))));
+	XMStoreFloat4x4(&mb.mShadowView[2], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 0.0f, mPosition.y + 1.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f))));
+	XMStoreFloat4x4(&mb.mShadowView[3], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 0.0f, mPosition.y - 1.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f))));
+	XMStoreFloat4x4(&mb.mShadowView[4], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 0.0f, mPosition.y + 0.0f, mPosition.z + 1.0f, 0.0f), DirectX::XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f))));
+	XMStoreFloat4x4(&mb.mShadowView[5], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 0.0f, mPosition.y + 0.0f, mPosition.z - 1.0f, 0.0f), DirectX::XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f))));
+
+	Dx11Render::instance()->useShadowMatrixBuffer(mb);
+
+	ShadowLightBuffer lb;
+
+	lb.mLightPosition = mPosition;
+	lb.mFarPlane = 20.0f;
+
+	Dx11Render::instance()->useShadowLightBuffer(lb);
+
+	mFramebuffer->useFramebuffer();
+}
+
+void SpotLight::useShadow(unsigned pTextureSlot)
+{
+	mFramebuffer->useTexture(pTextureSlot);
+}
+
+void SpotLight::releaseShadow(unsigned int pTextureSlot)
+{
+	mFramebuffer->releaseTexture(pTextureSlot);
 }
 
 std::istream& operator>>(std::istream& pIn, SpotLight& pLight)

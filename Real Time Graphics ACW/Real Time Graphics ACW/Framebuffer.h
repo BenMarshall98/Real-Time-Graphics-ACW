@@ -39,6 +39,7 @@ public:
 
 	void useFramebuffer() const;
 	void useTexture(unsigned int pSlot);
+	void releaseTexture(unsigned int pSlot) const;
 
 	float getHeight()
 	{

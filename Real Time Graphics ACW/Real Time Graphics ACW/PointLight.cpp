@@ -26,7 +26,6 @@ PointLight::PointLight()
 	}
 }
 
-
 void PointLight::use(PointLightBuffer & pLightBuffer) const
 {
 	pLightBuffer.mColor = DirectX::XMFLOAT4(mColor.x, mColor.y, mColor.z, 0.0f);
@@ -35,7 +34,7 @@ void PointLight::use(PointLightBuffer & pLightBuffer) const
 	pLightBuffer.mAttenuationLinear = mAttenuationLinear;
 	pLightBuffer.mAttenuationQuad = mAttenuationQuad;
 	pLightBuffer.mIsUsed = true;
-	pLightBuffer.mFarPlane = 100.0f;
+	pLightBuffer.mFarPlane = 20.0f;
 }
 
 void PointLight::update(DirectX::XMFLOAT4X4& pMatrix)
@@ -70,6 +69,16 @@ void PointLight::updateShadow()
 	Dx11Render::instance()->useShadowLightBuffer(lb);
 	
 	mFramebuffer->useFramebuffer();
+}
+
+void PointLight::useShadow(unsigned pTextureSlot)
+{
+	mFramebuffer->useTexture(pTextureSlot);
+}
+
+void PointLight::releaseShadow(unsigned pTextureSlot)
+{
+	mFramebuffer->releaseTexture(pTextureSlot);
 }
 
 std::istream& operator>>(std::istream& pIn, PointLight& pLight)

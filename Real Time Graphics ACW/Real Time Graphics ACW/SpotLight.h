@@ -1,6 +1,7 @@
 #pragma once
 #include <directxmath.h>
 #include <iostream>
+#include "Framebuffer.h"
 
 struct SpotLightBuffer
 {
@@ -13,6 +14,7 @@ struct SpotLightBuffer
 	float mAttenuationLinear[4];
 	float mAttenuationQuad[4];
 	int mIsUsed[4];
+	float mFarPlane[4];
 };
 
 class SpotLight
@@ -25,10 +27,11 @@ class SpotLight
 	float mAttenuationConstant;
 	float mAttenuationLinear;
 	float mAttenuationQuad;
+	std::unique_ptr<Framebuffer> mFramebuffer;
 	
 public:
 	SpotLight(const DirectX::XMFLOAT3 & pColor, const DirectX::XMFLOAT3 & pPosition, const DirectX::XMFLOAT3 & pDirection, float pInnerAngle, float pOuterAngle, float pAttenuationConstant, float pAttenuationLinear, float pAttenuationQuad);
-	SpotLight() = default;
+	SpotLight();
 	~SpotLight() = default;
 
 	SpotLight(const SpotLight &) = delete;
@@ -67,6 +70,8 @@ public:
 	void use(SpotLightBuffer & pLightBuffer, unsigned int pIndex) const;
 	void update(DirectX::XMFLOAT4X4 & pMatrix);
 	void updateShadow();
+	void useShadow(unsigned int pTextureSlot);
+	void releaseShadow(unsigned int pTextureSlot);
 };
 
 std::istream& operator>>(std::istream & pIn, SpotLight & pLight);

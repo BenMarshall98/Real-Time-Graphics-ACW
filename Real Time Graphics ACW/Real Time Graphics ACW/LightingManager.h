@@ -47,6 +47,8 @@ public:
 	bool updateDirectionalLightShadow() const;
 	bool updatePointLightShadow() const;
 	void updateSpotLightShadow(unsigned int pLight) const;
+
+	void useShadowTextures() const;
 	
 	unsigned int getNumberOfSpotLights() const
 	{

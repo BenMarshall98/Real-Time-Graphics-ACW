@@ -11,6 +11,8 @@ cbuffer directionalBuffer : register(b2)
     float4 DirectionalColor;
     float3 DirectionalDirection;
     int DirectionalUsed;
+    matrix DirectionalView;
+    matrix DirectionalProjection;
 }
 
 cbuffer pointBuffer : register(b3)
@@ -43,7 +45,13 @@ struct VS_OUTPUT
     float4 FragmentPos : POSITION0;
     float4 Normal : NORMAL0;
     float3 ViewPosition : POSITION1;
+    float4 LightFragmentPos : POSITION2;
 };
+
+Texture2D directionalShadowTexture : register(t0);
+SamplerState directionalShadowSampler : register(s0);
+
+float DirectionalShadowCalculation(float4 lightPos);
 
 float4 main(VS_OUTPUT input) : SV_Target
 {
@@ -52,7 +60,8 @@ float4 main(VS_OUTPUT input) : SV_Target
 
     float3 color = float3(0.0f, 0.0f, 0.0f);
 
-	//Directional Light
+    //Directional Light
+
     if (DirectionalUsed)
     {
         float3 lightDirection = normalize(-DirectionalDirection);
@@ -62,10 +71,12 @@ float4 main(VS_OUTPUT input) : SV_Target
         float3 reflectDirection = reflect(-lightDirection, normal);
 		
         float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), MaterialShininess);
+        
+        float shadow = DirectionalShadowCalculation(input.LightFragmentPos);
 
         color += MaterialAmbient * DirectionalColor;
-        color += MaterialDiffuse * DirectionalColor * diffuse;
-        color += MaterialSpecular * DirectionalColor * specular;
+        color += MaterialDiffuse * DirectionalColor * shadow * diffuse;
+        color += MaterialSpecular * DirectionalColor * shadow * specular;
     }
 
 	//Point Light
@@ -111,6 +122,23 @@ float4 main(VS_OUTPUT input) : SV_Target
             color += MaterialSpecular * SpotColor[i] * specular * attenuation * intensity;
         }
     }
+    
+    return float4(color, 1.0f);
+}
 
-    return float4(color.x, color.y, color.z, 1.0f);
+float DirectionalShadowCalculation(float4 lightPos)
+{
+    float3 projCoords = lightPos.xyz / lightPos.w;
+    
+    projCoords.y = -projCoords.y;
+    
+    projCoords.xy = projCoords.xy * 0.5f + 0.5f;
+    
+    float closestDepth = directionalShadowTexture.Sample(directionalShadowSampler, projCoords.xy).r;
+    
+    float currentDepth = projCoords.z;
+    
+    float shadow = currentDepth > closestDepth ? 1.0f : 0.0f;
+    
+    return (1.0 - shadow);
 }

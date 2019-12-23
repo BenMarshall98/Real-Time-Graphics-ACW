@@ -107,9 +107,9 @@ void Game::run()
 
 		LightingManager::instance()->update();
 
-		mBase->useFragment(0);
-		mSpec->useFragment(1);
-		mNorm->useFragment(2);
+		mBase->useFragment(6);
+		mSpec->useFragment(7);
+		mNorm->useFragment(8);
 		mDisp->useDomain(0);
 
 		//mFramebuffer->useFramebuffer();

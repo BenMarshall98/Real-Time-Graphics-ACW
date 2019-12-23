@@ -84,7 +84,7 @@ void LightingManager::update() const
 		render->usePointLightBuffer(pb);
 	}
 
-	{
+	/*{
 		SpotLightBuffer sb;
 		ZeroMemory(&sb, sizeof SpotLightBuffer);
 
@@ -101,13 +101,14 @@ void LightingManager::update() const
 		}
 
 		render->useSpotLightBuffer(sb);
-	}
+	}*/
 }
 
 bool LightingManager::updateDirectionalLightShadow() const
 {
 	if (mDirectionalLight)
 	{
+		mDirectionalLight->releaseShadow(0);
 		mDirectionalLight->updateShadow();
 		return true;
 	}
@@ -118,6 +119,7 @@ bool LightingManager::updatePointLightShadow() const
 {
 	if (mPointLight)
 	{
+		mPointLight->releaseShadow(1);
 		mPointLight->updateShadow();
 		return true;
 	}
@@ -126,5 +128,17 @@ bool LightingManager::updatePointLightShadow() const
 
 void LightingManager::updateSpotLightShadow(const unsigned int pLight) const
 {
+	mSpotLights[pLight]->releaseShadow(pLight + 2);
 	mSpotLights[pLight]->updateShadow();
+}
+
+void LightingManager::useShadowTextures() const
+{
+	mDirectionalLight->useShadow(0);
+	mPointLight->useShadow(1);
+
+	for (auto i = 0u; i < mSpotLights.size(); i++)
+	{
+		mSpotLights[i]->useShadow(2 + i);
+	}
 }

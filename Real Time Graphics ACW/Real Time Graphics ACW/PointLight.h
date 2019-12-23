@@ -53,6 +53,8 @@ public:
 	void use(PointLightBuffer & pLightBuffer) const;
 	void update(DirectX::XMFLOAT4X4 & pMatrix);
 	void updateShadow();
+	void useShadow(unsigned int pTextureSlot);
+	void releaseShadow(unsigned int pTextureSlot);
 };
 
 std::istream& operator>>(std::istream & pIn, PointLight & pLight);

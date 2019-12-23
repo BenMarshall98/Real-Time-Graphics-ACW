@@ -47,11 +47,11 @@ void RenderManager::renderShadows()
 		}
 	}
 
-	if (lightManager->updatePointLightShadow())
+	/*if (lightManager->updatePointLightShadow())
 	{
 		for (auto i = 0; i < mDynamicShapes.size(); i++)
 		{
-			mDynamicTechniques[i + 1]->renderOmniDirectionalShadow(mDynamicShapes[i]);
+			mDynamicTechniques[i]->renderOmniDirectionalShadow(mDynamicShapes[i]);
 		}
 	}
 	
@@ -59,11 +59,13 @@ void RenderManager::renderShadows()
 	{
 		lightManager->updateSpotLightShadow(i);
 
-		for (auto& dynamicShape : mDynamicShapes)
+		for (auto j = 0; j < mDynamicShapes.size(); j++)
 		{
-			mStaticTechnique->renderOmniDirectionalShadow(dynamicShape);
+			mDynamicTechniques[j]->renderOmniDirectionalShadow(mDynamicShapes[j]);
 		}
-	}
+	}*/
+
+	lightManager->useShadowTextures();
 }
 
 void RenderManager::addStaticShape(const std::shared_ptr<Shape>& pShape)

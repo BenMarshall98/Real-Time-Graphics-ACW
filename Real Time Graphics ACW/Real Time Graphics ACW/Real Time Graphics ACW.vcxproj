@@ -141,6 +141,9 @@
     <ClInclude Include="GourandShading.h" />
     <ClInclude Include="IdentityNode.h" />
     <ClInclude Include="IExplode.h" />
+    <ClInclude Include="InkCubeRender.h" />
+    <ClInclude Include="InkPlaneRender.h" />
+    <ClInclude Include="InkRender.h" />
     <ClInclude Include="LightingManager.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Model.h" />
@@ -191,6 +194,9 @@
     <ClCompile Include="GlowingShading.cpp" />
     <ClCompile Include="GourandShading.cpp" />
     <ClCompile Include="IdentityNode.cpp" />
+    <ClCompile Include="InkCubeRender.cpp" />
+    <ClCompile Include="InkPlaneRender.cpp" />
+    <ClCompile Include="InkRender.cpp" />
     <ClCompile Include="LightingManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -484,6 +490,21 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="InkColorDomainShader.hlsl" />
+    <FxCompile Include="InkColorFragmentShader.hlsl" />
+    <FxCompile Include="InkColorHullShader.hlsl" />
+    <FxCompile Include="InkColorVertexShader.hlsl" />
+    <FxCompile Include="InkCubeDepthFragmentShader.hlsl" />
+    <FxCompile Include="InkCubeDepthGeometryShader.hlsl" />
+    <FxCompile Include="InkCubeDepthVertexShader.hlsl" />
+    <FxCompile Include="InkDepthDomainShader.hlsl" />
+    <FxCompile Include="InkDepthFragmentShader.hlsl" />
+    <FxCompile Include="InkDepthHullShader.hlsl" />
+    <FxCompile Include="InkDepthVertexShader.hlsl" />
+    <FxCompile Include="InkPlaneFragmentShader.hlsl" />
+    <FxCompile Include="InkPlaneVertexShader.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

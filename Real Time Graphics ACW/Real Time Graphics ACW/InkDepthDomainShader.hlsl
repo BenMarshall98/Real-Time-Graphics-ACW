@@ -1,4 +1,4 @@
-cbuffer inkBuffer : register(b0) //TODO: register
+cbuffer inkBuffer : register(b3) //TODO: register
 {
     matrix InkView;
     matrix InkProjection;

@@ -6,6 +6,7 @@
 #include "SceneGraphNode.h"
 #include "Texture.h"
 #include "Framebuffer.h"
+#include "InkRender.h"
 
 class Game
 {
@@ -23,6 +24,8 @@ class Game
 	std::shared_ptr<Texture> mSpec;
 	std::shared_ptr<Texture> mDisp;
 	std::shared_ptr<Texture> mNorm;
+
+	std::unique_ptr<InkRender> mInk;
 	
 public:
 	Game();

@@ -54,6 +54,8 @@ Game::Game()
 	mSpec = ResourceManager::instance()->loadTexture("tyre_spec.dds");
 	mDisp = ResourceManager::instance()->loadTexture("tyre_height.dds");
 	mNorm = ResourceManager::instance()->loadTexture("tyre_normal.dds");
+
+	mInk = std::make_unique<InkRender>();
 	
 	QueryPerformanceFrequency(&mTimer);
 	mFreq = double(mTimer.QuadPart);
@@ -122,6 +124,11 @@ void Game::run()
 		Dx11Render::instance()->bindDefaultFramebuffer();
 
 		RenderManager::instance()->render();
+
+		mInk->UpdateInk();
+
+		Dx11Render::instance()->bindDefaultFramebuffer();
+		
 		ParticleManager::instance()->render();
 		
 		//

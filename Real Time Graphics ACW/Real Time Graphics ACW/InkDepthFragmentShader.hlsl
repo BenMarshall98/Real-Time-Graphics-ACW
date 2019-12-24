@@ -7,5 +7,5 @@ struct DS_OUTPUT
 
 float main(DS_OUTPUT input) : SV_Depth
 {
-    return input.HeightPos.y - input.FragmentPos.y;
+    return input.HeightPos.y;
 }

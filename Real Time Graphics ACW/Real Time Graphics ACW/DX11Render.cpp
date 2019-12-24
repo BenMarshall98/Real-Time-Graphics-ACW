@@ -7,6 +7,7 @@
 #include "SpotLight.h"
 #include "DirectionalLight.h"
 #include "Shadow.h"
+#include "InkRender.h"
 
 Dx11Render * Dx11Render::mInstance = nullptr;
 
@@ -281,6 +282,15 @@ bool Dx11Render::loadRender()
 		return false;
 	}
 
+	bd.ByteWidth = sizeof(InkBuffer);
+
+	result = mDevice->CreateBuffer(&bd, nullptr, mInkBuffer.ReleaseAndGetAddressOf());
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -337,6 +347,12 @@ void Dx11Render::useShadowLightBuffer(const ShadowLightBuffer& pShadowLightBuffe
 {
 	mDeviceContext->UpdateSubresource(mShadowLightBuffer.Get(), 0, nullptr, &pShadowLightBuffer, 0, 0);
 	mDeviceContext->PSSetConstantBuffers(5, 1, mShadowLightBuffer.GetAddressOf());
+}
+
+void Dx11Render::useInkBuffer(const InkBuffer& pInkBuffer) const
+{
+	mDeviceContext->UpdateSubresource(mInkBuffer.Get(), 0, nullptr, &pInkBuffer, 0, 0);
+	mDeviceContext->DSSetConstantBuffers(3, 1, mInkBuffer.GetAddressOf());
 }
 
 bool Dx11Render::resize(const int pWidth, const int pHeight)

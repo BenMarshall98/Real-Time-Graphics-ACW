@@ -49,6 +49,7 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     normal += uvw[1] * tri[1].Normal;
     normal += uvw[2] * tri[2].Normal;
     
+    //TODO: Wave function
     float3 heightPos = pos + normal * texCoord.x * texCoord.y;
     
     output.Pos = mul(float4(pos, 1.0f), World);

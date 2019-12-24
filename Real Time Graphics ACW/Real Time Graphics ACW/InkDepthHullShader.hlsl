@@ -40,7 +40,7 @@ struct HS_OUTPUT
 [patchconstantfunc("ConstantHS")]
 [maxtessfactor(64.0f)]
 
-HS_OUTPUT main(InputPatch<VS_OUTPUT, 3> patch, uint i : SV_OutputControlPointID, uint pathcID : SV_PrimitiveID)
+HS_OUTPUT main(InputPatch<VS_OUTPUT, 3> patch, uint i : SV_OutputControlPointID, uint patchID : SV_PrimitiveID)
 {
     HS_OUTPUT output = (HS_OUTPUT) 0;
     

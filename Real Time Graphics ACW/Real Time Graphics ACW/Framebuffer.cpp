@@ -392,3 +392,41 @@ void Framebuffer::releaseTexture(unsigned int pSlot) const
 		deviceContext->PSSetShaderResources(pSlot, 1, shaderResourceView.GetAddressOf());
 	}
 }
+
+void Framebuffer::useDomainTexture(unsigned int pSlot)
+{
+	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
+
+	deviceContext->OMSetRenderTargets(0, nullptr, nullptr);
+
+	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
+	{
+		deviceContext->DSSetShaderResources(pSlot, 1, &mColorTextureResourceViews[i]);
+		deviceContext->DSSetSamplers(pSlot, 1, &mSampler);
+		pSlot++;
+	}
+
+	if (mDepthTextureResourceView)
+	{
+		deviceContext->DSSetShaderResources(pSlot, 1, mDepthTextureResourceView.GetAddressOf());
+		deviceContext->DSSetSamplers(pSlot, 1, mSampler.GetAddressOf());
+	}
+}
+
+void Framebuffer::releaseDomainTexture(unsigned int pSlot) const
+{
+	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
+
+	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
+	{
+		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView = nullptr;
+		deviceContext->DSSetShaderResources(pSlot, 1, shaderResourceView.GetAddressOf());
+		pSlot++;
+	}
+
+	if (mDepthTextureResourceView)
+	{
+		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView = nullptr;
+		deviceContext->DSSetShaderResources(pSlot, 1, shaderResourceView.GetAddressOf());
+	}
+}

@@ -46,7 +46,7 @@ void InkRender::UpdateInk()
 
 	Dx11Render::instance()->useInkBuffer(lb);
 
-	mFramebuffer->releaseTexture(0);
+	mFramebuffer->releaseDomainTexture(0);
 	mFramebuffer->useFramebuffer();
 
 	mDepthShader->useShader();
@@ -59,7 +59,25 @@ void InkRender::UseInk()
 	
 }
 
-void InkRender::RenderInk()
+void InkRender::RenderInk() const
 {
+	const auto trans = DirectX::XMMatrixTranslation(0.0f, mHeight, 0.0f);
+	const auto scale = DirectX::XMMatrixScaling(5.0f, 5.0f, 5.0f);
+	const auto matrix = DirectX::XMMatrixMultiply(trans, scale);
+
+	ModelBuffer mb = {
+		DirectX::XMMatrixTranspose(matrix),
+		DirectX::XMMatrixInverse(nullptr, matrix)
+	};
+
+	Dx11Render::instance()->useModelBuffer(mb);
 	
+	mFramebuffer->useDomainTexture(0);
+
+	Dx11Render::instance()->defaultViewport();
+	Dx11Render::instance()->bindDefaultFramebuffer();
+
+	mColorShader->useShader();
+
+	mModel->render(true);
 }

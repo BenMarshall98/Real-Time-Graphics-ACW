@@ -1,8 +1,11 @@
 #include "Shape.h"
 #include "DX11Render.h"
 
-Shape::Shape(std::shared_ptr<Model> pModel, std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial) :
-	mModel(std::move(pModel)), mTexturePack(std::move(pTexturePack)), mMaterial(std::move(pMaterial)), mCurrentMatrix(), mPreviousMatrix()
+Shape::Shape(std::shared_ptr<Model> pModel, std::unique_ptr<TexturePack> pTexturePack,
+	std::unique_ptr<Material> pMaterial, std::unique_ptr<InkShapeRender> pInkRender) :
+	mModel(std::move(pModel)), mTexturePack(std::move(pTexturePack)),
+	mMaterial(std::move(pMaterial)), mInkRender(std::move(pInkRender)),
+	mCurrentMatrix(), mPreviousMatrix()
 {
 }
 

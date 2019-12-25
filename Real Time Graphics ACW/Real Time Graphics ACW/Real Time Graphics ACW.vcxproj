@@ -144,6 +144,7 @@
     <ClInclude Include="InkCubeRender.h" />
     <ClInclude Include="InkPlaneRender.h" />
     <ClInclude Include="InkRender.h" />
+    <ClInclude Include="InkShapeRender.h" />
     <ClInclude Include="LightingManager.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Model.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="InkCubeRender.cpp" />
     <ClCompile Include="InkPlaneRender.cpp" />
     <ClCompile Include="InkRender.cpp" />
+    <ClCompile Include="InkShapeRender.cpp" />
     <ClCompile Include="LightingManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />

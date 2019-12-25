@@ -4,6 +4,7 @@
 #include "Material.h"
 #include "TexturePack.h"
 #include "Particle.h"
+#include "InkShapeRender.h"
 
 #include <memory>
 
@@ -16,17 +17,17 @@ struct ModelBuffer
 class Shape
 {
 	//TODO: Temp
-public:
+protected:
 	std::shared_ptr<Model> mModel;
 	std::unique_ptr<TexturePack> mTexturePack;
 	std::unique_ptr<Material> mMaterial;
+	std::unique_ptr<InkShapeRender> mInkRender;
 
-protected:
 	DirectX::XMFLOAT4X4 mCurrentMatrix;
 	DirectX::XMFLOAT4X4 mPreviousMatrix;
 	
 public:
-	Shape(std::shared_ptr<Model> pModel, std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial);
+	Shape(std::shared_ptr<Model> pModel, std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial, std::unique_ptr<InkShapeRender> pInkRender);
 	Shape();
 	virtual ~Shape() = default;
 

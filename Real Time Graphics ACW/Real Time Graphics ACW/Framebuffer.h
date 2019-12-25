@@ -41,6 +41,9 @@ public:
 	void useTexture(unsigned int pSlot);
 	void releaseTexture(unsigned int pSlot) const;
 
+	void useDomainTexture(unsigned int pSlot);
+	void releaseDomainTexture(unsigned int pSlot) const;
+
 	float getHeight()
 	{
 		return mHeight;

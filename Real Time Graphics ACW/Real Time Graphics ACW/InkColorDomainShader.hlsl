@@ -10,19 +10,20 @@ cbuffer modelBuffer : register(b1)
     matrix World;
     matrix InverseWorld;
 }
+
 Texture2D inkTexture : register(t0); //TODO: register
 SamplerState inkSampler : register(s0);
 
 struct PatchTess
 {
-    float EdgeTess[3] : SV_TEssFactor;
+    float EdgeTess[3] : SV_TessFactor;
     float InsideTess : SV_InsideTessFactor;
 };
 
 struct HS_OUTPUT
 {
     float3 Pos : POSITION0;
-    float3 Normal : NORMA0;
+    float3 Normal : NORMAL0;
     float2 TexCoord : TEXCOORD0;
 };
 
@@ -40,7 +41,7 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     texCoord += uvw[1] * tri[1].TexCoord;
     texCoord += uvw[2] * tri[2].TexCoord;
     
-    float height = inkTexture.SampleLevel(inkSampler, texCoord, 0).x;
+    float height = inkTexture.SampleLevel(inkSampler, texCoord, 0).x * 0.1f;
     
     //Position
     float3 pos = uvw[0] * tri[0].Pos;
@@ -52,9 +53,11 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     normal += uvw[1] * tri[1].Normal;
     normal += uvw[2] * tri[2].Normal;
     
-    float3 heightPos = pos + normal * height;
+    normal = normalize(normal);
     
-    output.Pos = mul(float4(heightPos, 1.0f), World);
+    pos += normal * height;
+    
+    output.Pos = mul(float4(pos, 1.0f), World);
     output.Pos = mul(output.Pos, View);
     output.Pos = mul(output.Pos, Projection);
     

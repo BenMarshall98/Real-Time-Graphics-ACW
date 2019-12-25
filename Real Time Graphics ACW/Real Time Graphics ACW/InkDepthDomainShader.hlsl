@@ -30,6 +30,8 @@ struct DS_OUTPUT
     float3 HeightPos : POSITION1;
 };
 
+float SinWave(float pPos);
+
 [domain("tri")]
 DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatch<HS_OUTPUT, 3> tri)
 {
@@ -49,15 +51,23 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     normal += uvw[1] * tri[1].Normal;
     normal += uvw[2] * tri[2].Normal;
     
+    normal = normalize(normal);
+    
     //TODO: Wave function
-    float3 heightPos = pos + normal * texCoord.x * texCoord.y;
+    float3 heightPos = pos + (normal * SinWave(texCoord.x) * SinWave(texCoord.y) * 0.25f);
+    heightPos = pos + (normal * 0.1f);
     
     output.Pos = mul(float4(pos, 1.0f), World);
     output.FragmentPos = output.Pos.xyz;
     output.Pos = mul(output.Pos, InkView);
     output.Pos = mul(output.Pos, InkProjection);
     
-    output.HeightPos = mul(float4(heightPos, 1.0f), World).xyz;
+    output.HeightPos = heightPos;
     
     return output;
+}
+
+float SinWave(float pPos)
+{
+    return sin(pPos * 50.0f);
 }

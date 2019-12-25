@@ -128,6 +128,8 @@ void Game::run()
 		mInk->UpdateInk();
 
 		Dx11Render::instance()->bindDefaultFramebuffer();
+
+		mInk->RenderInk();
 		
 		ParticleManager::instance()->render();
 		

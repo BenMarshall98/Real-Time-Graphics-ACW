@@ -27,7 +27,7 @@ public:
 	void IncreaseHeight(float pDt);
 	void DecreaseHeight(float pDt);
 	void UseInk();
-	void RenderInk();
+	void RenderInk() const;
 	void UsePlaneDepthShader();
 	void UseCubeDepthShader();
 };

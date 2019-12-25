@@ -377,7 +377,6 @@ HRESULT Shader::compileShaderFromFile(const std::wstring & pFileName, const char
 
 	if (FAILED(result))
 	{
-		int i = 0;
 		if (errorBlob)
 		{
 			OutputDebugStringA(reinterpret_cast<const char*>(errorBlob->GetBufferPointer()));

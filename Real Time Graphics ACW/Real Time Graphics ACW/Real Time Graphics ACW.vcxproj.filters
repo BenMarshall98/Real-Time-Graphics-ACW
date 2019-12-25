@@ -258,6 +258,9 @@
     <ClInclude Include="InkPlaneRender.h">
       <Filter>Ink</Filter>
     </ClInclude>
+    <ClInclude Include="InkShapeRender.h">
+      <Filter>Ink</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModelLoader.cpp">
@@ -413,6 +416,9 @@
     <ClCompile Include="InkPlaneRender.cpp">
       <Filter>Ink</Filter>
     </ClCompile>
+    <ClCompile Include="InkShapeRender.cpp">
+      <Filter>Ink</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="GourandFragmentShader.hlsl">
@@ -514,6 +520,45 @@
     <CopyFileToFolders Include="ParticleVertexShader.hlsl">
       <Filter>Resource Files\Shaders\ParticleShader</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="InkColorDomainShader.hlsl">
+      <Filter>Ink\ColorShader</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="InkColorFragmentShader.hlsl">
+      <Filter>Ink\ColorShader</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="InkColorHullShader.hlsl">
+      <Filter>Ink\ColorShader</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="InkColorVertexShader.hlsl">
+      <Filter>Ink\ColorShader</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="InkDepthDomainShader.hlsl">
+      <Filter>Ink\DepthShader</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="InkDepthFragmentShader.hlsl">
+      <Filter>Ink\DepthShader</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="InkDepthHullShader.hlsl">
+      <Filter>Ink\DepthShader</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="InkDepthVertexShader.hlsl">
+      <Filter>Ink\DepthShader</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="InkCubeDepthFragmentShader.hlsl">
+      <Filter>Ink\CubeDepthShader</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="InkCubeDepthGeometryShader.hlsl">
+      <Filter>Ink\CubeDepthShader</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="InkCubeDepthVertexShader.hlsl">
+      <Filter>Ink\CubeDepthShader</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="InkPlaneFragmentShader.hlsl">
+      <Filter>Ink\PlaneDepthShader</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="InkPlaneVertexShader.hlsl">
+      <Filter>Ink\PlaneDepthShader</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />
@@ -535,46 +580,5 @@
     <Image Include="tyre_spec.dds">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="InkColorVertexShader.hlsl">
-      <Filter>Ink\ColorShader</Filter>
-    </FxCompile>
-    <FxCompile Include="InkColorHullShader.hlsl">
-      <Filter>Ink\ColorShader</Filter>
-    </FxCompile>
-    <FxCompile Include="InkColorDomainShader.hlsl">
-      <Filter>Ink\ColorShader</Filter>
-    </FxCompile>
-    <FxCompile Include="InkColorFragmentShader.hlsl">
-      <Filter>Ink\ColorShader</Filter>
-    </FxCompile>
-    <FxCompile Include="InkCubeDepthFragmentShader.hlsl">
-      <Filter>Ink\CubeDepthShader</Filter>
-    </FxCompile>
-    <FxCompile Include="InkCubeDepthGeometryShader.hlsl">
-      <Filter>Ink\CubeDepthShader</Filter>
-    </FxCompile>
-    <FxCompile Include="InkCubeDepthVertexShader.hlsl">
-      <Filter>Ink\CubeDepthShader</Filter>
-    </FxCompile>
-    <FxCompile Include="InkDepthDomainShader.hlsl">
-      <Filter>Ink\DepthShader</Filter>
-    </FxCompile>
-    <FxCompile Include="InkDepthFragmentShader.hlsl">
-      <Filter>Ink\DepthShader</Filter>
-    </FxCompile>
-    <FxCompile Include="InkDepthHullShader.hlsl">
-      <Filter>Ink\DepthShader</Filter>
-    </FxCompile>
-    <FxCompile Include="InkDepthVertexShader.hlsl">
-      <Filter>Ink\DepthShader</Filter>
-    </FxCompile>
-    <FxCompile Include="InkPlaneFragmentShader.hlsl">
-      <Filter>Ink\PlaneDepthShader</Filter>
-    </FxCompile>
-    <FxCompile Include="InkPlaneVertexShader.hlsl">
-      <Filter>Ink\PlaneDepthShader</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>

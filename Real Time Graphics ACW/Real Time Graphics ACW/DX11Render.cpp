@@ -8,6 +8,8 @@
 #include "DirectionalLight.h"
 #include "Shadow.h"
 #include "InkRender.h"
+#include "InkPlaneRender.h"
+#include "InkCubeRender.h"
 
 Dx11Render * Dx11Render::mInstance = nullptr;
 
@@ -291,6 +293,24 @@ bool Dx11Render::loadRender()
 		return false;
 	}
 
+	bd.ByteWidth = sizeof(InkCubeBuffer);
+
+	result = mDevice->CreateBuffer(&bd, nullptr, mInkCubeBuffer.ReleaseAndGetAddressOf());
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	bd.ByteWidth = sizeof(InkPlaneBuffer);
+
+	result = mDevice->CreateBuffer(&bd, nullptr, mInkPlaneBuffer.ReleaseAndGetAddressOf());
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -354,6 +374,19 @@ void Dx11Render::useInkBuffer(const InkBuffer& pInkBuffer) const
 	mDeviceContext->UpdateSubresource(mInkBuffer.Get(), 0, nullptr, &pInkBuffer, 0, 0);
 	mDeviceContext->DSSetConstantBuffers(3, 1, mInkBuffer.GetAddressOf());
 }
+
+void Dx11Render::useInkPlaneBuffer(const InkPlaneBuffer& pInkPlaneBuffer) const
+{
+	mDeviceContext->UpdateSubresource(mInkPlaneBuffer.Get(), 0, nullptr, &pInkPlaneBuffer, 0, 0);
+	mDeviceContext->PSSetConstantBuffers(6, 1, mInkPlaneBuffer.GetAddressOf());
+}
+
+void Dx11Render::useInkCubeBuffer(const InkCubeBuffer& pInkCubeBuffer) const
+{
+	mDeviceContext->UpdateSubresource(mInkCubeBuffer.Get(), 0, nullptr, &pInkCubeBuffer, 0, 0);
+	//TODO: shader register
+}
+
 
 bool Dx11Render::resize(const int pWidth, const int pHeight)
 {

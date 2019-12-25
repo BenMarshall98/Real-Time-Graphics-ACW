@@ -54,6 +54,8 @@ public:
 
 	void render(bool pTesselated = false) const;
 
+	void updateInk() const;
+
 	virtual void collideWith(Particle pParticle) = 0;
 };
 

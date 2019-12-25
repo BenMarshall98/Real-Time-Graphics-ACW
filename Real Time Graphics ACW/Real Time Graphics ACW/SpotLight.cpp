@@ -64,12 +64,12 @@ void SpotLight::updateShadow()
 	ShadowMatrixBuffer mb;
 
 	XMStoreFloat4x4(&mb.mShadowPerspective, XMMatrixTranspose(DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, static_cast<float>(mFramebuffer->getWidth()) / static_cast<float>(mFramebuffer->getHeight()), 0.01f, 20.0f)));
-	XMStoreFloat4x4(&mb.mShadowView[0], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 1.0f, mPosition.y + 0.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f))));
-	XMStoreFloat4x4(&mb.mShadowView[1], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x - 1.0f, mPosition.y + 0.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f))));
-	XMStoreFloat4x4(&mb.mShadowView[2], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 0.0f, mPosition.y + 1.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f))));
-	XMStoreFloat4x4(&mb.mShadowView[3], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 0.0f, mPosition.y - 1.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f))));
-	XMStoreFloat4x4(&mb.mShadowView[4], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 0.0f, mPosition.y + 0.0f, mPosition.z + 1.0f, 0.0f), DirectX::XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f))));
-	XMStoreFloat4x4(&mb.mShadowView[5], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 0.0f, mPosition.y + 0.0f, mPosition.z - 1.0f, 0.0f), DirectX::XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f))));
+	XMStoreFloat4x4(&mb.mShadowView[0], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 1.0f, mPosition.y + 0.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))));
+	XMStoreFloat4x4(&mb.mShadowView[1], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x - 1.0f, mPosition.y + 0.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))));
+	XMStoreFloat4x4(&mb.mShadowView[2], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 0.0f, mPosition.y + 1.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f))));
+	XMStoreFloat4x4(&mb.mShadowView[3], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 0.0f, mPosition.y - 1.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f))));
+	XMStoreFloat4x4(&mb.mShadowView[4], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 0.0f, mPosition.y + 0.0f, mPosition.z + 1.0f, 0.0f), DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))));
+	XMStoreFloat4x4(&mb.mShadowView[5], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 0.0f, mPosition.y + 0.0f, mPosition.z - 1.0f, 0.0f), DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))));
 
 	Dx11Render::instance()->useShadowMatrixBuffer(mb);
 

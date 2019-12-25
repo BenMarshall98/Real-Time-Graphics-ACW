@@ -12,12 +12,12 @@ InkCubeRender::InkCubeRender() :
 	}
 }
 
-void InkCubeRender::update()
+void InkCubeRender::update(DirectX::XMFLOAT4X4 pMatrix)
 {
-	
+	//TODO: Implement
 }
 
 void InkCubeRender::use()
 {
-	
+	//TODO: Implement
 }

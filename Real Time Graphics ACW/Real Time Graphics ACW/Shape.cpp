@@ -40,6 +40,20 @@ void Shape::render(const bool pTesselated) const
 	}
 }
 
+void Shape::updateInk() const
+{
+	const auto matrix = XMLoadFloat4x4(&mCurrentMatrix);
+
+	const ModelBuffer mb = {
+		XMMatrixTranspose(matrix),
+		XMMatrixInverse(nullptr, matrix)
+	};
+
+	Dx11Render::instance()->useModelBuffer(mb);
+
+	mInkRender->update(mCurrentMatrix);
+}
+
 std::istream& operator>>(std::istream& pIn, std::shared_ptr<Shape>& pShape)
 {
 	char c;

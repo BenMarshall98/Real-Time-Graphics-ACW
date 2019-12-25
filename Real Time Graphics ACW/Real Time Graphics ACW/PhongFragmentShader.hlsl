@@ -23,7 +23,7 @@ cbuffer pointBuffer : register(b3)
     float PointAttenuationLinear;
     float PointAttenuationQuad;
     int PointUsed;
-    float FarPlane;
+    float PointFarPlane;
 }
 
 cbuffer spotBuffer : register(b4)
@@ -37,6 +37,7 @@ cbuffer spotBuffer : register(b4)
     float4 SpotAttenuationLinear;
     float4 SpotAttenuationQuad;
     int4 SpotUsed;
+    float4 SpotFarPlane;
 }
 
 struct VS_OUTPUT
@@ -54,8 +55,20 @@ SamplerState directionalShadowSampler : register(s0);
 TextureCube pointShadowTexture : register(t1);
 SamplerState pointShadowSampler : register(s1);
 
+TextureCube spot1ShadowTexture : register(t2);
+SamplerState spot1ShadowSampler : register(s2);
+
+TextureCube spot2ShadowTexture : register(t3);
+SamplerState spot2ShadowSampler : register(s3);
+
+TextureCube spot3ShadowTexture : register(t4);
+SamplerState spot3ShadowSampler : register(s4);
+
+TextureCube spot4ShadowTexture : register(t5);
+SamplerState spot4ShadowSampler : register(s5);
+
 float DirectionalShadowCalculation(float4 lightPos);
-float PointShadowCalculation(float3 pFragPos, float3 pLightPos, TextureCube pTexture, SamplerState pSampler);
+float PointShadowCalculation(float3 pFragPos, float3 pLightPos, float pFarPlane, TextureCube pTexture, SamplerState pSampler);
 
 float4 main(VS_OUTPUT input) : SV_Target
 {
@@ -97,7 +110,7 @@ float4 main(VS_OUTPUT input) : SV_Target
         float distance = length(PointPosition.xyz - input.FragmentPos.xyz);
         float attenuation = 1.0f / (PointAttenuationConstant + PointAttenuationLinear * distance + PointAttenuationQuad * distance * distance);
         
-        float shadow = PointShadowCalculation(input.FragmentPos.xyz, PointPosition.xyz, pointShadowTexture, pointShadowSampler);
+        float shadow = PointShadowCalculation(input.FragmentPos.xyz, PointPosition.xyz, PointFarPlane, pointShadowTexture, pointShadowSampler);
 
         color += MaterialAmbient * PointColor * attenuation;
         color += MaterialDiffuse * PointColor * diffuse * shadow * attenuation;
@@ -117,15 +130,35 @@ float4 main(VS_OUTPUT input) : SV_Target
 			
             float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), MaterialShininess);
 			
-            float distance = length(PointPosition.xyz - input.FragmentPos.xyz);
+            float distance = length(SpotPosition[i].xyz - input.FragmentPos.xyz);
             float attenuation = 1.0f / (SpotAttenuationConstant[i] + SpotAttenuationLinear[i] * distance + SpotAttenuationQuad[i] * distance * distance);
 
-            float theta = dot(lightDirection, normalize(-SpotDirection[i].xyz));
-            float intensity = clamp((theta - SpotOuterAngle[i]) / (SpotInnerAngle[i] - SpotOuterAngle[i]), 0.0f, 1.0f);
+            float theta = dot(lightDirection, normalize(SpotDirection[i].xyz));
+            
+            float intensity = clamp((theta - (1.0f - SpotOuterAngle[i])) / ((1.0f - SpotInnerAngle[i]) - (1.0f - SpotOuterAngle[i])), 0.0f, 1.0f);
+            
+            float shadow;
+            
+            if (i == 0)
+            {
+                shadow = PointShadowCalculation(input.FragmentPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot1ShadowTexture, spot1ShadowSampler);
+            }
+            else if (i == 1)
+            {
+                shadow = PointShadowCalculation(input.FragmentPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot2ShadowTexture, spot2ShadowSampler);
+            }
+            else if (i == 2)
+            {
+                shadow = PointShadowCalculation(input.FragmentPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot3ShadowTexture, spot3ShadowSampler);
+            }
+            else if (i == 3)
+            {
+                shadow = PointShadowCalculation(input.FragmentPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot4ShadowTexture, spot4ShadowSampler);
+            }
 			
-            color += MaterialAmbient * SpotColor[i] * attenuation * intensity;
-            color += MaterialDiffuse * SpotColor[i] * diffuse * attenuation * intensity;
-            color += MaterialSpecular * SpotColor[i] * specular * attenuation * intensity;
+            color += MaterialAmbient * SpotColor[i] * attenuation * shadow * intensity;
+            color += MaterialDiffuse * SpotColor[i] * diffuse * attenuation * shadow * intensity;
+            color += MaterialSpecular * SpotColor[i] * specular * attenuation * shadow * intensity;
         }
     }
     
@@ -149,12 +182,12 @@ float DirectionalShadowCalculation(float4 lightPos)
     return (1.0 - shadow);
 }
 
-float PointShadowCalculation(float3 pFragPos, float3 pLightPos, TextureCube pTexture, SamplerState pSampler)
+float PointShadowCalculation(float3 pFragPos, float3 pLightPos, float pFarPlane, TextureCube pTexture, SamplerState pSampler)
 {
     float3 vec = pFragPos - pLightPos;
     float closestDepth = pTexture.Sample(pSampler, vec).r;
     
-    closestDepth *= FarPlane;
+    closestDepth *= pFarPlane;
     
     float currentDepth = length(vec);
     

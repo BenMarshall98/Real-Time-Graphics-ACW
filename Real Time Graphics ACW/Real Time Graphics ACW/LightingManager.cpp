@@ -84,7 +84,7 @@ void LightingManager::update() const
 		render->usePointLightBuffer(pb);
 	}
 
-	/*{
+	{
 		SpotLightBuffer sb;
 		ZeroMemory(&sb, sizeof SpotLightBuffer);
 
@@ -101,7 +101,7 @@ void LightingManager::update() const
 		}
 
 		render->useSpotLightBuffer(sb);
-	}*/
+	}
 }
 
 bool LightingManager::updateDirectionalLightShadow() const

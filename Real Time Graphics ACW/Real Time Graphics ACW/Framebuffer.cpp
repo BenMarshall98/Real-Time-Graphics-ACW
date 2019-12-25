@@ -30,6 +30,7 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 
 		if (pType == TextureType::TEXTURE_2D)
 		{
+			renderTextureDesc.MiscFlags = 0;
 			if (pNumberOfBuffers == 1)
 			{
 				renderTextureDesc.ArraySize = 1;
@@ -41,6 +42,7 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 		}
 		else
 		{
+			renderTextureDesc.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
 			renderTextureDesc.ArraySize = 6 * pNumberOfBuffers;
 		}
 
@@ -49,7 +51,7 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 		renderTextureDesc.Usage = D3D11_USAGE_DEFAULT;
 		renderTextureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		renderTextureDesc.CPUAccessFlags = 0;
-		renderTextureDesc.MiscFlags = 0;
+		
 
 		auto result = device->CreateTexture2D(&renderTextureDesc, nullptr, mColorTexture.ReleaseAndGetAddressOf());
 

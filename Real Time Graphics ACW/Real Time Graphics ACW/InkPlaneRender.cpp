@@ -12,12 +12,13 @@ InkPlaneRender::InkPlaneRender() :
 	}
 }
 
-void InkPlaneRender::update()
+void InkPlaneRender::update(DirectX::XMFLOAT4X4 pMatrix)
 {
 	
+	//TODO: Implement
 }
 
 void InkPlaneRender::use()
 {
-	
+	//TODO: Implement
 }

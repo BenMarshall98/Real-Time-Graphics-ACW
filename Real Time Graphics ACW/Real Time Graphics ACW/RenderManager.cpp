@@ -39,32 +39,33 @@ void RenderManager::renderShadows()
 	//Directional Light
 	const auto lightManager = LightingManager::instance();
 
-	/*if (lightManager->updateDirectionalLightShadow())
+	if (lightManager->updateDirectionalLightShadow())
 	{
 		for (auto i = 0u; i < mDynamicShapes.size(); i++)
 		{
 			mDynamicTechniques[i]->renderDirectionalShadow(mDynamicShapes[i]);
 		}
-	}*/
+	}
 
+	//Point Light
 	if (lightManager->updatePointLightShadow())
 	{
-		for (auto i = 0; i < mDynamicShapes.size(); i++)
+		for (auto i = 0u; i < mDynamicShapes.size(); i++)
 		{
 			mDynamicTechniques[i]->renderOmniDirectionalShadow(mDynamicShapes[i]);
 		}
 	}
 
-	/*
+	//SpotLight
 	for (auto i = 0u; i < lightManager->getNumberOfSpotLights(); i++)
 	{
 		lightManager->updateSpotLightShadow(i);
 
-		for (auto j = 0; j < mDynamicShapes.size(); j++)
+		for (auto j = 0u; j < mDynamicShapes.size(); j++)
 		{
 			mDynamicTechniques[j]->renderOmniDirectionalShadow(mDynamicShapes[j]);
 		}
-	}*/
+	}
 
 	lightManager->useShadowTextures();
 }

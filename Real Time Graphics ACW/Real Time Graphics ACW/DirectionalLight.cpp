@@ -8,7 +8,9 @@ DirectionalLight::DirectionalLight(const DirectX::XMFLOAT4 & pColor, const Direc
 {
 	mFramebuffer = std::make_unique<Framebuffer>();
 
-	if (!mFramebuffer->loadFramebuffer(false, true, 1024, 1024))
+	float colour[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, colour))
 	{
 		mFramebuffer.reset();
 	}
@@ -18,7 +20,9 @@ DirectionalLight::DirectionalLight() : mColor(), mDirection()
 {
 	mFramebuffer = std::make_unique<Framebuffer>();
 
-	if (!mFramebuffer->loadFramebuffer(false, true, 1024, 1024))
+	float colour[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, colour))
 	{
 		mFramebuffer.reset();
 	}
@@ -61,12 +65,12 @@ void DirectionalLight::updateShadow()
 	mFramebuffer->useFramebuffer();
 }
 
-void DirectionalLight::useShadow(unsigned pTextureSlot)
+void DirectionalLight::useShadow(unsigned int pTextureSlot)
 {
 	mFramebuffer->useTexture(pTextureSlot);
 }
 
-void DirectionalLight::releaseShadow(unsigned pTextureSlot)
+void DirectionalLight::releaseShadow(unsigned int pTextureSlot)
 {
 	mFramebuffer->releaseTexture(pTextureSlot);
 }

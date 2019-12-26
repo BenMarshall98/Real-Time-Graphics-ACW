@@ -2,6 +2,7 @@
 #include <d3d11.h>
 #include <vector>
 #include <wrl/client.h>
+#include <directxcolors.h>
 
 enum class TextureType
 {
@@ -24,14 +25,15 @@ class Framebuffer
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> mSampler = nullptr;
 
 	TextureType mType = TextureType::TEXTURE_2D;
+	float mDefaultColour[4];
 	unsigned int mWidth;
 	unsigned int mHeight;
 	bool mUpdateResize = false;
 	
 public:
 	Framebuffer() = default;
-	bool loadFramebuffer(bool pColour, bool pDepth, TextureType pType = TextureType::TEXTURE_2D, unsigned int pNumberOfBuffers = 1u);
-	bool loadFramebuffer(bool pColour, bool pDepth, int pWidth, int pHeight, TextureType pType = TextureType::TEXTURE_2D, unsigned int pNumberOfBuffers = 1u);
+	bool loadFramebuffer(bool pColour, bool pDepth, const float pDefaultColour[4] = DirectX::Colors::MidnightBlue, TextureType pType = TextureType::TEXTURE_2D, unsigned int pNumberOfBuffers = 1u);
+	bool loadFramebuffer(bool pColour, bool pDepth, int pWidth, int pHeight, const float pDefaultColour[4] = DirectX::Colors::MidnightBlue, TextureType pType = TextureType::TEXTURE_2D, unsigned int pNumberOfBuffers = 1u);
 	~Framebuffer() = default;
 
 	Framebuffer(const Framebuffer & pFramebuffer) = delete;

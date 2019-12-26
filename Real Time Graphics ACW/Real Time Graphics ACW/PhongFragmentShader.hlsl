@@ -67,7 +67,7 @@ SamplerState spot3ShadowSampler : register(s4);
 TextureCube spot4ShadowTexture : register(t5);
 SamplerState spot4ShadowSampler : register(s5);
 
-float DirectionalShadowCalculation(float4 lightPos);
+float DirectionalShadowCalculation(float4 lightPos, float3 lightDir, float3 normal);
 float PointShadowCalculation(float3 pFragPos, float3 pLightPos, float pFarPlane, TextureCube pTexture, SamplerState pSampler);
 
 float4 main(VS_OUTPUT input) : SV_Target
@@ -89,7 +89,7 @@ float4 main(VS_OUTPUT input) : SV_Target
 		
         float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), MaterialShininess);
         
-        float shadow = DirectionalShadowCalculation(input.LightFragmentPos);
+        float shadow = DirectionalShadowCalculation(input.LightFragmentPos, lightDirection, input.Normal.xyz);
 
         color += MaterialAmbient * DirectionalColor;
         color += MaterialDiffuse * DirectionalColor * shadow * diffuse;
@@ -165,7 +165,7 @@ float4 main(VS_OUTPUT input) : SV_Target
     return float4(color, 1.0f);
 }
 
-float DirectionalShadowCalculation(float4 lightPos)
+float DirectionalShadowCalculation(float4 lightPos, float3 lightDir, float3 normal)
 {
     float3 projCoords = lightPos.xyz / lightPos.w;
     
@@ -173,25 +173,138 @@ float DirectionalShadowCalculation(float4 lightPos)
     
     projCoords.xy = projCoords.xy * 0.5f + 0.5f;
     
-    float closestDepth = directionalShadowTexture.Sample(directionalShadowSampler, projCoords.xy).r;
+    if (projCoords.z > 1.0)
+    {
+        return 1.0f;
+    }
     
+    float bias = max(0.05f * (1.0f - dot(normal, lightDir)), 0.005);
     float currentDepth = projCoords.z;
     
-    float shadow = currentDepth > closestDepth ? 1.0f : 0.0f;
+    float shadow = 0.0f;
     
-    return (1.0 - shadow);
+    int shadowType = 2;
+    
+    if (shadowType == 0) //No PCF or VSM
+    {
+        float closestDepth = directionalShadowTexture.Sample(directionalShadowSampler, projCoords.xy).r;
+        
+        shadow = currentDepth - bias > closestDepth ? 1.0f : 0.0f;
+    }
+    else if (shadowType == 1) //PCF
+    {
+        float2 texSize = float2(1.0f / 1024.0f, 1.0f / 1024.0f);
+        
+        for (int x = -2; x <= 2; ++x)
+        {
+            for (int y = -2; y <= 2; ++y)
+            {
+                float closestDepth = directionalShadowTexture.Sample(directionalShadowSampler, projCoords.xy + float2(x, y) * texSize).r;
+                shadow += currentDepth - bias > closestDepth ? 1.0f : 0.0f;
+            }
+        }
+        shadow /= 25.0f;
+    }
+    else //VSM
+    {
+        currentDepth = currentDepth - bias;
+        float2 texSize = float2(1.0f / 1024.0f, 1.0f / 1024.0f);
+        
+        for (int x = -2; x <= 2; ++x)
+        {
+            for (int y = -2; y <= 2; ++y)
+            {
+        
+                //TODO: Source: http://developer.download.nvidia.com/SDK/10/direct3d/Source/VarianceShadowMapping/Doc/VarianceShadowMapping.pdf
+                float2 moments = directionalShadowTexture.Sample(directionalShadowSampler, projCoords.xy + float2(x, y) * texSize).rg;
+        
+                float variance = moments.y - (moments.x * moments.x);
+
+                float d = currentDepth - moments.x;
+                float shadowVSM = (variance / (variance + d * d));
+        
+                shadowVSM = max(shadowVSM, currentDepth <= moments.x);
+        
+                shadow += 1.0f - shadowVSM;
+            }
+        }
+        
+        shadow /= 25.0f;
+    }
+    
+    
+    return (1.0f - shadow);
 }
 
 float PointShadowCalculation(float3 pFragPos, float3 pLightPos, float pFarPlane, TextureCube pTexture, SamplerState pSampler)
 {
     float3 vec = pFragPos - pLightPos;
-    float closestDepth = pTexture.Sample(pSampler, vec).r;
-    
-    closestDepth *= pFarPlane;
     
     float currentDepth = length(vec);
     
-    float shadow = currentDepth > closestDepth ? 1.0f : 0.0f;
+    float bias = 0.05f;
+    
+    float shadow = 0.0f;
+    
+    int shadowType = 2;
+    
+    if (shadowType == 0) //No PCF or VSM
+    {
+        float closestDepth = pTexture.Sample(pSampler, vec).r;
+        closestDepth *= pFarPlane;
+        
+        shadow = currentDepth - bias > closestDepth ? 1.0f : 0.0f;
+    }
+    else if (shadowType == 1) //PCF
+    {
+        float samples = 4.0f;
+        float offset = 0.01f;
+        
+        for (float x = -offset; x < offset; x += offset / (samples * 0.5))
+        {
+            for (float y = -offset; y < offset; y += offset / (samples * 0.5))
+            {
+                for (float z = -offset; z < offset; z += offset / (samples * 0.5))
+                {
+                    float closestDepth = pTexture.Sample(pSampler, vec + float3(x, y, z)).r;
+                    closestDepth *= pFarPlane;
+                  
+                    shadow += currentDepth - bias > closestDepth ? 1.0f : 0.0f;
+                }
+            }
+        }
+        
+        shadow /= (samples * samples * samples);
+    }
+    else //VSM
+    {
+        currentDepth /= pFarPlane;
+        float samples = 4.0f;
+        float offset = 0.01f;
+        
+        for (float x = -offset; x < offset; x += offset / (samples * 0.5))
+        {
+            for (float y = -offset; y < offset; y += offset / (samples * 0.5))
+            {
+                for (float z = -offset; z < offset; z += offset / (samples * 0.5))
+                {
+                    //TODO: Source: http://developer.download.nvidia.com/SDK/10/direct3d/Source/VarianceShadowMapping/Doc/VarianceShadowMapping.pdf
+                    float2 moments = pTexture.Sample(pSampler, vec + float3(x, y, z)).rg;
+        
+                    float variance = moments.y - (moments.x * moments.x);
+
+                    float d = currentDepth - moments.x;
+                    float shadowVSM = (variance / (variance + d * d));
+        
+                    shadowVSM = max(shadowVSM, currentDepth <= moments.x);
+        
+                    shadow += 1.0f - shadowVSM;
+                }
+            }
+        }
+        
+        shadow /= (samples * samples * samples);
+    }
 
     return (1.0 - shadow);
 }

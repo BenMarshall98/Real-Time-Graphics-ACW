@@ -314,6 +314,6 @@ Scene
 	DirectionalLight
 	{
 		Color: 0.1, 0.1, 0.1
-		Direction: 1.0, 0.0, 0.0
+		Direction: 1.0, -1.0, 1.0
 	}
 }

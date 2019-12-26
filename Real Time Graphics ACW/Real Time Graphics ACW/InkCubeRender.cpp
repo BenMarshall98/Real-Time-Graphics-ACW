@@ -6,7 +6,8 @@ InkCubeRender::InkCubeRender() :
 		ResourceManager::instance()->loadShader("InkCubeDepthVertexShader.hlsl", "InkCubeDepthFragmentShader.hlsl", "InkCubeDepthGeometryShader.hlsl")
 	)
 {
-	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, TextureType::TEXTURE_CUBE))
+	float colour[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, colour, TextureType::TEXTURE_CUBE))
 	{
 		mFramebuffer.reset();
 	}

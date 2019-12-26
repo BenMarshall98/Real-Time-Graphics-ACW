@@ -10,7 +10,9 @@ PointLight::PointLight(const DirectX::XMFLOAT3 pColor, const DirectX::XMFLOAT3 p
 {
 	mFramebuffer = std::make_unique<Framebuffer>();
 
-	if (!mFramebuffer->loadFramebuffer(false, true, 1024, 1024, TextureType::TEXTURE_CUBE))
+	float colour[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, colour, TextureType::TEXTURE_CUBE))
 	{
 		mFramebuffer.reset();
 	}
@@ -20,7 +22,9 @@ PointLight::PointLight()
 {
 	mFramebuffer = std::make_unique<Framebuffer>();
 
-	if (!mFramebuffer->loadFramebuffer(false, true, 1024, 1024, TextureType::TEXTURE_CUBE))
+	float colour[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, colour, TextureType::TEXTURE_CUBE))
 	{
 		mFramebuffer.reset();
 	}

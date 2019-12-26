@@ -11,10 +11,19 @@ struct GS_OUTPUT
     uint Layer : SV_RenderTargetArrayIndex;
 };
     
-float main(GS_OUTPUT input) : SV_Depth
+float4 main(GS_OUTPUT input) : SV_Target
 {
     float distance = length(input.FragPos.xyz - LightPosition.xyz);
     distance = distance / FarPlane;
-    return distance;
+    
+    float moment1 = distance;
+    float moment2 = distance * distance;
+    
+    float dx = ddx(distance);
+    float dy = ddy(distance);
+    
+    moment2 += 0.25f * (dx * dx + dy * dy);
+    
+    return float4(moment1, moment2, 0.0f, 1.0f);
 }
 

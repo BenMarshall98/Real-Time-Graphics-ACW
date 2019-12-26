@@ -1,22 +1,27 @@
 #include "Framebuffer.h"
 #include "DX11Render.h"
-#include <directxcolors.h>
+
 #include "Win32Window.h"
 #include <algorithm>
 
-bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, const TextureType pType, const unsigned int pNumberOfBuffers)
+bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, const float pDefaultColour[4], const TextureType pType, const unsigned int pNumberOfBuffers)
 {
 	//TODO: Register framebuffer to be resized
 	mUpdateResize = true;
 	const auto height = Win32Window::instance()->getHeight();
 	const auto width = Win32Window::instance()->getWidth();
-	return loadFramebuffer(pColour, pDepth, width, height, pType, pNumberOfBuffers);
+	return loadFramebuffer(pColour, pDepth, width, height, pDefaultColour, pType, pNumberOfBuffers);
 }
 
-bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWidth, int pHeight, TextureType pType, unsigned int pNumberOfBuffers)
+bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWidth, int pHeight, const float pDefaultColour[4], TextureType pType, unsigned int pNumberOfBuffers)
 {
 	mWidth = pWidth;
 	mHeight = pHeight;
+
+	for (auto i = 0u; i < 4; i++)
+	{
+		mDefaultColour[i] = pDefaultColour[i];
+	}
 	
 	const auto device = Dx11Render::instance()->getDevice();
 
@@ -107,11 +112,11 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 		{
 			renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
 			renderTargetViewDesc.Texture2DArray.MipSlice = 0;
-			renderTargetViewDesc.Texture2DArray.ArraySize = 1;
+			renderTargetViewDesc.Texture2DArray.ArraySize = 6;
 
-			for (auto i = 0u; i < pNumberOfBuffers * 6; i++)
+			for (auto i = 0u; i < pNumberOfBuffers; i++)
 			{
-				renderTargetViewDesc.Texture2DArray.FirstArraySlice = i;
+				renderTargetViewDesc.Texture2DArray.FirstArraySlice = i * 6;
 
 				ID3D11RenderTargetView * renderTargetView = nullptr;
 				result = device->CreateRenderTargetView(mColorTexture.Get(), &renderTargetViewDesc, &renderTargetView);
@@ -349,7 +354,7 @@ void Framebuffer::useFramebuffer() const
 
 	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
 	{
-		deviceContext->ClearRenderTargetView(mColorTextureTargetViews[i], DirectX::Colors::MidnightBlue);
+		deviceContext->ClearRenderTargetView(mColorTextureTargetViews[i], mDefaultColour);
 	}
 	
 	deviceContext->ClearDepthStencilView(mDepthTextureTargetView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0.0f);
@@ -366,7 +371,7 @@ void Framebuffer::useTexture(unsigned int pSlot)
 	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
 	{
 		deviceContext->PSSetShaderResources(pSlot, 1, &mColorTextureResourceViews[i]);
-		deviceContext->PSSetSamplers(pSlot, 1, &mSampler);
+		deviceContext->PSSetSamplers(pSlot, 1, mSampler.GetAddressOf());
 		pSlot++;
 	}
 
@@ -404,7 +409,7 @@ void Framebuffer::useDomainTexture(unsigned int pSlot)
 	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
 	{
 		deviceContext->DSSetShaderResources(pSlot, 1, &mColorTextureResourceViews[i]);
-		deviceContext->DSSetSamplers(pSlot, 1, &mSampler);
+		deviceContext->DSSetSamplers(pSlot, 1, mSampler.GetAddressOf());
 		pSlot++;
 	}
 

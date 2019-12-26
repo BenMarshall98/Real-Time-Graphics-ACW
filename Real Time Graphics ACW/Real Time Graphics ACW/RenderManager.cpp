@@ -13,11 +13,11 @@ RenderManager * RenderManager::mInstance = nullptr;
 RenderManager::RenderManager()
 {
 	mStaticTechnique = std::make_unique<PhongShading>();
-	mDynamicTechniques.emplace_back(std::make_unique<GourandShading>());
+	//mDynamicTechniques.emplace_back(std::make_unique<GourandShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<PhongShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<TextureMapping>());
-	mDynamicTechniques.emplace_back(std::make_unique<DisplacementMapping>());
 	mDynamicTechniques.emplace_back(std::make_unique<BumpMapping>());
+	mDynamicTechniques.emplace_back(std::make_unique<DisplacementMapping>());
 	mDynamicTechniques.emplace_back(std::make_unique<ToonShading>());
 }
 

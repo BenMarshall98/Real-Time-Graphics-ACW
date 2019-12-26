@@ -40,15 +40,6 @@ cbuffer spotBuffer : register(b4)
     float4 SpotFarPlane;
 }
 
-struct VS_OUTPUT
-{
-    float4 Pos : SV_POSITION;
-    float4 FragmentPos : POSITION0;
-    float4 Normal : NORMAL0;
-    float3 ViewPosition : POSITION1;
-    float4 LightFragmentPos : POSITION2;
-};
-
 Texture2D directionalShadowTexture : register(t0);
 SamplerState directionalShadowSampler : register(s0);
 
@@ -66,6 +57,15 @@ SamplerState spot3ShadowSampler : register(s4);
 
 TextureCube spot4ShadowTexture : register(t5);
 SamplerState spot4ShadowSampler : register(s5);
+
+struct VS_OUTPUT
+{
+    float4 Pos : SV_POSITION;
+    float4 FragmentPos : POSITION0;
+    float4 Normal : NORMAL0;
+    float3 ViewPosition : POSITION1;
+    float4 LightFragmentPos : POSITION2;
+};
 
 float DirectionalShadowCalculation(float4 lightPos, float3 lightDir, float3 normal);
 float PointShadowCalculation(float3 pFragPos, float3 pLightPos, float pFarPlane, TextureCube pTexture, SamplerState pSampler);

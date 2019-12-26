@@ -52,6 +52,7 @@ void LightingManager::removeSpotLight(std::shared_ptr<SpotLight>& pSpotLight)
 void LightingManager::update() const
 {
 	const auto render = Dx11Render::instance();
+	
 	{
 		DirectionalLightBuffer db;
 		ZeroMemory(&db, sizeof DirectionalLightBuffer);

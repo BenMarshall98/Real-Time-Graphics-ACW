@@ -20,6 +20,12 @@ cbuffer directionalBuffer : register(b3)
     matrix DirectionalProjection;
 }
 
+struct VS_INPUT
+{
+    float4 Pos : POSITION;
+    float4 Normal : NORMAL;
+};
+
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
@@ -29,15 +35,15 @@ struct VS_OUTPUT
     float4 LightFragmentPos : POSITION2;
 };
 
-VS_OUTPUT main(float4 Pos : POSITION, float4 Normal : NORMAL)
+VS_OUTPUT main(VS_INPUT input)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
-    output.FragmentPos = mul(Pos, World);
+    output.FragmentPos = mul(input.Pos, World);
     output.LightFragmentPos = mul(output.FragmentPos, DirectionalView);
     output.LightFragmentPos = mul(output.LightFragmentPos, DirectionalProjection);
     output.Pos = mul(output.FragmentPos, View);
     output.Pos = mul(output.Pos, Projection);
-    output.Normal = mul(Normal, InverseWorld);
+    output.Normal = mul(input.Normal, InverseWorld);
     output.ViewPosition = ViewPosition;
     return output;
 }

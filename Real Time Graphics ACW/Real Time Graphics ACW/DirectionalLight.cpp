@@ -8,9 +8,9 @@ DirectionalLight::DirectionalLight(const DirectX::XMFLOAT4 & pColor, const Direc
 {
 	mFramebuffer = std::make_unique<Framebuffer>();
 
-	float colour[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, colour))
+	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }))
 	{
 		mFramebuffer.reset();
 	}
@@ -20,9 +20,9 @@ DirectionalLight::DirectionalLight() : mColor(), mDirection()
 {
 	mFramebuffer = std::make_unique<Framebuffer>();
 
-	float colour[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, colour))
+	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }))
 	{
 		mFramebuffer.reset();
 	}

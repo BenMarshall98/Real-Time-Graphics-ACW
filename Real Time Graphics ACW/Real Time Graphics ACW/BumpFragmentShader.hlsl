@@ -80,10 +80,16 @@ struct VS_OUTPUT
     float3x3 TBN : POSITION3;
 };
 
+struct PS_OUTPUT
+{
+    float4 NormalColor : SV_Target0;
+    float4 BloomColor : SV_Target1;
+};
+
 float DirectionalShadowCalculation(float4 lightPos, float3 lightDir, float3 normal);
 float PointShadowCalculation(float3 pFragPos, float3 pLightPos, float pFarPlane, TextureCube pTexture, SamplerState pSampler);
 
-float4 main(VS_OUTPUT input) : SV_Target
+PS_OUTPUT main(VS_OUTPUT input)
 {
 	//float3 normal = normalize(input.Normal.xyz);
     float3 norm = normTexture.Sample(normSampler, input.TexCoord).xyz;
@@ -181,7 +187,23 @@ float4 main(VS_OUTPUT input) : SV_Target
         }
     }
 
-    return float4(color, 1.0f);
+    PS_OUTPUT output = (PS_OUTPUT) 0;
+    
+    output.NormalColor = float4(color, 1.0f);
+    
+    //TODO: Source
+    float brightness = dot(color, float3(0.2126f, 0.7152f, 0.0722f));
+    
+    if (brightness > 1.0f)
+    {
+        output.BloomColor = float4(color, 1.0f);
+    }
+    else
+    {
+        output.BloomColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+    }
+    
+    return output;
 }
 
 float DirectionalShadowCalculation(float4 lightPos, float3 lightDir, float3 normal)

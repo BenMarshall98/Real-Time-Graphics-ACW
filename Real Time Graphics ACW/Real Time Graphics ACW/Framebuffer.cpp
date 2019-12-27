@@ -3,25 +3,23 @@
 
 #include "Win32Window.h"
 #include <algorithm>
+#include <utility>
 
-bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, const float pDefaultColour[4], const TextureType pType, const unsigned int pNumberOfBuffers)
+bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, std::vector<DirectX::XMVECTORF32> pDefaultColour, const TextureType pType, const unsigned int pNumberOfBuffers)
 {
 	//TODO: Register framebuffer to be resized
 	mUpdateResize = true;
 	const auto height = Win32Window::instance()->getHeight();
 	const auto width = Win32Window::instance()->getWidth();
-	return loadFramebuffer(pColour, pDepth, width, height, pDefaultColour, pType, pNumberOfBuffers);
+	return loadFramebuffer(pColour, pDepth, width, height, std::move(pDefaultColour), pType, pNumberOfBuffers);
 }
 
-bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWidth, int pHeight, const float pDefaultColour[4], TextureType pType, unsigned int pNumberOfBuffers)
+bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWidth, int pHeight, std::vector<DirectX::XMVECTORF32> pDefaultColour, TextureType pType, unsigned int pNumberOfBuffers)
 {
 	mWidth = pWidth;
 	mHeight = pHeight;
 
-	for (auto i = 0u; i < 4; i++)
-	{
-		mDefaultColour[i] = pDefaultColour[i];
-	}
+	mDefaultColours = std::move(pDefaultColour);
 	
 	const auto device = Dx11Render::instance()->getDevice();
 
@@ -354,7 +352,7 @@ void Framebuffer::useFramebuffer() const
 
 	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
 	{
-		deviceContext->ClearRenderTargetView(mColorTextureTargetViews[i], mDefaultColour);
+		deviceContext->ClearRenderTargetView(mColorTextureTargetViews[i], mDefaultColours[i]);
 	}
 	
 	deviceContext->ClearDepthStencilView(mDepthTextureTargetView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0.0f);
@@ -435,5 +433,18 @@ void Framebuffer::releaseDomainTexture(unsigned int pSlot) const
 	{
 		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView = nullptr;
 		deviceContext->DSSetShaderResources(pSlot, 1, shaderResourceView.GetAddressOf());
+	}
+}
+
+Framebuffer::~Framebuffer()
+{
+	for (auto i = 0u; i < mColorTextureTargetViews.size(); i++)
+	{
+		mColorTextureTargetViews[i]->Release();
+	}
+
+	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
+	{
+		mColorTextureResourceViews[i]->Release();
 	}
 }

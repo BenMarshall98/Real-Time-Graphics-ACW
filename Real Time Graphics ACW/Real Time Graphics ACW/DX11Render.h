@@ -29,6 +29,7 @@ class Dx11Render
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mRenderTargetView;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> mDepthView;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> mRasterizerState;
+	Microsoft::WRL::ComPtr<ID3D11Debug> mDebug;
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mModelBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mCameraBuffer = nullptr;
@@ -114,7 +115,7 @@ public:
 	
 	bool resize(int pWidth, int pHeight);
 	
-	~Dx11Render() = default;
+	~Dx11Render();
 	Dx11Render(const Dx11Render&) = delete;
 	Dx11Render(Dx11Render &&) = delete;
 	Dx11Render & operator= (const Dx11Render &) = delete;

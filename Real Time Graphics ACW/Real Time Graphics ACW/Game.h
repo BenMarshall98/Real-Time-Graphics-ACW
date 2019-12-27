@@ -26,10 +26,12 @@ class Game
 	std::shared_ptr<Texture> mNorm;
 
 	std::unique_ptr<InkRender> mInk;
+	std::unique_ptr<Framebuffer> mFramebuffer;
+	
 	
 public:
 	Game();
-	~Game() = default;
+	~Game();
 	Game(const Game &) = delete;
 	Game(Game &&) = delete;
 	Game & operator= (const Game &) = delete;

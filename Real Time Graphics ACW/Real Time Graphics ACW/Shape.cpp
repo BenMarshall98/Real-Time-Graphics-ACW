@@ -13,6 +13,12 @@ Shape::Shape() : mCurrentMatrix(), mPreviousMatrix()
 {
 }
 
+Shape::~Shape()
+{
+	int i = 0;
+}
+
+
 void Shape::render(const bool pTesselated) const
 {
 	const auto matrix = XMLoadFloat4x4(&mCurrentMatrix);

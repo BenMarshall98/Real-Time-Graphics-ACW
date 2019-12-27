@@ -56,6 +56,13 @@ Game::Game()
 	mNorm = ResourceManager::instance()->loadTexture("tyre_normal.dds");
 
 	mInk = std::make_unique<InkRender>();
+
+	mFramebuffer = std::make_unique<Framebuffer>();
+
+	if (!mFramebuffer->loadFramebuffer(true, false, { DirectX::Colors::MidnightBlue, {0.0f, 0.0f, 0.0f, 1.0f } }, TextureType::TEXTURE_2D, 2))
+	{
+		mFramebuffer.reset();
+	}
 	
 	QueryPerformanceFrequency(&mTimer);
 	mFreq = double(mTimer.QuadPart);
@@ -90,7 +97,7 @@ void Game::run()
 		// Update variables
 		//
 		//
-		ParticleManager::instance()->update(mDt);
+		//ParticleManager::instance()->update(mDt);
 		CameraBuffer cb;
 		//cb.mWorld = XMMatrixTranspose(g_World);
 		const auto viewMatrix = mCamera->getViewMatrix();
@@ -114,28 +121,39 @@ void Game::run()
 		mNorm->useFragment(8);
 		mDisp->useDomain(0);
 
-		//mFramebuffer->useFramebuffer();
+		
 
 		//ObjectManager::instance()->render();
 
 		RenderManager::instance()->renderShadows();
 
 		Dx11Render::instance()->defaultViewport();
-		Dx11Render::instance()->bindDefaultFramebuffer();
+		//Dx11Render::instance()->bindDefaultFramebuffer();
 
+		mFramebuffer->useFramebuffer();
+		
 		RenderManager::instance()->render();
 
-		/*mInk->UpdateInk();
+		///*mInk->UpdateInk();
 
-		Dx11Render::instance()->bindDefaultFramebuffer();
+		//Dx11Render::instance()->bindDefaultFramebuffer();
 
-		mInk->RenderInk();*/
-		
-		ParticleManager::instance()->render();
-		
+		//mInk->RenderInk();*/
+		//
+		//ParticleManager::instance()->render();
+		//
 		//
 		// Present our back buffer to our front buffer
 		//
 		Dx11Render::instance()->present();
 	}
+}
+
+Game::~Game()
+{
+	delete LightingManager::instance();
+	delete RenderManager::instance();
+	delete ObjectManager::instance();
+	delete ResourceManager::instance();
+	delete mCamera;
 }

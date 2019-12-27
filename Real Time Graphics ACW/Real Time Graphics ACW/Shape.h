@@ -29,7 +29,7 @@ protected:
 public:
 	Shape(std::shared_ptr<Model> pModel, std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial, std::unique_ptr<InkShapeRender> pInkRender);
 	Shape();
-	virtual ~Shape() = default;
+	virtual ~Shape();// = default;
 
 	void setModel(const std::shared_ptr<Model> & pModel)
 	{

@@ -48,6 +48,13 @@ bool Dx11Render::loadRender()
 		return false;
 	}
 
+	result = mDevice.As(&mDebug);
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+
 	Microsoft::WRL::ComPtr<IDXGIAdapter> dxgiAdapter = nullptr;
 	result = dxgiDevice->GetAdapter(&dxgiAdapter);
 
@@ -475,4 +482,29 @@ Dx11Render * Dx11Render::instance()
 	}
 
 	return mInstance;
+}
+
+Dx11Render::~Dx11Render()
+{
+	/*mModelBuffer.Reset();
+	mCameraBuffer.Reset();
+	mDirectionalLightBuffer.Reset();
+	mPointLightBuffer.Reset();
+	mSpotLightBuffer.Reset();
+	mMaterialBuffer.Reset();
+	mShadowMatrixBuffer.Reset();
+	mShadowLightBuffer.Reset();
+	mInkBuffer.Reset();
+	mInkPlaneBuffer.Reset();
+	mInkCubeBuffer.Reset();
+	mRasterizerState.Reset();
+	mDepthView.Reset();
+	mRenderTargetView.Reset();
+	mSwapChain1.Reset();
+	mSwapChain.Reset();
+	mDeviceContext.Reset();
+	mDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+	mDebug.Reset();
+	mDeviceContext.Reset();
+	mDevice.Reset();*/
 }

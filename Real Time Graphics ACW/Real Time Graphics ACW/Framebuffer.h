@@ -25,16 +25,16 @@ class Framebuffer
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> mSampler = nullptr;
 
 	TextureType mType = TextureType::TEXTURE_2D;
-	float mDefaultColour[4];
+	std::vector<DirectX::XMVECTORF32> mDefaultColours;
 	unsigned int mWidth;
 	unsigned int mHeight;
 	bool mUpdateResize = false;
 	
 public:
 	Framebuffer() = default;
-	bool loadFramebuffer(bool pColour, bool pDepth, const float pDefaultColour[4] = DirectX::Colors::MidnightBlue, TextureType pType = TextureType::TEXTURE_2D, unsigned int pNumberOfBuffers = 1u);
-	bool loadFramebuffer(bool pColour, bool pDepth, int pWidth, int pHeight, const float pDefaultColour[4] = DirectX::Colors::MidnightBlue, TextureType pType = TextureType::TEXTURE_2D, unsigned int pNumberOfBuffers = 1u);
-	~Framebuffer() = default;
+	bool loadFramebuffer(bool pColour, bool pDepth, std::vector<DirectX::XMVECTORF32> pDefaultColour = { DirectX::Colors::MidnightBlue }, TextureType pType = TextureType::TEXTURE_2D, unsigned int pNumberOfBuffers = 1u);
+	bool loadFramebuffer(bool pColour, bool pDepth, int pWidth, int pHeight, std::vector<DirectX::XMVECTORF32> pDefaultColour = { DirectX::Colors::MidnightBlue }, TextureType pType = TextureType::TEXTURE_2D, unsigned int pNumberOfBuffers = 1u);
+	~Framebuffer();
 
 	Framebuffer(const Framebuffer & pFramebuffer) = delete;
 	Framebuffer & operator= (const Framebuffer & pFramebuffer) = delete;

@@ -12,9 +12,9 @@ SpotLight::SpotLight(const DirectX::XMFLOAT3& pColor, const DirectX::XMFLOAT3 & 
 {
 	mFramebuffer = std::make_unique<Framebuffer>();
 
-	float colour[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	if (mFramebuffer->loadFramebuffer(true, false, 1024, 1024, colour, TextureType::TEXTURE_CUBE))
+	if (mFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }, TextureType::TEXTURE_CUBE))
 	{
 		mFramebuffer.reset();
 	}
@@ -24,9 +24,9 @@ SpotLight::SpotLight()
 {
 	mFramebuffer = std::make_unique<Framebuffer>();
 
-	float colour[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, colour, TextureType::TEXTURE_CUBE))
+	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }, TextureType::TEXTURE_CUBE))
 	{
 		mFramebuffer.reset();
 	}

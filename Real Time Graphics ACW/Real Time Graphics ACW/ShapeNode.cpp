@@ -19,10 +19,6 @@ ShapeNode::ShapeNode(Shape * pShape, const ObjectType pType) : mShape(pShape)
 	
 }
 
-ShapeNode::ShapeNode() : mShape(nullptr)
-{
-}
-
 void ShapeNode::read(std::istream& pIn)
 {
 	std::string s, type;

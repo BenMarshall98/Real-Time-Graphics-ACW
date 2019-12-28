@@ -27,7 +27,8 @@ class Game
 
 	std::unique_ptr<InkRender> mInk;
 	std::unique_ptr<Framebuffer> mFramebuffer;
-	
+	std::shared_ptr<Shader> mShader;
+	std::shared_ptr<Model> mModel;
 	
 public:
 	Game();

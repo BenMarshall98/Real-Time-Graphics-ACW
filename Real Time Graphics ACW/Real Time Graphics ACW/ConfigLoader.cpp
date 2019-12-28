@@ -4,6 +4,7 @@
 #include "TranslationNode.h"
 #include "RotationNode.h"
 #include "ScaleNode.h"
+#include "AnimationNode.h"
 #include "ShapeNode.h"
 #include "DirectionalLightNode.h"
 #include "PointLightNode.h"
@@ -33,6 +34,10 @@ void ConfigLoader::readScene(std::istream& pIn, std::unique_ptr<SceneGraphNode>&
 		else if (nodeType == "Scale")
 		{
 			child = std::make_unique<ScaleNode>();
+		}
+		else if (nodeType == "Animation")
+		{
+			child = std::make_unique<AnimationNode>();
 		}
 		else if (nodeType == "Shape")
 		{

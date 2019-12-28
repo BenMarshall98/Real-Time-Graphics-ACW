@@ -15,7 +15,7 @@ class VectorAnimation
 	std::vector<VectorNode> mNodes;
 	float mEndTime = 0.0f;
 	float mCurrentTime = 0.0f;
-	float mCurrentNode = 0;
+	unsigned int mCurrentNode = 0u;
 	
 public:
 	VectorAnimation(std::vector<VectorNode> pNodes, float pEndTime);
@@ -42,4 +42,4 @@ public:
 	DirectX::XMFLOAT4X4 animate(float pDeltaTime);
 };
 
-std::istream& operator>>(std::istream& pIn, VectorAnimation & pNode);
+std::istream& operator>>(std::istream& pIn, std::unique_ptr<VectorAnimation> & pAnimation);

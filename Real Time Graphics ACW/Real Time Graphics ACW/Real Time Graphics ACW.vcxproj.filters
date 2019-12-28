@@ -100,6 +100,9 @@
     <Filter Include="Ink\CubeDepthShader">
       <UniqueIdentifier>{3754ffca-06b6-4c61-a282-1fd47dfcb837}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders\HDRShading">
+      <UniqueIdentifier>{472b01e5-21f5-4e25-a19c-5ed708bd867c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -261,6 +264,9 @@
     <ClInclude Include="InkShapeRender.h">
       <Filter>Ink</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationNode.h">
+      <Filter>SceneGraph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModelLoader.cpp">
@@ -419,6 +425,9 @@
     <ClCompile Include="InkShapeRender.cpp">
       <Filter>Ink</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationNode.cpp">
+      <Filter>SceneGraph</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="GourandFragmentShader.hlsl">
@@ -559,6 +568,8 @@
     <CopyFileToFolders Include="InkPlaneVertexShader.hlsl">
       <Filter>Ink\PlaneDepthShader</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="HDRFragmentShader.hlsl" />
+    <CopyFileToFolders Include="HDRVertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />

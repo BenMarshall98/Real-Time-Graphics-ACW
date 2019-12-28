@@ -11,11 +11,11 @@ enum ObjectType
 
 class ShapeNode final : public SceneGraphNode
 {
-	std::shared_ptr<Shape> mShape;
+	std::shared_ptr<Shape> mShape = nullptr;
 	
 public:
 	explicit ShapeNode(Shape * pShape, ObjectType pType);
-	ShapeNode();
+	ShapeNode() = default;
 	~ShapeNode() = default;
 
 	ShapeNode(const ShapeNode &) = delete;

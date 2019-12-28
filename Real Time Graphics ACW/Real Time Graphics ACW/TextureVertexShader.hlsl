@@ -11,6 +11,13 @@ cbuffer modelBuffer : register(b1)
     matrix InverseWorld;
 }
 
+struct VS_INPUT
+{
+    float4 Pos : POSITION;
+    float4 Normal : NORMAL;
+    float2 TexCoord : TEXCOORD;
+};
+
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
@@ -20,15 +27,15 @@ struct VS_OUTPUT
     float2 TexCoord : TEXCOORD0;
 };
 
-VS_OUTPUT main(float4 Pos : POSITION, float4 Normal : NORMAL, float2 TexCoord : TEXCOORD)
+VS_OUTPUT main(VS_INPUT input)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
-    output.Pos = mul(Pos, World);
+    output.Pos = mul(input.Pos, World);
     output.Pos = mul(output.Pos, View);
     output.Pos = mul(output.Pos, Projection);
-    output.FragmentPos = mul(Pos, World);
-    output.Normal = mul(Normal, InverseWorld);
+    output.FragmentPos = mul(input.Pos, World);
+    output.Normal = mul(input.Normal, InverseWorld);
     output.ViewPosition = ViewPosition;
-    output.TexCoord = TexCoord;
+    output.TexCoord = input.TexCoord;
     return output;
 }

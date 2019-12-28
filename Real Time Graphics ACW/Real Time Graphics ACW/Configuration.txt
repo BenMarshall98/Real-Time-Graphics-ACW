@@ -1,18 +1,39 @@
 Scene
 {
-	Shape
+	Animation
 	{
-		Type: Dynamic
-		Sphere
+		Type: Vector
 		{
-			Material
+			Pos: -2.5, -2.5, 0.0
+			Time: 0.0
+		}
+		{
+			Pos: -2.5, 2.5, 0.0
+			Time: 5.0
+		}
+		{
+			Pos: 2.5, 2.5, 0.0
+			Time: 10.0
+		}
+		{
+			Pos: 2.5, -2.5, 0.0
+			Time: 15.0
+		}
+		EndTime: 20.0
+		Shape
+		{
+			Type: Dynamic
+			Sphere
 			{
-				Ambient: 0.1, 0.1, 0.1
-				Diffuse: 1.0, 0.0, 0.0
-				Specular: 1.0, 1.0, 1.0
-				Shininess: 32.0
+				Material
+				{
+					Ambient: 0.1, 0.1, 0.1
+					Diffuse: 1.0, 0.0, 0.0
+					Specular: 1.0, 1.0, 1.0
+					Shininess: 32.0
+				}
+				NoTexture
 			}
-			NoTexture
 		}
 	}
 	Rotation

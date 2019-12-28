@@ -205,7 +205,7 @@ float DirectionalShadowCalculation(float4 lightPos, float3 lightDir, float3 norm
     
     float shadow = 0.0f;
     
-    int shadowType = 2;
+    int shadowType = 0;
     
     if (shadowType == 0) //No PCF or VSM
     {
@@ -268,7 +268,7 @@ float PointShadowCalculation(float3 pFragPos, float3 pLightPos, float pFarPlane,
     
     float shadow = 0.0f;
     
-    int shadowType = 2;
+    int shadowType = 0;
     
     if (shadowType == 0) //No PCF or VSM
     {

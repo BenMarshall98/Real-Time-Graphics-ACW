@@ -63,6 +63,9 @@ Game::Game()
 	{
 		mFramebuffer.reset();
 	}
+
+	mShader = ResourceManager::instance()->loadShader("HDRVertexShader.hlsl", "HDRFragmentShader.hlsl");
+	mModel = ResourceManager::instance()->loadModel("plane.obj");
 	
 	QueryPerformanceFrequency(&mTimer);
 	mFreq = double(mTimer.QuadPart);
@@ -145,6 +148,13 @@ void Game::run()
 		//
 		// Present our back buffer to our front buffer
 		//
+
+		mShader->useShader();
+		mFramebuffer->useTexture(0);
+		Dx11Render::instance()->bindDefaultFramebuffer();
+
+		mModel->render();
+		
 		Dx11Render::instance()->present();
 	}
 }

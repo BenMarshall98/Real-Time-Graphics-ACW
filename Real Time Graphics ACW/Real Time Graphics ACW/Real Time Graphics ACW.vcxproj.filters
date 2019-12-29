@@ -106,6 +106,30 @@
     <Filter Include="Animation">
       <UniqueIdentifier>{8af3d0e1-72da-42fe-a22c-6ec1d4347e8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders\BumpShading\Deferred">
+      <UniqueIdentifier>{7eb879be-1239-4ae5-ab76-c1ce40a20d35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\BumpShading\Forward">
+      <UniqueIdentifier>{35194ad5-917b-4ce2-9465-fbd55b92a65c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\DisplacementShading\Deferred">
+      <UniqueIdentifier>{46c1583b-9119-43ee-8db9-7799bb2340ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\DisplacementShading\Forward">
+      <UniqueIdentifier>{85572799-c3df-4f33-8e60-9ac1ff0994c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\PhongShading\Deferred">
+      <UniqueIdentifier>{3f20184b-f1dc-4bdf-b840-d2be177f1aec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\PhongShading\Forward">
+      <UniqueIdentifier>{d0422075-7ba4-46bd-a1b0-473acedf07ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\TextureShading\Deferred">
+      <UniqueIdentifier>{17b07f88-1104-4f1d-a0f4-a8dd921fec70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\TextureShading\Forward">
+      <UniqueIdentifier>{70cc148b-a0d6-4bc6-bbb1-b63fa5ff48a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -451,36 +475,6 @@
     <CopyFileToFolders Include="GourandVertexShader.hlsl">
       <Filter>Resource Files\Shaders\GourandShading</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="PhongFragmentShader.hlsl">
-      <Filter>Resource Files\Shaders\PhongShading</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="PhongVertexShader.hlsl">
-      <Filter>Resource Files\Shaders\PhongShading</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TextureFragmentShader.hlsl">
-      <Filter>Resource Files\Shaders\TextureShading</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TextureVertexShader.hlsl">
-      <Filter>Resource Files\Shaders\TextureShading</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="DisplacementDomainShader.hlsl">
-      <Filter>Resource Files\Shaders\DisplacementShading</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="DisplacementFragmentShader.hlsl">
-      <Filter>Resource Files\Shaders\DisplacementShading</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="DisplacementHullShader.hlsl">
-      <Filter>Resource Files\Shaders\DisplacementShading</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="DisplacementVertexShader.hlsl">
-      <Filter>Resource Files\Shaders\DisplacementShading</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="BumpFragmentShader.hlsl">
-      <Filter>Resource Files\Shaders\BumpShading</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="BumpVertexShader.hlsl">
-      <Filter>Resource Files\Shaders\BumpShading</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="sphere.obj">
       <Filter>Resource Files\Models</Filter>
     </CopyFileToFolders>
@@ -589,6 +583,36 @@
     <CopyFileToFolders Include="HDRVertexShader.hlsl">
       <Filter>Resource Files\Shaders\HDRShading</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="BumpFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\BumpShading\Forward</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="BumpVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\BumpShading\Forward</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DisplacementDomainShader.hlsl">
+      <Filter>Resource Files\Shaders\DisplacementShading\Forward</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DisplacementFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\DisplacementShading\Forward</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DisplacementHullShader.hlsl">
+      <Filter>Resource Files\Shaders\DisplacementShading\Forward</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DisplacementVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\DisplacementShading\Forward</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="PhongFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\PhongShading\Forward</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="PhongVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\PhongShading\Forward</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TextureFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\TextureShading\Forward</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TextureVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\TextureShading\Forward</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />
@@ -610,5 +634,37 @@
     <Image Include="tyre_spec.dds">
       <Filter>Resource Files\Textures</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="BumpDeferredFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\BumpShading\Deferred</Filter>
+    </FxCompile>
+    <FxCompile Include="BumpDeferredVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\BumpShading\Deferred</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementDeferredDomainShader.hlsl">
+      <Filter>Resource Files\Shaders\DisplacementShading\Deferred</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementDeferredFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\DisplacementShading\Deferred</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementDeferredHullShader.hlsl">
+      <Filter>Resource Files\Shaders\DisplacementShading\Deferred</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementDeferredVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\DisplacementShading\Deferred</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongDeferredFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\PhongShading\Deferred</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongDeferredVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\PhongShading\Deferred</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureDeferredFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\TextureShading\Deferred</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureDeferredVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\TextureShading\Deferred</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

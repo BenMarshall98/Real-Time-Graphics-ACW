@@ -7,6 +7,8 @@ QuaternionAnimation::QuaternionAnimation(std::vector<QuaternionNode> pNodes, flo
 {
 }
 
+//https://docs.microsoft.com/en-us/previous-versions/windows/desktop/bb281657(v=vs.85)?redirectedfrom=MSDN
+
 void QuaternionAnimation::calculateTangents()
 {
 	if (mNodes.size() <= 2)

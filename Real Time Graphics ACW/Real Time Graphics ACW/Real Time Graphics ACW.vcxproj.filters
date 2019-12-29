@@ -583,8 +583,12 @@
     <CopyFileToFolders Include="InkPlaneVertexShader.hlsl">
       <Filter>Ink\PlaneDepthShader</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="HDRFragmentShader.hlsl" />
-    <CopyFileToFolders Include="HDRVertexShader.hlsl" />
+    <CopyFileToFolders Include="HDRFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\HDRShading</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="HDRVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\HDRShading</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />

@@ -1,14 +1,14 @@
 #pragma once
 
 #include "SceneGraphNode.h"
-#include "VectorAnimation.h"
+#include "Animation.h"
 
 class AnimationNode final : public SceneGraphNode
 {
-	std::unique_ptr<VectorAnimation> mAnimation = nullptr;
+	std::unique_ptr<Animation> mAnimation = nullptr;
 	
 public:
-	explicit AnimationNode(VectorAnimation * pAnimation);
+	explicit AnimationNode(Animation * pAnimation);
 	AnimationNode() = default;
 	~AnimationNode() = default;
 

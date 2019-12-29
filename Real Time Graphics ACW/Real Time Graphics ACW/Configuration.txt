@@ -36,10 +36,30 @@ Scene
 			}
 		}
 	}
-	Rotation
+	Animation
 	{
-		Axis: 0.0, 1.0, 0.0
-		Angle: 0.0
+		Type: Quaternion
+		{
+			Axis: 0.0, 1.0, 0.0
+			Angle: 0.0
+			Time: 0.0
+		}
+		{
+			Axis: 0.0, 1.0, 0.0
+			Angle: 90.0
+			Time: 5.0
+		}
+		{
+			Axis: 0.0, 1.0, 0.0
+			Angle: 180.0
+			Time: 10.0
+		}
+		{
+			Axis: 0.0, 1.0, 0.0
+			Angle: 270.0
+			Time: 15.0
+		}
+		EndTime: 20.0
 		Translate
 		{
 			Pos: 4.0, 0.0, 0.0

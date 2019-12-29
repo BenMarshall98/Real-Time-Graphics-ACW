@@ -103,6 +103,9 @@
     <Filter Include="Resource Files\Shaders\HDRShading">
       <UniqueIdentifier>{472b01e5-21f5-4e25-a19c-5ed708bd867c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{8af3d0e1-72da-42fe-a22c-6ec1d4347e8c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -207,9 +210,6 @@
     <ClInclude Include="DirectionalLightNode.h">
       <Filter>SceneGraph</Filter>
     </ClInclude>
-    <ClInclude Include="VectorAnimation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Cuboid.h">
       <Filter>Shapes</Filter>
     </ClInclude>
@@ -266,6 +266,15 @@
     </ClInclude>
     <ClInclude Include="AnimationNode.h">
       <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="QuaternionAnimation.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorAnimation.h">
+      <Filter>Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -374,9 +383,6 @@
     <ClCompile Include="SpotLightNode.cpp">
       <Filter>SceneGraph</Filter>
     </ClCompile>
-    <ClCompile Include="VectorAnimation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Cuboid.cpp">
       <Filter>Shapes</Filter>
     </ClCompile>
@@ -427,6 +433,15 @@
     </ClCompile>
     <ClCompile Include="AnimationNode.cpp">
       <Filter>SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="QuaternionAnimation.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="VectorAnimation.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

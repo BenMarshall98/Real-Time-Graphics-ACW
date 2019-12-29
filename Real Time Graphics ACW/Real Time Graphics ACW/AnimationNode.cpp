@@ -1,7 +1,9 @@
 #include "AnimationNode.h"
 #include <string>
+#include "QuaternionAnimation.h"
+#include "VectorAnimation.h"
 
-AnimationNode::AnimationNode(VectorAnimation* pAnimation) : mAnimation(pAnimation)
+AnimationNode::AnimationNode(Animation* pAnimation) : mAnimation(pAnimation)
 {
 	
 }
@@ -16,8 +18,12 @@ void AnimationNode::read(std::istream& pIn)
 	{
 		mAnimation = std::make_unique<VectorAnimation>();
 	}
+	else if (type == "Quaternion")
+	{
+		mAnimation = std::make_unique<QuaternionAnimation>();
+	}
 
-	pIn >> mAnimation;
+	mAnimation->read(pIn);
 }
 
 void AnimationNode::update(DirectX::XMFLOAT4X4 pMatrix)

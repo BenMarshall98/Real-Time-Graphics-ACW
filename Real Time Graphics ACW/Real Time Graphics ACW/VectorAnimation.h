@@ -2,6 +2,7 @@
 #include <DirectXMath.h>
 #include <vector>
 #include <iostream>
+#include "Animation.h"
 
 struct VectorNode
 {
@@ -10,12 +11,14 @@ struct VectorNode
 	float mTime;
 };
 
-class VectorAnimation
+class VectorAnimation final : public Animation
 {
 	std::vector<VectorNode> mNodes;
-	float mEndTime = 0.0f;
-	float mCurrentTime = 0.0f;
-	unsigned int mCurrentNode = 0u;
+
+	void addNode(const VectorNode pNode)
+	{
+		mNodes.push_back(pNode);
+	}
 	
 public:
 	VectorAnimation(std::vector<VectorNode> pNodes, float pEndTime);
@@ -27,19 +30,8 @@ public:
 	VectorAnimation & operator= (const VectorAnimation &) = delete;
 	VectorAnimation & operator= (VectorAnimation &&) = delete;
 
-	void addNode(const VectorNode pNode)
-	{
-		mNodes.push_back(pNode);
-	}
-
-	void setEndTime(const float pEndTime)
-	{
-		mEndTime = pEndTime;
-	}
-
-	void calculateTangents();
+	void calculateTangents() override;
+	void read(std::istream& pIn) override;
 	
-	DirectX::XMFLOAT4X4 animate(float pDeltaTime);
+	DirectX::XMFLOAT4X4 animate(float pDeltaTime) override;
 };
-
-std::istream& operator>>(std::istream& pIn, std::unique_ptr<VectorAnimation> & pAnimation);

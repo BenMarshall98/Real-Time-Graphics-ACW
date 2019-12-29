@@ -125,6 +125,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationNode.h" />
     <ClInclude Include="BumpMapping.h" />
     <ClInclude Include="Camera.h" />
@@ -153,6 +154,7 @@
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="ParticleManager.h" />
     <ClInclude Include="ParticleRender.h" />
+    <ClInclude Include="QuaternionAnimation.h" />
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="Shadow.h" />
     <ClInclude Include="ShapeNode.h" />
@@ -181,6 +183,7 @@
     <ClInclude Include="Win32Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationNode.cpp" />
     <ClCompile Include="BumpMapping.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -209,6 +212,7 @@
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="ParticleManager.cpp" />
     <ClCompile Include="ParticleRender.cpp" />
+    <ClCompile Include="QuaternionAnimation.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="ShapeNode.cpp" />
     <ClCompile Include="Particle.cpp" />

@@ -3,7 +3,7 @@
 #include <string>
 
 VectorAnimation::VectorAnimation(std::vector<VectorNode> pNodes, const float pEndTime)
-	: mNodes(std::move(pNodes)), mEndTime(pEndTime)
+	: Animation(pEndTime), mNodes(std::move(pNodes))
 {
 }
 
@@ -147,16 +147,6 @@ DirectX::XMFLOAT4X4 VectorAnimation::animate(const float pDeltaTime)
 		const auto time2 = pow(time, 2);
 		const auto time3 = pow(time, 3);
 
-		/*const auto b0 = pow(1.0f - time, 3);
-		const auto b1 = pow(1.0f - time, 2) * time;
-		const auto b2 = 3 * (1.0f - time) * pow(time, 2);
-		const auto b3 = pow(time, 3);
-
-		const auto h0 = b0 + b1;
-		const auto h1 = (1.0f / 3.0f) * b1;
-		const auto h3 = (-1.0f / 3.0f) * b2;
-		const auto h2 = b2 + b3;*/
-
 		const auto h0 = 2.0f * time3 - 3.0f * time2 + 1.0f;
 		const auto h1 = -2.0f * time3 + 3.0f * time2;
 		const auto h2 = time3 - 2.0f * time2 + time;
@@ -181,16 +171,6 @@ DirectX::XMFLOAT4X4 VectorAnimation::animate(const float pDeltaTime)
 	const auto time2 = pow(time, 2);
 	const auto time3 = pow(time, 3);
 
-	/*const auto b0 = pow(1.0f - time, 3);
-	const auto b1 = pow(1.0f - time, 2) * time;
-	const auto b2 = 3 * (1.0f - time) * pow(time, 2);
-	const auto b3 = pow(time, 3);
-
-	const auto h0 = b0 + b1;
-	const auto h1 = (1.0f / 3.0f) * b1;
-	const auto h3 = (-1.0f / 3.0f) * b2;
-	const auto h2 = b2 + b3;*/
-
 	const auto h0 = 2.0f * time3 - 3.0f * time2 + 1.0f;
 	const auto h1 = -2.0f * time3 + 3.0f * time2;
 	const auto h2 = time3 - 2.0f * time2 + time;
@@ -203,7 +183,7 @@ DirectX::XMFLOAT4X4 VectorAnimation::animate(const float pDeltaTime)
 	return result;
 }
 
-std::istream& operator>>(std::istream& pIn, std::unique_ptr<VectorAnimation> & pAnimation)
+void VectorAnimation::read(std::istream& pIn)
 {
 	while (true)
 	{
@@ -228,7 +208,7 @@ std::istream& operator>>(std::istream& pIn, std::unique_ptr<VectorAnimation> & p
 				time
 			};
 
-			pAnimation->addNode(node);
+			addNode(node);
 
 			pIn >> s;
 		}
@@ -237,10 +217,9 @@ std::istream& operator>>(std::istream& pIn, std::unique_ptr<VectorAnimation> & p
 			float endTime;
 			pIn >> endTime;
 
-			pAnimation->setEndTime(endTime);
+			setEndTime(endTime);
 			break;
 		}
 	}
-	pAnimation->calculateTangents();
-	return pIn;
+	calculateTangents();
 }

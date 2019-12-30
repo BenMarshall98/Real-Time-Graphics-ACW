@@ -27,7 +27,7 @@ PS_OUTPUT main(VS_OUTPUT input)
 {
     PS_OUTPUT output = (PS_OUTPUT) 0;
     
-    output.Pos = float4(input.FragmentPos.xyz, 2.0f);
+    output.Pos = input.FragmentPos;
     output.Normal = input.Normal;
     output.Ambient = MaterialAmbient;
     output.Diffuse = MaterialDiffuse;

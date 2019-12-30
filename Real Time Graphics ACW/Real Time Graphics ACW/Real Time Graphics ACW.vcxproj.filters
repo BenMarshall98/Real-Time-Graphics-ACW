@@ -130,6 +130,15 @@
     <Filter Include="Resource Files\Shaders\TextureShading\Forward">
       <UniqueIdentifier>{70cc148b-a0d6-4bc6-bbb1-b63fa5ff48a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders\EnvironmentShading\Deferred">
+      <UniqueIdentifier>{8fb77ba7-a627-4e9d-b262-f96c14f45703}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\EnvironmentShading\Forward">
+      <UniqueIdentifier>{31a45d38-1461-489c-97ab-54359ae7e31b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\EnvironmentShading\Setup">
+      <UniqueIdentifier>{d278c840-bfc5-4cf5-ba0e-0f00ba4875ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -664,5 +673,28 @@
     <Image Include="tyre_spec.dds">
       <Filter>Resource Files\Textures</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="EnvironmentDeferredVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\EnvironmentShading\Deferred</Filter>
+    </FxCompile>
+    <FxCompile Include="EnvironmentDeferredFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\EnvironmentShading\Deferred</Filter>
+    </FxCompile>
+    <FxCompile Include="EnvironmentVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\EnvironmentShading\Forward</Filter>
+    </FxCompile>
+    <FxCompile Include="EnvironmentFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\EnvironmentShading\Forward</Filter>
+    </FxCompile>
+    <FxCompile Include="EnvironmentSetupVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\EnvironmentShading\Setup</Filter>
+    </FxCompile>
+    <FxCompile Include="EnvironmentSetupGeometryShader.hlsl">
+      <Filter>Resource Files\Shaders\EnvironmentShading\Setup</Filter>
+    </FxCompile>
+    <FxCompile Include="EnvironmentSetupFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\EnvironmentShading\Setup</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

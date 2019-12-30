@@ -680,6 +680,15 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </CopyFileToFolders>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="EnvironmentDeferredFragmentShader.hlsl" />
+    <FxCompile Include="EnvironmentDeferredVertexShader.hlsl" />
+    <FxCompile Include="EnvironmentFragmentShader.hlsl" />
+    <FxCompile Include="EnvironmentSetupFragmentShader.hlsl" />
+    <FxCompile Include="EnvironmentSetupGeometryShader.hlsl" />
+    <FxCompile Include="EnvironmentSetupVertexShader.hlsl" />
+    <FxCompile Include="EnvironmentVertexShader.hlsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets" Condition="Exists('..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets')" />

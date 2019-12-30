@@ -1,6 +1,6 @@
 //TODO: Source
 
-cbuffer shadowMatrixBufffer : register(b0)
+cbuffer shadowMatrixBuffer : register(b0)
 {
     matrix ShadowPerspective;
     matrix ShadowView[6];
@@ -21,7 +21,6 @@ struct GS_OUTPUT
 [maxvertexcount(18)]
 void main(triangle VS_OUTPUT input[3], inout TriangleStream<GS_OUTPUT> output)
 {
-    
     for (uint i = 0; i < 6; ++i)
     {
         for (uint j = 0; j < 3; ++j)

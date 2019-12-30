@@ -11,7 +11,7 @@ struct DS_OUTPUT
 {
     float4 Pos : SV_POSITION;
     float3 FragmentPos : POSITION0;
-    float3 LightFragmentPos : POSITION1;
+    float4 LightFragmentPos : POSITION1;
     float2 TexCoord : TEXCOORD0;
     float3x3 TBN : POSITION2;
 };
@@ -39,7 +39,7 @@ PS_OUTPUT main(DS_OUTPUT input)
     
     PS_OUTPUT output = (PS_OUTPUT) 0;
     
-    output.Pos = input.FragmentPos;
+    output.Pos = float4(input.FragmentPos, 1.0f);
     output.LightPos = input.LightFragmentPos;
     output.Normal = float4(normal, 1.0f);
     output.Ambient = float4(baseColor * 0.1f, 1.0f);

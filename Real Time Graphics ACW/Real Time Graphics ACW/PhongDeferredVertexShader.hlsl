@@ -28,7 +28,7 @@ struct VS_INPUT
 
 struct VS_OUTPUT
 {
-    float4 Pos : SV_POSIITON;
+    float4 Pos : SV_Position;
     float4 FragmentPos : POSITION0;
     float4 Normal : NORMAL0;
     float4 LightFragmentPos : POSITION1;

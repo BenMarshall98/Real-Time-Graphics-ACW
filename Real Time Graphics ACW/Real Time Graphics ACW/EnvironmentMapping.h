@@ -1,13 +1,22 @@
 #pragma once
-class EnvironmentMapping
+
+#include "Technique.h"
+
+class EnvironmentMapping final : public Technique
 {
+	std::shared_ptr<Shader> mSetupShader;
+	
 public:
-	EnvironmentMapping() = default;
+	EnvironmentMapping();
 	~EnvironmentMapping() = default;
 
 	EnvironmentMapping(const EnvironmentMapping &) = delete;
 	EnvironmentMapping(EnvironmentMapping &&) = delete;
 	EnvironmentMapping & operator= (const EnvironmentMapping &) = delete;
 	EnvironmentMapping & operator= (EnvironmentMapping &&) = delete;
+
+	void render(std::shared_ptr<Shape> & pShape, bool pDeffered) override;
+	void renderDirectionalShadow(std::shared_ptr<Shape>& pShape) override;
+	void renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape) override;
 };
 

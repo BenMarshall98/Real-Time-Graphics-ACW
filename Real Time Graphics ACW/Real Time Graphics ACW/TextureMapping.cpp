@@ -4,7 +4,7 @@
 TextureMapping::TextureMapping() :
 	Technique(
 		ResourceManager::instance()->loadShader("TextureVertexShader.hlsl", "TextureFragmentShader.hlsl"),
-		nullptr,
+		ResourceManager::instance()->loadShader("TextureDeferredVertexShader.hlsl", "TextureDeferredFragmentShader.hlsl"),
 		ResourceManager::instance()->loadShader("NormalDirectionalShadowVertexShader.hlsl", "NormalDirectionalShadowFragmentShader.hlsl"),
 		ResourceManager::instance()->loadShader("NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl")
 	)

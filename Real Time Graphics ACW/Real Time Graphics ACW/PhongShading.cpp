@@ -4,7 +4,7 @@
 PhongShading::PhongShading() :
 	Technique(
 		ResourceManager::instance()->loadShader("PhongVertexShader.hlsl", "PhongFragmentShader.hlsl"),
-		nullptr,
+		ResourceManager::instance()->loadShader("PhongDeferredVertexShader.hlsl", "PhongDeferredFragmentShader.hlsl"),
 		ResourceManager::instance()->loadShader("NormalDirectionalShadowVertexShader.hlsl", "NormalDirectionalShadowFragmentShader.hlsl"),
 		ResourceManager::instance()->loadShader("NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl")
 	)

@@ -43,7 +43,7 @@ struct DS_OUTPUT
 {
     float4 Pos : SV_POSITION;
     float3 FragmentPos : POSITION0;
-    float3 LightFragmentPos : POSITION1;
+    float4 LightFragmentPos : POSITION1;
     float2 TexCoord : TEXCOORD0;
     float3x3 TBN : POSITION2;
 };
@@ -77,7 +77,7 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     output.FragmentPos = output.Pos.xyz;
     
     output.LightFragmentPos = mul(output.Pos, DirectionalView);
-    output.LightFragmentPos = mul(output.Pos, DirectionalProjection);
+    output.LightFragmentPos = mul(output.LightFragmentPos, DirectionalProjection);
     
     output.Pos = mul(output.Pos, View);
     output.Pos = mul(output.Pos, Projection);

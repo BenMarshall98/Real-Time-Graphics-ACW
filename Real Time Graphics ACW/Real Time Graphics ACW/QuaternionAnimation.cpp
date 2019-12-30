@@ -157,8 +157,6 @@ DirectX::XMFLOAT4X4 QuaternionAnimation::animate(float pDeltaTime)
 	DirectX::XMFLOAT4X4 result;
 	DirectX::XMStoreFloat4x4(&result, DirectX::XMMatrixRotationQuaternion(rot));
 
-	OutputDebugString(("Time: " + std::to_string(mCurrentTime) + ", Node: " + std::to_string(mCurrentNode) + "\n").c_str());
-
 	return result;
 }
 

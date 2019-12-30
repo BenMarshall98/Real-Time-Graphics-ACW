@@ -36,8 +36,6 @@ struct VS_OUTPUT
 	float3 Normal : NORMAL0;
     float2 TexCoord : TEXCOORD0;
 	float3 ViewPosition : POSITION1;
-    float3 Tangent : TANGENT0;
-    float3 BiTangent : BITANGENT0;
     float4 LightFragmentPos : POSITION2;
     float3x3 TBN : POSITION3;
 };
@@ -52,11 +50,11 @@ VS_OUTPUT main(VS_INPUT input)
 	output.Pos = mul(output.Pos, View);
 	output.Pos = mul(output.Pos, Projection);
     output.Normal = mul(float4(input.Normal, 1.0f), InverseWorld).xyz;
-    output.Tangent = mul(float4(input.Tangent, 1.0f), InverseWorld).xyz;
-    output.BiTangent = mul(float4(input.BiTangent, 1.0f), InverseWorld).xyz;
+    float3 Tangent = mul(float4(input.Tangent, 1.0f), InverseWorld).xyz;
+    float3 BiTangent = mul(float4(input.BiTangent, 1.0f), InverseWorld).xyz;
     output.TexCoord = input.TexCoord;
 	output.ViewPosition = ViewPosition;
     
-    output.TBN = float3x3(output.Tangent, output.BiTangent, output.Normal);
+    output.TBN = float3x3(Tangent, BiTangent, output.Normal);
 	return output;
 }

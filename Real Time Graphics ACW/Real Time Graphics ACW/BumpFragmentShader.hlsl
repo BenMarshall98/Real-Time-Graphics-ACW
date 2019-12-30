@@ -1,11 +1,3 @@
-cbuffer materialBuffer : register(b1)
-{
-	float4 MaterialAmbient;
-	float4 MaterialDiffuse;
-	float4 MaterialSpecular;
-	float MaterialShininess;
-}
-
 cbuffer directionalBuffer : register(b2)
 {
     float4 DirectionalColor;
@@ -74,8 +66,6 @@ struct VS_OUTPUT
     float3 Normal : NORMAL0;
     float2 TexCoord : TEXCOORD0;
     float3 ViewPosition : POSITION1;
-    float3 Tangent : TANGENT0;
-    float3 BiTangent : BITANGENT0;
     float4 LightFragmentPos : POSITION2;
     float3x3 TBN : POSITION3;
 };

@@ -30,7 +30,7 @@ PS_OUTPUT main(VS_OUTPUT input)
     output.Normal = input.Normal;
     
     float3 color = baseTexture.Sample(baseSampler, input.TexCoord).rgb;
-    float spec = specTexture.Sample(specSampler, input.TexCoord).r;
+    float spec = specTexture.Sample(specSampler, input.TexCoord).r * 256;
     
     output.Ambient = float4(color * 0.1f, 1.0f);
     output.Diffuse = float4(color, 1.0f);

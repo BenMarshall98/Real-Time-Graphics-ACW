@@ -1,11 +1,4 @@
 //TODO: Note based on frank luna book
-cbuffer materialBuffer : register(b1)
-{
-    float4 MaterialAmbient;
-    float4 MaterialDiffuse;
-    float4 MaterialSpecular;
-    float MaterialShininess;
-}
 
 cbuffer directionalBuffer : register(b2)
 {

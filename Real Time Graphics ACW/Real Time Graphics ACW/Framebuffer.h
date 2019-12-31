@@ -46,12 +46,12 @@ public:
 	void useDomainTexture(unsigned int pSlot);
 	void releaseDomainTexture(unsigned int pSlot) const;
 
-	float getHeight()
+	unsigned int getHeight() const 
 	{
 		return mHeight;
 	}
 
-	float getWidth()
+	unsigned int getWidth() const
 	{
 		return mWidth;
 	}

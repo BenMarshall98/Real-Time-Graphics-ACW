@@ -139,6 +139,9 @@
     <Filter Include="Resource Files\Shaders\EnvironmentShading\Setup">
       <UniqueIdentifier>{d278c840-bfc5-4cf5-ba0e-0f00ba4875ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders\DeferredShading">
+      <UniqueIdentifier>{6338e227-c123-4b42-8bb7-cdfd82d18069}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -672,6 +675,12 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="EnvironmentVertexShader.hlsl">
       <Filter>Resource Files\Shaders\EnvironmentShading\Forward</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DeferredFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\DeferredShading</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DeferredVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\DeferredShading</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>

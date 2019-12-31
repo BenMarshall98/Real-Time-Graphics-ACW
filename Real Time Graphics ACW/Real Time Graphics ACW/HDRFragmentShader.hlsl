@@ -1,8 +1,8 @@
-Texture2D normalTexture : register(t0);
-SamplerState normalSampler : register(s0);
+Texture2D normalTexture : register(t6);
+SamplerState normalSampler : register(s6);
 
-Texture2D bloomTexture : register(t1);
-SamplerState bloomSampler : register(s1);
+Texture2D bloomTexture : register(t7);
+SamplerState bloomSampler : register(s7);
 
 struct VS_OUTPUT
 {

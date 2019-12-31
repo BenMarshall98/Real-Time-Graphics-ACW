@@ -15,6 +15,7 @@ struct ShadowLightBuffer;
 struct InkBuffer;
 struct InkCubeBuffer;
 struct InkPlaneBuffer;
+struct GlobalBuffer;
 
 class Dx11Render
 {
@@ -42,6 +43,7 @@ class Dx11Render
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mInkBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mInkPlaneBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mInkCubeBuffer = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> mGlobalBuffer = nullptr;
 	
 	Dx11Render();
 	bool loadRender();
@@ -101,6 +103,7 @@ public:
 		mDeviceContext->RSSetViewports(1, &viewport);
 	}
 
+	void useGlobalBuffer(const GlobalBuffer & pGlobalBuffer) const;
 	void useModelBuffer(const ModelBuffer & pModelBuffer) const;
 	void useMaterialBuffer(const MaterialBuffer & pMaterialBuffer) const;
 	void useCameraBuffer(const CameraBuffer & pCameraBuffer) const;

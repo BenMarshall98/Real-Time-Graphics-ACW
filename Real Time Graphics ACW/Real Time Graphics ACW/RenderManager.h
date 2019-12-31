@@ -6,6 +6,14 @@
 #include <map>
 #include <vector>
 
+struct GlobalBuffer
+{
+	float mTime;
+	int mScreenMode;
+	int mShadowMode;
+	float mInkHeight;
+};
+
 class RenderManager final
 {
 	static RenderManager * mInstance;
@@ -28,7 +36,7 @@ class RenderManager final
 
 	std::map<std::unique_ptr<Technique>, std::shared_ptr<Shape>> mRenderTechnique;
 
-	unsigned int mMode = 8u;
+	unsigned int mMode = 0u;
 
 public:
 	~RenderManager() = default;
@@ -46,6 +54,7 @@ public:
 		return mInstance;
 	}
 
+	void setup(float pCurrentTime);
 	void render();
 	void renderShadows();
 	void renderToScreen();

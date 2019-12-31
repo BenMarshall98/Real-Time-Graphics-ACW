@@ -50,6 +50,19 @@ RenderManager::RenderManager()
 	//mDynamicTechniques.emplace_back(std::make_unique<ToonShading>());
 }
 
+void RenderManager::setup(float pCurrentTime)
+{
+	GlobalBuffer gb =
+	{
+		pCurrentTime,
+		mMode,
+		0,
+		0.0f
+	};
+
+	Dx11Render::instance()->useGlobalBuffer(gb);
+}
+
 void RenderManager::render()
 {
 	auto deferred = true;
@@ -113,27 +126,25 @@ void RenderManager::renderShadows()
 
 void RenderManager::renderToScreen()
 {
-	
-	
 	if (mMode <= 7)
 	{
 		mDeferredShader->useShader();
-		mDeferredBuffer->useTexture(0);
+		mDeferredBuffer->useTexture(6);
 
 		Dx11Render::instance()->bindDefaultFramebuffer();
 		
 		mOutputModel->render();
-		mDeferredBuffer->releaseTexture(0);
+		mDeferredBuffer->releaseTexture(6);
 	}
 	else
 	{
 		mHDRShader->useShader();
-		mHdrFrambuffer->useTexture(0);
+		mHdrFrambuffer->useTexture(6);
 
 		Dx11Render::instance()->bindDefaultFramebuffer();
 		
 		mOutputModel->render();
-		mHdrFrambuffer->releaseTexture(0);
+		mHdrFrambuffer->releaseTexture(6);
 	}
 }
 

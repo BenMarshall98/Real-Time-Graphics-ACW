@@ -3,6 +3,7 @@
 #include "Game.h"
 #include <string>
 #include "ObjectManager.h"
+#include "RenderManager.h"
 
 Win32Window * Win32Window::mInstance = nullptr;
 
@@ -148,6 +149,9 @@ LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMess
 		case '8':
 		case '9':
 			ObjectManager::instance()->explode(pWParam - '0');
+			break;
+		case VK_F8:
+			RenderManager::instance()->changeMode();
 			break;
 		default:
 			break;

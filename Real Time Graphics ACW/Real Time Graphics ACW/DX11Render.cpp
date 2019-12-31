@@ -10,6 +10,7 @@
 #include "InkRender.h"
 #include "InkPlaneRender.h"
 #include "InkCubeRender.h"
+#include "RenderManager.h"
 
 Dx11Render * Dx11Render::mInstance = nullptr;
 
@@ -318,7 +319,25 @@ bool Dx11Render::loadRender()
 		return false;
 	}
 
+	bd.ByteWidth = sizeof(GlobalBuffer);
+
+	result = mDevice->CreateBuffer(&bd, nullptr, mGlobalBuffer.ReleaseAndGetAddressOf());
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+
 	return true;
+}
+
+void Dx11Render::useGlobalBuffer(const GlobalBuffer & pGlobalBuffer) const
+{
+	mDeviceContext->UpdateSubresource(mGlobalBuffer.Get(), 0, nullptr, &pGlobalBuffer, 0, 0);
+	mDeviceContext->VSSetConstantBuffers(10, 1, mGlobalBuffer.GetAddressOf());
+	mDeviceContext->HSSetConstantBuffers(10, 1, mGlobalBuffer.GetAddressOf());
+	mDeviceContext->DSSetConstantBuffers(10, 1, mGlobalBuffer.GetAddressOf());
+	mDeviceContext->PSSetConstantBuffers(10, 1, mGlobalBuffer.GetAddressOf());
 }
 
 void Dx11Render::useModelBuffer(const ModelBuffer& pModelBuffer) const

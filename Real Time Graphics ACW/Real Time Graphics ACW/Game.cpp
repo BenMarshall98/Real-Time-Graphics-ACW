@@ -114,8 +114,7 @@ void Game::run()
 		mNorm->useFragment(8);
 		mDisp->useDomain(0);
 
-		
-
+		RenderManager::instance()->setup(mDt2);
 		//ObjectManager::instance()->render();
 
 		RenderManager::instance()->renderShadows();
@@ -123,7 +122,10 @@ void Game::run()
 		Dx11Render::instance()->defaultViewport();
 		//Dx11Render::instance()->bindDefaultFramebuffer();
 
-		
+		mBase->useFragment(6);
+		mSpec->useFragment(7);
+		mNorm->useFragment(8);
+		mDisp->useDomain(0);
 		RenderManager::instance()->render();
 		RenderManager::instance()->renderToScreen();
 		///*mInk->UpdateInk();

@@ -26,9 +26,6 @@ class Game
 	std::shared_ptr<Texture> mNorm;
 
 	std::unique_ptr<InkRender> mInk;
-	std::unique_ptr<Framebuffer> mFramebuffer;
-	std::shared_ptr<Shader> mShader;
-	std::shared_ptr<Model> mModel;
 	
 public:
 	Game();

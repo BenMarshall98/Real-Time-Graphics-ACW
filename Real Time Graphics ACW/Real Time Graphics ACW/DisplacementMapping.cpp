@@ -11,9 +11,17 @@ DisplacementMapping::DisplacementMapping() :
 {
 }
 
-void DisplacementMapping::render(std::shared_ptr<Shape>& pShape, bool)
+void DisplacementMapping::render(std::shared_ptr<Shape>& pShape, bool pDeferred)
 {
-	mNormalShader->useShader();
+	if (pDeferred)
+	{
+		mDeferredShader->useShader();
+	}
+	else
+	{
+		mNormalShader->useShader();
+	}
+	
 	pShape->render(true);
 }
 

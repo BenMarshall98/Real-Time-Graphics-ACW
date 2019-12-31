@@ -8,31 +8,70 @@
 #include "ToonShading.h"
 #include "LightingManager.h"
 #include "EnvironmentMapping.h"
+#include "ResourceManager.h"
+#include "DX11Render.h"
 
 RenderManager * RenderManager::mInstance = nullptr;
 
 RenderManager::RenderManager()
 {
+	mHdrFrambuffer = std::make_unique<Framebuffer>();
+	mDeferredBuffer = std::make_unique<Framebuffer>();
+
+	if (!mHdrFrambuffer->loadFramebuffer(true, false, { DirectX::Colors::MidnightBlue, {0.0f, 0.0f, 0.0f, 1.0f } }, TextureType::TEXTURE_2D, 2))
+	{
+		mHdrFrambuffer.reset();
+	}
+
+	if (!mDeferredBuffer->loadFramebuffer(true, false, 
+		{ {0.0f, 0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 0.0f, 1.0f} },
+		TextureType::TEXTURE_2D, 7))
+	{
+		mDeferredBuffer.reset();
+	}
+
+	mHDRShader = ResourceManager::instance()->loadShader("HDRVertexShader.hlsl", "HDRFragmentShader.hlsl");
+	mDeferredShader = ResourceManager::instance()->loadShader("DeferredVertexShader.hlsl", "DeferredFragmentShader.hlsl");
+	mOutputModel = ResourceManager::instance()->loadModel("plane.obj");
+	
 	mStaticTechnique = std::make_unique<PhongShading>();
 	mDynamicTechniques.emplace_back(std::make_unique<PhongShading>());
-	mDynamicTechniques.emplace_back(std::make_unique<GourandShading>());
+	//mDynamicTechniques.emplace_back(std::make_unique<GourandShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<TextureMapping>());
 	mDynamicTechniques.emplace_back(std::make_unique<BumpMapping>());
 	mDynamicTechniques.emplace_back(std::make_unique<DisplacementMapping>());
-	mDynamicTechniques.emplace_back(std::make_unique<EnvironmentMapping>());
-	mDynamicTechniques.emplace_back(std::make_unique<ToonShading>());
+	//mDynamicTechniques.emplace_back(std::make_unique<EnvironmentMapping>());
+	//mDynamicTechniques.emplace_back(std::make_unique<ToonShading>());
 }
 
 void RenderManager::render()
 {
+	auto deferred = true;
+	
+	if (mMode <= 7)
+	{
+		mDeferredBuffer->useFramebuffer();
+	}
+	else
+	{
+		mHdrFrambuffer->useFramebuffer();
+		deferred = false;
+	}
+	
 	for (auto& staticShape : mStaticShapes)
 	{
-		mStaticTechnique->render(staticShape, false);
+		mStaticTechnique->render(staticShape, deferred);
 	}
 
 	for (auto i = 0u; i < mDynamicShapes.size(); i++)
 	{
-		mDynamicTechniques[i]->render(mDynamicShapes[i], false);
+		mDynamicTechniques[i]->render(mDynamicShapes[i], deferred);
 	}
 }
 
@@ -72,6 +111,32 @@ void RenderManager::renderShadows()
 	lightManager->useShadowTextures();
 }
 
+void RenderManager::renderToScreen()
+{
+	
+	
+	if (mMode <= 7)
+	{
+		mDeferredShader->useShader();
+		mDeferredBuffer->useTexture(0);
+
+		Dx11Render::instance()->bindDefaultFramebuffer();
+		
+		mOutputModel->render();
+		mDeferredBuffer->releaseTexture(0);
+	}
+	else
+	{
+		mHDRShader->useShader();
+		mHdrFrambuffer->useTexture(0);
+
+		Dx11Render::instance()->bindDefaultFramebuffer();
+		
+		mOutputModel->render();
+		mHdrFrambuffer->releaseTexture(0);
+	}
+}
+
 void RenderManager::addStaticShape(const std::shared_ptr<Shape>& pShape)
 {
 	mStaticShapes.push_back(pShape);
@@ -99,4 +164,14 @@ void RenderManager::removeShape(const std::shared_ptr<Shape>& pShape)
 	}
 
 	//TODO: Deal with dynamic technique map
+}
+
+void RenderManager::changeMode()
+{
+	mMode++;
+
+	if (mMode > 9)
+	{
+		mMode = 0;
+	}
 }

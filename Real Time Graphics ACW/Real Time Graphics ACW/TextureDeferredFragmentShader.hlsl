@@ -17,10 +17,11 @@ struct PS_OUTPUT
 {
     float4 Pos : SV_Target0;
     float4 LightPos : SV_Target1;
-    float4 Normal : SV_Target2;
-    float4 Ambient : SV_Target3;
-    float4 Diffuse : SV_Target4;
-    float4 Specular : SV_Target5;
+    float4 LightNorm : SV_Target2;
+    float4 Normal : SV_Target3;
+    float4 Ambient : SV_Target4;
+    float4 Diffuse : SV_Target5;
+    float4 Specular : SV_Target6;
 };
 
 PS_OUTPUT main(VS_OUTPUT input)
@@ -29,6 +30,7 @@ PS_OUTPUT main(VS_OUTPUT input)
 
     output.Pos = input.FragmentPos;
     output.LightPos = input.LightFragmentPos;
+    output.LightNorm = input.Normal;
     output.Normal = input.Normal;
     
     float3 color = baseTexture.Sample(baseSampler, input.TexCoord).rgb;

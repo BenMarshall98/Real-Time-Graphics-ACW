@@ -269,65 +269,10 @@ float PointShadowCalculation(float3 pFragPos, float3 pLightPos, float pFarPlane,
     
     float shadow = 0.0f;
     
-    int shadowType = 0;
-    
-    if (shadowType == 0) //No PCF or VSM
-    {
-        float closestDepth = pTexture.Sample(pSampler, vec).r;
-        closestDepth *= pFarPlane;
+    float closestDepth = pTexture.Sample(pSampler, vec).r;
+    closestDepth *= pFarPlane;
         
-        shadow = currentDepth - bias > closestDepth ? 1.0f : 0.0f;
-    }
-    else if (shadowType == 1) //PCF
-    {
-        float samples = 4.0f;
-        float offset = 0.01f;
-        
-        for (float x = -offset; x < offset; x += offset / (samples * 0.5))
-        {
-            for (float y = -offset; y < offset; y += offset / (samples * 0.5))
-            {
-                for (float z = -offset; z < offset; z += offset / (samples * 0.5))
-                {
-                    float closestDepth = pTexture.Sample(pSampler, vec + float3(x, y, z)).r;
-                    closestDepth *= pFarPlane;
-                  
-                    shadow += currentDepth - bias > closestDepth ? 1.0f : 0.0f;
-                }
-            }
-        }
-        
-        shadow /= (samples * samples * samples);
-    }
-    else //VSM
-    {
-        currentDepth /= pFarPlane;
-        float samples = 4.0f;
-        float offset = 0.01f;
-        
-        for (float x = -offset; x < offset; x += offset / (samples * 0.5))
-        {
-            for (float y = -offset; y < offset; y += offset / (samples * 0.5))
-            {
-                for (float z = -offset; z < offset; z += offset / (samples * 0.5))
-                {
-                    //TODO: Source: http://developer.download.nvidia.com/SDK/10/direct3d/Source/VarianceShadowMapping/Doc/VarianceShadowMapping.pdf
-                    float2 moments = pTexture.Sample(pSampler, vec + float3(x, y, z)).rg;
-        
-                    float variance = moments.y - (moments.x * moments.x);
-
-                    float d = currentDepth - moments.x;
-                    float shadowVSM = (variance / (variance + d * d));
-        
-                    shadowVSM = max(shadowVSM, currentDepth <= moments.x);
-        
-                    shadow += 1.0f - shadowVSM;
-                }
-            }
-        }
-        
-        shadow /= (samples * samples * samples);
-    }
+    shadow = currentDepth - bias > closestDepth ? 1.0f : 0.0f;
 
     return (1.0 - shadow);
 }

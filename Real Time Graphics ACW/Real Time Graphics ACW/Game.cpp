@@ -56,16 +56,6 @@ Game::Game()
 	mNorm = ResourceManager::instance()->loadTexture("tyre_normal.dds");
 
 	mInk = std::make_unique<InkRender>();
-
-	mFramebuffer = std::make_unique<Framebuffer>();
-
-	if (!mFramebuffer->loadFramebuffer(true, false, { DirectX::Colors::MidnightBlue, {0.0f, 0.0f, 0.0f, 1.0f } }, TextureType::TEXTURE_2D, 2))
-	{
-		mFramebuffer.reset();
-	}
-
-	mShader = ResourceManager::instance()->loadShader("HDRVertexShader.hlsl", "HDRFragmentShader.hlsl");
-	mModel = ResourceManager::instance()->loadModel("plane.obj");
 	
 	QueryPerformanceFrequency(&mTimer);
 	mFreq = double(mTimer.QuadPart);
@@ -133,10 +123,9 @@ void Game::run()
 		Dx11Render::instance()->defaultViewport();
 		//Dx11Render::instance()->bindDefaultFramebuffer();
 
-		mFramebuffer->useFramebuffer();
 		
 		RenderManager::instance()->render();
-
+		RenderManager::instance()->renderToScreen();
 		///*mInk->UpdateInk();
 
 		//Dx11Render::instance()->bindDefaultFramebuffer();
@@ -148,12 +137,6 @@ void Game::run()
 		//
 		// Present our back buffer to our front buffer
 		//
-
-		mShader->useShader();
-		mFramebuffer->useTexture(0);
-		Dx11Render::instance()->bindDefaultFramebuffer();
-
-		mModel->render();
 		
 		Dx11Render::instance()->present();
 	}

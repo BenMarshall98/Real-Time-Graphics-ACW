@@ -44,6 +44,7 @@ struct DS_OUTPUT
     float4 Pos : SV_POSITION;
     float3 FragmentPos : POSITION0;
     float4 LightFragmentPos : POSITION1;
+    float3 Normal : NORMAL0;
     float2 TexCoord : TEXCOORD0;
     float3x3 TBN : POSITION2;
 };
@@ -65,11 +66,11 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     pos += uvw[2] * tri[2].Pos;
     
     //Normal
-    float3 normal = uvw[0] * tri[0].Normal;
-    normal += uvw[1] * tri[1].Normal;
-    normal += uvw[2] * tri[2].Normal;
+    output.Normal = uvw[0] * tri[0].Normal;
+    output.Normal += uvw[1] * tri[1].Normal;
+    output.Normal += uvw[2] * tri[2].Normal;
     
-    pos += normalize(normal) * height;
+    pos += normalize(output.Normal) * height;
     
     //FragmentPosition
     output.Pos = mul(float4(pos, 1.0f), World);
@@ -94,7 +95,7 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     
     output.TBN = float3x3(normalize(mul(World, float4(tangent, 1.0f)).xyz),
                         normalize(mul(World, float4(biTangent, 1.0f)).xyz),
-                        normalize(mul(World, float4(normal, 1.0f)).xyz));
+                        normalize(mul(World, float4(output.Normal, 1.0f)).xyz));
     
     return output;
 }

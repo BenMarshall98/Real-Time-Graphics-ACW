@@ -12,13 +12,23 @@ class RenderManager final
 
 	RenderManager();
 
+	std::shared_ptr<Shader> mHDRShader;
+	std::shared_ptr<Shader> mDeferredShader;
+
+	std::shared_ptr<Model> mOutputModel;
+
 	std::unique_ptr<Technique> mStaticTechnique;
 	std::vector<std::unique_ptr<Technique>> mDynamicTechniques;
 
 	std::vector<std::shared_ptr<Shape>> mStaticShapes;
 	std::vector<std::shared_ptr<Shape>> mDynamicShapes;
 
+	std::unique_ptr<Framebuffer> mHdrFrambuffer;
+	std::unique_ptr<Framebuffer> mDeferredBuffer;
+
 	std::map<std::unique_ptr<Technique>, std::shared_ptr<Shape>> mRenderTechnique;
+
+	unsigned int mMode = 8u;
 
 public:
 	~RenderManager() = default;
@@ -38,9 +48,12 @@ public:
 
 	void render();
 	void renderShadows();
+	void renderToScreen();
 
 	void addStaticShape(const std::shared_ptr<Shape>& pShape);
 	void addDynamicShape(const std::shared_ptr<Shape>& pShape);
 
 	void removeShape(const std::shared_ptr<Shape> & pShape);
+
+	void changeMode();
 };

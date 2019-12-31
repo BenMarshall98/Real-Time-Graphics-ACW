@@ -652,6 +652,27 @@
     <CopyFileToFolders Include="TextureDeferredVertexShader.hlsl">
       <Filter>Resource Files\Shaders\TextureShading\Deferred</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="EnvironmentDeferredFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\EnvironmentShading\Deferred</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="EnvironmentDeferredVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\EnvironmentShading\Deferred</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="EnvironmentSetupFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\EnvironmentShading\Setup</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="EnvironmentSetupVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\EnvironmentShading\Setup</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="EnvironmentSetupGeometryShader.hlsl">
+      <Filter>Resource Files\Shaders\EnvironmentShading\Setup</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="EnvironmentFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\EnvironmentShading\Forward</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="EnvironmentVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\EnvironmentShading\Forward</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />
@@ -673,28 +694,5 @@
     <Image Include="tyre_spec.dds">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="EnvironmentDeferredVertexShader.hlsl">
-      <Filter>Resource Files\Shaders\EnvironmentShading\Deferred</Filter>
-    </FxCompile>
-    <FxCompile Include="EnvironmentDeferredFragmentShader.hlsl">
-      <Filter>Resource Files\Shaders\EnvironmentShading\Deferred</Filter>
-    </FxCompile>
-    <FxCompile Include="EnvironmentVertexShader.hlsl">
-      <Filter>Resource Files\Shaders\EnvironmentShading\Forward</Filter>
-    </FxCompile>
-    <FxCompile Include="EnvironmentFragmentShader.hlsl">
-      <Filter>Resource Files\Shaders\EnvironmentShading\Forward</Filter>
-    </FxCompile>
-    <FxCompile Include="EnvironmentSetupVertexShader.hlsl">
-      <Filter>Resource Files\Shaders\EnvironmentShading\Setup</Filter>
-    </FxCompile>
-    <FxCompile Include="EnvironmentSetupGeometryShader.hlsl">
-      <Filter>Resource Files\Shaders\EnvironmentShading\Setup</Filter>
-    </FxCompile>
-    <FxCompile Include="EnvironmentSetupFragmentShader.hlsl">
-      <Filter>Resource Files\Shaders\EnvironmentShading\Setup</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>

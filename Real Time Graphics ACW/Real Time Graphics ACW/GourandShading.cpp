@@ -1,5 +1,6 @@
 #include "GourandShading.h"
 #include "ResourceManager.h"
+#include "DX11Render.h"
 
 GourandShading::GourandShading() :
 	Technique(
@@ -7,9 +8,10 @@ GourandShading::GourandShading() :
 		nullptr,
 		ResourceManager::instance()->loadShader("NormalDirectionalShadowVertexShader.hlsl", "NormalDirectionalShadowFragmentShader.hlsl"),
 		ResourceManager::instance()->loadShader("NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl")
-	), mFramebuffer(std::make_unique<Framebuffer>())
+	), mFramebuffer(std::make_unique<Framebuffer>()), mRenderPlane(ResourceManager::instance()->loadModel("plane.obj")),
+	mPostShader(ResourceManager::instance()->loadShader("PostVertexShader.hlsl", "PostFragmentShader.hlsl"))
 {
-	if (!mFramebuffer->loadFramebuffer(true, true, { { 0.0f, 0.0f, 0.0f, 0.0f }, {0.0f, 0.0f, 0.0f, 0.0f } }, TextureType::TEXTURE_2D, 2))
+	if (!mFramebuffer->loadFramebuffer(true, true, { { 0.0f, 0.0f, 0.0f, 0.0f } }))
 	{
 		mFramebuffer.reset();
 	}
@@ -21,7 +23,7 @@ void GourandShading::render(std::shared_ptr<Shape>& pShape, bool, std::unique_pt
 	mNormalShader->useShader();
 	pShape->render();
 
-	pCurrentFramebuffer->useFramebuffer();
+	pCurrentFramebuffer->useFramebuffer(false);
 }
 
 void GourandShading::renderDirectionalShadow(std::shared_ptr<Shape>& pShape)
@@ -36,7 +38,29 @@ void GourandShading::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape)
 	pShape->render();
 }
 
-void GourandShading::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
+bool GourandShading::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
 {
-	//TODO: Implement
+	mFramebuffer->useTexture(8);
+
+	if (pCurrentFramebuffer == nullptr)
+	{
+		Dx11Render::instance()->bindDefaultFramebuffer();
+	}
+	else
+	{
+		pCurrentFramebuffer->useFramebuffer();
+	}
+
+	mPostShader->useShader();
+
+	mRenderPlane->render();
+
+	mFramebuffer->releaseTexture(8);
+
+	return true;
+}
+
+bool GourandShading::renderTransparent(std::unique_ptr<Framebuffer> &)
+{
+	return false;
 }

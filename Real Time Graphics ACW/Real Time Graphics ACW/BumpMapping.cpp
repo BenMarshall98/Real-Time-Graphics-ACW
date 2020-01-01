@@ -37,7 +37,12 @@ void BumpMapping::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape)
 	pShape->render();
 }
 
-void BumpMapping::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
+bool BumpMapping::renderPostprocessing(std::unique_ptr<Framebuffer> &)
 {
-	//TODO: Implement
+	return false;
+}
+
+bool BumpMapping::renderTransparent(std::unique_ptr<Framebuffer> &)
+{
+	return false;
 }

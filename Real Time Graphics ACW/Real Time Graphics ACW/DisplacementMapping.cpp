@@ -37,7 +37,12 @@ void DisplacementMapping::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pS
 	pShape->render(true);
 }
 
-void DisplacementMapping::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
+bool DisplacementMapping::renderPostprocessing(std::unique_ptr<Framebuffer> &)
 {
-	//TODO: Implement
+	return false;
+}
+
+bool DisplacementMapping::renderTransparent(std::unique_ptr<Framebuffer> &)
+{
+	return false;
 }

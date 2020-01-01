@@ -24,6 +24,7 @@ public:
 	virtual void render(std::shared_ptr<Shape>& pShape, bool pDeferred, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) = 0;
 	virtual void renderDirectionalShadow(std::shared_ptr<Shape>& pShape) = 0;
 	virtual void renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape) = 0;
-	virtual void renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer) = 0;
+	virtual bool renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer) = 0;
+	virtual bool renderTransparent(std::unique_ptr<Framebuffer> & pCurrentFramebuffer) = 0;
 };
 

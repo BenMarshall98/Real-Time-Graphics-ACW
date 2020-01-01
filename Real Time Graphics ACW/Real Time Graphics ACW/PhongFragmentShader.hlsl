@@ -67,16 +67,10 @@ struct VS_OUTPUT
     float4 LightFragmentPos : POSITION2;
 };
 
-struct PS_OUTPUT
-{
-    float4 NormalColor : SV_Target0;
-    float4 BloomColor : SV_Target1;
-};
-
 float DirectionalShadowCalculation(float4 lightPos, float3 lightDir, float3 normal);
 float PointShadowCalculation(float3 pFragPos, float3 pLightPos, float pFarPlane, TextureCube pTexture, SamplerState pSampler);
 
-PS_OUTPUT main(VS_OUTPUT input)
+float4 main(VS_OUTPUT input) : SV_Target
 {
     float3 normal = normalize(input.Normal.xyz);
     float3 viewDirection = normalize(input.ViewPosition - input.FragmentPos.xyz);
@@ -167,24 +161,7 @@ PS_OUTPUT main(VS_OUTPUT input)
             color += MaterialSpecular * SpotColor[i] * specular * attenuation * shadow * intensity;
         }
     }
-    
-    PS_OUTPUT output = (PS_OUTPUT) 0;
-    
-    output.NormalColor = float4(color, 1.0f);
-    
-    //TODO: Source
-    float brightness = dot(color, float3(0.2126f, 0.7152f, 0.0722f));
-    
-    if (brightness > 1.0f)
-    {
-        output.BloomColor = float4(color, 1.0f);
-    }
-    else
-    {
-        output.BloomColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-    }
-    
-    return output;
+    return float4(color, 1.0f);
 }
 
 float DirectionalShadowCalculation(float4 lightPos, float3 lightDir, float3 normal)
@@ -194,6 +171,11 @@ float DirectionalShadowCalculation(float4 lightPos, float3 lightDir, float3 norm
     projCoords.y = -projCoords.y;
     
     projCoords.xy = projCoords.xy * 0.5f + 0.5f;
+    
+    if (projCoords.x < 0.0f || projCoords.y < 0.0f || projCoords.x > 1.0f || projCoords.y > 1.0f)
+    {
+        return 1.0f;
+    }
     
     if (projCoords.z > 1.0)
     {

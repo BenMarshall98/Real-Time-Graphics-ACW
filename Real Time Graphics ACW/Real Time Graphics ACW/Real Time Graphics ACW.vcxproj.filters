@@ -142,6 +142,9 @@
     <Filter Include="Resource Files\Shaders\DeferredShading">
       <UniqueIdentifier>{6338e227-c123-4b42-8bb7-cdfd82d18069}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders\PostProcessing">
+      <UniqueIdentifier>{eeed4c42-309a-4a5c-9325-7cfe5244ee80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -681,6 +684,12 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="DeferredVertexShader.hlsl">
       <Filter>Resource Files\Shaders\DeferredShading</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="PostFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\PostProcessing</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="PostVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\PostProcessing</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>

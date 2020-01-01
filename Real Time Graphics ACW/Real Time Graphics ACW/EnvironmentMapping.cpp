@@ -26,7 +26,12 @@ void EnvironmentMapping::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pSh
 	//TODO: Implement	
 }
 
-void EnvironmentMapping::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
+bool EnvironmentMapping::renderPostprocessing(std::unique_ptr<Framebuffer> &)
 {
-	//TODO: Implement
+	return false;
+}
+
+bool EnvironmentMapping::renderTransparent(std::unique_ptr<Framebuffer> &)
+{
+	return false;
 }

@@ -37,7 +37,12 @@ void TextureMapping::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape)
 	pShape->render();
 }
 
-void TextureMapping::renderPostprocessing(std::unique_ptr<Framebuffer> &)
+bool TextureMapping::renderPostprocessing(std::unique_ptr<Framebuffer> &)
 {
-	//TODO: Implement
+	return false;
+}
+
+bool TextureMapping::renderTransparent(std::unique_ptr<Framebuffer> &)
+{
+	return false;
 }

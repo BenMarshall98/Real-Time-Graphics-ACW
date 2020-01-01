@@ -79,6 +79,9 @@ SamplerState diffuseSampler : register(s11);
 Texture2D specularTexture : register(t12);
 SamplerState specularSampler : register(s12);
 
+Texture2D depthTexture : register(t13);
+SamplerState depthSampler : register(s13);
+
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
@@ -86,38 +89,53 @@ struct VS_OUTPUT
     float2 TexCoord : TEXCOORD0;
 };
 
+struct PS_OUTPUT
+{
+    float4 Color : SV_Target;
+    float Depth : SV_Depth;
+};
+
 float DirectionalShadowCalculation(float4 lightPos, float3 lightDir, float3 normal);
 float PointShadowCalculation(float3 pFragPos, float3 pLightPos, float pFarPlane, TextureCube pTexture, SamplerState pSampler);
 
-float4 main(VS_OUTPUT input) : SV_Target
+PS_OUTPUT main(VS_OUTPUT input)
 {
+    float visable = posTexture.Sample(posSampler, input.TexCoord).a;
+    
+    if (visable == 0.0f)
+    {
+        discard;
+    }
+    
+    PS_OUTPUT output = (PS_OUTPUT) 0;
+    
     if (ScreenMode == 1)
     {
-        return posTexture.Sample(posSampler, input.TexCoord);
+        output.Color = posTexture.Sample(posSampler, input.TexCoord);
     }
     else if (ScreenMode == 2)
     {
-        return lightPosTexture.Sample(lightPosSampler, input.TexCoord);
+        output.Color = lightPosTexture.Sample(lightPosSampler, input.TexCoord);
     }
     else if (ScreenMode == 3)
     {
-        return lightNormTexture.Sample(lightNormSampler, input.TexCoord);
+        output.Color = lightNormTexture.Sample(lightNormSampler, input.TexCoord);
     }
     else if (ScreenMode == 4)
     {
-        return normalTexture.Sample(normalSampler, input.TexCoord);
+        output.Color = normalTexture.Sample(normalSampler, input.TexCoord);
     }
     else if (ScreenMode == 5)
     {
-        return ambientTexture.Sample(ambientSampler, input.TexCoord);
+        output.Color = ambientTexture.Sample(ambientSampler, input.TexCoord);
     }
     else if (ScreenMode == 6)
     {
-        return diffuseTexture.Sample(diffuseSampler, input.TexCoord);
+        output.Color = diffuseTexture.Sample(diffuseSampler, input.TexCoord);
     }
     else if (ScreenMode == 7)
     {
-        return specularTexture.Sample(specularSampler, input.TexCoord);
+        output.Color = specularTexture.Sample(specularSampler, input.TexCoord);
     }
     else
     {
@@ -224,8 +242,12 @@ float4 main(VS_OUTPUT input) : SV_Target
             }
         }
     
-        return float4(color, 1.0f);
+        output.Color = float4(color, 1.0f);
     }
+    
+    output.Depth = depthTexture.Sample(depthSampler, input.TexCoord).r;
+    
+    return output;
 }
 
 float DirectionalShadowCalculation(float4 lightPos, float3 lightDir, float3 normal)
@@ -235,6 +257,11 @@ float DirectionalShadowCalculation(float4 lightPos, float3 lightDir, float3 norm
     projCoords.y = -projCoords.y;
     
     projCoords.xy = projCoords.xy * 0.5f + 0.5f;
+    
+    if (projCoords.x < 0.0f || projCoords.y < 0.0f || projCoords.x > 1.0f || projCoords.y > 1.0f)
+    {
+        return 1.0f;
+    }
     
     if (projCoords.z > 1.0)
     {

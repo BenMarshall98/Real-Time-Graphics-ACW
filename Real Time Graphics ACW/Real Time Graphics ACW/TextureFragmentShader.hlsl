@@ -44,18 +44,13 @@ struct VS_OUTPUT
     float2 TexCoord : TEXCOORD0;
 };
 
-struct PS_OUTPUT
-{
-    float4 NormalColor : SV_Target0;
-    float4 BloomColor : SV_Target1;
-};
 
-PS_OUTPUT main(VS_OUTPUT input)
+float4 main(VS_OUTPUT input) : SV_Target
 {
     float3 normal = normalize(input.Normal.xyz);
     float3 viewDirection = normalize(input.ViewPosition - input.FragmentPos.xyz);
     
-    float3 baseColor = specTexture.Sample(specSampler, input.TexCoord).xyz;
+    float3 baseColor = baseTexture.Sample(baseSampler, input.TexCoord).xyz;
     float spec = specTexture.Sample(specSampler, input.TexCoord).x * 256;
 
     float3 color = float3(0.0f, 0.0f, 0.0f);
@@ -120,21 +115,5 @@ PS_OUTPUT main(VS_OUTPUT input)
         }
     }
     
-    PS_OUTPUT output = (PS_OUTPUT) 0;
-    
-    output.NormalColor = float4(color, 1.0f);
-
-     //TODO: Source
-    float brightness = dot(color, float3(0.2126f, 0.7152f, 0.0722f));
-    
-    if (brightness > 1.0f)
-    {
-        output.BloomColor = float4(color, 1.0f);
-    }
-    else
-    {
-        output.BloomColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-    }
-    
-    return output;
+    return float4(color, 1.0f);
 }

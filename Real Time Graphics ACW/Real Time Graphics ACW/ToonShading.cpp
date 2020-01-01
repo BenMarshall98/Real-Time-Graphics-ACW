@@ -29,7 +29,12 @@ void ToonShading::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape)
 	pShape->render();
 }
 
-void ToonShading::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
+bool ToonShading::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
 {
-	//TODO: Implement
+	return false; //TODO: Implement
+}
+
+bool ToonShading::renderTransparent(std::unique_ptr<Framebuffer> &)
+{
+	return false;
 }

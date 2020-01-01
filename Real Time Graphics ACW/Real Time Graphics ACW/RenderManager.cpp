@@ -17,14 +17,16 @@ RenderManager::RenderManager()
 {
 	mHdrFramebuffer = std::make_unique<Framebuffer>();
 	mDeferredBuffer = std::make_unique<Framebuffer>();
+	mScreenFramebufferOne = std::make_unique<Framebuffer>();
+	mScreenFramebufferTwo = std::make_unique<Framebuffer>();
 
-	if (!mHdrFramebuffer->loadFramebuffer(true, false, { DirectX::Colors::MidnightBlue, {0.0f, 0.0f, 0.0f, 1.0f } }, TextureType::TEXTURE_2D, 2))
+	if (!mHdrFramebuffer->loadFramebuffer(true, true, { {0.0f, 0.0f, 0.0f, 0.0f } }, TextureType::TEXTURE_2D))
 	{
 		mHdrFramebuffer.reset();
 	}
 
-	if (!mDeferredBuffer->loadFramebuffer(true, false, 
-		{ {0.0f, 0.0f, 0.0f, 1.0f},
+	if (!mDeferredBuffer->loadFramebuffer(true, true, 
+		{ {0.0f, 0.0f, 0.0f, 0.0f},
 			{0.0f, 0.0f, 0.0f, 1.0f},
 			{0.0f, 0.0f, 0.0f, 1.0f},
 			{0.0f, 0.0f, 0.0f, 1.0f},
@@ -34,6 +36,16 @@ RenderManager::RenderManager()
 		TextureType::TEXTURE_2D, 7))
 	{
 		mDeferredBuffer.reset();
+	}
+
+	if (!mScreenFramebufferOne->loadFramebuffer(true, true, { { 0.0f, 0.0f, 0.0f, 0.0f } }))
+	{
+		mScreenFramebufferOne.reset();
+	}
+
+	if (!mScreenFramebufferTwo->loadFramebuffer(true, true, { {0.0f, 0.0f, 0.0f, 0.0f} }))
+	{
+		mScreenFramebufferTwo.reset();
 	}
 
 	mHDRShader = ResourceManager::instance()->loadShader("HDRVertexShader.hlsl", "HDRFragmentShader.hlsl");
@@ -83,17 +95,17 @@ void RenderManager::render()
 	}
 	else
 	{
-		mHdrFramebuffer->useFramebuffer();
+		mScreenFramebufferOne->useFramebuffer();
 		deferred = false;
 
 		for (auto& staticShape : mStaticShapes)
 		{
-			mStaticTechnique->render(staticShape, deferred, mHdrFramebuffer);
+			mStaticTechnique->render(staticShape, deferred, mScreenFramebufferOne);
 		}
 
 		for (auto i = 0u; i < mDynamicShapes.size(); i++)
 		{
-			mDynamicTechniques[i]->render(mDynamicShapes[i], deferred, mHdrFramebuffer);
+			mDynamicTechniques[i]->render(mDynamicShapes[i], deferred, mScreenFramebufferOne);
 		}
 	}
 }
@@ -141,20 +153,136 @@ void RenderManager::renderToScreen()
 		mDeferredShader->useShader();
 		mDeferredBuffer->useTexture(6);
 
-		Dx11Render::instance()->bindDefaultFramebuffer();
+		mScreenFramebufferOne->useFramebuffer();
 		
 		mOutputModel->render();
 		mDeferredBuffer->releaseTexture(6);
 	}
-	else
+
+	if (mMode == 0 || mMode == 8 || mMode == 9)
 	{
-		mHDRShader->useShader();
-		mHdrFramebuffer->useTexture(6);
+		//Post Processing
+		for (auto& staticShape : mStaticShapes)
+		{
+			if (mFramebuffer == 0)
+			{
+				mScreenFramebufferOne->useTexture(6);
+				if (mStaticTechnique->renderPostprocessing(mScreenFramebufferTwo))
+				{
+					mFramebuffer = 1;
+				}
+				mScreenFramebufferOne->releaseTexture(6);
+				
+			}
+			else
+			{
+				mScreenFramebufferTwo->useTexture(6);
+				if (mStaticTechnique->renderPostprocessing(mScreenFramebufferOne))
+				{
+					mFramebuffer = 0;
+				}
+				mScreenFramebufferTwo->releaseTexture(6);
+			}
+		}
+
+		for (auto i = 0u; i < mDynamicShapes.size(); i++)
+		{
+			if (mFramebuffer == 0)
+			{
+				mScreenFramebufferOne->useTexture(6);
+				if (mDynamicTechniques[i]->renderPostprocessing(mScreenFramebufferTwo))
+				{
+					mFramebuffer = 1;
+				}
+				mScreenFramebufferOne->releaseTexture(6);
+
+			}
+			else
+			{
+				mScreenFramebufferTwo->useTexture(6);
+				if (mDynamicTechniques[i]->renderPostprocessing(mScreenFramebufferOne))
+				{
+					mFramebuffer = 0;
+				}
+				mScreenFramebufferTwo->releaseTexture(6);
+			}
+		}
+
+		//Transparent
+		for (auto& staticShape : mStaticShapes)
+		{
+			if (mFramebuffer == 0)
+			{
+				mScreenFramebufferOne->useTexture(6);
+				if (mStaticTechnique->renderTransparent(mScreenFramebufferTwo))
+				{
+					mFramebuffer = 1;
+				}
+				mScreenFramebufferOne->releaseTexture(6);
+
+			}
+			else
+			{
+				mScreenFramebufferTwo->useTexture(6);
+				if (mStaticTechnique->renderTransparent(mScreenFramebufferOne))
+				{
+					mFramebuffer = 0;
+				}
+				mScreenFramebufferTwo->releaseTexture(6);
+			}
+		}
+
+		for (auto i = 0u; i < mDynamicShapes.size(); i++)
+		{
+			if (mFramebuffer == 0)
+			{
+				mScreenFramebufferOne->useTexture(6);
+				if (mDynamicTechniques[i]->renderTransparent(mScreenFramebufferTwo))
+				{
+					mFramebuffer = 1;
+				}
+				mScreenFramebufferOne->releaseTexture(6);
+
+			}
+			else
+			{
+				mScreenFramebufferTwo->useTexture(6);
+				if (mDynamicTechniques[i]->renderTransparent(mScreenFramebufferOne))
+				{
+					mFramebuffer = 0;
+				}
+				mScreenFramebufferTwo->releaseTexture(6);
+			}
+		}
+
+		//TODO: ink
+
+		//TODO: explosion
+	}
+
+	//TODO: Work out bloom
+
+	if (mFramebuffer == 0)
+	{
+		mScreenFramebufferOne->useTexture(6);
 
 		Dx11Render::instance()->bindDefaultFramebuffer();
-		
+
+		mHDRShader->useShader();
+
 		mOutputModel->render();
-		mHdrFramebuffer->releaseTexture(6);
+		mScreenFramebufferOne->releaseTexture(6);
+	}
+	else
+	{
+		mScreenFramebufferTwo->useTexture(6);
+
+		Dx11Render::instance()->bindDefaultFramebuffer();
+
+		mHDRShader->useShader();
+
+		mOutputModel->render();
+		mScreenFramebufferTwo->releaseTexture(6);
 	}
 }
 

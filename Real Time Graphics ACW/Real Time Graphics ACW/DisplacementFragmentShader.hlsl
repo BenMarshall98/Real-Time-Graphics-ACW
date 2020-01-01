@@ -49,13 +49,7 @@ struct DS_OUTPUT
     float3x3 TBN : POSITION2;
 };
 
-struct PS_OUTPUT
-{
-    float4 NormalColor : SV_Target0;
-    float4 BloomColor : SV_Target1;
-};
-
-PS_OUTPUT main(DS_OUTPUT input)
+float4 main(DS_OUTPUT input) : SV_Target
 {
     float3 norm = normTexture.Sample(normSampler, input.TexCoord).xyz;
     
@@ -129,21 +123,5 @@ PS_OUTPUT main(DS_OUTPUT input)
         }
     }
 
-    PS_OUTPUT output = (PS_OUTPUT) 0;
-    
-    output.NormalColor = float4(color, 1.0f);
-    
-    //TODO: Source
-    float brightness = dot(color, float3(0.2126f, 0.7152f, 0.0722f));
-    
-    if (brightness > 1.0f)
-    {
-        output.BloomColor = float4(color, 1.0f);
-    }
-    else
-    {
-        output.BloomColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-    }
-    
-    return output;
+    return float4(color, 1.0f);
 }

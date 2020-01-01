@@ -34,9 +34,13 @@ class RenderManager final
 	std::unique_ptr<Framebuffer> mHdrFramebuffer;
 	std::unique_ptr<Framebuffer> mDeferredBuffer;
 
+	std::unique_ptr<Framebuffer> mScreenFramebufferOne;
+	std::unique_ptr<Framebuffer> mScreenFramebufferTwo;
+
 	std::map<std::unique_ptr<Technique>, std::shared_ptr<Shape>> mRenderTechnique;
 
 	unsigned int mMode = 0u;
+	unsigned int mFramebuffer = 0u;
 
 public:
 	~RenderManager() = default;

@@ -37,7 +37,12 @@ void PhongShading::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape)
 	pShape->render();
 }
 
-void PhongShading::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
+bool PhongShading::renderPostprocessing(std::unique_ptr<Framebuffer> &)
 {
-	//TODO: Implement
+	return false;
+}
+
+bool PhongShading::renderTransparent(std::unique_ptr<Framebuffer> &)
+{
+	return false;
 }

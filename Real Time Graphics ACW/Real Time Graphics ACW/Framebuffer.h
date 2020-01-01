@@ -39,7 +39,7 @@ public:
 	Framebuffer(const Framebuffer & pFramebuffer) = delete;
 	Framebuffer & operator= (const Framebuffer & pFramebuffer) = delete;
 
-	void useFramebuffer() const;
+	void useFramebuffer(bool pClearFramebuffer = true) const;
 	void useTexture(unsigned int pSlot);
 	void releaseTexture(unsigned int pSlot) const;
 

@@ -344,18 +344,21 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 	return true;
 }
 
-void Framebuffer::useFramebuffer() const
+void Framebuffer::useFramebuffer(bool pClearFramebuffer) const
 {
 	Dx11Render::instance()->setViewport(mWidth, mHeight);
 	
 	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
 
-	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
+	if (pClearFramebuffer)
 	{
-		deviceContext->ClearRenderTargetView(mColorTextureTargetViews[i], mDefaultColours[i]);
+		for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
+		{
+			deviceContext->ClearRenderTargetView(mColorTextureTargetViews[i], mDefaultColours[i]);
+		}
+
+		deviceContext->ClearDepthStencilView(mDepthTextureTargetView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0.0f);
 	}
-	
-	deviceContext->ClearDepthStencilView(mDepthTextureTargetView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0.0f);
 
 	deviceContext->OMSetRenderTargets(mColorTextureTargetViews.size(), mColorTextureTargetViews.data(), mDepthTextureTargetView.Get());
 }

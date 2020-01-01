@@ -21,8 +21,9 @@ public:
 	Technique & operator= (const Technique &) = delete;
 	Technique & operator= (Technique &&) = delete;
 
-	virtual void render(std::shared_ptr<Shape>& pShape, bool pDeferred) = 0;
+	virtual void render(std::shared_ptr<Shape>& pShape, bool pDeferred, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) = 0;
 	virtual void renderDirectionalShadow(std::shared_ptr<Shape>& pShape) = 0;
 	virtual void renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape) = 0;
+	virtual void renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer) = 0;
 };
 

@@ -11,7 +11,7 @@ BumpMapping::BumpMapping() :
 {
 }
 
-void BumpMapping::render(std::shared_ptr<Shape>& pShape, bool pDeferred)
+void BumpMapping::render(std::shared_ptr<Shape>& pShape, bool pDeferred, std::unique_ptr<Framebuffer> &)
 {
 	if (pDeferred)
 	{
@@ -35,4 +35,9 @@ void BumpMapping::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape)
 {
 	mOmniDirectionalShader->useShader();
 	pShape->render();
+}
+
+void BumpMapping::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
+{
+	//TODO: Implement
 }

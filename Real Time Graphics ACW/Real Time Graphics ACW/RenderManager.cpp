@@ -15,12 +15,12 @@ RenderManager * RenderManager::mInstance = nullptr;
 
 RenderManager::RenderManager()
 {
-	mHdrFrambuffer = std::make_unique<Framebuffer>();
+	mHdrFramebuffer = std::make_unique<Framebuffer>();
 	mDeferredBuffer = std::make_unique<Framebuffer>();
 
-	if (!mHdrFrambuffer->loadFramebuffer(true, false, { DirectX::Colors::MidnightBlue, {0.0f, 0.0f, 0.0f, 1.0f } }, TextureType::TEXTURE_2D, 2))
+	if (!mHdrFramebuffer->loadFramebuffer(true, false, { DirectX::Colors::MidnightBlue, {0.0f, 0.0f, 0.0f, 1.0f } }, TextureType::TEXTURE_2D, 2))
 	{
-		mHdrFrambuffer.reset();
+		mHdrFramebuffer.reset();
 	}
 
 	if (!mDeferredBuffer->loadFramebuffer(true, false, 
@@ -42,7 +42,7 @@ RenderManager::RenderManager()
 	
 	mStaticTechnique = std::make_unique<PhongShading>();
 	mDynamicTechniques.emplace_back(std::make_unique<PhongShading>());
-	//mDynamicTechniques.emplace_back(std::make_unique<GourandShading>());
+	mDynamicTechniques.emplace_back(std::make_unique<GourandShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<TextureMapping>());
 	mDynamicTechniques.emplace_back(std::make_unique<BumpMapping>());
 	mDynamicTechniques.emplace_back(std::make_unique<DisplacementMapping>());
@@ -70,21 +70,31 @@ void RenderManager::render()
 	if (mMode <= 7)
 	{
 		mDeferredBuffer->useFramebuffer();
+
+		for (auto& staticShape : mStaticShapes)
+		{
+			mStaticTechnique->render(staticShape, deferred, mDeferredBuffer);
+		}
+
+		for (auto i = 0u; i < mDynamicShapes.size(); i++)
+		{
+			mDynamicTechniques[i]->render(mDynamicShapes[i], deferred, mDeferredBuffer);
+		}
 	}
 	else
 	{
-		mHdrFrambuffer->useFramebuffer();
+		mHdrFramebuffer->useFramebuffer();
 		deferred = false;
-	}
-	
-	for (auto& staticShape : mStaticShapes)
-	{
-		mStaticTechnique->render(staticShape, deferred);
-	}
 
-	for (auto i = 0u; i < mDynamicShapes.size(); i++)
-	{
-		mDynamicTechniques[i]->render(mDynamicShapes[i], deferred);
+		for (auto& staticShape : mStaticShapes)
+		{
+			mStaticTechnique->render(staticShape, deferred, mHdrFramebuffer);
+		}
+
+		for (auto i = 0u; i < mDynamicShapes.size(); i++)
+		{
+			mDynamicTechniques[i]->render(mDynamicShapes[i], deferred, mHdrFramebuffer);
+		}
 	}
 }
 
@@ -139,12 +149,12 @@ void RenderManager::renderToScreen()
 	else
 	{
 		mHDRShader->useShader();
-		mHdrFrambuffer->useTexture(6);
+		mHdrFramebuffer->useTexture(6);
 
 		Dx11Render::instance()->bindDefaultFramebuffer();
 		
 		mOutputModel->render();
-		mHdrFrambuffer->releaseTexture(6);
+		mHdrFramebuffer->releaseTexture(6);
 	}
 }
 

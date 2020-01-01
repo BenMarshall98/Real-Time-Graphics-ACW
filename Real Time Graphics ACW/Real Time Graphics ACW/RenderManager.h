@@ -31,7 +31,7 @@ class RenderManager final
 	std::vector<std::shared_ptr<Shape>> mStaticShapes;
 	std::vector<std::shared_ptr<Shape>> mDynamicShapes;
 
-	std::unique_ptr<Framebuffer> mHdrFrambuffer;
+	std::unique_ptr<Framebuffer> mHdrFramebuffer;
 	std::unique_ptr<Framebuffer> mDeferredBuffer;
 
 	std::map<std::unique_ptr<Technique>, std::shared_ptr<Shape>> mRenderTechnique;

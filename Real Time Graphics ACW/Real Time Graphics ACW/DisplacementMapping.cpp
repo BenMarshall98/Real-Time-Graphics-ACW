@@ -11,7 +11,7 @@ DisplacementMapping::DisplacementMapping() :
 {
 }
 
-void DisplacementMapping::render(std::shared_ptr<Shape>& pShape, bool pDeferred)
+void DisplacementMapping::render(std::shared_ptr<Shape>& pShape, bool pDeferred, std::unique_ptr<Framebuffer> &)
 {
 	if (pDeferred)
 	{
@@ -35,4 +35,9 @@ void DisplacementMapping::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pS
 {
 	mOmniDirectionalShader->useShader();
 	pShape->render(true);
+}
+
+void DisplacementMapping::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
+{
+	//TODO: Implement
 }

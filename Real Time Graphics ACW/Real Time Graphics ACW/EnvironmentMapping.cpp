@@ -11,7 +11,7 @@ EnvironmentMapping::EnvironmentMapping() :
 {
 }
 
-void EnvironmentMapping::render(std::shared_ptr<Shape>& pShape, bool pDeffered)
+void EnvironmentMapping::render(std::shared_ptr<Shape>& pShape, bool pDeffered, std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
 {
 	//TODO: Implement
 }
@@ -24,4 +24,9 @@ void EnvironmentMapping::renderDirectionalShadow(std::shared_ptr<Shape>& pShape)
 void EnvironmentMapping::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape)
 {
 	//TODO: Implement	
+}
+
+void EnvironmentMapping::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
+{
+	//TODO: Implement
 }

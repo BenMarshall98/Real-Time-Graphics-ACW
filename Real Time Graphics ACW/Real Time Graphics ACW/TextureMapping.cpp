@@ -11,7 +11,7 @@ TextureMapping::TextureMapping() :
 {
 }
 
-void TextureMapping::render(std::shared_ptr<Shape>& pShape, bool pDeferred)
+void TextureMapping::render(std::shared_ptr<Shape>& pShape, bool pDeferred, std::unique_ptr<Framebuffer> &)
 {
 	if (pDeferred)
 	{
@@ -35,4 +35,9 @@ void TextureMapping::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape)
 {
 	mOmniDirectionalShader->useShader();
 	pShape->render();
+}
+
+void TextureMapping::renderPostprocessing(std::unique_ptr<Framebuffer> &)
+{
+	//TODO: Implement
 }

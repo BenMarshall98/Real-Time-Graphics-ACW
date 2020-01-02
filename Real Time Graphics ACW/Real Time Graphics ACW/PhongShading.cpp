@@ -42,7 +42,7 @@ bool PhongShading::renderPostprocessing(std::unique_ptr<Framebuffer> &)
 	return false;
 }
 
-bool PhongShading::renderTransparent(std::unique_ptr<Framebuffer> &)
+void PhongShading::renderTransparent(std::shared_ptr<Shape> &, std::unique_ptr<Framebuffer> &)
 {
-	return false;
+	//Do Nothing
 }

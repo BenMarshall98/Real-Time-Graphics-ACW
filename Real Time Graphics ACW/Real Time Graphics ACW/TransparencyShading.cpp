@@ -8,23 +8,22 @@ TransparencyShading::TransparencyShading() :
 		nullptr,
 		ResourceManager::instance()->loadShader("NormalDirectionalShadowVertexShader.hlsl", "NormalDirectionalShadowFragmentShader.hlsl"),
 		ResourceManager::instance()->loadShader("NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl")
-	), mFramebuffer(std::make_unique<Framebuffer>()), mRenderPlane(ResourceManager::instance()->loadModel("plane.obj")),
-	mPostShader(ResourceManager::instance()->loadShader("PostVertexShader.hlsl", "PostFragmentShader.hlsl"))
+	)
 {
-	if (!mFramebuffer->loadFramebuffer(true, true, { { 0.0f, 0.0f, 0.0f, 0.0f } }))
+	/*if (!mFramebuffer->loadFramebuffer(true, true, { { 0.0f, 0.0f, 0.0f, 0.0f } }))
 	{
 		mFramebuffer.reset();
-	}
+	}*/
 }
 
 void TransparencyShading::render(std::shared_ptr<Shape> & pShape, bool, std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
 {
 	//Dx11Render::instance()->enableBlend();
-	mFramebuffer->useFramebuffer();
+	/*mFramebuffer->useFramebuffer();
 	mNormalShader->useShader();
 	pShape->render();
 
-	pCurrentFramebuffer->useFramebuffer(false);
+	pCurrentFramebuffer->useFramebuffer(false);*/
 	//Dx11Render::instance()->disableBlend();
 }
 
@@ -45,26 +44,10 @@ bool TransparencyShading::renderPostprocessing(std::unique_ptr<Framebuffer> & pC
 	return false;
 }
 
-bool TransparencyShading::renderTransparent(std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
+void TransparencyShading::renderTransparent(std::shared_ptr<Shape> & pShape, std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
 {
 	Dx11Render::instance()->enableBlend();
-	mFramebuffer->useTexture(8);
-
-	if (pCurrentFramebuffer == nullptr)
-	{
-		Dx11Render::instance()->bindDefaultFramebuffer();
-	}
-	else
-	{
-		pCurrentFramebuffer->useFramebuffer();
-	}
-
-	mPostShader->useShader();
-
-	mRenderPlane->render();
-
-	mFramebuffer->releaseTexture(8);
+	mNormalShader->useShader();
+	pShape->render();
 	Dx11Render::instance()->disableBlend();
-
-	return true;
 }

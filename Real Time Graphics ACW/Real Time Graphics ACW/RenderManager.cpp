@@ -211,49 +211,31 @@ void RenderManager::renderToScreen()
 		}
 
 		//Transparent
-		for (auto& staticShape : mStaticShapes)
+		if (mFramebuffer == 1)
 		{
-			if (mFramebuffer == 0)
-			{
-				mScreenFramebufferOne->useTexture(6);
-				if (mStaticTechnique->renderTransparent(mScreenFramebufferTwo))
-				{
-					mFramebuffer = 1;
-				}
-				mScreenFramebufferOne->releaseTexture(6);
+			mScreenFramebufferTwo->useFramebuffer(false);
 
-			}
-			else
+			for (auto& staticShape : mStaticShapes)
 			{
-				mScreenFramebufferTwo->useTexture(6);
-				if (mStaticTechnique->renderTransparent(mScreenFramebufferOne))
-				{
-					mFramebuffer = 0;
-				}
-				mScreenFramebufferTwo->releaseTexture(6);
+				mStaticTechnique->renderTransparent(staticShape, mScreenFramebufferTwo);
+			}
+
+			for (auto i = 0u; i < mDynamicShapes.size(); i++)
+			{
+				mDynamicTechniques[i]->renderTransparent(mDynamicShapes[i], mScreenFramebufferTwo);
 			}
 		}
-
-		for (auto i = 0u; i < mDynamicShapes.size(); i++)
+		else
 		{
-			if (mFramebuffer == 0)
+			mScreenFramebufferOne->useFramebuffer(false);
+			for (auto& staticShape : mStaticShapes)
 			{
-				mScreenFramebufferOne->useTexture(6);
-				if (mDynamicTechniques[i]->renderTransparent(mScreenFramebufferTwo))
-				{
-					mFramebuffer = 1;
-				}
-				mScreenFramebufferOne->releaseTexture(6);
-
+				mStaticTechnique->renderTransparent(staticShape, mScreenFramebufferOne);
 			}
-			else
+
+			for (auto i = 0u; i < mDynamicShapes.size(); i++)
 			{
-				mScreenFramebufferTwo->useTexture(6);
-				if (mDynamicTechniques[i]->renderTransparent(mScreenFramebufferOne))
-				{
-					mFramebuffer = 0;
-				}
-				mScreenFramebufferTwo->releaseTexture(6);
+				mDynamicTechniques[i]->renderTransparent(mDynamicShapes[i], mScreenFramebufferOne);
 			}
 		}
 

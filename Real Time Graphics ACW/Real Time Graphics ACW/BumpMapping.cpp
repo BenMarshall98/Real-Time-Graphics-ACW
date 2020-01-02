@@ -42,7 +42,7 @@ bool BumpMapping::renderPostprocessing(std::unique_ptr<Framebuffer> &)
 	return false;
 }
 
-bool BumpMapping::renderTransparent(std::unique_ptr<Framebuffer> &)
+void BumpMapping::renderTransparent(std::shared_ptr<Shape> &, std::unique_ptr<Framebuffer> &)
 {
-	return false;
+	//Do Nothing
 }

@@ -3,10 +3,6 @@
 
 class TransparencyShading final : public Technique
 {
-	std::unique_ptr<Framebuffer> mFramebuffer;
-	std::shared_ptr<Model> mRenderPlane;
-	std::shared_ptr<Shader> mPostShader;
-
 public:
 	TransparencyShading();
 	~TransparencyShading() = default;
@@ -20,6 +16,6 @@ public:
 	void renderDirectionalShadow(std::shared_ptr<Shape> & pShape) override;
 	void renderOmniDirectionalShadow(std::shared_ptr<Shape> & pShape) override;
 	bool renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
-	bool renderTransparent(std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
+	void renderTransparent(std::shared_ptr<Shape> & pShape, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
 };
 

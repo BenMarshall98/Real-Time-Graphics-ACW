@@ -42,7 +42,7 @@ bool TextureMapping::renderPostprocessing(std::unique_ptr<Framebuffer> &)
 	return false;
 }
 
-bool TextureMapping::renderTransparent(std::unique_ptr<Framebuffer> &)
+void TextureMapping::renderTransparent(std::shared_ptr<Shape> &, std::unique_ptr<Framebuffer> &)
 {
-	return false;
+	//Do Nothing
 }

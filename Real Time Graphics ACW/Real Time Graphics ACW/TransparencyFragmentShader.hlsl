@@ -161,7 +161,7 @@ float4 main(VS_OUTPUT input) : SV_Target
             color += MaterialSpecular * SpotColor[i] * specular * attenuation * shadow * intensity;
         }
     }
-    return float4(color, 0.1f);
+    return float4(color, 0.5f);
 }
 
 float DirectionalShadowCalculation(float4 lightPos, float3 lightDir, float3 normal)

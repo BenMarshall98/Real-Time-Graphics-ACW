@@ -60,7 +60,7 @@ bool GourandShading::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurren
 	return true;
 }
 
-bool GourandShading::renderTransparent(std::unique_ptr<Framebuffer> &)
+void GourandShading::renderTransparent(std::shared_ptr<Shape> &, std::unique_ptr<Framebuffer> &)
 {
-	return false;
+	//Do Nothing
 }

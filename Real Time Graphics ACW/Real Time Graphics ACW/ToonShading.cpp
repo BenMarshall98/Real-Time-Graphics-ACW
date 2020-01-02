@@ -34,7 +34,7 @@ bool ToonShading::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFr
 	return false; //TODO: Implement
 }
 
-bool ToonShading::renderTransparent(std::unique_ptr<Framebuffer> &)
+void ToonShading::renderTransparent(std::shared_ptr<Shape> &, std::unique_ptr<Framebuffer> &)
 {
-	return false;
+	//Do Nothing
 }

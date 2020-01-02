@@ -31,7 +31,7 @@ bool EnvironmentMapping::renderPostprocessing(std::unique_ptr<Framebuffer> &)
 	return false;
 }
 
-bool EnvironmentMapping::renderTransparent(std::unique_ptr<Framebuffer> &)
+void EnvironmentMapping::renderTransparent(std::shared_ptr<Shape> &, std::unique_ptr<Framebuffer> &)
 {
-	return false;
+	//Do Nothing
 }

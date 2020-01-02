@@ -31,6 +31,8 @@ class Dx11Render
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> mDepthView;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> mRasterizerState;
 	Microsoft::WRL::ComPtr<ID3D11Debug> mDebug;
+	Microsoft::WRL::ComPtr<ID3D11BlendState> mBlendState;
+	Microsoft::WRL::ComPtr<ID3D11BlendState> mNoBlendState;
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mModelBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mCameraBuffer = nullptr;
@@ -101,6 +103,18 @@ public:
 		viewport.TopLeftY = 0;
 
 		mDeviceContext->RSSetViewports(1, &viewport);
+	}
+
+	void enableBlend()
+	{
+		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+		mDeviceContext->OMSetBlendState(mBlendState.Get(), blendFactor, 0xffffffff);
+	}
+
+	void disableBlend()
+	{
+		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+		mDeviceContext->OMSetBlendState(mNoBlendState.Get(), blendFactor, 0xffffffff);
 	}
 
 	void useGlobalBuffer(const GlobalBuffer & pGlobalBuffer) const;

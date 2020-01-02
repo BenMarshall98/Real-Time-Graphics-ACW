@@ -8,6 +8,7 @@
 #include "ToonShading.h"
 #include "LightingManager.h"
 #include "EnvironmentMapping.h"
+#include "TransparencyShading.h"
 #include "ResourceManager.h"
 #include "DX11Render.h"
 
@@ -54,6 +55,7 @@ RenderManager::RenderManager()
 	
 	mStaticTechnique = std::make_unique<PhongShading>();
 	mDynamicTechniques.emplace_back(std::make_unique<PhongShading>());
+	mDynamicTechniques.emplace_back(std::make_unique<TransparencyShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<GourandShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<TextureMapping>());
 	mDynamicTechniques.emplace_back(std::make_unique<BumpMapping>());

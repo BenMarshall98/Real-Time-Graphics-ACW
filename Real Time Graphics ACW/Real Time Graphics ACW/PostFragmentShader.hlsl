@@ -36,20 +36,20 @@ PS_OUTPUT main(VS_OUTPUT input)
     }
     else if (visible != 0.0f && visible2 == 0.0f)
     {
-        float3 color = normalTexture.Sample(normalSampler, input.TexCoord).rgb;
+        float4 color = normalTexture.Sample(normalSampler, input.TexCoord).rgba;
     
         float depth = depthTexture.Sample(depthSampler, input.TexCoord).r;
     
-        output.Color = float4(color, 1.0f);
+        output.Color = float4(color);
         output.Depth = depth;
     }
     else if (visible2 != 0.0f && visible == 0.0f)
     {
-        float3 color = normalTexture2.Sample(normalSampler2, input.TexCoord).rgb;
+        float4 color = normalTexture2.Sample(normalSampler2, input.TexCoord).rgba;
     
         float depth = depthTexture2.Sample(depthSampler2, input.TexCoord).r;
     
-        output.Color = float4(color, 1.0f);
+        output.Color = float4(color);
         output.Depth = depth;
     }
     else
@@ -59,14 +59,14 @@ PS_OUTPUT main(VS_OUTPUT input)
         
         if (depth > depth2)
         {
-            float3 color = normalTexture2.Sample(normalSampler2, input.TexCoord).rgb;
-            output.Color = float4(color, 1.0f);
+            float4 color = normalTexture2.Sample(normalSampler2, input.TexCoord).rgba;
+            output.Color = float4(color);
             output.Depth = depth2;
         }
         else
         {
-            float3 color = normalTexture.Sample(normalSampler, input.TexCoord).rgb;
-            output.Color = float4(color, 1.0f);
+            float4 color = normalTexture.Sample(normalSampler, input.TexCoord).rgba;
+            output.Color = float4(color);
             output.Depth = depth;
         }
     }

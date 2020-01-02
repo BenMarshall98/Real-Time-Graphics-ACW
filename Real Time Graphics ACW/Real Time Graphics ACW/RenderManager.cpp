@@ -79,6 +79,27 @@ void RenderManager::setup(float pCurrentTime)
 
 void RenderManager::render()
 {
+	renderInk();
+	renderShadows();
+	renderShapes();
+	renderToScreen();
+}
+
+void RenderManager::renderInk()
+{
+	for (auto & staticShape : mStaticShapes)
+	{
+		staticShape->updateInk();
+	}
+
+	for (auto & dynamicShape : mDynamicShapes)
+	{
+		dynamicShape->updateInk();
+	}
+}
+
+void RenderManager::renderShapes()
+{
 	auto deferred = true;
 	
 	if (mMode <= 7)

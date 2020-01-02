@@ -15,6 +15,7 @@ InkCubeRender::InkCubeRender() :
 
 void InkCubeRender::update(DirectX::XMFLOAT4X4 pMatrix)
 {
+	int i = 0;
 	//TODO: Implement
 }
 

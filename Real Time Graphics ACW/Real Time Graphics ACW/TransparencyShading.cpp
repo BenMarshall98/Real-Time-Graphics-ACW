@@ -10,21 +10,10 @@ TransparencyShading::TransparencyShading() :
 		ResourceManager::instance()->loadShader("NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl")
 	)
 {
-	/*if (!mFramebuffer->loadFramebuffer(true, true, { { 0.0f, 0.0f, 0.0f, 0.0f } }))
-	{
-		mFramebuffer.reset();
-	}*/
 }
 
 void TransparencyShading::render(std::shared_ptr<Shape> & pShape, bool, std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
 {
-	//Dx11Render::instance()->enableBlend();
-	/*mFramebuffer->useFramebuffer();
-	mNormalShader->useShader();
-	pShape->render();
-
-	pCurrentFramebuffer->useFramebuffer(false);*/
-	//Dx11Render::instance()->disableBlend();
 }
 
 void TransparencyShading::renderDirectionalShadow(std::shared_ptr<Shape> & pShape)

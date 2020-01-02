@@ -19,6 +19,10 @@ class RenderManager final
 	static RenderManager * mInstance;
 
 	RenderManager();
+	void renderInk();
+	void renderShapes();
+	void renderShadows();
+	void renderToScreen();
 
 	std::shared_ptr<Shader> mHDRShader;
 	std::shared_ptr<Shader> mDeferredShader;
@@ -60,8 +64,6 @@ public:
 
 	void setup(float pCurrentTime);
 	void render();
-	void renderShadows();
-	void renderToScreen();
 
 	void addStaticShape(const std::shared_ptr<Shape>& pShape);
 	void addDynamicShape(const std::shared_ptr<Shape>& pShape);

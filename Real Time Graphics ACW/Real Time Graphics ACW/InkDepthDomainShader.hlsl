@@ -1,13 +1,22 @@
-cbuffer inkBuffer : register(b3) //TODO: register
+cbuffer cameraBuffer : register(b0)
 {
-    matrix InkView;
-    matrix InkProjection;
+    matrix View;
+    matrix Projection;
+    float3 ViewPosition;
 }
 
 cbuffer modelBuffer : register(b1)
 {
     matrix World;
     matrix InverseWorld;
+}
+
+cbuffer GlobalBuffer : register(b10)
+{
+    float Time;
+    int ScreenMode;
+    int ShadowMode;
+    float InkHeight;
 }
 
 struct PatchTess
@@ -26,8 +35,6 @@ struct HS_OUTPUT
 struct DS_OUTPUT
 {
     float4 Pos : SV_POSITION;
-    float3 FragmentPos : POSITION0;
-    float3 HeightPos : POSITION1;
 };
 
 float SinWave(float pPos);
@@ -54,20 +61,17 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     normal = normalize(normal);
     
     //TODO: Wave function
-    float3 heightPos = pos + (normal * SinWave(texCoord.x) * SinWave(texCoord.y) * 0.25f);
-    heightPos = pos + (normal * 0.1f);
+    float3 heightPos = pos + (normal * SinWave(texCoord.x) * SinWave(texCoord.y) * 0.025f);
+    //heightPos = pos + (normal * 0.1f);
     
-    output.Pos = mul(float4(pos, 1.0f), World);
-    output.FragmentPos = output.Pos.xyz;
-    output.Pos = mul(output.Pos, InkView);
-    output.Pos = mul(output.Pos, InkProjection);
-    
-    output.HeightPos = heightPos;
+    output.Pos = mul(float4(heightPos, 1.0f), World);
+    output.Pos = mul(output.Pos, View);
+    output.Pos = mul(output.Pos, Projection);
     
     return output;
 }
 
 float SinWave(float pPos)
 {
-    return sin(pPos * 50.0f);
+    return sin((pPos * 50.0f) + Time);
 }

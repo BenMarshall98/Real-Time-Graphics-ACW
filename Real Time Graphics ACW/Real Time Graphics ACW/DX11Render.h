@@ -12,9 +12,6 @@ struct PointLightBuffer;
 struct SpotLightBuffer;
 struct ShadowMatrixBuffer;
 struct ShadowLightBuffer;
-struct InkBuffer;
-struct InkCubeBuffer;
-struct InkPlaneBuffer;
 struct GlobalBuffer;
 
 class Dx11Render
@@ -42,9 +39,6 @@ class Dx11Render
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mMaterialBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mShadowMatrixBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mShadowLightBuffer = nullptr;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> mInkBuffer = nullptr;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> mInkPlaneBuffer = nullptr;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> mInkCubeBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mGlobalBuffer = nullptr;
 	
 	Dx11Render();
@@ -126,9 +120,6 @@ public:
 	void useSpotLightBuffer(const SpotLightBuffer & pSpotLightBuffer) const;
 	void useShadowMatrixBuffer(const ShadowMatrixBuffer & pShadowMatrixBuffer) const;
 	void useShadowLightBuffer(const ShadowLightBuffer & pShadowLightBuffer) const;
-	void useInkBuffer(const InkBuffer & pInkBuffer) const;
-	void useInkPlaneBuffer(const InkPlaneBuffer & pInkPlaneBuffer) const;
-	void useInkCubeBuffer(const InkCubeBuffer & pInkCubeBuffer) const;
 	
 	bool resize(int pWidth, int pHeight);
 	

@@ -94,12 +94,6 @@
     <Filter Include="Ink\ColorShader">
       <UniqueIdentifier>{e281433d-a32b-45c1-9b1d-21f1dfe7f08b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Ink\PlaneDepthShader">
-      <UniqueIdentifier>{f649a841-2492-469c-801b-c5a19d8a9909}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Ink\CubeDepthShader">
-      <UniqueIdentifier>{3754ffca-06b6-4c61-a282-1fd47dfcb837}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\Shaders\HDRShading">
       <UniqueIdentifier>{472b01e5-21f5-4e25-a19c-5ed708bd867c}</UniqueIdentifier>
     </Filter>
@@ -294,15 +288,6 @@
     <ClInclude Include="InkRender.h">
       <Filter>Ink</Filter>
     </ClInclude>
-    <ClInclude Include="InkCubeRender.h">
-      <Filter>Ink</Filter>
-    </ClInclude>
-    <ClInclude Include="InkPlaneRender.h">
-      <Filter>Ink</Filter>
-    </ClInclude>
-    <ClInclude Include="InkShapeRender.h">
-      <Filter>Ink</Filter>
-    </ClInclude>
     <ClInclude Include="AnimationNode.h">
       <Filter>SceneGraph</Filter>
     </ClInclude>
@@ -461,15 +446,6 @@
     <ClCompile Include="InkRender.cpp">
       <Filter>Ink</Filter>
     </ClCompile>
-    <ClCompile Include="InkCubeRender.cpp">
-      <Filter>Ink</Filter>
-    </ClCompile>
-    <ClCompile Include="InkPlaneRender.cpp">
-      <Filter>Ink</Filter>
-    </ClCompile>
-    <ClCompile Include="InkShapeRender.cpp">
-      <Filter>Ink</Filter>
-    </ClCompile>
     <ClCompile Include="AnimationNode.cpp">
       <Filter>SceneGraph</Filter>
     </ClCompile>
@@ -577,21 +553,6 @@
     <CopyFileToFolders Include="InkDepthVertexShader.hlsl">
       <Filter>Ink\DepthShader</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="InkCubeDepthFragmentShader.hlsl">
-      <Filter>Ink\CubeDepthShader</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="InkCubeDepthGeometryShader.hlsl">
-      <Filter>Ink\CubeDepthShader</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="InkCubeDepthVertexShader.hlsl">
-      <Filter>Ink\CubeDepthShader</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="InkPlaneFragmentShader.hlsl">
-      <Filter>Ink\PlaneDepthShader</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="InkPlaneVertexShader.hlsl">
-      <Filter>Ink\PlaneDepthShader</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="HDRFragmentShader.hlsl">
       <Filter>Resource Files\Shaders\HDRShading</Filter>
     </CopyFileToFolders>
@@ -691,6 +652,8 @@
     <CopyFileToFolders Include="PostVertexShader.hlsl">
       <Filter>Resource Files\Shaders\PostProcessing</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="TransparencyFragmentShader.hlsl" />
+    <CopyFileToFolders Include="TransparencyVertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />
@@ -712,13 +675,5 @@
     <Image Include="tyre_spec.dds">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="TransparencyVertexShader.hlsl">
-      <Filter>Resource Files\Shaders\TransparencyShading</Filter>
-    </FxCompile>
-    <FxCompile Include="TransparencyFragmentShader.hlsl">
-      <Filter>Resource Files\Shaders\TransparencyShading</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>

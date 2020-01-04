@@ -13,9 +13,7 @@ struct InkBuffer
 
 class InkRender
 {
-	std::unique_ptr<Framebuffer> mFramebuffer;
 	std::shared_ptr<Shader> mDepthShader;
-	std::shared_ptr<Shader> mColorShader;
 	std::shared_ptr<Model> mModel;
 	
 	float mHeight = 0.0f;
@@ -23,11 +21,7 @@ class InkRender
 public:
 	InkRender();
 	~InkRender() = default;
-	void UpdateInk();
 	void IncreaseHeight(float pDt);
 	void DecreaseHeight(float pDt);
-	void UseInk();
 	void RenderInk() const;
-	void UsePlaneDepthShader();
-	void UseCubeDepthShader();
 };

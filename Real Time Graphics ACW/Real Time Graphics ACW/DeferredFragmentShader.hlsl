@@ -95,6 +95,9 @@ struct PS_OUTPUT
     float Depth : SV_Depth;
 };
 
+float InkDirectionalFactorCalculation(float3 pFragPos, float3 pViewPosition);
+float InkPointFactorCalculation(float3 pFragPos, float3 pLightPos, float3 pViewPosition);
+
 float DirectionalShadowCalculation(float4 lightPos, float3 lightDir, float3 normal);
 float PointShadowCalculation(float3 pFragPos, float3 pLightPos, float pFarPlane, TextureCube pTexture, SamplerState pSampler);
 
@@ -156,6 +159,7 @@ PS_OUTPUT main(VS_OUTPUT input)
         float3 viewDirection = normalize(input.ViewPosition - fragPos.xyz);
 
         float3 color = float3(0.0f, 0.0f, 0.0f);
+        float3 inkColor = float3(0.0f, 0.0f, 1.0f);
 
         //Directional Light
 
@@ -170,10 +174,12 @@ PS_OUTPUT main(VS_OUTPUT input)
             float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), shininess);
         
             float shadow = DirectionalShadowCalculation(lightPos, lightDirection, lightNorm);
+            
+            float inkFactor = InkDirectionalFactorCalculation(fragPos, input.ViewPosition);
 
-            color += MaterialAmbient * DirectionalColor.xyz;
-            color += MaterialDiffuse * DirectionalColor.xyz * shadow * diffuse;
-            color += MaterialSpecular * DirectionalColor.xyz * shadow * specular;
+            color += lerp(MaterialAmbient, inkColor * 0.1f, inkFactor) * DirectionalColor.xyz;
+            color += lerp(MaterialDiffuse, inkColor, inkFactor) * DirectionalColor.xyz * shadow * diffuse;
+            color += lerp(MaterialSpecular, inkColor, inkFactor) * DirectionalColor.xyz * shadow * specular;
         }
 
 	    //Point Light
@@ -191,10 +197,12 @@ PS_OUTPUT main(VS_OUTPUT input)
             float attenuation = 1.0f / (PointAttenuationConstant + PointAttenuationLinear * distance + PointAttenuationQuad * distance * distance);
         
             float shadow = PointShadowCalculation(fragPos.xyz, PointPosition.xyz, PointFarPlane, pointShadowTexture, pointShadowSampler);
+            
+            float inkFactor = InkPointFactorCalculation(fragPos, PointPosition.xyz, input.ViewPosition);
 
-            color += MaterialAmbient * PointColor.xyz * attenuation;
-            color += MaterialDiffuse * PointColor.xyz * diffuse * shadow * attenuation;
-            color += MaterialSpecular * PointColor.xyz * specular * shadow * attenuation;
+            color += lerp(MaterialAmbient, inkColor * 0.1f, inkFactor) * PointColor.xyz * attenuation;
+            color += lerp(MaterialDiffuse, inkColor, inkFactor) * PointColor.xyz * diffuse * shadow * attenuation;
+            color += lerp(MaterialSpecular, inkColor, inkFactor) * PointColor.xyz * specular * shadow * attenuation;
         }
 
 	    //Spot Light
@@ -235,10 +243,12 @@ PS_OUTPUT main(VS_OUTPUT input)
                 {
                     shadow = PointShadowCalculation(fragPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot4ShadowTexture, spot4ShadowSampler);
                 }
+                
+                float inkFactor = InkPointFactorCalculation(fragPos, SpotPosition[i].xyz, input.ViewPosition);
 			
-                color += MaterialAmbient * SpotColor[i].xyz * attenuation * shadow * intensity;
-                color += MaterialDiffuse * SpotColor[i].xyz * diffuse * attenuation * shadow * intensity;
-                color += MaterialSpecular * SpotColor[i].xyz * specular * attenuation * shadow * intensity;
+                color += lerp(MaterialAmbient, inkColor * 0.1f, inkFactor) * SpotColor[i].xyz * attenuation * shadow * intensity;
+                color += lerp(MaterialDiffuse, inkColor, inkFactor) * SpotColor[i].xyz * diffuse * attenuation * shadow * intensity;
+                color += lerp(MaterialSpecular, inkColor, inkFactor) * SpotColor[i].xyz * specular * attenuation * shadow * intensity;
             }
         }
     
@@ -248,6 +258,42 @@ PS_OUTPUT main(VS_OUTPUT input)
     output.Depth = depthTexture.Sample(depthSampler, input.TexCoord).r;
     
     return output;
+}
+
+float InkDirectionalFactorCalculation(float3 pFragPos, float3 pViewPosition)
+{
+    float fogInk = 1.0f;
+    
+    if (pFragPos.y > 0.0f)
+    {
+        return 0.0f;
+    }
+  
+    float fogCamera = (20.0f - length(pFragPos - pViewPosition)) / (20.0f - 5.0f);
+    
+    fogCamera = clamp(fogCamera, 0.0f, 0.5f);
+    
+    fogCamera = 1.0f - fogCamera;
+    
+    return fogInk * fogCamera;
+}
+
+float InkPointFactorCalculation(float3 pFragPos, float3 pLightPos, float3 pViewPosition)
+{
+    float fogInk = 1.0f;
+    
+    if (pFragPos.y > 0.0f)
+    {
+        return 0.0f;
+    }
+  
+    float fogCamera = (20.0f - length(pFragPos - pViewPosition)) / (20.0f - 5.0f);
+    
+    fogCamera = clamp(fogCamera, 0.0f, 0.5f);
+    
+    fogCamera = 1.0f - fogCamera;
+    
+    return fogInk * fogCamera;
 }
 
 float DirectionalShadowCalculation(float4 lightPos, float3 lightDir, float3 normal)

@@ -3,6 +3,7 @@
 #include "Shape.h"
 #include "SceneGraphNode.h"
 #include "Technique.h"
+#include "InkRender.h"
 #include <map>
 #include <vector>
 
@@ -19,13 +20,14 @@ class RenderManager final
 	static RenderManager * mInstance;
 
 	RenderManager();
-	void renderInk();
 	void renderShapes();
 	void renderShadows();
 	void renderToScreen();
 
 	std::shared_ptr<Shader> mHDRShader;
 	std::shared_ptr<Shader> mDeferredShader;
+
+	std::unique_ptr<InkRender> mInkRender;
 
 	std::shared_ptr<Model> mOutputModel;
 

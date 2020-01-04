@@ -20,6 +20,7 @@ RenderManager::RenderManager()
 	mDeferredBuffer = std::make_unique<Framebuffer>();
 	mScreenFramebufferOne = std::make_unique<Framebuffer>();
 	mScreenFramebufferTwo = std::make_unique<Framebuffer>();
+	mInkRender = std::make_unique<InkRender>();
 
 	if (!mHdrFramebuffer->loadFramebuffer(true, true, { {0.0f, 0.0f, 0.0f, 0.0f } }, TextureType::TEXTURE_2D))
 	{
@@ -79,23 +80,9 @@ void RenderManager::setup(float pCurrentTime)
 
 void RenderManager::render()
 {
-	renderInk();
 	renderShadows();
 	renderShapes();
 	renderToScreen();
-}
-
-void RenderManager::renderInk()
-{
-	for (auto & staticShape : mStaticShapes)
-	{
-		staticShape->updateInk();
-	}
-
-	for (auto & dynamicShape : mDynamicShapes)
-	{
-		dynamicShape->updateInk();
-	}
 }
 
 void RenderManager::renderShapes()
@@ -245,9 +232,13 @@ void RenderManager::renderToScreen()
 			{
 				mDynamicTechniques[i]->renderTransparent(mDynamicShapes[i], mScreenFramebufferTwo);
 			}
+
+			//Ink
+			mInkRender->RenderInk();
 		}
 		else
 		{
+			//Transparent
 			mScreenFramebufferOne->useFramebuffer(false);
 			for (auto& staticShape : mStaticShapes)
 			{
@@ -258,6 +249,9 @@ void RenderManager::renderToScreen()
 			{
 				mDynamicTechniques[i]->renderTransparent(mDynamicShapes[i], mScreenFramebufferOne);
 			}
+
+			//Ink
+			mInkRender->RenderInk();
 		}
 
 		//TODO: ink

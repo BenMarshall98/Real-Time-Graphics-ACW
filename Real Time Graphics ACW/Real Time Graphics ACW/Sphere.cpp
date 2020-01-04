@@ -2,15 +2,14 @@
 #include "ResourceManager.h"
 #include <corecrt_math_defines.h>
 #include "ParticleManager.h"
-#include "InkCubeRender.h"
 
 Sphere::Sphere(std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial) :
-	Shape(ResourceManager::instance()->loadModel("sphere.obj"), std::move(pTexturePack), std::move(pMaterial), std::make_unique<InkCubeRender>())
+	Shape(ResourceManager::instance()->loadModel("sphere.obj"), std::move(pTexturePack), std::move(pMaterial))
 {
 }
 
 Sphere::Sphere() :
-	Shape(ResourceManager::instance()->loadModel("sphere.obj"), nullptr, nullptr, std::make_unique<InkCubeRender>())
+	Shape(ResourceManager::instance()->loadModel("sphere.obj"), nullptr, nullptr)
 {
 	
 }

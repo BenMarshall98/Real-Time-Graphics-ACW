@@ -2,10 +2,9 @@
 #include "DX11Render.h"
 
 Shape::Shape(std::shared_ptr<Model> pModel, std::unique_ptr<TexturePack> pTexturePack,
-	std::unique_ptr<Material> pMaterial, std::unique_ptr<InkShapeRender> pInkRender) :
+	std::unique_ptr<Material> pMaterial) :
 	mModel(std::move(pModel)), mTexturePack(std::move(pTexturePack)),
-	mMaterial(std::move(pMaterial)), mInkRender(std::move(pInkRender)),
-	mCurrentMatrix(), mPreviousMatrix()
+	mMaterial(std::move(pMaterial)), mCurrentMatrix(), mPreviousMatrix()
 {
 }
 
@@ -44,20 +43,6 @@ void Shape::render(const bool pTesselated) const
 	{
 		mModel->render(pTesselated);
 	}
-}
-
-void Shape::updateInk() const
-{
-	const auto matrix = XMLoadFloat4x4(&mCurrentMatrix);
-
-	const ModelBuffer mb = {
-		XMMatrixTranspose(matrix),
-		XMMatrixInverse(nullptr, matrix)
-	};
-
-	Dx11Render::instance()->useModelBuffer(mb);
-
-	mInkRender->update(mCurrentMatrix);
 }
 
 std::istream& operator>>(std::istream& pIn, std::shared_ptr<Shape>& pShape)

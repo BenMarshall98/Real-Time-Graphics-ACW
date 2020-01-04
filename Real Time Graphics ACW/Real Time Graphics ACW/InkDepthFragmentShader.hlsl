@@ -1,12 +1,10 @@
 struct DS_OUTPUT
 {
     float4 Pos : SV_POSITION;
-    float3 FragmentPos : POSITION0;
-    float3 HeightPos : POSITION1;
 };
 
-float main(DS_OUTPUT input) : SV_Depth
+float4 main(DS_OUTPUT input) : SV_Target
 {
-    return input.HeightPos.y;// * 0.5f + 0.5f;
+    return float4(0.0f, 0.0f, 1.0f, 0.2f);
 
 }

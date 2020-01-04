@@ -18,10 +18,10 @@ struct VS_OUTPUT
 PatchTess ConstantHS(InputPatch<VS_OUTPUT, 3> inPatch, uint patchID : SV_PrimitiveID)
 {
     PatchTess outPatch;
-    outPatch.EdgeTess[0] = 64;
-    outPatch.EdgeTess[1] = 64;
-    outPatch.EdgeTess[2] = 64;
-    outPatch.InsideTess = 64;
+    outPatch.EdgeTess[0] = 10;
+    outPatch.EdgeTess[1] = 10;
+    outPatch.EdgeTess[2] = 10;
+    outPatch.InsideTess = 10;
     
     return outPatch;
 }

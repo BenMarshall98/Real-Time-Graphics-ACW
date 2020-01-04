@@ -2,6 +2,7 @@
 
 #include "Shape.h"
 #include "Shader.h"
+#include "Framebuffer.h"
 
 class Technique
 {

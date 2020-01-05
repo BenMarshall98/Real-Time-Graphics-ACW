@@ -25,6 +25,6 @@ public:
 		mChildren.push_back(std::move(pChild));
 	}
 
-	virtual void update(DirectX::XMFLOAT4X4 pMatrix);
+	virtual void update(DirectX::XMFLOAT4X4 pFullMatrix, DirectX::XMFLOAT4X4 pRotationMatrix);
 	virtual void read(std::istream & pIn) = 0;
 };

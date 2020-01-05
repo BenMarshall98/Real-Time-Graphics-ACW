@@ -20,7 +20,7 @@ void DirectionalLightNode::read(std::istream& pIn)
 	LightingManager::instance()->addDirectionalLight(mDirectionalLight);
 }
 
-void DirectionalLightNode::update(DirectX::XMFLOAT4X4 pMatrix)
+void DirectionalLightNode::update(DirectX::XMFLOAT4X4 pFullMatrix, DirectX::XMFLOAT4X4 pRotationMatrix)
 {
-	mDirectionalLight->update(pMatrix);
+	mDirectionalLight->update(pFullMatrix);
 }

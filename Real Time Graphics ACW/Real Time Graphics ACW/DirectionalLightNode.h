@@ -18,6 +18,6 @@ public:
 	DirectionalLightNode & operator= (DirectionalLightNode &&) = delete;
 
 	void read(std::istream & pIn) override;
-	void update(DirectX::XMFLOAT4X4 pMatrix) override;
+	void update(DirectX::XMFLOAT4X4 pFullMatrix, DirectX::XMFLOAT4X4 pRotationMatrix) override;
 };
 

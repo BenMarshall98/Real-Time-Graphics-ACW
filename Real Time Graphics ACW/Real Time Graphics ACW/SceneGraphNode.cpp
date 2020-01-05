@@ -18,13 +18,13 @@ SceneGraphNode::~SceneGraphNode()
 	mChildren.clear();
 }
 
-void SceneGraphNode::update(DirectX::XMFLOAT4X4 pMatrix)
+void SceneGraphNode::update(DirectX::XMFLOAT4X4 pFullMatrix, DirectX::XMFLOAT4X4 pRotationMatrix)
 {
 	auto matrix = DirectX::XMFLOAT4X4();
-	XMStoreFloat4x4(&matrix, XMMatrixMultiply(XMLoadFloat4x4(&mMatrix), XMLoadFloat4x4(&pMatrix)));
+	XMStoreFloat4x4(&matrix, XMMatrixMultiply(XMLoadFloat4x4(&mMatrix), XMLoadFloat4x4(&pFullMatrix)));
 
 	for (const auto& child : mChildren)
 	{
-		child->update(matrix);
+		child->update(matrix, pRotationMatrix);
 	}
 }

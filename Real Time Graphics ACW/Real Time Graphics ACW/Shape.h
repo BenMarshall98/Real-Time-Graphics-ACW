@@ -23,6 +23,9 @@ protected:
 
 	DirectX::XMFLOAT4X4 mCurrentMatrix;
 	DirectX::XMFLOAT4X4 mPreviousMatrix;
+
+	DirectX::XMFLOAT4X4 mCurrentRotation;
+	DirectX::XMFLOAT4X4 mPreviousRotation;
 	
 public:
 	Shape(std::shared_ptr<Model> pModel, std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial);
@@ -44,10 +47,13 @@ public:
 		mMaterial = std::move(pMaterial);
 	}
 
-	void setMatrix(const DirectX::XMFLOAT4X4 & pMatrix)
+	void setMatrix(const DirectX::XMFLOAT4X4 & pMatrix, const DirectX::XMFLOAT4X4 & pRotationMatrix)
 	{
 		mPreviousMatrix = mCurrentMatrix;
 		mCurrentMatrix = pMatrix;
+
+		mPreviousRotation = mCurrentRotation;
+		mCurrentRotation = pRotationMatrix;
 	}
 
 	void render(bool pTesselated = false) const;

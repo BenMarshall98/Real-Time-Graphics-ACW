@@ -100,7 +100,7 @@ void Game::run()
 		DirectX::XMFLOAT4X4 world;
 		XMStoreFloat4x4(&world, DirectX::XMMatrixIdentity());
 		
-		mNode->update(world);
+		mNode->update(world, world);
 
 		LightingManager::instance()->update();
 

@@ -54,7 +54,7 @@ void ShapeNode::read(std::istream& pIn)
 	}
 }
 
-void ShapeNode::update(const DirectX::XMFLOAT4X4 pMatrix)
+void ShapeNode::update(const DirectX::XMFLOAT4X4 pFullMatrix, DirectX::XMFLOAT4X4 pRotationMatrix)
 {
-	mShape->setMatrix(pMatrix);
+	mShape->setMatrix(pFullMatrix, pRotationMatrix);
 }

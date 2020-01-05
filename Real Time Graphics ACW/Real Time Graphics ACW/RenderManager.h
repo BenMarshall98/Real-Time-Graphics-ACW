@@ -6,6 +6,7 @@
 #include "InkRender.h"
 #include <map>
 #include <vector>
+#include "Bloom.h"
 
 struct GlobalBuffer
 {
@@ -42,6 +43,7 @@ class RenderManager final
 	std::unique_ptr<Framebuffer> mScreenFramebufferTwo;
 
 	std::map<std::unique_ptr<Technique>, std::shared_ptr<Shape>> mRenderTechnique;
+	std::unique_ptr<Bloom> mBloom;
 
 	unsigned int mMode = 0u;
 	unsigned int mFramebuffer = 0u;

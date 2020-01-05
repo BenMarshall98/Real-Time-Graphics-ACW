@@ -11,10 +11,11 @@
 #include "TransparencyShading.h"
 #include "ResourceManager.h"
 #include "DX11Render.h"
+#include <string>
 
 RenderManager * RenderManager::mInstance = nullptr;
 
-RenderManager::RenderManager()
+RenderManager::RenderManager() : mBloom(std::make_unique<Bloom>())
 {
 	mHdrFramebuffer = std::make_unique<Framebuffer>();
 	mDeferredBuffer = std::make_unique<Framebuffer>();
@@ -258,11 +259,24 @@ void RenderManager::renderToScreen()
 		//TODO: explosion
 	}
 
-	//TODO: Work out bloom
+	if (mMode == 9)
+	{
+		auto strength = 5;
+		if (mFramebuffer == 0)
+		{
+			mBloom->applyBloom(mScreenFramebufferOne, strength);
+		}
+		else
+		{
+			mBloom->applyBloom(mScreenFramebufferTwo, strength);
+		}
+	}
 
 	if (mFramebuffer == 0)
 	{
 		mScreenFramebufferOne->useTexture(6);
+
+		mBloom->useBloomTexture(7);
 
 		Dx11Render::instance()->bindDefaultFramebuffer();
 
@@ -270,10 +284,14 @@ void RenderManager::renderToScreen()
 
 		mOutputModel->render();
 		mScreenFramebufferOne->releaseTexture(6);
+
+		mBloom->releaseBloomTexture(7);
 	}
 	else
 	{
 		mScreenFramebufferTwo->useTexture(6);
+
+		mBloom->useBloomTexture(7);
 
 		Dx11Render::instance()->bindDefaultFramebuffer();
 
@@ -281,6 +299,8 @@ void RenderManager::renderToScreen()
 
 		mOutputModel->render();
 		mScreenFramebufferTwo->releaseTexture(6);
+
+		mBloom->releaseBloomTexture(7);
 	}
 }
 

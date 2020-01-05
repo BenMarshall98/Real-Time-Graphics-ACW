@@ -26,6 +26,10 @@ float4 main(VS_OUTPUT input) : SV_Target
     
     if (ScreenMode > 7) //HDR or Bloom else deferred
     {
+        if (ScreenMode == 9)
+        {
+            color += bloomTexture.Sample(bloomSampler, input.TexCoord).rgb;
+        }
         color = color / (color + float3(1.0f, 1.0f, 1.0f));
     }
     

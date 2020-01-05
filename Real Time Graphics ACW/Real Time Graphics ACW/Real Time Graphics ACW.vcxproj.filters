@@ -303,6 +303,9 @@
     <ClInclude Include="CameraManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Bloom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModelLoader.cpp">
@@ -462,6 +465,9 @@
       <Filter>Animation</Filter>
     </ClCompile>
     <ClCompile Include="CameraManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bloom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -681,5 +687,13 @@
     <Image Include="tyre_spec.dds">
       <Filter>Resource Files\Textures</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="HorzBloomVertexShader.hlsl" />
+    <FxCompile Include="HorzBloomFragmentShader.hlsl" />
+    <FxCompile Include="VertBloomVertexShader.hlsl" />
+    <FxCompile Include="VertBloomFragmentShader.hlsl" />
+    <FxCompile Include="BloomExtractVertexShader.hlsl" />
+    <FxCompile Include="BloomExtractFragmentShader.hlsl" />
   </ItemGroup>
 </Project>

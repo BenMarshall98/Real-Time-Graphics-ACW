@@ -13,7 +13,6 @@ class Game
 	LARGE_INTEGER mTimer;
 
 	DirectX::XMMATRIX mWorld;
-	DirectX::XMMATRIX mProjection;
 	double mFreq;
 	double mDt2 = 0.0;
 	__int64 mStart;
@@ -34,7 +33,6 @@ public:
 	Game & operator= (Game &&) = delete;
 
 	static double mDt;
-	static Camera * mCamera;
 
 	void run();
 };

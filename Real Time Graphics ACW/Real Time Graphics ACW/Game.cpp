@@ -18,9 +18,9 @@
 #include "ConfigLoader.h"
 #include "RenderManager.h"
 #include "ParticleManager.h"
+#include "CameraManager.h"
 
 double Game::mDt = 0.0f;
-Camera * Game::mCamera = nullptr;
 
 Game::Game()
 {
@@ -41,15 +41,22 @@ Game::Game()
 	mWorld = DirectX::XMMatrixIdentity();
 
 	// Initialize the view matrix
-	const auto eye = DirectX::XMFLOAT3(0.0f, 1.0f, -5.0f);
-	const auto at = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
-	const auto up = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
+	{
+		const auto eye = DirectX::XMFLOAT3(0.0f, 0.0f, -5.0f);
+		const auto at = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+		const auto up = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
 
-	mCamera = new Camera(eye, up, at);
+		CameraManager::instance()->setCamera1(std::make_unique<Camera>(eye, up, at));
+	}
 
-	// Initialize the projection matrix
-	mProjection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, static_cast<float>(Win32Window::instance()->getWidth()) / static_cast<float>(Win32Window::instance()->getHeight()), 0.01f, 20.0f);
-	
+	{
+		const auto eye = DirectX::XMFLOAT3(0.0f, 5.0f, 0.0f);
+		const auto at = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+		const auto up = DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f);
+
+		CameraManager::instance()->setCamera2(std::make_unique<Camera>(eye, up, at));
+	}
+
 	mBase = ResourceManager::instance()->loadTexture("tyre_base.dds");
 	mSpec = ResourceManager::instance()->loadTexture("tyre_spec.dds");
 	mDisp = ResourceManager::instance()->loadTexture("tyre_height.dds");
@@ -66,7 +73,7 @@ void Game::run()
 {
 	while(Win32Window::windowEvents())
 	{
-		mCamera->update();
+		CameraManager::instance()->update();
 		Dx11Render::instance()->clearRenderTargetView(DirectX::Colors::MidnightBlue);
 
 		const auto inst = Dx11Render::instance();
@@ -89,16 +96,6 @@ void Game::run()
 		//
 		//
 		//ParticleManager::instance()->update(mDt);
-		CameraBuffer cb;
-		//cb.mWorld = XMMatrixTranspose(g_World);
-		const auto viewMatrix = mCamera->getViewMatrix();
-		const auto viewPosition = mCamera->getViewPosition();
-
-		cb.mViewPosition = XMLoadFloat3(&viewPosition);
-		cb.mView = XMMatrixTranspose(XMLoadFloat4x4(&viewMatrix));
-		cb.mProjection = XMMatrixTranspose(mProjection);
-
-		inst->useCameraBuffer(cb);
 		
 		DirectX::XMFLOAT4X4 world;
 		XMStoreFloat4x4(&world, DirectX::XMMatrixIdentity());
@@ -144,5 +141,5 @@ Game::~Game()
 	delete RenderManager::instance();
 	delete ObjectManager::instance();
 	delete ResourceManager::instance();
-	delete mCamera;
+	delete CameraManager::instance();
 }

@@ -9,6 +9,7 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, std::ve
 {
 	//TODO: Register framebuffer to be resized
 	mUpdateResize = true;
+	Dx11Render::instance()->addFramebuffer(this);
 	const auto height = Win32Window::instance()->getHeight();
 	const auto width = Win32Window::instance()->getWidth();
 	return loadFramebuffer(pColour, pDepth, width, height, std::move(pDefaultColour), pType, pNumberOfBuffers);
@@ -18,6 +19,9 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 {
 	mWidth = pWidth;
 	mHeight = pHeight;
+	mColour = pColour;
+	mDepth = pDepth;
+	mNumberOfBuffer = pNumberOfBuffers;
 
 	mDefaultColours = std::move(pDefaultColour);
 	
@@ -450,4 +454,35 @@ Framebuffer::~Framebuffer()
 	{
 		mColorTextureResourceViews[i]->Release();
 	}
+
+	if (mUpdateResize)
+	{
+		Dx11Render::instance()->removeFramebuffer(this);
+	}
+}
+
+bool Framebuffer::resize(const int pWidth, const int pHeight)
+{
+	mColorTexture.Reset();
+
+	for (auto i = 0u; i < mColorTextureTargetViews.size(); i++)
+	{
+		mColorTextureTargetViews[i]->Release();
+	}
+
+	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
+	{
+		mColorTextureResourceViews[i]->Release();
+	}
+
+	mColorTextureTargetViews.clear();
+	mColorTextureResourceViews.clear();
+
+	mDepthTexture.Reset();
+	mDepthState.Reset();
+	mDepthTextureTargetView.Reset();
+	mDepthTextureResourceView.Reset();
+	mSampler.Reset();
+
+	return loadFramebuffer(mColour, mDepth, pWidth, pHeight, mDefaultColours, mType, mNumberOfBuffer);
 }

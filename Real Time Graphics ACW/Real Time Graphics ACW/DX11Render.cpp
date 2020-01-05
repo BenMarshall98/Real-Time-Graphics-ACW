@@ -2,7 +2,7 @@
 #include "Win32Window.h"
 #include "Material.h"
 #include "Shape.h"
-#include "Camera.h"
+#include "CameraManager.h"
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "DirectionalLight.h"
@@ -399,7 +399,7 @@ bool Dx11Render::resize(const int pWidth, const int pHeight)
 {
 	mRenderTargetView.Reset();
 	mDepthView.Reset();
-	
+
 	mSwapChain->ResizeBuffers(1, pWidth, pHeight, DXGI_FORMAT_UNKNOWN, 0);
 
 	//Recreate Color Backbuffer
@@ -464,6 +464,14 @@ bool Dx11Render::resize(const int pWidth, const int pHeight)
 	viewport.TopLeftY = 0;
 
 	mDeviceContext->RSSetViewports(1, &viewport);
+
+	for (auto i = 0u; i < mResizeableFramebuffer.size(); i++)
+	{
+		if (!mResizeableFramebuffer[i]->resize(pWidth, pHeight))
+		{
+			return false;
+		}
+	}
 
 	return true;
 }

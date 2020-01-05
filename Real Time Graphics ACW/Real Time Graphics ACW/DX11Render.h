@@ -3,6 +3,8 @@
 #include <d3d11_1.h>
 #include <WRL/client.h>
 #include "Win32Window.h"
+#include "Framebuffer.h"
+#include <algorithm>
 
 struct ModelBuffer;
 struct MaterialBuffer;
@@ -43,6 +45,8 @@ class Dx11Render
 	
 	Dx11Render();
 	bool loadRender();
+
+	std::vector<Framebuffer *> mResizeableFramebuffer;
 	
 public:
 	static Dx11Render * instance();
@@ -109,6 +113,21 @@ public:
 	{
 		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 		mDeviceContext->OMSetBlendState(mNoBlendState.Get(), blendFactor, 0xffffffff);
+	}
+
+	void addFramebuffer(Framebuffer * pFramebuffer)
+	{
+		mResizeableFramebuffer.push_back(pFramebuffer);
+	}
+
+	void removeFramebuffer(Framebuffer * pFramebuffer)
+	{
+		const auto it = std::find(mResizeableFramebuffer.begin(), mResizeableFramebuffer.end(), pFramebuffer);
+
+		if (it != mResizeableFramebuffer.end())
+		{
+			mResizeableFramebuffer.erase(it);
+		}
 	}
 
 	void useGlobalBuffer(const GlobalBuffer & pGlobalBuffer) const;

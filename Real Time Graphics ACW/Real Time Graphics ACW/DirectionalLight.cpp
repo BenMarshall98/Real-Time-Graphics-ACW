@@ -1,7 +1,7 @@
 #include "DirectionalLight.h"
 #include <string>
 #include "DX11Render.h"
-#include "Game.h"
+#include "CameraManager.h"
 
 DirectionalLight::DirectionalLight(const DirectX::XMFLOAT4 & pColor, const DirectX::XMFLOAT3 & pDirection) :
 	mColor(pColor), mDirection(pDirection)
@@ -34,7 +34,7 @@ void DirectionalLight::use(DirectionalLightBuffer& pLightBuffer) const
 	pLightBuffer.mColor = mColor;
 	pLightBuffer.mDirection = mDirection;
 	pLightBuffer.mIsUsed = true;
-	const auto pos = Game::mCamera->getViewPosition();
+	const auto pos = CameraManager::instance()->getViewPosition();
 	const auto eye = DirectX::XMLoadFloat3(&pos);
 	const auto target = DirectX::XMVectorAdd(eye, DirectX::XMLoadFloat3(&mDirection));
 	const auto up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);

@@ -2,12 +2,7 @@
 
 #include <DirectXMath.h>
 
-struct CameraBuffer
-{
-	DirectX::XMMATRIX mView;
-	DirectX::XMMATRIX mProjection;
-	DirectX::XMVECTOR mViewPosition;
-};
+struct CameraBuffer;
 
 class Camera
 {
@@ -43,11 +38,6 @@ public:
 	Camera(Camera &&) = delete;
 	Camera & operator= (const Camera &) = delete;
 	Camera & operator= (Camera &&) = delete;
-
-	DirectX::XMFLOAT3 getViewPosition() const
-	{
-		return mEyePosition;
-	}
 	
 	void rotateLeft(const bool & pRotate)
 	{
@@ -99,12 +89,11 @@ public:
 		mPanBackward = pPan;
 	}
 
-	void update();
-	void render();
+	void update(CameraBuffer & pCameraBuffer);
 
-	DirectX::XMFLOAT4X4 getViewMatrix() const
+	DirectX::XMFLOAT3 getViewPosition()
 	{
-		return mViewMatrix;
+		return mEyePosition;
 	}
 };
 

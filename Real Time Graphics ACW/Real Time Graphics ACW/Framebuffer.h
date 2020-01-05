@@ -28,6 +28,9 @@ class Framebuffer
 	std::vector<DirectX::XMVECTORF32> mDefaultColours;
 	unsigned int mWidth;
 	unsigned int mHeight;
+	bool mColour;
+	bool mDepth;
+	unsigned int mNumberOfBuffer;
 	bool mUpdateResize = false;
 	
 public:
@@ -55,5 +58,7 @@ public:
 	{
 		return mWidth;
 	}
+
+	bool resize(const int pWidth, const int pHeight);
 };
 

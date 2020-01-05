@@ -129,6 +129,7 @@
     <ClInclude Include="AnimationNode.h" />
     <ClInclude Include="BumpMapping.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraManager.h" />
     <ClInclude Include="ConfigLoader.h" />
     <ClInclude Include="Cuboid.h" />
     <ClInclude Include="DDSTextureLoader.h" />
@@ -184,6 +185,7 @@
     <ClCompile Include="AnimationNode.cpp" />
     <ClCompile Include="BumpMapping.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="ConfigLoader.cpp" />
     <ClCompile Include="Cuboid.cpp" />
     <ClCompile Include="DDSTextureLoader.cpp" />

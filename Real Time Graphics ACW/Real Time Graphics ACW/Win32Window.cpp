@@ -1,6 +1,6 @@
 #include "Win32Window.h"
 #include "DX11Render.h"
-#include "Game.h"
+#include "CameraManager.h"
 #include <string>
 #include "ObjectManager.h"
 #include "RenderManager.h"
@@ -82,13 +82,13 @@ LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMess
 		case 'J':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::mCamera->panLeft(true);
-				Game::mCamera->rotateLeft(false);
+				CameraManager::instance()->panLeft(true);
+				CameraManager::instance()->rotateLeft(false);
 			}
 			else
 			{
-				Game::mCamera->rotateLeft(true);
-				Game::mCamera->panLeft(false);
+				CameraManager::instance()->rotateLeft(true);
+				CameraManager::instance()->panLeft(false);
 			}
 			break;
 		case VK_RIGHT:
@@ -96,13 +96,13 @@ LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMess
 		case 'L':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::mCamera->panRight(true);
-				Game::mCamera->rotateRight(false);
+				CameraManager::instance()->panRight(true);
+				CameraManager::instance()->rotateRight(false);
 			}
 			else
 			{
-				Game::mCamera->rotateRight(true);
-				Game::mCamera->panRight(false);
+				CameraManager::instance()->rotateRight(true);
+				CameraManager::instance()->panRight(false);
 			}
 			break;
 		case VK_UP:
@@ -110,13 +110,13 @@ LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMess
 		case 'I':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::mCamera->panForward(true);
-				Game::mCamera->rotateUp(false);
+				CameraManager::instance()->panForward(true);
+				CameraManager::instance()->rotateUp(false);
 			}
 			else
 			{
-				Game::mCamera->rotateUp(true);
-				Game::mCamera->panForward(false);
+				CameraManager::instance()->rotateUp(true);
+				CameraManager::instance()->panForward(false);
 			}
 			break;
 		case VK_DOWN:
@@ -124,20 +124,20 @@ LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMess
 		case 'K':
 			if (GetKeyState(VK_CONTROL) < 0)
 			{
-				Game::mCamera->panBackward(true);
-				Game::mCamera->rotateDown(false);
+				CameraManager::instance()->panBackward(true);
+				CameraManager::instance()->rotateDown(false);
 			}
 			else
 			{
-				Game::mCamera->rotateDown(true);
-				Game::mCamera->panBackward(false);
+				CameraManager::instance()->rotateDown(true);
+				CameraManager::instance()->panBackward(false);
 			}
 			break;
 		case VK_PRIOR:
-			Game::mCamera->panUp(true);
+			CameraManager::instance()->panUp(true);
 			break;
 		case VK_NEXT:
-			Game::mCamera->panDown(true);
+			CameraManager::instance()->panDown(true);
 			break;
 		case '1':
 		case '2':
@@ -172,6 +172,12 @@ LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMess
 				InkRender::instance()->DecreaseHeight(false);
 			}
 			break;
+		case VK_F1:
+			CameraManager::instance()->useCamera1();
+			break;
+		case VK_F2:
+			CameraManager::instance()->useCamera2();
+			break;
 		default:
 			break;
 		}
@@ -184,64 +190,64 @@ LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMess
 		case VK_LEFT:
 		case 'A':
 		case 'J':
-			Game::mCamera->panLeft(false);
-			Game::mCamera->rotateLeft(false);
+			CameraManager::instance()->panLeft(false);
+			CameraManager::instance()->rotateLeft(false);
 			break;
 		case VK_RIGHT:
 		case 'D':
 		case 'L':
-			Game::mCamera->panRight(false);
-			Game::mCamera->rotateRight(false);
+			CameraManager::instance()->panRight(false);
+			CameraManager::instance()->rotateRight(false);
 			break;
 		case VK_UP:
 		case 'W':
 		case 'I':
-			Game::mCamera->panForward(false);
-			Game::mCamera->rotateUp(false);
+			CameraManager::instance()->panForward(false);
+			CameraManager::instance()->rotateUp(false);
 			break;
 		case VK_DOWN:
 		case 'S':
 		case 'K':
-			Game::mCamera->panBackward(false);
-			Game::mCamera->rotateDown(false);
+			CameraManager::instance()->panBackward(false);
+			CameraManager::instance()->rotateDown(false);
 			break;
 		case VK_PRIOR:
-			Game::mCamera->panUp(false);
+			CameraManager::instance()->panUp(false);
 			break;
 		case VK_NEXT:
-			Game::mCamera->panDown(false);
+			CameraManager::instance()->panDown(false);
 			break;
 		case VK_CONTROL:
 			if (GetKeyState(VK_LEFT) < 0 ||
 				GetKeyState('A') < 0 ||
 				GetKeyState('J') < 0)
 			{
-				Game::mCamera->rotateLeft(true);
-				Game::mCamera->panLeft(false);
+				CameraManager::instance()->rotateLeft(true);
+				CameraManager::instance()->panLeft(false);
 			}
 
 			if (GetKeyState(VK_RIGHT) < 0 ||
 				GetKeyState('D') < 0 ||
 				GetKeyState('L') < 0)
 			{
-				Game::mCamera->rotateRight(true);
-				Game::mCamera->panRight(false);
+				CameraManager::instance()->rotateRight(true);
+				CameraManager::instance()->panRight(false);
 			}
 
 			if (GetKeyState(VK_UP) < 0 ||
 				GetKeyState('W') < 0 ||
 				GetKeyState('I') < 0)
 			{
-				Game::mCamera->rotateUp(true);
-				Game::mCamera->panForward(false);
+				CameraManager::instance()->rotateUp(true);
+				CameraManager::instance()->panForward(false);
 			}
 
 			if (GetKeyState(VK_DOWN) < 0 ||
 				GetKeyState('S') < 0 ||
 				GetKeyState('K') < 0)
 			{
-				Game::mCamera->rotateDown(true);
-				Game::mCamera->panBackward(false);
+				CameraManager::instance()->rotateDown(true);
+				CameraManager::instance()->panBackward(false);
 			}
 			break;
 		case 'F':
@@ -273,6 +279,7 @@ LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMess
 		{
 			PostMessage(pHwnd, WM_CLOSE, 0, 0);
 		}
+		CameraManager::instance()->changeSize(width, height);
 	}
 	break;
 	case WM_DESTROY:

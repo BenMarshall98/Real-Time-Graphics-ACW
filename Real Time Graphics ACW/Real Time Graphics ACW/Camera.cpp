@@ -1,11 +1,11 @@
 #include "Camera.h"
 #include "Game.h"
+#include "CameraManager.h"
 
 Camera::Camera(const DirectX::XMFLOAT3 & pEyePosition, const DirectX::XMFLOAT3 & pUpDirection,
 	const DirectX::XMFLOAT3 & pTargetPosition) : mViewMatrix(), mUpDirection(pUpDirection),
 	mEyePosition(pEyePosition), mTargetPosition(pTargetPosition)
 {
-	update();
 }
 
 void Camera::rotateLeftRight(const bool pLeft)
@@ -117,7 +117,7 @@ void Camera::panUpDown(const bool pUp)
 	XMStoreFloat3(&mTargetPosition, DirectX::XMVectorAdd(targetTemp, movement));
 }
 
-void Camera::update()
+void Camera::update(CameraBuffer & pCameraBuffer)
 {
 	if (mRotateLeft && !mRotateRight)
 	{
@@ -168,9 +168,7 @@ void Camera::update()
 	const auto eyeTemp = XMLoadFloat3(&mEyePosition);
 	const auto upTemp = XMLoadFloat3(&mUpDirection);
 	XMStoreFloat4x4(&mViewMatrix, DirectX::XMMatrixLookAtLH(eyeTemp, targetTemp, upTemp));
-}
 
-void Camera::render()
-{
-	//TODO: Implement
+	DirectX::XMStoreFloat4x4(&pCameraBuffer.mView, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&mViewMatrix)));
+	pCameraBuffer.mViewPosition = DirectX::XMFLOAT4(mEyePosition.x, mEyePosition.y, mEyePosition.z, 1.0f);
 }

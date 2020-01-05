@@ -153,6 +153,25 @@ LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMess
 		case VK_F8:
 			RenderManager::instance()->changeMode();
 			break;
+		case 'F':
+			if (GetKeyState(VK_SHIFT) < 0)
+			{
+				InkRender::instance()->IncreaseHeight(true);
+				InkRender::instance()->DecreaseHeight(false);
+			}
+			else
+			{
+				InkRender::instance()->DecreaseHeight(true);
+				InkRender::instance()->IncreaseHeight(false);
+			}
+			break;
+		case VK_SHIFT:
+			if (GetKeyState('F') < 0)
+			{
+				InkRender::instance()->IncreaseHeight(true);
+				InkRender::instance()->DecreaseHeight(false);
+			}
+			break;
 		default:
 			break;
 		}
@@ -223,6 +242,24 @@ LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMess
 			{
 				Game::mCamera->rotateDown(true);
 				Game::mCamera->panBackward(false);
+			}
+			break;
+		case 'F':
+			{
+				InkRender::instance()->DecreaseHeight(false);
+				InkRender::instance()->IncreaseHeight(false);
+			}
+			break;
+		case VK_SHIFT:
+			if (GetKeyState('F') < 0)
+			{
+				InkRender::instance()->DecreaseHeight(true);
+				InkRender::instance()->IncreaseHeight(false);
+			}
+			else
+			{
+				InkRender::instance()->DecreaseHeight(false);
+				InkRender::instance()->IncreaseHeight(false);
 			}
 			break;
 		}

@@ -27,8 +27,6 @@ class RenderManager final
 	std::shared_ptr<Shader> mHDRShader;
 	std::shared_ptr<Shader> mDeferredShader;
 
-	std::unique_ptr<InkRender> mInkRender;
-
 	std::shared_ptr<Model> mOutputModel;
 
 	std::unique_ptr<Technique> mStaticTechnique;

@@ -20,7 +20,6 @@ RenderManager::RenderManager()
 	mDeferredBuffer = std::make_unique<Framebuffer>();
 	mScreenFramebufferOne = std::make_unique<Framebuffer>();
 	mScreenFramebufferTwo = std::make_unique<Framebuffer>();
-	mInkRender = std::make_unique<InkRender>();
 
 	if (!mHdrFramebuffer->loadFramebuffer(true, true, { {0.0f, 0.0f, 0.0f, 0.0f } }, TextureType::TEXTURE_2D))
 	{
@@ -234,7 +233,7 @@ void RenderManager::renderToScreen()
 			}
 
 			//Ink
-			mInkRender->RenderInk();
+			InkRender::instance()->RenderInk();
 		}
 		else
 		{
@@ -251,7 +250,7 @@ void RenderManager::renderToScreen()
 			}
 
 			//Ink
-			mInkRender->RenderInk();
+			InkRender::instance()->RenderInk();
 		}
 
 		//TODO: ink

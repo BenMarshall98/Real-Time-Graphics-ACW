@@ -13,15 +13,38 @@ struct InkBuffer
 
 class InkRender
 {
+	static InkRender * mInstance;
+
+	InkRender();
+
 	std::shared_ptr<Shader> mDepthShader;
 	std::shared_ptr<Model> mModel;
 	
 	float mHeight = 0.0f;
+
+	bool mIncrease = false;
+	bool mDecrease = false;
 	
 public:
-	InkRender();
 	~InkRender() = default;
-	void IncreaseHeight(float pDt);
-	void DecreaseHeight(float pDt);
-	void RenderInk() const;
+	void IncreaseHeight(bool pIsTrue)
+	{
+		mIncrease = pIsTrue;
+	}
+
+	void DecreaseHeight(bool pIsTrue)
+	{
+		mDecrease = pIsTrue;
+	}
+
+	void RenderInk();
+
+	static InkRender * instance()
+	{
+		if (!mInstance)
+		{
+			mInstance = new InkRender();
+		}
+		return mInstance;
+	}
 };

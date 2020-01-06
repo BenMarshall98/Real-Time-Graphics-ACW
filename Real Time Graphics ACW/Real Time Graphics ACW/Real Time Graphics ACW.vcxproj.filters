@@ -666,6 +666,12 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="TransparencyFragmentShader.hlsl" />
     <CopyFileToFolders Include="TransparencyVertexShader.hlsl" />
+    <CopyFileToFolders Include="BloomExtractFragmentShader.hlsl" />
+    <CopyFileToFolders Include="BloomExtractVertexShader.hlsl" />
+    <CopyFileToFolders Include="HorzBloomFragmentShader.hlsl" />
+    <CopyFileToFolders Include="HorzBloomVertexShader.hlsl" />
+    <CopyFileToFolders Include="VertBloomFragmentShader.hlsl" />
+    <CopyFileToFolders Include="VertBloomVertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />
@@ -687,13 +693,5 @@
     <Image Include="tyre_spec.dds">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="HorzBloomVertexShader.hlsl" />
-    <FxCompile Include="HorzBloomFragmentShader.hlsl" />
-    <FxCompile Include="VertBloomVertexShader.hlsl" />
-    <FxCompile Include="VertBloomFragmentShader.hlsl" />
-    <FxCompile Include="BloomExtractVertexShader.hlsl" />
-    <FxCompile Include="BloomExtractFragmentShader.hlsl" />
   </ItemGroup>
 </Project>

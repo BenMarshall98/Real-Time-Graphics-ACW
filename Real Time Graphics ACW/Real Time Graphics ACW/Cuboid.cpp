@@ -4,7 +4,7 @@
 #include <cmath>
 #include <algorithm>
 
-Cuboid::Cuboid(std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial) :
+Cuboid::Cuboid(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Material> & pMaterial) :
 	Shape(ResourceManager::instance()->loadModel("cube.obj"), std::move(pTexturePack), std::move(pMaterial))
 {
 }
@@ -14,9 +14,12 @@ Cuboid::Cuboid() :
 {
 }
 
+Cuboid::~Cuboid() = default;
+
 void Cuboid::explode()
 {
-	const auto matrix = DirectX::XMLoadFloat4x4(&mCurrentMatrix);
+	const auto currentMatrix = getCurrentMatrix();
+	const auto matrix = DirectX::XMLoadFloat4x4(&currentMatrix);
 
 	auto center = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 	auto xDir = DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f);
@@ -30,15 +33,14 @@ void Cuboid::explode()
 
 	std::vector<DirectX::XMFLOAT3> positions;
 
-	std::vector<DirectX::XMFLOAT3> directions =
-	{
+	std::vector<DirectX::XMFLOAT3> directions({
 		DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f),
 		DirectX::XMFLOAT3(0.0f, 0.0f, -1.0f),
 		DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f),
 		DirectX::XMFLOAT3(0.0f, -1.0f, 0.0f),
 		DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f),
 		DirectX::XMFLOAT3(-1.0f, 0.0f, 0.0f)
-	};
+		});
 
 	for (auto i = 0; i < directions.size(); i++)
 	{
@@ -52,13 +54,15 @@ void Cuboid::explode()
 
 				bool jUsed = false;
 
-				if (directions[i].x == 0.0f)
+				const auto EPSILION = 0.005f;
+				
+				if (directions[i].x < EPSILION && directions[i].x > -EPSILION)
 				{
 					position = DirectX::XMVectorAdd(position, DirectX::XMVectorScale(xDir, j * 0.1f));
 					jUsed = true;
 				}
 
-				if (directions[i].y == 0.0f)
+				if (directions[i].y < EPSILION && directions[i].y > -EPSILION)
 				{
 					if (jUsed)
 					{
@@ -70,7 +74,7 @@ void Cuboid::explode()
 					}
 				}
 
-				if (directions[i].z == 0.0f)
+				if (directions[i].z < EPSILION && directions[i].z > -EPSILION)
 				{
 					position = DirectX::XMVectorAdd(position, DirectX::XMVectorScale(zDir, k * 0.1f));
 				}
@@ -89,8 +93,8 @@ void Cuboid::explode()
 
 	for (int i = 0; i < positions.size(); i++)
 	{
-		auto tempPosition = XMLoadFloat3(&positions[i]);
-		auto length = DirectX::XMVectorGetX(DirectX::XMVector3Length(tempPosition));
+		const auto tempPosition = XMLoadFloat3(&positions[i]);
+		const auto length = DirectX::XMVectorGetX(DirectX::XMVector3Length(tempPosition));
 
 		const auto tempVelocity = DirectX::XMVectorScale(DirectX::XMVectorSubtract(tempPosition, center), 10.0f / length);
 
@@ -104,26 +108,31 @@ void Cuboid::explode()
 	ParticleManager::instance()->addParticles(particles);
 }
 
-void Cuboid::collideWith(Particle pParticle)
+void Cuboid::collideWith(const Particle & pParticle)
 {
-	const auto matrix = DirectX::XMLoadFloat4x4(&mCurrentMatrix);
+	const auto currentMatrix = getCurrentMatrix();
+	const auto previousMatrix = getPreviousMatrix();
+	const auto matrix = DirectX::XMLoadFloat4x4(&currentMatrix);
 
 	auto center = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
-	auto xDir = DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f);
-	auto yDir = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
-	auto zDir = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f);
+	const auto xDir = DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f);
+	const auto yDir = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
+	const auto zDir = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f);
 
 	center = DirectX::XMVector3Transform(center, matrix);
 	const auto xLength = DirectX::XMVectorGetX(DirectX::XMVector3Length(DirectX::XMVectorSubtract(DirectX::XMVector3Transform(xDir, matrix), center)));
 	const auto yLength = DirectX::XMVectorGetX(DirectX::XMVector3Length(DirectX::XMVectorSubtract(DirectX::XMVector3Transform(yDir, matrix), center)));
 	const auto zLength = DirectX::XMVectorGetX(DirectX::XMVector3Length(DirectX::XMVectorSubtract(DirectX::XMVector3Transform(zDir, matrix), center)));
 
-	const auto quat0 = DirectX::XMQuaternionRotationMatrix(DirectX::XMLoadFloat4x4(&mPreviousMatrix));
-	const auto quat1 = DirectX::XMQuaternionRotationMatrix(DirectX::XMLoadFloat4x4(&mCurrentMatrix));
+	const auto currentRotation = getCurrentRotationMatrix();
+	const auto previousRotation = getPreviousRotationMatrix();
+
+	const auto quat0 = DirectX::XMQuaternionRotationMatrix(DirectX::XMLoadFloat4x4(&previousRotation));
+	const auto quat1 = DirectX::XMQuaternionRotationMatrix(DirectX::XMLoadFloat4x4(&currentRotation));
 	const auto cubePos1 = center;
 
 	center = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
-	const auto preMatrix = DirectX::XMLoadFloat4x4(&mPreviousMatrix);
+	const auto preMatrix = DirectX::XMLoadFloat4x4(&previousMatrix);
 
 	const auto cubePos0 = DirectX::XMVector3Transform(center, preMatrix);
 
@@ -184,6 +193,7 @@ void Cuboid::collideWith(Particle pParticle)
 				}
 
 				currentTime = timeStart + 0.5f * (timeEnd - timeStart);
+				firstTime = false;
 			}
 		}
 		else
@@ -222,7 +232,7 @@ void Cuboid::collideWith(Particle pParticle)
 }
 
 bool Cuboid::detectCollision(const DirectX::XMVECTOR & pNormal, const DirectX::XMVECTOR & pTangent, const DirectX::XMVECTOR & pBiTangent, const DirectX::XMFLOAT3 & pLengths,
-	const DirectX::XMVECTOR & pCubePos, const DirectX::XMVECTOR & pPartPos, DirectX::XMVECTOR & pCollisionPos)
+	const DirectX::XMVECTOR & pCubePos, const DirectX::XMVECTOR & pPartPos, DirectX::XMVECTOR & pCollisionPos) const
 {
 	const auto d = DirectX::XMVectorSubtract(pPartPos, pCubePos);
 
@@ -288,7 +298,7 @@ bool Cuboid::detectCollision(const DirectX::XMVECTOR & pNormal, const DirectX::X
 //TODO: Source: Simulation Coursework
 
 void Cuboid::calculateNormal(const DirectX::XMVECTOR & pNormal, const DirectX::XMVECTOR & pTangent, const DirectX::XMVECTOR & pBiTangent, const DirectX::XMFLOAT3 & pLengths,
-	const DirectX::XMVECTOR & pCubePos, const DirectX::XMVECTOR & pCollisionPos, DirectX::XMVECTOR & pCollisionNormal)
+	const DirectX::XMVECTOR & pCubePos, const DirectX::XMVECTOR & pCollisionPos, DirectX::XMVECTOR & pCollisionNormal) const
 {
 	const auto d = DirectX::XMVectorSubtract(pCollisionPos, pCubePos);
 

@@ -6,15 +6,15 @@
 class Cuboid final : public Shape, public IExplode
 {
 	void calculateNormal(const DirectX::XMVECTOR & pNormal, const DirectX::XMVECTOR & pTangent, const DirectX::XMVECTOR & pBiTangent, const DirectX::XMFLOAT3 & pLengths,
-		const DirectX::XMVECTOR & pCubePos, const DirectX::XMVECTOR & pCollisionPos, DirectX::XMVECTOR & pCollisionNormal);
+		const DirectX::XMVECTOR & pCubePos, const DirectX::XMVECTOR & pCollisionPos, DirectX::XMVECTOR & pCollisionNormal) const;
 
 	bool detectCollision(const DirectX::XMVECTOR & pNormal, const DirectX::XMVECTOR & pTangent, const DirectX::XMVECTOR & pBiTangent, const DirectX::XMFLOAT3 & pLengths,
-		const DirectX::XMVECTOR & pCubePos, const DirectX::XMVECTOR & pPartPos, DirectX::XMVECTOR & pCollisionPos);
+		const DirectX::XMVECTOR & pCubePos, const DirectX::XMVECTOR & pPartPos, DirectX::XMVECTOR & pCollisionPos) const;
 
 public:
-	Cuboid(std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial);
+	Cuboid(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Material> & pMaterial);
 	Cuboid();
-	~Cuboid() override = default;
+	~Cuboid();
 
 	Cuboid(const Cuboid&) = delete;
 	Cuboid(Cuboid &&) = delete;
@@ -22,5 +22,5 @@ public:
 	Cuboid & operator= (Cuboid &&) = delete;
 
 	void explode() override;
-	void collideWith(Particle pParticle) override;
+	void collideWith(const Particle & pParticle) override;
 };

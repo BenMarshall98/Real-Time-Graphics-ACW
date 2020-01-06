@@ -3,7 +3,10 @@
 
 ScaleNode::ScaleNode(const float & pX, const float & pY, const float & pZ)
 {
-	XMStoreFloat4x4(&mMatrix, DirectX::XMMatrixScaling(pX, pY, pZ));
+	auto matrix = DirectX::XMFLOAT4X4();
+	XMStoreFloat4x4(&matrix, DirectX::XMMatrixScaling(pX, pY, pZ));
+
+	setMatrix(matrix);
 }
 
 void ScaleNode::read(std::istream& pIn)
@@ -16,5 +19,8 @@ void ScaleNode::read(std::istream& pIn)
 
 	pIn >> x >> c >> y >> c >> z;
 
-	XMStoreFloat4x4(&mMatrix, DirectX::XMMatrixScaling(x, y, z));
+	auto matrix = DirectX::XMFLOAT4X4();
+	XMStoreFloat4x4(&matrix, DirectX::XMMatrixScaling(x, y, z));
+
+	setMatrix(matrix);
 }

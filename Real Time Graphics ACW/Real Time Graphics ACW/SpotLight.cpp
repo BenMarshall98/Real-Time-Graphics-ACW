@@ -20,7 +20,7 @@ SpotLight::SpotLight(const DirectX::XMFLOAT3& pColor, const DirectX::XMFLOAT3 & 
 	}
 }
 
-SpotLight::SpotLight()
+SpotLight::SpotLight() : mAttenuationConstant(1.0f), mAttenuationLinear(0.0f), mAttenuationQuad(0.0f), mInnerAngle(5.0f), mOuterAngle(15.0f)
 {
 	mFramebuffer = std::make_unique<Framebuffer>();
 
@@ -46,7 +46,7 @@ void SpotLight::use(SpotLightBuffer& pLightBuffer, const unsigned int pIndex) co
 	pLightBuffer.mFarPlane[pIndex] = 20.0f;
 }
 
-void SpotLight::update(DirectX::XMFLOAT4X4& pMatrix)
+void SpotLight::update(const DirectX::XMFLOAT4X4& pMatrix)
 {
 	auto center = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 	auto direction = XMLoadFloat3(&mDirection);

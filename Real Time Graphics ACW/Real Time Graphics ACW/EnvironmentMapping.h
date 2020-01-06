@@ -15,9 +15,9 @@ public:
 	EnvironmentMapping & operator= (const EnvironmentMapping &) = delete;
 	EnvironmentMapping & operator= (EnvironmentMapping &&) = delete;
 
-	void render(std::shared_ptr<Shape> & pShape, bool pDeffered, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
-	void renderDirectionalShadow(std::shared_ptr<Shape>& pShape) override;
-	void renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape) override;
+	void render(const std::shared_ptr<Shape> & pShape, bool pDeffered, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
+	void renderDirectionalShadow(const std::shared_ptr<Shape>& pShape) override;
+	void renderOmniDirectionalShadow(const std::shared_ptr<Shape>& pShape) override;
 	bool renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
 	void renderTransparent(std::shared_ptr<Shape> & pShape, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
 };

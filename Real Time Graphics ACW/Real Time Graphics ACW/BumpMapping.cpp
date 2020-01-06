@@ -11,29 +11,31 @@ BumpMapping::BumpMapping() :
 {
 }
 
-void BumpMapping::render(std::shared_ptr<Shape>& pShape, bool pDeferred, std::unique_ptr<Framebuffer> &)
+BumpMapping::~BumpMapping() = default;
+
+void BumpMapping::render(const std::shared_ptr<Shape> & pShape, const bool pDeferred, std::unique_ptr<Framebuffer> &)
 {
 	if (pDeferred)
 	{
-		mDeferredShader->useShader();
+		useDeferredShader();
 	}
 	else
 	{
-		mNormalShader->useShader();
+		useNormalShader();
 	}
 	
 	pShape->render();
 }
 
-void BumpMapping::renderDirectionalShadow(std::shared_ptr<Shape>& pShape)
+void BumpMapping::renderDirectionalShadow(const std::shared_ptr<Shape>& pShape)
 {
-	mDirectionalShader->useShader();
+	useDirectionalShader();
 	pShape->render();
 }
 
-void BumpMapping::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape)
+void BumpMapping::renderOmniDirectionalShadow(const std::shared_ptr<Shape>& pShape)
 {
-	mOmniDirectionalShader->useShader();
+	useOmniDirectionalShader();
 	pShape->render();
 }
 

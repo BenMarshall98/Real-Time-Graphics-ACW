@@ -33,12 +33,12 @@ public:
 		return mInstance;
 	}
 
-	void setCamera1(std::unique_ptr<Camera> pCamera)
+	void setCamera1(std::unique_ptr<Camera> & pCamera)
 	{
 		mCamera1 = std::move(pCamera);
 	}
 
-	void setCamera2(std::unique_ptr<Camera> pCamera)
+	void setCamera2(std::unique_ptr<Camera> & pCamera)
 	{
 		mCamera2 = std::move(pCamera);
 	}
@@ -174,7 +174,7 @@ public:
 
 	void update();
 
-	DirectX::XMFLOAT3 getViewPosition()
+	DirectX::XMFLOAT3 getViewPosition() const
 	{
 		if (mCurrentCamera == 1)
 		{

@@ -6,7 +6,6 @@
 
 class Technique
 {
-protected:
 	std::shared_ptr<Shader> mNormalShader;
 	std::shared_ptr<Shader> mDeferredShader;
 	std::shared_ptr<Shader> mDirectionalShader;
@@ -22,10 +21,30 @@ public:
 	Technique & operator= (const Technique &) = delete;
 	Technique & operator= (Technique &&) = delete;
 
-	virtual void render(std::shared_ptr<Shape>& pShape, bool pDeferred, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) = 0;
-	virtual void renderDirectionalShadow(std::shared_ptr<Shape>& pShape) = 0;
-	virtual void renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape) = 0;
+	virtual void render(const std::shared_ptr<Shape> & pShape, bool pDeferred, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) = 0;
+	virtual void renderDirectionalShadow(const std::shared_ptr<Shape> & pShape) = 0;
+	virtual void renderOmniDirectionalShadow(const std::shared_ptr<Shape> & pShape) = 0;
 	virtual bool renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer) = 0;
 	virtual void renderTransparent(std::shared_ptr<Shape> & pShape, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) = 0;
+
+	void useNormalShader() const
+	{
+		mNormalShader->useShader();
+	}
+
+	void useDeferredShader() const
+	{
+		mDeferredShader->useShader();
+	}
+
+	void useDirectionalShader() const
+	{
+		mDirectionalShader->useShader();
+	}
+
+	void useOmniDirectionalShader() const
+	{
+		mOmniDirectionalShader->useShader();
+	}
 };
 

@@ -5,17 +5,16 @@
 #include <algorithm>
 #include <utility>
 
-bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, std::vector<DirectX::XMVECTORF32> pDefaultColour, const TextureType pType, const unsigned int pNumberOfBuffers)
+bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, const std::vector<DirectX::XMVECTORF32> & pDefaultColour, const TextureType pType, const unsigned int pNumberOfBuffers)
 {
-	//TODO: Register framebuffer to be resized
 	mUpdateResize = true;
 	Dx11Render::instance()->addFramebuffer(this);
 	const auto height = Win32Window::instance()->getHeight();
 	const auto width = Win32Window::instance()->getWidth();
-	return loadFramebuffer(pColour, pDepth, width, height, std::move(pDefaultColour), pType, pNumberOfBuffers);
+	return loadFramebuffer(pColour, pDepth, width, height, pDefaultColour, pType, pNumberOfBuffers);
 }
 
-bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWidth, int pHeight, std::vector<DirectX::XMVECTORF32> pDefaultColour, TextureType pType, unsigned int pNumberOfBuffers)
+bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWidth, int pHeight, const std::vector<DirectX::XMVECTORF32> & pDefaultColour, TextureType pType, unsigned int pNumberOfBuffers)
 {
 	mWidth = pWidth;
 	mHeight = pHeight;
@@ -445,19 +444,27 @@ void Framebuffer::releaseDomainTexture(unsigned int pSlot) const
 
 Framebuffer::~Framebuffer()
 {
-	for (auto i = 0u; i < mColorTextureTargetViews.size(); i++)
+	//TODO: Find another way
+	try
 	{
-		mColorTextureTargetViews[i]->Release();
-	}
+		for (auto i = 0u; i < mColorTextureTargetViews.size(); i++)
+		{
+			mColorTextureTargetViews[i]->Release();
+		}
 
-	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
-	{
-		mColorTextureResourceViews[i]->Release();
-	}
+		for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
+		{
+			mColorTextureResourceViews[i]->Release();
+		}
 
-	if (mUpdateResize)
+		if (mUpdateResize)
+		{
+			Dx11Render::instance()->removeFramebuffer(this);
+		}
+	}
+	catch (...)
 	{
-		Dx11Render::instance()->removeFramebuffer(this);
+
 	}
 }
 

@@ -11,29 +11,29 @@ TextureMapping::TextureMapping() :
 {
 }
 
-void TextureMapping::render(std::shared_ptr<Shape>& pShape, bool pDeferred, std::unique_ptr<Framebuffer> &)
+void TextureMapping::render(const std::shared_ptr<Shape>& pShape, bool pDeferred, std::unique_ptr<Framebuffer> &)
 {
 	if (pDeferred)
 	{
-		mDeferredShader->useShader();
+		useDeferredShader();
 	}
 	else
 	{
-		mNormalShader->useShader();
+		useNormalShader();
 	}
 	
 	pShape->render();
 }
 
-void TextureMapping::renderDirectionalShadow(std::shared_ptr<Shape>& pShape)
+void TextureMapping::renderDirectionalShadow(const std::shared_ptr<Shape>& pShape)
 {
-	mDirectionalShader->useShader();
+	useDirectionalShader();
 	pShape->render();
 }
 
-void TextureMapping::renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape)
+void TextureMapping::renderOmniDirectionalShadow(const std::shared_ptr<Shape>& pShape)
 {
-	mOmniDirectionalShader->useShader();
+	useOmniDirectionalShader();
 	pShape->render();
 }
 

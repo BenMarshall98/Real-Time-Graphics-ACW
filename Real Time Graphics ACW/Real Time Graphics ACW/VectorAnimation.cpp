@@ -19,7 +19,7 @@ void VectorAnimation::calculateTangents()
 
 	{
 		const auto pos1 = XMLoadFloat3(&mNodes[mNodes.size() - 1].mPosition);
-		const auto time1 = mNodes[mNodes.size() - 1].mTime - mEndTime;
+		const auto time1 = mNodes[mNodes.size() - 1].mTime - getEndTime();
 
 		const auto pos2 = XMLoadFloat3(&mNodes[1].mPosition);
 		const auto time2 = mNodes[1].mTime;
@@ -47,7 +47,7 @@ void VectorAnimation::calculateTangents()
 		const auto time1 = mNodes[mNodes.size() - 2].mTime;
 
 		const auto pos2 = XMLoadFloat3(&mNodes[0].mPosition);
-		const auto time2 = mEndTime;
+		const auto time2 = getEndTime();
 
 		const auto tang = DirectX::XMVectorScale(DirectX::XMVectorSubtract(pos2, pos1), 1.0f / (time2 - time1));
 
@@ -76,32 +76,39 @@ DirectX::XMFLOAT4X4 VectorAnimation::animate(const float pDeltaTime)
 
 	if (mNodes.size() == 2)
 	{
-		mCurrentTime += pDeltaTime;
+		auto currentTime = getCurrentTime();
+		auto endTime = getEndTime();
+		auto currentNode = getCurrentNode();
+		
+		currentTime += pDeltaTime;
 
-		if (mCurrentTime >= mEndTime)
+		if (currentTime >= endTime)
 		{
-			mCurrentNode = 0;
-			mCurrentTime -= mEndTime;
+			currentNode = 0;
+			currentTime -= endTime;
 		}
 
-		if (mCurrentTime >= mNodes[1].mTime)
+		if (currentTime >= mNodes[1].mTime)
 		{
-			mCurrentNode = 1;
+			currentNode = 1;
 
 			const auto pos0 = DirectX::XMLoadFloat3(&mNodes[1].mPosition);
 			const auto time0 = mNodes[1].mTime;
 			
 			const auto pos1 = DirectX::XMLoadFloat3(&mNodes[0].mPosition);
-			const auto time1 = mEndTime;
+			const auto time1 = endTime;
 
-			const auto pos = DirectX::XMVectorAdd(pos0, DirectX::XMVectorScale(DirectX::XMVectorSubtract(pos1, pos0), (mCurrentTime - time0) / (time1 - time0)));
+			const auto pos = DirectX::XMVectorAdd(pos0, DirectX::XMVectorScale(DirectX::XMVectorSubtract(pos1, pos0), (currentTime - time0) / (time1 - time0)));
 			DirectX::XMFLOAT4X4 result;
 			DirectX::XMStoreFloat4x4(&result, DirectX::XMMatrixTranslationFromVector(pos));
 
+			setCurrentTime(currentTime);
+			setCurrentNode(currentNode);
+			
 			return result;
 		}
 
-		mCurrentNode = 0;
+		currentNode = 0;
 
 		const auto pos0 = DirectX::XMLoadFloat3(&mNodes[0].mPosition);
 		const auto time0 = mNodes[0].mTime;
@@ -109,41 +116,48 @@ DirectX::XMFLOAT4X4 VectorAnimation::animate(const float pDeltaTime)
 		const auto pos1 = DirectX::XMLoadFloat3(&mNodes[1].mPosition);
 		const auto time1 = mNodes[1].mTime;
 
-		const auto pos = DirectX::XMVectorAdd(pos0, DirectX::XMVectorScale(DirectX::XMVectorSubtract(pos1, pos0), (mCurrentTime - time0) / (time1 - time0)));
+		const auto pos = DirectX::XMVectorAdd(pos0, DirectX::XMVectorScale(DirectX::XMVectorSubtract(pos1, pos0), (currentTime - time0) / (time1 - time0)));
 		DirectX::XMFLOAT4X4 result;
 		DirectX::XMStoreFloat4x4(&result, DirectX::XMMatrixTranslationFromVector(pos));
 
+		setCurrentTime(currentTime);
+		setCurrentNode(currentNode);
+		
 		return result;
 	}
 
-	mCurrentTime += pDeltaTime;
+	auto currentTime = getCurrentTime();
+	auto endTime = getEndTime();
+	auto currentNode = getCurrentNode();
 
-	if (mCurrentTime >= mEndTime)
+	currentTime += pDeltaTime;
+
+	if (currentTime >= endTime)
 	{
-		mCurrentNode = 0;
-		mCurrentTime -= mEndTime;
+		currentNode = 0;
+		currentTime -= endTime;
 	}
 
 	for (auto i = mNodes.size() - 1; i >= 0; i--)
 	{
-		if (mNodes[i].mTime < mCurrentTime)
+		if (mNodes[i].mTime < currentTime)
 		{
-			mCurrentNode = i;
+			currentNode = i;
 			break;
 		}
 	}
 
-	if (mCurrentNode == mNodes.size() - 1)
+	if (currentNode == mNodes.size() - 1)
 	{
-		const auto pos0 = DirectX::XMLoadFloat3(&mNodes[mCurrentNode].mPosition);
-		const auto tan0 = DirectX::XMLoadFloat3(&mNodes[mCurrentNode].mTangent);
-		const auto time0 = mNodes[mCurrentNode].mTime;
+		const auto pos0 = DirectX::XMLoadFloat3(&mNodes[currentNode].mPosition);
+		const auto tan0 = DirectX::XMLoadFloat3(&mNodes[currentNode].mTangent);
+		const auto time0 = mNodes[currentNode].mTime;
 
 		const auto pos1 = DirectX::XMLoadFloat3(&mNodes[0].mPosition);
 		const auto tan1 = DirectX::XMLoadFloat3(&mNodes[0].mTangent);
-		const auto time1 = mEndTime;
+		const auto time1 = endTime;
 		
-		const auto time = (mCurrentTime - time0) / (time1 - time0);
+		const auto time = (currentTime - time0) / (time1 - time0);
 		const auto time2 = pow(time, 2);
 		const auto time3 = pow(time, 3);
 
@@ -156,18 +170,21 @@ DirectX::XMFLOAT4X4 VectorAnimation::animate(const float pDeltaTime)
 		DirectX::XMFLOAT4X4 result;
 		DirectX::XMStoreFloat4x4(&result, DirectX::XMMatrixTranslationFromVector(pos));
 
+		setCurrentTime(currentTime);
+		setCurrentNode(currentNode);
+
 		return result;
 	}
 
-	const auto pos0 = DirectX::XMLoadFloat3(&mNodes[mCurrentNode].mPosition);
-	const auto tan0 = DirectX::XMLoadFloat3(&mNodes[mCurrentNode].mTangent);
-	const auto time0 = mNodes[mCurrentNode].mTime;
+	const auto pos0 = DirectX::XMLoadFloat3(&mNodes[currentNode].mPosition);
+	const auto tan0 = DirectX::XMLoadFloat3(&mNodes[currentNode].mTangent);
+	const auto time0 = mNodes[currentNode].mTime;
 
-	const auto pos1 = DirectX::XMLoadFloat3(&mNodes[mCurrentNode + 1].mPosition);
-	const auto tan1 = DirectX::XMLoadFloat3(&mNodes[mCurrentNode + 1].mTangent);
-	const auto time1 = mNodes[mCurrentNode + 1].mTime;
+	const auto pos1 = DirectX::XMLoadFloat3(&mNodes[currentNode + 1].mPosition);
+	const auto tan1 = DirectX::XMLoadFloat3(&mNodes[currentNode + 1].mTangent);
+	const auto time1 = mNodes[currentNode + 1].mTime;
 
-	const auto time = (mCurrentTime - time0) / (time1 - time0);
+	const auto time = (currentTime - time0) / (time1 - time0);
 	const auto time2 = pow(time, 2);
 	const auto time3 = pow(time, 3);
 
@@ -179,6 +196,9 @@ DirectX::XMFLOAT4X4 VectorAnimation::animate(const float pDeltaTime)
 	const auto pos = DirectX::XMVectorAdd(DirectX::XMVectorAdd(DirectX::XMVectorAdd(DirectX::XMVectorScale(pos0, h0), DirectX::XMVectorScale(pos1, h1)), DirectX::XMVectorScale(tan0, h2)), DirectX::XMVectorScale(tan1, h3));
 	DirectX::XMFLOAT4X4 result;
 	DirectX::XMStoreFloat4x4(&result, DirectX::XMMatrixTranslationFromVector(pos));
+
+	setCurrentTime(currentTime);
+	setCurrentNode(currentNode);
 
 	return result;
 }

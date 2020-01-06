@@ -15,8 +15,8 @@ class Game
 	DirectX::XMMATRIX mWorld;
 	double mFreq;
 	double mDt2 = 0.0;
-	__int64 mStart;
-	__int64 mStop;
+	__int64 mStart = 0.0;
+	__int64 mStop = 0.0;
 
 	std::unique_ptr<SceneGraphNode> mNode;
 	std::shared_ptr<Texture> mBase;

@@ -4,7 +4,9 @@
 
 class ConfigLoader
 {
+	ConfigLoader() = default;
+	~ConfigLoader() = default;
 public:
-	static void readScene(std::istream & pIn, std::unique_ptr<SceneGraphNode> & pNode);
+	static void readScene(std::istream & pIn, const std::unique_ptr<SceneGraphNode> & pNode);
 };
 

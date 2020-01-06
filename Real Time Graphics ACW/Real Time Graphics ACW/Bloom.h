@@ -17,8 +17,8 @@ public:
 	Bloom();
 	~Bloom();
 
-	void applyBloom(std::unique_ptr<Framebuffer> & pCurrentFramebuffer, unsigned int pBloomStrength);
-	void useBloomTexture(unsigned int pSlot);
-	void releaseBloomTexture(unsigned int pSlot);
+	void applyBloom(const std::unique_ptr<Framebuffer> & pCurrentFramebuffer, unsigned int pBloomStrength);
+	void useBloomTexture(unsigned int pSlot) const;
+	void releaseBloomTexture(unsigned int pSlot) const;
 };
 

@@ -3,9 +3,10 @@
 #include "QuaternionAnimation.h"
 #include "VectorAnimation.h"
 
-AnimationNode::AnimationNode(Animation* pAnimation) : mAnimation(pAnimation)
+AnimationNode::~AnimationNode() = default;
+
+AnimationNode::AnimationNode(std::unique_ptr<Animation> & pAnimation) : mAnimation(std::move(pAnimation))
 {
-	
 }
 
 void AnimationNode::read(std::istream& pIn)
@@ -26,16 +27,18 @@ void AnimationNode::read(std::istream& pIn)
 	mAnimation->read(pIn);
 }
 
-void AnimationNode::update(DirectX::XMFLOAT4X4 pMatrix, DirectX::XMFLOAT4X4 pRotationMatrix)
+void AnimationNode::update(const DirectX::XMFLOAT4X4 & pMatrix, DirectX::XMFLOAT4X4 & pRotationMatrix)
 {
 	//TODO: update needs to pass in time
-	mMatrix = mAnimation->animate(0.016f);
+	const auto outMatrix = mAnimation->animate(0.016f);
+
+	setMatrix(outMatrix);
 
 	if (dynamic_cast<QuaternionAnimation *>(mAnimation.get()))
 	{
 		auto matrix = DirectX::XMFLOAT4X4();
 
-		DirectX::XMStoreFloat4x4(&matrix, DirectX::XMMatrixMultiply(DirectX::XMLoadFloat4x4(&pRotationMatrix), DirectX::XMLoadFloat4x4(&mMatrix)));
+		DirectX::XMStoreFloat4x4(&matrix, DirectX::XMMatrixMultiply(DirectX::XMLoadFloat4x4(&pRotationMatrix), DirectX::XMLoadFloat4x4(&outMatrix)));
 
 		SceneGraphNode::update(pMatrix, matrix);
 	}

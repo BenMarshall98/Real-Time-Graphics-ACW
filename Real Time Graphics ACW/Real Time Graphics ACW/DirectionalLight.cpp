@@ -46,7 +46,7 @@ void DirectionalLight::use(DirectionalLightBuffer& pLightBuffer) const
 	XMStoreFloat4x4(&pLightBuffer.mProjectionMatrix, projection);
 }
 
-void DirectionalLight::update(DirectX::XMFLOAT4X4& pMatrix)
+void DirectionalLight::update(const DirectX::XMFLOAT4X4& pMatrix)
 {
 	auto center = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 	auto direction = XMLoadFloat3(&mDirection);

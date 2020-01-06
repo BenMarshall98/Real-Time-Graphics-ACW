@@ -12,9 +12,9 @@ public:
 	DisplacementMapping & operator= (const DisplacementMapping &) = delete;
 	DisplacementMapping & operator= (DisplacementMapping &&) = delete;
 
-	void render(std::shared_ptr<Shape>& pShape, bool pDeferred, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
-	void renderDirectionalShadow(std::shared_ptr<Shape>& pShape) override;
-	void renderOmniDirectionalShadow(std::shared_ptr<Shape>& pShape) override;
+	void render(const std::shared_ptr<Shape>& pShape, bool pDeferred, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
+	void renderDirectionalShadow(const std::shared_ptr<Shape>& pShape) override;
+	void renderOmniDirectionalShadow(const std::shared_ptr<Shape>& pShape) override;
 	bool renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
 	void renderTransparent(std::shared_ptr<Shape> & pShape, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
 };

@@ -15,8 +15,6 @@ struct ModelBuffer
 
 class Shape
 {
-	//TODO: Temp
-protected:
 	std::shared_ptr<Model> mModel;
 	std::unique_ptr<TexturePack> mTexturePack;
 	std::unique_ptr<Material> mMaterial;
@@ -58,7 +56,27 @@ public:
 
 	void render(bool pTesselated = false) const;
 
-	virtual void collideWith(Particle pParticle) = 0;
+	DirectX::XMFLOAT4X4 getCurrentMatrix()
+	{
+		return mCurrentMatrix;
+	}
+
+	DirectX::XMFLOAT4X4 getPreviousMatrix()
+	{
+		return mPreviousMatrix;
+	}
+
+	DirectX::XMFLOAT4X4 getCurrentRotationMatrix()
+	{
+		return mCurrentRotation;
+	}
+
+	DirectX::XMFLOAT4X4 getPreviousRotationMatrix()
+	{
+		return mPreviousRotation;
+	}
+
+	virtual void collideWith(const Particle & pParticle) = 0;
 };
 
 std::istream & operator>>(std::istream & pIn, std::shared_ptr<Shape> & pShape);

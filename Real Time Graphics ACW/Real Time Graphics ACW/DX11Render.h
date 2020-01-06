@@ -51,7 +51,7 @@ class Dx11Render
 public:
 	static Dx11Render * instance();
 
-	void clearRenderTargetView(const float pColor[4]) const
+	void clearRenderTargetView(const DirectX::XMVECTORF32 & pColor) const
 	{
 		mDeviceContext->ClearRenderTargetView(mRenderTargetView.Get(), pColor);
 		mDeviceContext->ClearDepthStencilView(mDepthView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0.0f);
@@ -64,7 +64,7 @@ public:
 
 	void present() const
 	{
-		auto result = mSwapChain->Present(1, 0);
+		mSwapChain->Present(1, 0);
 	}
 
 	Microsoft::WRL::ComPtr<ID3D11Device> getDevice() const
@@ -115,12 +115,12 @@ public:
 		mDeviceContext->OMSetBlendState(mNoBlendState.Get(), blendFactor, 0xffffffff);
 	}
 
-	void addFramebuffer(Framebuffer * pFramebuffer)
+	void addFramebuffer(Framebuffer * const pFramebuffer)
 	{
 		mResizeableFramebuffer.push_back(pFramebuffer);
 	}
 
-	void removeFramebuffer(Framebuffer * pFramebuffer)
+	void removeFramebuffer(Framebuffer * const pFramebuffer)
 	{
 		const auto it = std::find(mResizeableFramebuffer.begin(), mResizeableFramebuffer.end(), pFramebuffer);
 

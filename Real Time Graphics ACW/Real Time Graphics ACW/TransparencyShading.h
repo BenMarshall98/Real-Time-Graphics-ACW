@@ -12,9 +12,9 @@ public:
 	TransparencyShading & operator= (const TransparencyShading &) = delete;
 	TransparencyShading & operator= (TransparencyShading &&) = delete;
 
-	void render(std::shared_ptr<Shape> & pShape, bool pDeferred, std::unique_ptr<Framebuffer> & pCurrentFramebuffer);
-	void renderDirectionalShadow(std::shared_ptr<Shape> & pShape) override;
-	void renderOmniDirectionalShadow(std::shared_ptr<Shape> & pShape) override;
+	void render(const std::shared_ptr<Shape> & pShape, bool pDeferred, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
+	void renderDirectionalShadow(const std::shared_ptr<Shape> & pShape) override;
+	void renderOmniDirectionalShadow(const std::shared_ptr<Shape> & pShape) override;
 	bool renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
 	void renderTransparent(std::shared_ptr<Shape> & pShape, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
 };

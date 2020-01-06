@@ -68,7 +68,7 @@ public:
 	}
 
 	void use(SpotLightBuffer & pLightBuffer, unsigned int pIndex) const;
-	void update(DirectX::XMFLOAT4X4 & pMatrix);
+	void update(const DirectX::XMFLOAT4X4 & pMatrix);
 	void updateShadow();
 	void useShadow(unsigned int pTextureSlot);
 	void releaseShadow(unsigned int pTextureSlot);

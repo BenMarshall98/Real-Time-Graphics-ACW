@@ -3,7 +3,10 @@
 
 TranslationNode::TranslationNode(const float& pX, const float& pY, const float& pZ)
 {
-	XMStoreFloat4x4(&mMatrix, DirectX::XMMatrixTranslation(pX, pY, pZ));
+	auto matrix = DirectX::XMFLOAT4X4();
+	XMStoreFloat4x4(&matrix, DirectX::XMMatrixTranslation(pX, pY, pZ));
+
+	setMatrix(matrix);
 }
 
 void TranslationNode::read(std::istream& pIn)
@@ -17,5 +20,9 @@ void TranslationNode::read(std::istream& pIn)
 	pIn >> x >> c >> y >> c >> z;
 
 	DirectX::XMFLOAT3 temp(x, y, z);
-	XMStoreFloat4x4(&mMatrix, DirectX::XMMatrixTranslation(x, y, z));
+
+	auto matrix = DirectX::XMFLOAT4X4();
+	XMStoreFloat4x4(&matrix, DirectX::XMMatrixTranslation(x, y, z));
+
+	setMatrix(matrix);
 }

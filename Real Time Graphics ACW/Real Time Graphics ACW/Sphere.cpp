@@ -36,7 +36,9 @@ void Sphere::explode()
 		}
 	}
 
-	const auto matrix = XMLoadFloat4x4(&mCurrentMatrix);
+	const auto currentMatrix = getCurrentMatrix();
+	
+	const auto matrix = XMLoadFloat4x4(&currentMatrix);
 	const auto center = XMVector3Transform(DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f), matrix);
 	
 	std::vector<Particle> particles;
@@ -65,11 +67,14 @@ void Sphere::explode()
 
 //TODO: Source: http://www.r-5.org/files/books/computers/algo-list/realtime-3d/Christer_Ericson-Real-Time_Collision_Detection-EN.pdf
 
-void Sphere::collideWith(Particle pParticle)
+void Sphere::collideWith(const Particle & pParticle)
 {
 	//Assume sphere moves in a straight line between time 0 and 1
-	const auto startMatrix = DirectX::XMLoadFloat4x4(&mPreviousMatrix);
-	const auto endMatrix = DirectX::XMLoadFloat4x4(&mCurrentMatrix);
+	const auto previousMatrix = getPreviousMatrix();
+	const auto currentMatrix = getCurrentMatrix();
+	
+	const auto startMatrix = DirectX::XMLoadFloat4x4(&previousMatrix);
+	const auto endMatrix = DirectX::XMLoadFloat4x4(&currentMatrix);
 
 	auto sphereStart = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 	auto sphereEnd = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);

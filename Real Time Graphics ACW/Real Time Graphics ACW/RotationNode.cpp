@@ -3,7 +3,10 @@
 
 RotationNode::RotationNode(const DirectX::XMFLOAT3& pAxis, const float& pAngle)
 {
-	XMStoreFloat4x4(&mMatrix, DirectX::XMMatrixRotationAxis(XMLoadFloat3(&pAxis), DirectX::XMConvertToRadians(pAngle)));
+	auto matrix = DirectX::XMFLOAT4X4();
+	XMStoreFloat4x4(&matrix, DirectX::XMMatrixRotationAxis(XMLoadFloat3(&pAxis), DirectX::XMConvertToRadians(pAngle)));
+
+	setMatrix(matrix);
 }
 
 void RotationNode::read(std::istream& pIn)
@@ -20,14 +23,20 @@ void RotationNode::read(std::istream& pIn)
 	pIn >> s >> angle;
 
 	DirectX::XMFLOAT3 axis(x, y, z);
-	XMStoreFloat4x4(&mMatrix, DirectX::XMMatrixRotationAxis(XMLoadFloat3(&axis), DirectX::XMConvertToRadians(angle)));
+
+	auto matrix = DirectX::XMFLOAT4X4();
+	XMStoreFloat4x4(&matrix, DirectX::XMMatrixRotationAxis(XMLoadFloat3(&axis), DirectX::XMConvertToRadians(angle)));
+
+	setMatrix(matrix);
 }
 
-void RotationNode::update(DirectX::XMFLOAT4X4 pFullMatrix, DirectX::XMFLOAT4X4 pRotationMatrix)
+void RotationNode::update(const DirectX::XMFLOAT4X4 & pFullMatrix, DirectX::XMFLOAT4X4 & pRotationMatrix)
 {
 	auto matrix = DirectX::XMFLOAT4X4();
 
-	DirectX::XMStoreFloat4x4(&matrix, DirectX::XMMatrixMultiply(DirectX::XMLoadFloat4x4(&pRotationMatrix), DirectX::XMLoadFloat4x4(&mMatrix)));
+	const auto mat = getMatrix();
+	
+	DirectX::XMStoreFloat4x4(&matrix, DirectX::XMMatrixMultiply(DirectX::XMLoadFloat4x4(&pRotationMatrix), DirectX::XMLoadFloat4x4(&mat)));
 
 	SceneGraphNode::update(pFullMatrix, matrix);
 }

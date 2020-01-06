@@ -24,5 +24,5 @@ public:
 	ShapeNode & operator= (ShapeNode &&) = delete;
 	
 	void read(std::istream& pIn) override;
-	void update(DirectX::XMFLOAT4X4 pFullMatrix, DirectX::XMFLOAT4X4 pRotationMatrix) override;
+	void update(const DirectX::XMFLOAT4X4 & pFullMatrix, DirectX::XMFLOAT4X4 & pRotationMatrix) override;
 };

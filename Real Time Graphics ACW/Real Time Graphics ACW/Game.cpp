@@ -24,7 +24,6 @@ double Game::mDt = 0.0f;
 
 Game::Game()
 {
-	auto device = Dx11Render::instance()->getDevice();
 
 	mNode = std::make_unique<IdentityNode>();
 
@@ -76,7 +75,6 @@ void Game::run()
 		CameraManager::instance()->update();
 		Dx11Render::instance()->clearRenderTargetView(DirectX::Colors::MidnightBlue);
 
-		const auto inst = Dx11Render::instance();
 		auto deviceContext = Dx11Render::instance()->getDeviceContext();
 		// Update our time
 
@@ -137,9 +135,17 @@ void Game::run()
 
 Game::~Game()
 {
-	delete LightingManager::instance();
-	delete RenderManager::instance();
-	delete ObjectManager::instance();
-	delete ResourceManager::instance();
-	delete CameraManager::instance();
+	//TODO: see if there is a better way
+	try
+	{
+		delete LightingManager::instance();
+		delete RenderManager::instance();
+		delete ObjectManager::instance();
+		delete ResourceManager::instance();
+		delete CameraManager::instance();
+	}
+	catch (...)
+	{
+		
+	}
 }

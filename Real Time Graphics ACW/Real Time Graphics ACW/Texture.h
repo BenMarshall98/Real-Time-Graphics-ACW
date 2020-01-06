@@ -1,11 +1,12 @@
 #pragma once
 #include <string>
 #include <d3d11.h>
+#include <wrl/client.h>
 
 class Texture
 {
-	ID3D11ShaderResourceView * mTexture = nullptr;
-	ID3D11SamplerState * mSampler = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mTexture = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> mSampler = nullptr;
 	
 public:
 	Texture() = default;

@@ -77,32 +77,39 @@ DirectX::XMFLOAT4X4 QuaternionAnimation::animate(float pDeltaTime)
 
 	if (mNodes.size() == 2)
 	{
-		mCurrentTime += pDeltaTime;
+		auto currentTime = getCurrentTime();
+		auto endTime = getEndTime();
+		auto currentNode = getCurrentNode();
+		
+		currentTime += pDeltaTime;
 
-		if (mCurrentTime >= mEndTime)
+		if (currentTime >= endTime)
 		{
-			mCurrentNode = 0;
-			mCurrentTime -= mEndTime;
+			currentNode = 0;
+			currentTime -= endTime;
 		}
 
-		if (mCurrentTime >= mNodes[1].mTime)
+		if (currentTime >= mNodes[1].mTime)
 		{
-			mCurrentNode = 1;
+			currentNode = 1;
 
 			const auto rot0 = DirectX::XMLoadFloat4(&mNodes[1].mQuaternion0);
 			const auto time0 = mNodes[1].mTime;
 
 			const auto rot1 = DirectX::XMLoadFloat4(&mNodes[0].mQuaternion0);
-			const auto time1 = mEndTime;
+			const auto time1 = endTime;
 
-			const auto rot = DirectX::XMQuaternionSlerp(rot0, rot1, (mCurrentTime - time0) / (time1 - time0));
+			const auto rot = DirectX::XMQuaternionSlerp(rot0, rot1, (currentTime - time0) / (time1 - time0));
 			DirectX::XMFLOAT4X4 result;
 			DirectX::XMStoreFloat4x4(&result, DirectX::XMMatrixRotationQuaternion(rot));
+
+			setCurrentTime(currentTime);
+			setCurrentNode(currentNode);
 
 			return result;
 		}
 
-		mCurrentNode = 0;
+		currentNode = 0;
 
 		const auto rot0 = DirectX::XMLoadFloat4(&mNodes[0].mQuaternion0);
 		const auto time0 = mNodes[0].mTime;
@@ -110,52 +117,62 @@ DirectX::XMFLOAT4X4 QuaternionAnimation::animate(float pDeltaTime)
 		const auto rot1 = DirectX::XMLoadFloat4(&mNodes[1].mQuaternion0);
 		const auto time1 = mNodes[1].mTime;
 
-		const auto rot = DirectX::XMQuaternionSlerp(rot0, rot1, (mCurrentTime - time0) / (time1 - time0));
+		const auto rot = DirectX::XMQuaternionSlerp(rot0, rot1, (currentTime - time0) / (time1 - time0));
 		DirectX::XMFLOAT4X4 result;
 		DirectX::XMStoreFloat4x4(&result, DirectX::XMMatrixRotationQuaternion(rot));
 
+		setCurrentTime(currentTime);
+		setCurrentNode(currentNode);
+		
 		return result;
 	}
 
-	mCurrentTime += pDeltaTime;
+	auto currentTime = getCurrentTime();
+	auto endTime = getEndTime();
+	auto currentNode = getCurrentNode();
 
-	if (mCurrentTime >= mEndTime)
+	currentTime += pDeltaTime;
+
+	if (currentTime >= endTime)
 	{
-		mCurrentNode = 0;
-		mCurrentTime -= mEndTime;
+		currentNode = 0;
+		currentTime -= endTime;
 	}
 
 	for (auto i = mNodes.size() - 1; i >= 0; i--)
 	{
-		if (mNodes[i].mTime < mCurrentTime)
+		if (mNodes[i].mTime < currentTime)
 		{
-			mCurrentNode = i;
+			currentNode = i;
 			break;
 		}
 	}
 
-	const auto quaternion0 = DirectX::XMLoadFloat4(&mNodes[mCurrentNode].mQuaternion0);
-	const auto quaternion1 = DirectX::XMLoadFloat4(&mNodes[mCurrentNode].mQuaternion1);
-	const auto quaternion2 = DirectX::XMLoadFloat4(&mNodes[mCurrentNode].mQuaternion2);
-	const auto quaternion3 = DirectX::XMLoadFloat4(&mNodes[mCurrentNode].mQuaternion3);
+	const auto quaternion0 = DirectX::XMLoadFloat4(&mNodes[currentNode].mQuaternion0);
+	const auto quaternion1 = DirectX::XMLoadFloat4(&mNodes[currentNode].mQuaternion1);
+	const auto quaternion2 = DirectX::XMLoadFloat4(&mNodes[currentNode].mQuaternion2);
+	const auto quaternion3 = DirectX::XMLoadFloat4(&mNodes[currentNode].mQuaternion3);
 
-	const auto time0 = mNodes[mCurrentNode].mTime;
+	const auto time0 = mNodes[currentNode].mTime;
 
 	auto time1 = 0.0f;
 
-	if (mCurrentNode == mNodes.size() - 1)
+	if (currentNode == mNodes.size() - 1)
 	{
-		time1 = mEndTime;
+		time1 = endTime;
 	}
 	else
 	{
-		time1 = mNodes[mCurrentNode + 1].mTime;
+		time1 = mNodes[currentNode + 1].mTime;
 	}
 
-	const auto rot = DirectX::XMQuaternionSquad(quaternion0, quaternion1, quaternion2, quaternion3, (mCurrentTime - time0) / (time1 - time0));
+	const auto rot = DirectX::XMQuaternionSquad(quaternion0, quaternion1, quaternion2, quaternion3, (currentTime - time0) / (time1 - time0));
 
 	DirectX::XMFLOAT4X4 result;
 	DirectX::XMStoreFloat4x4(&result, DirectX::XMMatrixRotationQuaternion(rot));
+
+	setCurrentTime(currentTime);
+	setCurrentNode(currentNode);
 
 	return result;
 }

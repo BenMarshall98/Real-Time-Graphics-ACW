@@ -12,19 +12,19 @@ TransparencyShading::TransparencyShading() :
 {
 }
 
-void TransparencyShading::render(std::shared_ptr<Shape> & pShape, bool, std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
+void TransparencyShading::render(const std::shared_ptr<Shape> & pShape, bool, std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
 {
 }
 
-void TransparencyShading::renderDirectionalShadow(std::shared_ptr<Shape> & pShape)
+void TransparencyShading::renderDirectionalShadow(const std::shared_ptr<Shape> & pShape)
 {
-	mDirectionalShader->useShader();
+	useDirectionalShader();
 	pShape->render();
 }
 
-void TransparencyShading::renderOmniDirectionalShadow(std::shared_ptr<Shape> & pShape)
+void TransparencyShading::renderOmniDirectionalShadow(const std::shared_ptr<Shape> & pShape)
 {
-	mOmniDirectionalShader->useShader();
+	useOmniDirectionalShader();
 	pShape->render();
 }
 
@@ -36,7 +36,7 @@ bool TransparencyShading::renderPostprocessing(std::unique_ptr<Framebuffer> & pC
 void TransparencyShading::renderTransparent(std::shared_ptr<Shape> & pShape, std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
 {
 	Dx11Render::instance()->enableBlend();
-	mNormalShader->useShader();
+	useNormalShader();
 	pShape->render();
 	Dx11Render::instance()->disableBlend();
 }

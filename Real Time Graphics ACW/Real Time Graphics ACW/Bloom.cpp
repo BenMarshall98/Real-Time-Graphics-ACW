@@ -5,9 +5,9 @@ Bloom::Bloom() :
 	mHorzBloomShader(ResourceManager::instance()->loadShader("HorzBloomVertexShader.hlsl", "HorzBloomFragmentShader.hlsl")),
 	mVertBloomShader(ResourceManager::instance()->loadShader("VertBloomVertexShader.hlsl", "VertBloomFragmentShader.hlsl")),
 	mBloomExtractShader(ResourceManager::instance()->loadShader("BloomExtractVertexShader.hlsl", "BloomExtractFragmentShader.hlsl")),
-	mRenderModel(ResourceManager::instance()->loadModel("Plane.obj")),
 	mHorzBloomFramebuffer(std::make_unique<Framebuffer>()),
-	mVertBloomFramebuffer(std::make_unique<Framebuffer>())
+	mVertBloomFramebuffer(std::make_unique<Framebuffer>()),
+	mRenderModel(ResourceManager::instance()->loadModel("Plane.obj"))
 {
 	if (!mHorzBloomFramebuffer->loadFramebuffer(true, false, { {0.0f, 0.0f, 0.0f, 0.0f} }))
 	{
@@ -26,7 +26,7 @@ Bloom::~Bloom()
 
 //TODO: Source: LearnOpenGL
 
-void Bloom::applyBloom(std::unique_ptr<Framebuffer> & pCurrentFramebuffer, unsigned int pBloomStrength)
+void Bloom::applyBloom(const std::unique_ptr<Framebuffer> & pCurrentFramebuffer, const unsigned int pBloomStrength)
 {
 	pCurrentFramebuffer->useTexture(0);
 
@@ -66,12 +66,12 @@ void Bloom::applyBloom(std::unique_ptr<Framebuffer> & pCurrentFramebuffer, unsig
 	}
 }
 
-void Bloom::useBloomTexture(unsigned int pSlot)
+void Bloom::useBloomTexture(const unsigned int pSlot) const
 {
 	mVertBloomFramebuffer->useTexture(pSlot);
 }
 
-void Bloom::releaseBloomTexture(unsigned int pSlot)
+void Bloom::releaseBloomTexture(const unsigned int pSlot) const
 {
 	mVertBloomFramebuffer->releaseTexture(pSlot);
 }

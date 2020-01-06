@@ -23,7 +23,7 @@ void PointLightNode::read(std::istream& pIn)
 	LightingManager::instance()->addPointLight(mPointLight);
 }
 
-void PointLightNode::update(DirectX::XMFLOAT4X4 pFullMatrix, DirectX::XMFLOAT4X4 pRotationMatrix)
+void PointLightNode::update(const DirectX::XMFLOAT4X4 & pFullMatrix, DirectX::XMFLOAT4X4 & pRotationMatrix)
 {
 	mPointLight->update(pFullMatrix);
 }

@@ -1,7 +1,7 @@
 #include "Particle.h"
 
 Particle::Particle(const DirectX::XMFLOAT3& pPosition, const DirectX::XMFLOAT3& pVelocity) :
-	mPreviousPosition(pPosition), mCurrentPosition(pPosition), mVelocity(pVelocity)
+	mPreviousPosition(pPosition), mCurrentPosition(pPosition), mVelocity(pVelocity), mTime(0.0f)
 {
 }
 
@@ -65,7 +65,8 @@ Derivative Particle::evaluate(const State& pInitial, const float pDt, const Deri
 	};
 }
 
-DirectX::XMVECTOR Particle::acceleration(const State& pState)
+DirectX::XMVECTOR Particle::acceleration(const State&)
 {
+	//TODO: Drag
 	return DirectX::XMVectorSet(0.0f, -9.81f, 0.0f, 0.0f);
 }

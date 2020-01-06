@@ -35,8 +35,8 @@ class Framebuffer
 	
 public:
 	Framebuffer() = default;
-	bool loadFramebuffer(bool pColour, bool pDepth, std::vector<DirectX::XMVECTORF32> pDefaultColour = { DirectX::Colors::MidnightBlue }, TextureType pType = TextureType::TEXTURE_2D, unsigned int pNumberOfBuffers = 1u);
-	bool loadFramebuffer(bool pColour, bool pDepth, int pWidth, int pHeight, std::vector<DirectX::XMVECTORF32> pDefaultColour = { DirectX::Colors::MidnightBlue }, TextureType pType = TextureType::TEXTURE_2D, unsigned int pNumberOfBuffers = 1u);
+	bool loadFramebuffer(bool pColour, bool pDepth, const std::vector<DirectX::XMVECTORF32> & pDefaultColour, TextureType pType = TextureType::TEXTURE_2D, unsigned int pNumberOfBuffers = 1u);
+	bool loadFramebuffer(bool pColour, bool pDepth, int pWidth, int pHeight, const std::vector<DirectX::XMVECTORF32> & pDefaultColour, TextureType pType = TextureType::TEXTURE_2D, unsigned int pNumberOfBuffers = 1u);
 	~Framebuffer();
 
 	Framebuffer(const Framebuffer & pFramebuffer) = delete;

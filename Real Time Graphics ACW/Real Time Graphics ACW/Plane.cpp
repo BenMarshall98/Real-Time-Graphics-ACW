@@ -16,7 +16,8 @@ Plane::Plane() :
 void Plane::collideWith(Particle pParticle)
 {
 	//Assuming that the planes do not move
-	const auto matrix = DirectX::XMLoadFloat4x4(&mCurrentMatrix);
+	const auto currentMatrix = getCurrentMatrix();
+	const auto matrix = DirectX::XMLoadFloat4x4(&currentMatrix);
 
 	auto planeCenter = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 	auto planeNormal = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);

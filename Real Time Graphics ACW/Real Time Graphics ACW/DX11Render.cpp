@@ -19,7 +19,7 @@ Dx11Render::Dx11Render() : mDriverType(D3D_DRIVER_TYPE_HARDWARE), mFeatureLevel(
 
 bool Dx11Render::loadRender()
 {
-	auto window = Win32Window::instance();
+	const auto window = Win32Window::instance();
 
 	D3D_FEATURE_LEVEL featureLevels[] =
 	{
@@ -29,7 +29,7 @@ bool Dx11Render::loadRender()
 		D3D_FEATURE_LEVEL_10_0
 	};
 
-	UINT flags = D3D11_CREATE_DEVICE_DEBUG;
+	const UINT flags = D3D11_CREATE_DEVICE_DEBUG;
 
 	auto result = D3D11CreateDevice(nullptr, mDriverType, nullptr, flags, featureLevels, 4, D3D11_SDK_VERSION, &mDevice, &mFeatureLevel, &mDeviceContext);
 

@@ -10,7 +10,7 @@
 #include "PointLightNode.h"
 #include "SpotLightNode.h"
 
-void ConfigLoader::readScene(std::istream& pIn, std::unique_ptr<SceneGraphNode>& pNode)
+void ConfigLoader::readScene(std::istream& pIn, const std::unique_ptr<SceneGraphNode> & pNode)
 {
 	while(true)
 	{
@@ -67,7 +67,7 @@ void ConfigLoader::readScene(std::istream& pIn, std::unique_ptr<SceneGraphNode>&
 			
 			child->read(pIn);
 			readScene(pIn, child);
-			pNode->addChild(std::move(child));
+			pNode->addChild(child);
 		}
 	}
 }

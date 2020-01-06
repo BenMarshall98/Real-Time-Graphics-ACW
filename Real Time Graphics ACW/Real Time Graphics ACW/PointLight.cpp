@@ -18,7 +18,7 @@ PointLight::PointLight(const DirectX::XMFLOAT3 pColor, const DirectX::XMFLOAT3 p
 	}
 }
 
-PointLight::PointLight()
+PointLight::PointLight() : mAttenuationConstant(1.0f), mAttenuationLinear(0.0f), mAttenuationQuad(0.0f)
 {
 	mFramebuffer = std::make_unique<Framebuffer>();
 
@@ -41,7 +41,7 @@ void PointLight::use(PointLightBuffer & pLightBuffer) const
 	pLightBuffer.mFarPlane = 20.0f;
 }
 
-void PointLight::update(DirectX::XMFLOAT4X4& pMatrix)
+void PointLight::update(const DirectX::XMFLOAT4X4& pMatrix)
 {
 	auto center = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 	const auto matrix = XMLoadFloat4x4(&pMatrix);

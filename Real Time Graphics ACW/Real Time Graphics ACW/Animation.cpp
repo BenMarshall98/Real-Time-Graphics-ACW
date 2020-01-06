@@ -1,5 +1,7 @@
 #include "Animation.h"
 
-Animation::Animation(float pEndTime) : mEndTime(pEndTime)
+Animation::~Animation() = default;
+
+Animation::Animation(const float pEndTime) : mEndTime(pEndTime)
 {
 }

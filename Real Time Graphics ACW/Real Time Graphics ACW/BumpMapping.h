@@ -12,10 +12,10 @@ public:
 	BumpMapping & operator= (const BumpMapping &) = delete;
 	BumpMapping & operator= (BumpMapping &&) = delete;
 
-	void render(const std::shared_ptr<Shape> & pShape, bool pDeferred, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
+	void render(const std::shared_ptr<Shape> & pShape, bool pDeferred, const std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
 	void renderDirectionalShadow(const std::shared_ptr<Shape> & pShape) override;
 	void renderOmniDirectionalShadow(const std::shared_ptr<Shape> & pShape) override;
-	bool renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
-	void renderTransparent(std::shared_ptr<Shape> & pShape, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
+	bool renderPostprocessing(const std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
+	void renderTransparent(const std::shared_ptr<Shape> & pShape, const std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
 };
 

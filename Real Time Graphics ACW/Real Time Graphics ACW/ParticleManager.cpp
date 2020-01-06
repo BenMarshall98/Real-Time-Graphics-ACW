@@ -12,7 +12,7 @@ ParticleManager::ParticleManager()
 		mParticleRenders.erase(mParticleRenders.begin() + 0);
 	}
 
-	mParticleShader = ResourceManager::instance()->loadParticleShader("ParticleVertexShader.hlsl", "ParticleFragmentShader.hlsl");
+	ResourceManager::instance()->loadParticleShader(mParticleShader, "ParticleVertexShader.hlsl", "ParticleFragmentShader.hlsl");
 }
 
 void ParticleManager::addParticles(std::vector<Particle>& pParticles)
@@ -35,7 +35,7 @@ void ParticleManager::addParticles(std::vector<Particle>& pParticles)
 	}
 }
 
-void ParticleManager::update(float pDt)
+void ParticleManager::update(const float pDt)
 {
 	for (auto & particle : mParticles)
 	{
@@ -60,7 +60,10 @@ void ParticleManager::render()
 		
 		for (auto j = i * max_particles; j < (i + 1) * max_particles && j < mParticles.size(); j++)
 		{
-			positions.push_back(mParticles[j].getCurrentPosition());
+			DirectX::XMFLOAT3 currentPosition;
+			mParticles[j].getCurrentPosition(currentPosition);
+			
+			positions.push_back(currentPosition);
 			times.push_back(mParticles[j].getTime());
 		}
 

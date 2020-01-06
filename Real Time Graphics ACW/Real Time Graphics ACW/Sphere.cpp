@@ -4,15 +4,24 @@
 #include "ParticleManager.h"
 
 Sphere::Sphere(std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial) :
-	Shape(ResourceManager::instance()->loadModel("sphere.obj"), std::move(pTexturePack), std::move(pMaterial))
+	Shape(std::move(pTexturePack), std::move(pMaterial))
 {
+	std::shared_ptr<Model> model;
+	getModel(model);
+	ResourceManager::instance()->loadModel(model, "sphere.obj");
+	setModel(model);
 }
 
 Sphere::Sphere() :
-	Shape(ResourceManager::instance()->loadModel("sphere.obj"), nullptr, nullptr)
+	Shape()
 {
-	
+	std::shared_ptr<Model> model;
+	getModel(model);
+	ResourceManager::instance()->loadModel(model, "sphere.obj");
+	setModel(model);
 }
+
+Sphere::~Sphere() = default;
 
 void Sphere::explode()
 {
@@ -36,7 +45,8 @@ void Sphere::explode()
 		}
 	}
 
-	const auto currentMatrix = getCurrentMatrix();
+	auto currentMatrix = DirectX::XMFLOAT4X4();
+	getCurrentMatrix(currentMatrix);
 	
 	const auto matrix = XMLoadFloat4x4(&currentMatrix);
 	const auto center = XMVector3Transform(DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f), matrix);
@@ -70,8 +80,10 @@ void Sphere::explode()
 void Sphere::collideWith(const Particle & pParticle)
 {
 	//Assume sphere moves in a straight line between time 0 and 1
-	const auto previousMatrix = getPreviousMatrix();
-	const auto currentMatrix = getCurrentMatrix();
+	auto previousMatrix = DirectX::XMFLOAT4X4();
+	getPreviousMatrix(previousMatrix);
+	auto currentMatrix = DirectX::XMFLOAT4X4();
+	getCurrentMatrix(currentMatrix);
 	
 	const auto startMatrix = DirectX::XMLoadFloat4x4(&previousMatrix);
 	const auto endMatrix = DirectX::XMLoadFloat4x4(&currentMatrix);
@@ -86,8 +98,11 @@ void Sphere::collideWith(const Particle & pParticle)
 
 	const auto radius = DirectX::XMVectorGetX(DirectX::XMVector3Length(sphereNormal));
 
-	const auto tempStart = pParticle.getPreviousPosition();
-	const auto tempEnd = pParticle.getCurrentPosition();
+	auto tempStart = DirectX::XMFLOAT3();
+	pParticle.getPreviousPosition(tempStart);
+	
+	auto tempEnd = DirectX::XMFLOAT3();
+	pParticle.getCurrentPosition(tempEnd);
 
 	const auto particleStart = DirectX::XMLoadFloat3(&tempStart);
 	const auto particleEnd = DirectX::XMLoadFloat3(&tempEnd);

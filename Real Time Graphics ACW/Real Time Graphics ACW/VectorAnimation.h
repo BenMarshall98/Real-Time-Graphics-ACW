@@ -23,7 +23,7 @@ class VectorAnimation final : public Animation
 public:
 	VectorAnimation(std::vector<VectorNode> pNodes, float pEndTime);
 	VectorAnimation() = default;
-	~VectorAnimation() = default;
+	~VectorAnimation();
 
 	VectorAnimation(const VectorAnimation &) = delete;
 	VectorAnimation(VectorAnimation &&) = delete;
@@ -33,5 +33,5 @@ public:
 	void calculateTangents() override;
 	void read(std::istream& pIn) override;
 	
-	DirectX::XMFLOAT4X4 animate(float pDeltaTime) override;
+	void animate(float pDeltaTime, DirectX::XMFLOAT4X4 & pFullMatrix, DirectX::XMFLOAT4X4 & pRotationMatrix) override;
 };

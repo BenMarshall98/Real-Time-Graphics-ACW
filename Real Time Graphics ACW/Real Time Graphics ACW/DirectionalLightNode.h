@@ -10,7 +10,7 @@ class DirectionalLightNode final : public SceneGraphNode
 public:
 	explicit DirectionalLightNode(DirectionalLight * pDirectionalLight);
 	DirectionalLightNode() = default;
-	~DirectionalLightNode() = default;
+	~DirectionalLightNode();
 
 	DirectionalLightNode(const DirectionalLightNode &) = delete;
 	DirectionalLightNode(DirectionalLightNode &&) = delete;
@@ -18,6 +18,6 @@ public:
 	DirectionalLightNode & operator= (DirectionalLightNode &&) = delete;
 
 	void read(std::istream & pIn) override;
-	void update(const DirectX::XMFLOAT4X4 & pFullMatrix, DirectX::XMFLOAT4X4 & pRotationMatrix) override;
+	void update(const DirectX::XMFLOAT4X4 & pFullMatrix, const DirectX::XMFLOAT4X4 & pRotationMatrix) override;
 };
 

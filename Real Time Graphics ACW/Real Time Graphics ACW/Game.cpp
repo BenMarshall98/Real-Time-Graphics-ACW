@@ -45,7 +45,8 @@ Game::Game()
 		const auto at = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 		const auto up = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
 
-		CameraManager::instance()->setCamera1(std::make_unique<Camera>(eye, up, at));
+		auto camera = std::make_unique<Camera>(eye, up, at);
+		CameraManager::instance()->setCamera1(camera);
 	}
 
 	{
@@ -53,16 +54,17 @@ Game::Game()
 		const auto at = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 		const auto up = DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f);
 
-		CameraManager::instance()->setCamera2(std::make_unique<Camera>(eye, up, at));
+		auto camera = std::make_unique<Camera>(eye, up, at);
+		CameraManager::instance()->setCamera2(camera);
 	}
 
-	mBase = ResourceManager::instance()->loadTexture("tyre_base.dds");
-	mSpec = ResourceManager::instance()->loadTexture("tyre_spec.dds");
-	mDisp = ResourceManager::instance()->loadTexture("tyre_height.dds");
-	mNorm = ResourceManager::instance()->loadTexture("tyre_normal.dds");
+	ResourceManager::instance()->loadTexture(mBase, "tyre_base.dds");
+	ResourceManager::instance()->loadTexture(mSpec, "tyre_spec.dds");
+	ResourceManager::instance()->loadTexture(mDisp, "tyre_height.dds");
+	ResourceManager::instance()->loadTexture(mNorm, "tyre_normal.dds");
 	
 	QueryPerformanceFrequency(&mTimer);
-	mFreq = double(mTimer.QuadPart);
+	mFreq = static_cast<double>(mTimer.QuadPart);
 
 	QueryPerformanceCounter(&mTimer);
 	mStart = mTimer.QuadPart;
@@ -75,12 +77,11 @@ void Game::run()
 		CameraManager::instance()->update();
 		Dx11Render::instance()->clearRenderTargetView(DirectX::Colors::MidnightBlue);
 
-		auto deviceContext = Dx11Render::instance()->getDeviceContext();
 		// Update our time
 
 		QueryPerformanceCounter(&mTimer);
 		mStop = mTimer.QuadPart;
-		mDt = double(mStop - mStart) / mFreq;
+		mDt = static_cast<double>(mStop - mStart) / mFreq;
 
 		mDt2 += mDt;
 
@@ -133,19 +134,15 @@ void Game::run()
 	}
 }
 
+void Game::clear()
+{
+	delete LightingManager::instance();
+	delete RenderManager::instance();
+	delete ObjectManager::instance();
+	delete ResourceManager::instance();
+	delete CameraManager::instance();
+}
+
 Game::~Game()
 {
-	//TODO: see if there is a better way
-	try
-	{
-		delete LightingManager::instance();
-		delete RenderManager::instance();
-		delete ObjectManager::instance();
-		delete ResourceManager::instance();
-		delete CameraManager::instance();
-	}
-	catch (...)
-	{
-		
-	}
 }

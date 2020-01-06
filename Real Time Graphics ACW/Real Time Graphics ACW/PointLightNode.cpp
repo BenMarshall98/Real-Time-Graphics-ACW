@@ -1,7 +1,7 @@
 #include "PointLightNode.h"
 #include "LightingManager.h"
 
-PointLightNode::PointLightNode(PointLight * pPointLight) : mPointLight(pPointLight)
+PointLightNode::PointLightNode(PointLight * const pPointLight) : mPointLight(pPointLight)
 {
 	LightingManager::instance()->addPointLight(mPointLight);
 }
@@ -9,6 +9,8 @@ PointLightNode::PointLightNode(PointLight * pPointLight) : mPointLight(pPointLig
 PointLightNode::PointLightNode() : mPointLight(nullptr)
 {
 }
+
+PointLightNode::~PointLightNode() = default;
 
 void PointLightNode::read(std::istream& pIn)
 {
@@ -23,7 +25,7 @@ void PointLightNode::read(std::istream& pIn)
 	LightingManager::instance()->addPointLight(mPointLight);
 }
 
-void PointLightNode::update(const DirectX::XMFLOAT4X4 & pFullMatrix, DirectX::XMFLOAT4X4 & pRotationMatrix)
+void PointLightNode::update(const DirectX::XMFLOAT4X4 & pFullMatrix, const DirectX::XMFLOAT4X4 & pRotationMatrix)
 {
 	mPointLight->update(pFullMatrix);
 }

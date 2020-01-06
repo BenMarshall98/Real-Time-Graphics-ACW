@@ -50,5 +50,5 @@ public:
 
 	virtual void calculateTangents() = 0;
 	virtual void read(std::istream & pIn) = 0;
-	virtual DirectX::XMFLOAT4X4 animate(float pDeltaTime) = 0;
+	virtual void animate(float pDeltaTime, DirectX::XMFLOAT4X4 & pFullMatrix, DirectX::XMFLOAT4X4 & pRotationMatrix) = 0;
 };

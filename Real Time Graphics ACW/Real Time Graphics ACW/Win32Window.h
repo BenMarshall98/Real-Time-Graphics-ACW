@@ -5,10 +5,10 @@
 
 class Win32Window
 {
+	HWND mHwnd;
 	const char * mClassName = "RealTimeGraphics";
 	int mWidth = 800;
 	int mHeight = 600;
-	HWND mHwnd;
 	int mCmdShow;
 
 	static Win32Window * mInstance;

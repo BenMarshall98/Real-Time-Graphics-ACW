@@ -13,7 +13,7 @@ void Particle::update()
 //The below uses Runge-Kutta 4th Order Method to calculate the new position and velocity
 //TODO: sources
 
-void Particle::calculatePhysics(float pDt)
+void Particle::calculatePhysics(const float pDt)
 {
 	State state = {
 		XMLoadFloat3(&mCurrentPosition),
@@ -33,40 +33,40 @@ void Particle::calculatePhysics(float pDt)
 	}
 }
 
-void Particle::integrate(State& pState, float pDt)
+void Particle::integrate(State& pState, const float pDt)
 {
 	const Derivative initial = {
 		DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),
 		DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f)
 	};
-	
-	const auto k1 = evaluate(pState, 0.0f, initial);
-	const auto k2 = evaluate(pState, pDt * 0.5f, k1);
-	const auto k3 = evaluate(pState, pDt * 0.5f, k2);
-	const auto k4 = evaluate(pState, pDt, k3);
 
-	auto dPos = DirectX::XMVectorScale(DirectX::XMVectorAdd(k1.mVelocity, DirectX::XMVectorAdd(DirectX::XMVectorScale(DirectX::XMVectorAdd(k2.mVelocity, k3.mVelocity), 2.0f), k4.mVelocity)), 1.0f / 6.0f);
-	auto dVel = DirectX::XMVectorScale(DirectX::XMVectorAdd(k1.mAcceleration, DirectX::XMVectorAdd(DirectX::XMVectorScale(DirectX::XMVectorAdd(k2.mAcceleration, k3.mAcceleration), 2.0f), k4.mAcceleration)), 1.0f / 6.0f);
+	Derivative k1, k2, k3, k4;
+	evaluate(pState, 0.0f, initial, k1);
+	evaluate(pState, pDt * 0.5f, k1, k2);
+	evaluate(pState, pDt * 0.5f, k2, k3);
+	evaluate(pState, pDt, k3, k4);
+
+	const auto dPos = DirectX::XMVectorScale(DirectX::XMVectorAdd(k1.mVelocity, DirectX::XMVectorAdd(DirectX::XMVectorScale(DirectX::XMVectorAdd(k2.mVelocity, k3.mVelocity), 2.0f), k4.mVelocity)), 1.0f / 6.0f);
+	const auto dVel = DirectX::XMVectorScale(DirectX::XMVectorAdd(k1.mAcceleration, DirectX::XMVectorAdd(DirectX::XMVectorScale(DirectX::XMVectorAdd(k2.mAcceleration, k3.mAcceleration), 2.0f), k4.mAcceleration)), 1.0f / 6.0f);
 
 	pState.mPosition = DirectX::XMVectorAdd(pState.mPosition, DirectX::XMVectorScale(dPos, pDt));
 	pState.mVelocity = DirectX::XMVectorAdd(pState.mVelocity, DirectX::XMVectorScale(dVel, pDt));
 }
 
-Derivative Particle::evaluate(const State& pInitial, const float pDt, const Derivative& pDerivative)
+void Particle::evaluate(const State& pInitial, const float pDt, const Derivative& pDerivative, Derivative & pReturnDerivative)
 {
 	const State state = {
 		DirectX::XMVectorAdd(pInitial.mPosition, DirectX::XMVectorScale(pDerivative.mVelocity, pDt)),
 		DirectX::XMVectorAdd(pInitial.mVelocity, DirectX::XMVectorScale(pDerivative.mAcceleration, pDt))
 	};
 	
-	return {
-		state.mVelocity,
-		acceleration(state)
-	};
+	pReturnDerivative = Derivative();
+	pReturnDerivative.mVelocity = state.mVelocity;
+	acceleration(state, pReturnDerivative.mAcceleration);
 }
 
-DirectX::XMVECTOR Particle::acceleration(const State&)
+void Particle::acceleration(const State & pState, DirectX::XMVECTOR & pAcceleration)
 {
 	//TODO: Drag
-	return DirectX::XMVectorSet(0.0f, -9.81f, 0.0f, 0.0f);
+	pAcceleration = DirectX::XMVectorSet(0.0f, -9.81f, 0.0f, 0.0f);
 }

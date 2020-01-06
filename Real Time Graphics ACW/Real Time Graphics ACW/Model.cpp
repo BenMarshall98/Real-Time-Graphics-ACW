@@ -7,7 +7,8 @@ bool Model::loadModel(const std::vector<DirectX::XMFLOAT3> & pPositions, const s
 {
 	mIndicesSize = pIndices.size();
 	
-	auto device = Dx11Render::instance()->getDevice();
+	Microsoft::WRL::ComPtr<ID3D11Device> device;
+	Dx11Render::instance()->getDevice(device);
 
 	//None changing data for buffers;
 	D3D11_BUFFER_DESC bufferDesc;
@@ -100,7 +101,8 @@ bool Model::loadModel(const std::vector<DirectX::XMFLOAT3> & pPositions, const s
 
 void Model::render(const bool pTessellated)
 {
-	auto deviceContext = Dx11Render::instance()->getDeviceContext();
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
+	Dx11Render::instance()->getDeviceContext(deviceContext);
 
 	static Model * lastModel = nullptr;
 
@@ -128,31 +130,13 @@ void Model::render(const bool pTessellated)
 		lastModel = this;
 	}
 
-	static auto lastTessellated = pTessellated;
-	static auto firstTime = true;
-
-	if (firstTime)
+	if (pTessellated)
 	{
-		if (pTessellated)
-		{
-			deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
-		}
-		else
-		{
-			deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		}
+		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
 	}
-	else if (lastTessellated != pTessellated)
+	else
 	{
-		if (pTessellated)
-		{
-			deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
-		}
-		else
-		{
-			deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		}
-		lastTessellated = pTessellated;
+		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	}
 
 	deviceContext->DrawIndexed(mIndicesSize, 0, 0);

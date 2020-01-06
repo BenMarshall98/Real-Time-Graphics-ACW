@@ -9,6 +9,8 @@ TranslationNode::TranslationNode(const float& pX, const float& pY, const float& 
 	setMatrix(matrix);
 }
 
+TranslationNode::~TranslationNode() = default;
+
 void TranslationNode::read(std::istream& pIn)
 {
 	std::string s;
@@ -18,8 +20,6 @@ void TranslationNode::read(std::istream& pIn)
 	float x, y, z;
 
 	pIn >> x >> c >> y >> c >> z;
-
-	DirectX::XMFLOAT3 temp(x, y, z);
 
 	auto matrix = DirectX::XMFLOAT4X4();
 	XMStoreFloat4x4(&matrix, DirectX::XMMatrixTranslation(x, y, z));

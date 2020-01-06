@@ -27,12 +27,12 @@ class InkRender
 	
 public:
 	~InkRender() = default;
-	void IncreaseHeight(bool pIsTrue)
+	void IncreaseHeight(const bool pIsTrue)
 	{
 		mIncrease = pIsTrue;
 	}
 
-	void DecreaseHeight(bool pIsTrue)
+	void DecreaseHeight(const bool pIsTrue)
 	{
 		mDecrease = pIsTrue;
 	}

@@ -1,17 +1,28 @@
 #include "ToonShading.h"
 #include "ResourceManager.h"
 
-ToonShading::ToonShading() :
-	Technique(
-		ResourceManager::instance()->loadShader("ToonVertexShader.hlsl", "ToonFragmentShader.hlsl"),
-		nullptr,
-		ResourceManager::instance()->loadShader("NormalDirectionalShadowVertexShader.hlsl", "NormalDirectionalShadowFragmentShader.hlsl"),
-		ResourceManager::instance()->loadShader("NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl")
-	)
+ToonShading::ToonShading()
 {
+	std::shared_ptr<Shader> normalShader;
+	std::shared_ptr<Shader> directionalShader;
+	std::shared_ptr<Shader> omniDirectionalShader;
+
+	getNormalShader(normalShader);
+	getDirectionalShader(directionalShader);
+	getOmniDirectionalShader(omniDirectionalShader);
+
+	ResourceManager::instance()->loadShader(normalShader, "ToonVertexShader.hlsl", "ToonFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(directionalShader, "NormalDirectionalShadowVertexShader.hlsl", "NormalDirectionalShadowFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(omniDirectionalShader, "NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl");
+
+	setNormalShader(normalShader);
+	setDirectionalShader(directionalShader);
+	setOmniDirectionalShader(omniDirectionalShader);
 }
 
-void ToonShading::render(const std::shared_ptr<Shape>& pShape, bool, std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
+ToonShading::~ToonShading() = default;
+
+void ToonShading::render(const std::shared_ptr<Shape>& pShape, bool, const std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
 {
 	//mNormalShader->useShader();
 	//pShape->render();
@@ -29,12 +40,12 @@ void ToonShading::renderOmniDirectionalShadow(const std::shared_ptr<Shape>& pSha
 	pShape->render();
 }
 
-bool ToonShading::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
+bool ToonShading::renderPostprocessing(const std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
 {
 	return false; //TODO: Implement
 }
 
-void ToonShading::renderTransparent(std::shared_ptr<Shape> &, std::unique_ptr<Framebuffer> &)
+void ToonShading::renderTransparent(const std::shared_ptr<Shape> &, const std::unique_ptr<Framebuffer> &)
 {
 	//Do Nothing
 }

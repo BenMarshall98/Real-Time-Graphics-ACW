@@ -25,7 +25,7 @@ void Material::use() const
 	Dx11Render::instance()->useMaterialBuffer(mb);
 }
 
-std::istream& operator>>(std::istream& pIn, std::unique_ptr<Material>& pMaterial)
+std::istream& operator>>(std::istream& pIn, const std::unique_ptr<Material> & pMaterial)
 {
 	std::string s;
 	char c;

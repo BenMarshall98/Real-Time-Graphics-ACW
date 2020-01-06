@@ -7,7 +7,9 @@ bool Texture::loadTexture(const std::string & pTextureFile)
 {
 	//TODO: Check if there is a better way
 	const auto temp = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(pTextureFile);
-	const auto device = Dx11Render::instance()->getDevice();
+	Microsoft::WRL::ComPtr<ID3D11Device> device;
+	Dx11Render::instance()->getDevice(device);
+	
 	auto result = DirectX::CreateDDSTextureFromFile(device.Get(), temp.c_str(), nullptr, mTexture.ReleaseAndGetAddressOf());
 
 	if (FAILED(result))
@@ -39,7 +41,8 @@ Texture::~Texture()
 
 void Texture::useFragment(const unsigned int pIndex) const
 {
-	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
+	Dx11Render::instance()->getDeviceContext(deviceContext);
 
 	deviceContext->PSSetShaderResources(pIndex, 1, mTexture.GetAddressOf());
 	deviceContext->PSSetSamplers(pIndex, 1, mSampler.GetAddressOf());
@@ -47,7 +50,8 @@ void Texture::useFragment(const unsigned int pIndex) const
 
 void Texture::useDomain(const unsigned int pIndex) const
 {
-	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
+	Dx11Render::instance()->getDeviceContext(deviceContext);
 
 	deviceContext->DSSetShaderResources(pIndex, 1, mTexture.GetAddressOf());
 	deviceContext->DSSetSamplers(pIndex, 1, mSampler.GetAddressOf());

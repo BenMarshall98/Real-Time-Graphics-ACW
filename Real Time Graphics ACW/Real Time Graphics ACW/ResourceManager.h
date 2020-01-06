@@ -39,12 +39,12 @@ public:
 		return mInstance;
 	}
 	
-	std::shared_ptr<Model> loadModel(const std::string & pModelFile);
-	std::shared_ptr<Texture> loadTexture(const std::string & pTextureFile);
-	std::shared_ptr<Shader> loadShader(const std::string & pVertexFile, const std::string & pFragmentFile);
-	std::shared_ptr<Shader> loadShader(const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pGeometryFile);
-	std::shared_ptr<Shader> loadShader(const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pHullFile, const std::string & pDomainFile);
-	std::shared_ptr<Shader> loadShader(const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pGeometryFile, const std::string & pHullFile, const std::string & pDomainFile);
-	std::shared_ptr<Shader> loadShader(const std::string & pComputeFile);
-	std::shared_ptr<Shader> loadParticleShader(const std::string & pVertexFile, const std::string & pFragmentFile);
+	void loadModel(std::shared_ptr<Model> & pModel, const std::string & pModelFile);
+	void loadTexture(std::shared_ptr<Texture> & pTexture, const std::string & pTextureFile);
+	void loadShader(std::shared_ptr<Shader> & pShader, const std::string & pVertexFile, const std::string & pFragmentFile);
+	void loadShader(std::shared_ptr<Shader> & pShader, const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pGeometryFile);
+	void loadShader(std::shared_ptr<Shader> & pShader, const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pHullFile, const std::string & pDomainFile);
+	void loadShader(std::shared_ptr<Shader> & pShader, const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pGeometryFile, const std::string & pHullFile, const std::string & pDomainFile);
+	void loadShader(std::shared_ptr<Shader> & pShader, const std::string & pComputeFile);
+	void loadParticleShader(std::shared_ptr<Shader> & pShader, const std::string & pVertexFile, const std::string & pFragmentFile);
 };

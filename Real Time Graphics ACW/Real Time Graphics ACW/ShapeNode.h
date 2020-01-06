@@ -3,7 +3,7 @@
 #include "SceneGraphNode.h"
 #include "Shape.h"
 
-enum ObjectType
+enum class ObjectType
 {
 	STATIC,
 	DYNAMIC
@@ -16,7 +16,7 @@ class ShapeNode final : public SceneGraphNode
 public:
 	explicit ShapeNode(Shape * pShape, ObjectType pType);
 	ShapeNode() = default;
-	~ShapeNode() = default;
+	~ShapeNode();
 
 	ShapeNode(const ShapeNode &) = delete;
 	ShapeNode(ShapeNode &&) = delete;
@@ -24,5 +24,5 @@ public:
 	ShapeNode & operator= (ShapeNode &&) = delete;
 	
 	void read(std::istream& pIn) override;
-	void update(const DirectX::XMFLOAT4X4 & pFullMatrix, DirectX::XMFLOAT4X4 & pRotationMatrix) override;
+	void update(const DirectX::XMFLOAT4X4 & pFullMatrix, const DirectX::XMFLOAT4X4 & pRotationMatrix) override;
 };

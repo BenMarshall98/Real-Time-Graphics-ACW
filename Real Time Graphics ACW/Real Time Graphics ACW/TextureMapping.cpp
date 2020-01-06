@@ -1,17 +1,32 @@
 #include "TextureMapping.h"
 #include "ResourceManager.h"
 
-TextureMapping::TextureMapping() :
-	Technique(
-		ResourceManager::instance()->loadShader("TextureVertexShader.hlsl", "TextureFragmentShader.hlsl"),
-		ResourceManager::instance()->loadShader("TextureDeferredVertexShader.hlsl", "TextureDeferredFragmentShader.hlsl"),
-		ResourceManager::instance()->loadShader("NormalDirectionalShadowVertexShader.hlsl", "NormalDirectionalShadowFragmentShader.hlsl"),
-		ResourceManager::instance()->loadShader("NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl")
-	)
+TextureMapping::TextureMapping()
 {
+	std::shared_ptr<Shader> normalShader;
+	std::shared_ptr<Shader> deferredShader;
+	std::shared_ptr<Shader> directionalShader;
+	std::shared_ptr<Shader> omniDirectionalShader;
+
+	getNormalShader(normalShader);
+	getDeferredShader(deferredShader);
+	getDirectionalShader(directionalShader);
+	getOmniDirectionalShader(omniDirectionalShader);
+
+	ResourceManager::instance()->loadShader(normalShader, "TextureVertexShader.hlsl", "TextureFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(deferredShader, "TextureDeferredVertexShader.hlsl", "TextureDeferredFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(directionalShader, "NormalDirectionalShadowVertexShader.hlsl", "NormalDirectionalShadowFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(omniDirectionalShader, "NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl");
+
+	setNormalShader(normalShader);
+	setDeferredShader(deferredShader);
+	setDirectionalShader(directionalShader);
+	setOmniDirectionalShader(omniDirectionalShader);
 }
 
-void TextureMapping::render(const std::shared_ptr<Shape>& pShape, bool pDeferred, std::unique_ptr<Framebuffer> &)
+TextureMapping::~TextureMapping() = default;
+
+void TextureMapping::render(const std::shared_ptr<Shape>& pShape, bool pDeferred, const std::unique_ptr<Framebuffer> &)
 {
 	if (pDeferred)
 	{
@@ -37,12 +52,12 @@ void TextureMapping::renderOmniDirectionalShadow(const std::shared_ptr<Shape>& p
 	pShape->render();
 }
 
-bool TextureMapping::renderPostprocessing(std::unique_ptr<Framebuffer> &)
+bool TextureMapping::renderPostprocessing(const std::unique_ptr<Framebuffer> &)
 {
 	return false;
 }
 
-void TextureMapping::renderTransparent(std::shared_ptr<Shape> &, std::unique_ptr<Framebuffer> &)
+void TextureMapping::renderTransparent(const std::shared_ptr<Shape> &, const std::unique_ptr<Framebuffer> &)
 {
 	//Do Nothing
 }

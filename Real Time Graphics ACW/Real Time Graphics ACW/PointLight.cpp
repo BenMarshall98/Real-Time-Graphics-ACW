@@ -75,12 +75,12 @@ void PointLight::updateShadow()
 	mFramebuffer->useFramebuffer();
 }
 
-void PointLight::useShadow(unsigned pTextureSlot)
+void PointLight::useShadow(const unsigned int pTextureSlot)
 {
 	mFramebuffer->useTexture(pTextureSlot);
 }
 
-void PointLight::releaseShadow(unsigned pTextureSlot)
+void PointLight::releaseShadow(const unsigned int pTextureSlot)
 {
 	mFramebuffer->releaseTexture(pTextureSlot);
 }

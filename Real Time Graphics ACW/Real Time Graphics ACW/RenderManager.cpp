@@ -50,9 +50,9 @@ RenderManager::RenderManager() : mBloom(std::make_unique<Bloom>())
 		mScreenFramebufferTwo.reset();
 	}
 
-	mHDRShader = ResourceManager::instance()->loadShader("HDRVertexShader.hlsl", "HDRFragmentShader.hlsl");
-	mDeferredShader = ResourceManager::instance()->loadShader("DeferredVertexShader.hlsl", "DeferredFragmentShader.hlsl");
-	mOutputModel = ResourceManager::instance()->loadModel("plane.obj");
+	ResourceManager::instance()->loadShader(mHDRShader, "HDRVertexShader.hlsl", "HDRFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(mDeferredShader, "DeferredVertexShader.hlsl", "DeferredFragmentShader.hlsl");
+	ResourceManager::instance()->loadModel(mOutputModel, "plane.obj");
 	
 	mStaticTechnique = std::make_unique<PhongShading>();
 	mDynamicTechniques.emplace_back(std::make_unique<PhongShading>());
@@ -65,9 +65,9 @@ RenderManager::RenderManager() : mBloom(std::make_unique<Bloom>())
 	//mDynamicTechniques.emplace_back(std::make_unique<ToonShading>());
 }
 
-void RenderManager::setup(float pCurrentTime)
+void RenderManager::setup(const float pCurrentTime)
 {
-	GlobalBuffer gb =
+	const GlobalBuffer gb =
 	{
 		pCurrentTime,
 		mMode,
@@ -93,7 +93,7 @@ void RenderManager::renderShapes()
 	{
 		mDeferredBuffer->useFramebuffer();
 
-		for (auto& staticShape : mStaticShapes)
+		for (const auto& staticShape : mStaticShapes)
 		{
 			mStaticTechnique->render(staticShape, deferred, mDeferredBuffer);
 		}
@@ -108,7 +108,7 @@ void RenderManager::renderShapes()
 		mScreenFramebufferOne->useFramebuffer();
 		deferred = false;
 
-		for (auto& staticShape : mStaticShapes)
+		for (const auto& staticShape : mStaticShapes)
 		{
 			mStaticTechnique->render(staticShape, deferred, mScreenFramebufferOne);
 		}
@@ -172,27 +172,24 @@ void RenderManager::renderToScreen()
 	if (mMode == 0 || mMode == 8 || mMode == 9)
 	{
 		//Post Processing
-		for (auto& staticShape : mStaticShapes)
+		if (mFramebuffer == 0)
 		{
-			if (mFramebuffer == 0)
+			mScreenFramebufferOne->useTexture(6);
+			if (mStaticTechnique->renderPostprocessing(mScreenFramebufferTwo))
 			{
-				mScreenFramebufferOne->useTexture(6);
-				if (mStaticTechnique->renderPostprocessing(mScreenFramebufferTwo))
-				{
-					mFramebuffer = 1;
-				}
-				mScreenFramebufferOne->releaseTexture(6);
-				
+				mFramebuffer = 1;
 			}
-			else
+			mScreenFramebufferOne->releaseTexture(6);
+			
+		}
+		else
+		{
+			mScreenFramebufferTwo->useTexture(6);
+			if (mStaticTechnique->renderPostprocessing(mScreenFramebufferOne))
 			{
-				mScreenFramebufferTwo->useTexture(6);
-				if (mStaticTechnique->renderPostprocessing(mScreenFramebufferOne))
-				{
-					mFramebuffer = 0;
-				}
-				mScreenFramebufferTwo->releaseTexture(6);
+				mFramebuffer = 0;
 			}
+			mScreenFramebufferTwo->releaseTexture(6);
 		}
 
 		for (auto i = 0u; i < mDynamicShapes.size(); i++)
@@ -223,7 +220,7 @@ void RenderManager::renderToScreen()
 		{
 			mScreenFramebufferTwo->useFramebuffer(false);
 
-			for (auto& staticShape : mStaticShapes)
+			for (const auto& staticShape : mStaticShapes)
 			{
 				mStaticTechnique->renderTransparent(staticShape, mScreenFramebufferTwo);
 			}
@@ -240,7 +237,7 @@ void RenderManager::renderToScreen()
 		{
 			//Transparent
 			mScreenFramebufferOne->useFramebuffer(false);
-			for (auto& staticShape : mStaticShapes)
+			for (const auto& staticShape : mStaticShapes)
 			{
 				mStaticTechnique->renderTransparent(staticShape, mScreenFramebufferOne);
 			}
@@ -261,7 +258,7 @@ void RenderManager::renderToScreen()
 
 	if (mMode == 9)
 	{
-		auto strength = 5;
+		const auto strength = 5;
 		if (mFramebuffer == 0)
 		{
 			mBloom->applyBloom(mScreenFramebufferOne, strength);

@@ -3,21 +3,36 @@
 #include "DX11Render.h"
 
 GourandShading::GourandShading() :
-	Technique(
-		ResourceManager::instance()->loadShader("GourandVertexShader.hlsl", "GourandFragmentShader.hlsl"),
-		nullptr,
-		ResourceManager::instance()->loadShader("NormalDirectionalShadowVertexShader.hlsl", "NormalDirectionalShadowFragmentShader.hlsl"),
-		ResourceManager::instance()->loadShader("NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl")
-	), mFramebuffer(std::make_unique<Framebuffer>()), mRenderPlane(ResourceManager::instance()->loadModel("plane.obj")),
-	mPostShader(ResourceManager::instance()->loadShader("PostVertexShader.hlsl", "PostFragmentShader.hlsl"))
+	mFramebuffer(std::make_unique<Framebuffer>())
 {
+	std::shared_ptr<Shader> normalShader;
+	std::shared_ptr<Shader> directionalShader;
+	std::shared_ptr<Shader> omniDirectionalShader;
+
+	getNormalShader(normalShader);
+	getDirectionalShader(directionalShader);
+	getOmniDirectionalShader(omniDirectionalShader);
+
+	ResourceManager::instance()->loadShader(normalShader, "GourandVertexShader.hlsl", "GourandFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(directionalShader, "NormalDirectionalShadowVertexShader.hlsl", "NormalDirectionalShadowFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(omniDirectionalShader, "NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl");
+
+	setNormalShader(normalShader);
+	setDirectionalShader(directionalShader);
+	setOmniDirectionalShader(omniDirectionalShader);
+	
+	ResourceManager::instance()->loadModel(mRenderPlane, "plane.obj");
+	ResourceManager::instance()->loadShader(mPostShader, "PostVertexShader.hlsl", "PostFragmentShader.hlsl");
+	
 	if (!mFramebuffer->loadFramebuffer(true, true, { { 0.0f, 0.0f, 0.0f, 0.0f } }))
 	{
 		mFramebuffer.reset();
 	}
 }
 
-void GourandShading::render(const std::shared_ptr<Shape>& pShape, bool, std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
+GourandShading::~GourandShading() = default;
+
+void GourandShading::render(const std::shared_ptr<Shape>& pShape, bool, const std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
 {
 	mFramebuffer->useFramebuffer();
 	useNormalShader();
@@ -38,7 +53,7 @@ void GourandShading::renderOmniDirectionalShadow(const std::shared_ptr<Shape>& p
 	pShape->render();
 }
 
-bool GourandShading::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
+bool GourandShading::renderPostprocessing(const std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
 {
 	mFramebuffer->useTexture(8);
 
@@ -60,7 +75,7 @@ bool GourandShading::renderPostprocessing(std::unique_ptr<Framebuffer> & pCurren
 	return true;
 }
 
-void GourandShading::renderTransparent(std::shared_ptr<Shape> &, std::unique_ptr<Framebuffer> &)
+void GourandShading::renderTransparent(const std::shared_ptr<Shape> &, const std::unique_ptr<Framebuffer> &)
 {
 	//Do Nothing
 }

@@ -28,11 +28,11 @@ public:
 		mMatrix = pMatrix;
 	}
 
-	DirectX::XMFLOAT4X4 getMatrix()
+	void getMatrix(DirectX::XMFLOAT4X4 & pMatrix)
 	{
-		return mMatrix;
+		pMatrix = mMatrix;
 	}
 	
-	virtual void update(const DirectX::XMFLOAT4X4 & pFullMatrix, DirectX::XMFLOAT4X4 & pRotationMatrix);
+	virtual void update(const DirectX::XMFLOAT4X4 & pFullMatrix, const DirectX::XMFLOAT4X4 & pRotationMatrix);
 	virtual void read(std::istream & pIn) = 0; 
 };

@@ -25,10 +25,22 @@ class Shape
 	DirectX::XMFLOAT4X4 mCurrentRotation;
 	DirectX::XMFLOAT4X4 mPreviousRotation;
 	
+protected:
+	
+	void getModel(std::shared_ptr<Model> & pModel)
+	{
+		pModel = mModel;
+	}
+	
 public:
-	Shape(std::shared_ptr<Model> pModel, std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial);
+	Shape(std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial);
 	Shape();
-	virtual ~Shape();// = default;
+	virtual ~Shape();
+
+	Shape(const Shape &) = delete;
+	Shape(Shape &&) = delete;
+	Shape & operator= (const Shape &) = delete;
+	Shape & operator= (Shape &&) = delete;
 
 	void setModel(const std::shared_ptr<Model> & pModel)
 	{
@@ -56,27 +68,27 @@ public:
 
 	void render(bool pTesselated = false) const;
 
-	DirectX::XMFLOAT4X4 getCurrentMatrix()
+	void getCurrentMatrix(DirectX::XMFLOAT4X4 & pCurrentMatrix)
 	{
-		return mCurrentMatrix;
+		pCurrentMatrix = mCurrentMatrix;
 	}
 
-	DirectX::XMFLOAT4X4 getPreviousMatrix()
+	void getPreviousMatrix(DirectX::XMFLOAT4X4 & pPreviousMatrix)
 	{
-		return mPreviousMatrix;
+		pPreviousMatrix = mPreviousMatrix;
 	}
 
-	DirectX::XMFLOAT4X4 getCurrentRotationMatrix()
+	void getCurrentRotationMatrix(DirectX::XMFLOAT4X4 & pCurrentRotation)
 	{
-		return mCurrentRotation;
+		pCurrentRotation = mCurrentRotation;
 	}
 
-	DirectX::XMFLOAT4X4 getPreviousRotationMatrix()
+	void getPreviousRotationMatrix(DirectX::XMFLOAT4X4 & pPreviousRotation)
 	{
-		return mPreviousRotation;
+		pPreviousRotation = mPreviousRotation;
 	}
 
 	virtual void collideWith(const Particle & pParticle) = 0;
 };
 
-std::istream & operator>>(std::istream & pIn, std::shared_ptr<Shape> & pShape);
+std::istream & operator>>(std::istream & pIn, const std::shared_ptr<Shape> & pShape);

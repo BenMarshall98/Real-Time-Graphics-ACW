@@ -22,12 +22,13 @@ class SpotLight
 	DirectX::XMFLOAT3 mColor;
 	DirectX::XMFLOAT3 mPosition;
 	DirectX::XMFLOAT3 mDirection;
+	std::unique_ptr<Framebuffer> mFramebuffer;
 	float mInnerAngle;
 	float mOuterAngle;
 	float mAttenuationConstant;
 	float mAttenuationLinear;
 	float mAttenuationQuad;
-	std::unique_ptr<Framebuffer> mFramebuffer;
+	
 	
 public:
 	SpotLight(const DirectX::XMFLOAT3 & pColor, const DirectX::XMFLOAT3 & pPosition, const DirectX::XMFLOAT3 & pDirection, float pInnerAngle, float pOuterAngle, float pAttenuationConstant, float pAttenuationLinear, float pAttenuationQuad);

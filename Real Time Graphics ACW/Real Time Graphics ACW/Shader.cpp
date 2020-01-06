@@ -27,7 +27,8 @@ const D3D11_INPUT_ELEMENT_DESC Shader::particle_layout[] =
 bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFragmentFile)
 {
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-	auto device = Dx11Render::instance()->getDevice();
+	Microsoft::WRL::ComPtr<ID3D11Device> device;
+	Dx11Render::instance()->getDevice(device);
 
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> vsBlob = nullptr;
@@ -73,7 +74,8 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 bool Shader::loadShader(const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pGeometryFile)
 {
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-	auto device = Dx11Render::instance()->getDevice();
+	Microsoft::WRL::ComPtr<ID3D11Device> device;
+	Dx11Render::instance()->getDevice(device);
 
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> vsBlob = nullptr;
@@ -136,7 +138,8 @@ bool Shader::loadShader(const std::string & pVertexFile, const std::string & pFr
 bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFragmentFile, const std::string& pHullFile, const std::string& pDomainFile)
 {
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-	auto device = Dx11Render::instance()->getDevice();
+	Microsoft::WRL::ComPtr<ID3D11Device> device;
+	Dx11Render::instance()->getDevice(device);
 
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> vsBlob = nullptr;
@@ -212,7 +215,8 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFragmentFile, const std::string& pGeometryFile, const std::string& pHullFile, const std::string& pDomainFile)
 {
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-	auto device = Dx11Render::instance()->getDevice();
+	Microsoft::WRL::ComPtr<ID3D11Device> device;
+	Dx11Render::instance()->getDevice(device);
 
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> vsBlob = nullptr;
@@ -303,8 +307,7 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 bool Shader::loadShader(const std::string& pComputeFile)
 {
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-	auto device = Dx11Render::instance()->getDevice();
-
+	
 	Microsoft::WRL::ComPtr<ID3DBlob> csBlob = nullptr;
 	auto result = compileShaderFromFile(converter.from_bytes(pComputeFile), "cs_5_0", &csBlob);
 	if (FAILED(result))
@@ -312,6 +315,9 @@ bool Shader::loadShader(const std::string& pComputeFile)
 		return false;
 	}
 
+	Microsoft::WRL::ComPtr<ID3D11Device> device;
+	Dx11Render::instance()->getDevice(device);
+	
 	result = device->CreateComputeShader(csBlob->GetBufferPointer(), csBlob->GetBufferSize(), nullptr, &mComputeShader);
 	if (FAILED(result))
 	{
@@ -324,7 +330,9 @@ bool Shader::loadShader(const std::string& pComputeFile)
 bool Shader::loadParticleShader(const std::string& pVertexFile, const std::string& pFragmentFile)
 {
 	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-	auto device = Dx11Render::instance()->getDevice();
+	
+	Microsoft::WRL::ComPtr<ID3D11Device> device;
+	Dx11Render::instance()->getDevice(device);
 
 	{
 		Microsoft::WRL::ComPtr<ID3DBlob> vsBlob = nullptr;
@@ -367,7 +375,7 @@ bool Shader::loadParticleShader(const std::string& pVertexFile, const std::strin
 	return true;
 }
 
-HRESULT Shader::compileShaderFromFile(const std::wstring & pFileName, const char * pTarget, ID3DBlob** pShaderBlob)
+HRESULT Shader::compileShaderFromFile(const std::wstring & pFileName, const char * const pTarget, ID3DBlob** const pShaderBlob)
 {
 	const DWORD shaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
 
@@ -388,11 +396,12 @@ HRESULT Shader::compileShaderFromFile(const std::wstring & pFileName, const char
 
 void Shader::useShader()
 {
-	static Shader * shader = nullptr;
+	static Shader * const shader = nullptr;
 
 	if (shader != this)
 	{
-		auto deviceContext = Dx11Render::instance()->getDeviceContext();
+		Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
+		Dx11Render::instance()->getDeviceContext(deviceContext);
 		
 		deviceContext->VSSetShader(mVertexShader.Get(), nullptr, 0);
 		deviceContext->PSSetShader(mPixelShader.Get(), nullptr, 0);

@@ -22,9 +22,9 @@ class QuaternionAnimation final : public Animation
 	}
 	
 public:
-	QuaternionAnimation(std::vector<QuaternionNode> pNodes, float pEndTime);
+	QuaternionAnimation(const std::vector<QuaternionNode> & pNodes, float pEndTime);
 	QuaternionAnimation() = default;
-	~QuaternionAnimation() = default;
+	~QuaternionAnimation();
 
 	QuaternionAnimation(const QuaternionAnimation &) = delete;
 	QuaternionAnimation(QuaternionAnimation &&) = delete;
@@ -34,6 +34,5 @@ public:
 	void calculateTangents() override;
 	void read(std::istream& pIn) override;
 
-	DirectX::XMFLOAT4X4 animate(float pDeltaTime) override;
+	void animate(float pDeltaTime, DirectX::XMFLOAT4X4 & pFullMatrix, DirectX::XMFLOAT4X4 & pRotationMatrix) override;
 };
-

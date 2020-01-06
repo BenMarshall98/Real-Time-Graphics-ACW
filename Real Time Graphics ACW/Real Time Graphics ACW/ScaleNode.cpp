@@ -9,6 +9,8 @@ ScaleNode::ScaleNode(const float & pX, const float & pY, const float & pZ)
 	setMatrix(matrix);
 }
 
+ScaleNode::~ScaleNode() = default;
+
 void ScaleNode::read(std::istream& pIn)
 {
 	std::string s;

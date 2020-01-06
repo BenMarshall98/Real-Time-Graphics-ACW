@@ -8,8 +8,8 @@ InkRender * InkRender::mInstance = nullptr;
 
 InkRender::InkRender()
 {
-	mDepthShader = ResourceManager::instance()->loadShader("InkDepthVertexShader.hlsl", "InkDepthFragmentShader.hlsl", "InkDepthHullShader.hlsl", "InkDepthDomainShader.hlsl");
-	mModel = ResourceManager::instance()->loadModel("plane.obj");
+	ResourceManager::instance()->loadShader(mDepthShader, "InkDepthVertexShader.hlsl", "InkDepthFragmentShader.hlsl", "InkDepthHullShader.hlsl", "InkDepthDomainShader.hlsl");
+	ResourceManager::instance()->loadModel(mModel, "plane.obj");
 }
 
 void InkRender::RenderInk()
@@ -37,7 +37,7 @@ void InkRender::RenderInk()
 	const auto scale = DirectX::XMMatrixScaling(5.0f, 5.0f, 5.0f);
 	const auto matrix = DirectX::XMMatrixMultiply(trans, scale);
 
-	ModelBuffer mb = {
+	const ModelBuffer mb = {
 		DirectX::XMMatrixTranspose(matrix),
 		DirectX::XMMatrixInverse(nullptr, matrix)
 	};

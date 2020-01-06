@@ -174,15 +174,15 @@ public:
 
 	void update();
 
-	DirectX::XMFLOAT3 getViewPosition() const
+	void getViewPosition(DirectX::XMFLOAT3 & pViewPosition)
 	{
 		if (mCurrentCamera == 1)
 		{
-			return mCamera1->getViewPosition();
+			mCamera1->getViewPosition(pViewPosition);
 		}
 		else
 		{
-			return mCamera2->getViewPosition();
+			mCamera2->getViewPosition(pViewPosition);
 		}
 	}
 };

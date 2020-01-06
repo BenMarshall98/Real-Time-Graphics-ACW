@@ -1,19 +1,32 @@
 #include "BumpMapping.h"
 #include "ResourceManager.h"
 
-BumpMapping::BumpMapping() :
-	Technique(
-		ResourceManager::instance()->loadShader("BumpVertexShader.hlsl", "BumpFragmentShader.hlsl"),
-		ResourceManager::instance()->loadShader("BumpDeferredVertexShader.hlsl", "BumpDeferredFragmentShader.hlsl"),
-		ResourceManager::instance()->loadShader("NormalDirectionalShadowVertexShader.hlsl", "NormalDirectionalShadowFragmentShader.hlsl"),
-		ResourceManager::instance()->loadShader("NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl")
-	)
+BumpMapping::BumpMapping()
 {
+	std::shared_ptr<Shader> normalShader;
+	std::shared_ptr<Shader> deferredShader;
+	std::shared_ptr<Shader> directionalShader;
+	std::shared_ptr<Shader> omniDirectionalShader;
+
+	getNormalShader(normalShader);
+	getDeferredShader(deferredShader);
+	getDirectionalShader(directionalShader);
+	getOmniDirectionalShader(omniDirectionalShader);
+
+	ResourceManager::instance()->loadShader(normalShader,"BumpVertexShader.hlsl", "BumpFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(deferredShader, "BumpDeferredVertexShader.hlsl", "BumpDeferredFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(directionalShader, "NormalDirectionalShadowVertexShader.hlsl", "NormalDirectionalShadowFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(omniDirectionalShader, "NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl");
+
+	setNormalShader(normalShader);
+	setDeferredShader(deferredShader);
+	setDirectionalShader(directionalShader);
+	setOmniDirectionalShader(omniDirectionalShader);
 }
 
 BumpMapping::~BumpMapping() = default;
 
-void BumpMapping::render(const std::shared_ptr<Shape> & pShape, const bool pDeferred, std::unique_ptr<Framebuffer> &)
+void BumpMapping::render(const std::shared_ptr<Shape> & pShape, const bool pDeferred, const std::unique_ptr<Framebuffer> &)
 {
 	if (pDeferred)
 	{
@@ -39,12 +52,12 @@ void BumpMapping::renderOmniDirectionalShadow(const std::shared_ptr<Shape>& pSha
 	pShape->render();
 }
 
-bool BumpMapping::renderPostprocessing(std::unique_ptr<Framebuffer> &)
+bool BumpMapping::renderPostprocessing(const std::unique_ptr<Framebuffer> &)
 {
 	return false;
 }
 
-void BumpMapping::renderTransparent(std::shared_ptr<Shape> &, std::unique_ptr<Framebuffer> &)
+void BumpMapping::renderTransparent(const std::shared_ptr<Shape> &, const std::unique_ptr<Framebuffer> &)
 {
 	//Do Nothing
 }

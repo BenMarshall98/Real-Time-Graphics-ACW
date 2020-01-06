@@ -15,7 +15,7 @@ class Bloom final
 
 public:
 	Bloom();
-	~Bloom();
+	~Bloom() = default;
 
 	void applyBloom(const std::unique_ptr<Framebuffer> & pCurrentFramebuffer, unsigned int pBloomStrength);
 	void useBloomTexture(unsigned int pSlot) const;

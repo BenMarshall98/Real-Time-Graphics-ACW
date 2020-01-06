@@ -10,6 +10,8 @@ SpotLightNode::SpotLightNode() : mSpotLight(nullptr)
 {
 }
 
+SpotLightNode::~SpotLightNode() = default;
+
 void SpotLightNode::read(std::istream& pIn)
 {
 	if (mSpotLight)
@@ -23,7 +25,7 @@ void SpotLightNode::read(std::istream& pIn)
 	LightingManager::instance()->addSpotLight(mSpotLight);
 }
 
-void SpotLightNode::update(const DirectX::XMFLOAT4X4 & pFullMatrix, DirectX::XMFLOAT4X4 & pRotationMatrix)
+void SpotLightNode::update(const DirectX::XMFLOAT4X4 & pFullMatrix, const DirectX::XMFLOAT4X4 & pRotationMatrix)
 {
 	mSpotLight->update(pFullMatrix);
 }

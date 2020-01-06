@@ -7,6 +7,8 @@ VectorAnimation::VectorAnimation(std::vector<VectorNode> pNodes, const float pEn
 {
 }
 
+VectorAnimation::~VectorAnimation() = default;
+
 //Uses a form of Catmull-Rom Spline
 //https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull%E2%80%93Rom_spline
 void VectorAnimation::calculateTangents()
@@ -55,14 +57,14 @@ void VectorAnimation::calculateTangents()
 	}
 }
 
-DirectX::XMFLOAT4X4 VectorAnimation::animate(const float pDeltaTime)
+void VectorAnimation::animate(const float pDeltaTime, DirectX::XMFLOAT4X4 & pFullMatrix, DirectX::XMFLOAT4X4 &)
 {
 	if (mNodes.empty())
 	{
-		return { 1, 0, 0, 0,
+		pFullMatrix = DirectX::XMFLOAT4X4( 1, 0, 0, 0,
 			0, 1, 0, 0,
 			0, 0, 1, 0,
-			0, 0, 0, 1 };
+			0, 0, 0, 1 );
 	}
 
 	if (mNodes.size() == 1)
@@ -71,7 +73,7 @@ DirectX::XMFLOAT4X4 VectorAnimation::animate(const float pDeltaTime)
 		DirectX::XMFLOAT4X4 result;
 		XMStoreFloat4x4(&result, DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z));
 
-		return result;
+		pFullMatrix = result;
 	}
 
 	if (mNodes.size() == 2)
@@ -105,7 +107,7 @@ DirectX::XMFLOAT4X4 VectorAnimation::animate(const float pDeltaTime)
 			setCurrentTime(currentTime);
 			setCurrentNode(currentNode);
 			
-			return result;
+			pFullMatrix = result;
 		}
 
 		currentNode = 0;
@@ -123,7 +125,7 @@ DirectX::XMFLOAT4X4 VectorAnimation::animate(const float pDeltaTime)
 		setCurrentTime(currentTime);
 		setCurrentNode(currentNode);
 		
-		return result;
+		pFullMatrix = result;
 	}
 
 	auto currentTime = getCurrentTime();
@@ -173,7 +175,7 @@ DirectX::XMFLOAT4X4 VectorAnimation::animate(const float pDeltaTime)
 		setCurrentTime(currentTime);
 		setCurrentNode(currentNode);
 
-		return result;
+		pFullMatrix = result;
 	}
 
 	const auto pos0 = DirectX::XMLoadFloat3(&mNodes[currentNode].mPosition);
@@ -200,7 +202,7 @@ DirectX::XMFLOAT4X4 VectorAnimation::animate(const float pDeltaTime)
 	setCurrentTime(currentTime);
 	setCurrentNode(currentNode);
 
-	return result;
+	pFullMatrix = result;
 }
 
 void VectorAnimation::read(std::istream& pIn)

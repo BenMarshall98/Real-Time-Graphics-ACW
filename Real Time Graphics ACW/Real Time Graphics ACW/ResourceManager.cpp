@@ -3,159 +3,164 @@
 
 ResourceManager * ResourceManager::mInstance = nullptr;
 
-std::shared_ptr<Model> ResourceManager::loadModel(const std::string & pModelFile)
+void ResourceManager::loadModel(std::shared_ptr<Model> & pModel, const std::string & pModelFile)
 {
 	const auto result = mModels.find(pModelFile);
 	
 	if (result != mModels.end())
 	{
-		return result->second;
+		pModel = result->second;
+		return;
 	}
 	
-	auto model = ModelLoader::loadModelFromFile(pModelFile);
+	ModelLoader::loadModelFromFile(pModelFile, pModel);
 	
-	if(model.get())
+	if(pModel.get())
 	{
-		mModels.insert(std::pair<std::string, std::shared_ptr<Model>>(pModelFile, model));
+		mModels.insert(std::pair<std::string, std::shared_ptr<Model>>(pModelFile, pModel));
 	}
-	
-	return model;
 }
 
-std::shared_ptr<Texture> ResourceManager::loadTexture(const std::string & pTextureFile)
+void ResourceManager::loadTexture(std::shared_ptr<Texture> & pTexture, const std::string & pTextureFile)
 {
 	const auto result = mTextures.find(pTextureFile);
 	
 	if (result != mTextures.end())
 	{
-		return result->second;
+		pTexture = result->second;
+		return;
 	}
 	
-	auto texture = std::make_shared<Texture>();
+	pTexture = std::make_shared<Texture>();
 	
-	if (texture->loadTexture(pTextureFile))
+	if (pTexture->loadTexture(pTextureFile))
 	{
-		mTextures.insert(std::pair<std::string, std::shared_ptr<Texture>>(pTextureFile, texture));
-		return texture;
+		mTextures.insert(std::pair<std::string, std::shared_ptr<Texture>>(pTextureFile, pTexture));
+		return;
 	}
-	return nullptr;
+	pTexture.reset();
 }
 
-std::shared_ptr<Shader> ResourceManager::loadShader(const std::string & pVertexFile, const std::string & pFragmentFile)
+void ResourceManager::loadShader(std::shared_ptr<Shader> & pShader, const std::string & pVertexFile, const std::string & pFragmentFile)
 {
 	const auto concat = pVertexFile + pFragmentFile;
 	const auto result = mVfShaders.find(concat);
 	
 	if (result != mVfShaders.end())
 	{
-		return result->second;
+		pShader = result->second;
+		return;
 	}
 	
-	auto shader = std::make_shared<Shader>();
+	pShader = std::make_shared<Shader>();
 	
-	if (shader->loadShader(pVertexFile, pFragmentFile))
+	if (pShader->loadShader(pVertexFile, pFragmentFile))
 	{
-		mVfShaders.insert(std::pair<std::string, std::shared_ptr<Shader>>(concat, shader));
-		return shader;
+		mVfShaders.insert(std::pair<std::string, std::shared_ptr<Shader>>(concat, pShader));
+		return;
 	}
-	return nullptr;
+	pShader.reset();
 }
 
-std::shared_ptr<Shader> ResourceManager::loadParticleShader(const std::string& pVertexFile, const std::string& pFragmentFile)
+void ResourceManager::loadParticleShader(std::shared_ptr<Shader> & pShader, const std::string& pVertexFile, const std::string& pFragmentFile)
 {
 	const auto concat = pVertexFile + pFragmentFile;
 	const auto result = mParticleShader.find(concat);
 
 	if (result != mParticleShader.end())
 	{
-		return result->second;
+		pShader = result->second;
+		return;
 	}
 
-	auto shader = std::make_shared<Shader>();
+	pShader = std::make_shared<Shader>();
 
-	if (shader->loadParticleShader(pVertexFile, pFragmentFile))
+	if (pShader->loadParticleShader(pVertexFile, pFragmentFile))
 	{
-		mParticleShader.insert(std::pair<std::string, std::shared_ptr<Shader>>(concat, shader));
-		return shader;
+		mParticleShader.insert(std::pair<std::string, std::shared_ptr<Shader>>(concat, pShader));
+		return;
 	}
-	return nullptr;
+	pShader.reset();
 }
 
-std::shared_ptr<Shader> ResourceManager::loadShader(const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pGeometryFile)
+void ResourceManager::loadShader(std::shared_ptr<Shader> & pShader, const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pGeometryFile)
 {
 	const auto concat = pVertexFile + pFragmentFile + pGeometryFile;
 	const auto result = mVfgShaders.find(concat);
 	
 	if (result != mVfgShaders.end())
 	{
-		return result->second;
+		pShader = result->second;
+		return;
 	}
 	
-	auto shader = std::make_shared<Shader>();
+	pShader = std::make_shared<Shader>();
 	
-	if (shader->loadShader(pVertexFile, pFragmentFile, pGeometryFile))
+	if (pShader->loadShader(pVertexFile, pFragmentFile, pGeometryFile))
 	{
-		mVfgShaders.insert(std::pair<std::string, std::shared_ptr<Shader>>(concat, shader));
-		return shader;
+		mVfgShaders.insert(std::pair<std::string, std::shared_ptr<Shader>>(concat, pShader));
+		return;
 	}
-	return nullptr;
+	pShader.reset();
 }
 
-std::shared_ptr<Shader> ResourceManager::loadShader(const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pHullFile, const std::string & pDomainFile)
+void ResourceManager::loadShader(std::shared_ptr<Shader> & pShader, const std::string & pVertexFile, const std::string & pFragmentFile, const std::string & pHullFile, const std::string & pDomainFile)
 {
 	const auto concat = pVertexFile + pFragmentFile + pHullFile + pDomainFile;
 	const auto result = mVfhdShaders.find(concat);
 	
 	if (result != mVfhdShaders.end())
 	{
-		return result->second;
+		pShader = result->second;
+		return;
 	}
 	
-	auto shader = std::make_shared<Shader>();
+	pShader = std::make_shared<Shader>();
 	
-	if (shader->loadShader(pVertexFile, pFragmentFile, pHullFile, pDomainFile))
+	if (pShader->loadShader(pVertexFile, pFragmentFile, pHullFile, pDomainFile))
 	{
-		mVfhdShaders.insert(std::pair<std::string, std::shared_ptr<Shader>>(concat, shader));
-		return shader;
+		mVfhdShaders.insert(std::pair<std::string, std::shared_ptr<Shader>>(concat, pShader));
+		return;
 	}
-	return nullptr;
+	pShader.reset();
 }
 
-std::shared_ptr<Shader> ResourceManager::loadShader(const std::string& pVertexFile, const std::string& pFragmentFile, const std::string& pGeometryFile, const std::string& pHullFile, const std::string& pDomainFile)
+void ResourceManager::loadShader(std::shared_ptr<Shader> & pShader, const std::string& pVertexFile, const std::string& pFragmentFile, const std::string& pGeometryFile, const std::string& pHullFile, const std::string& pDomainFile)
 {
 	const auto concat = pVertexFile + pFragmentFile + pGeometryFile + pHullFile + pDomainFile;
 	const auto result = mVfghdShaders.find(concat);
 
 	if (result != mVfghdShaders.end())
 	{
-		return result->second;
+		pShader = result->second;
+		return;
 	}
 
-	auto shader = std::make_shared<Shader>();
+	pShader = std::make_shared<Shader>();
 
-	if (shader->loadShader(pVertexFile, pFragmentFile, pGeometryFile, pHullFile, pDomainFile))
+	if (pShader->loadShader(pVertexFile, pFragmentFile, pGeometryFile, pHullFile, pDomainFile))
 	{
-		mVfghdShaders.insert(std::pair<std::string, std::shared_ptr<Shader>>(concat, shader));
-		return shader;
+		mVfghdShaders.insert(std::pair<std::string, std::shared_ptr<Shader>>(concat, pShader));
+		return;
 	}
-	return nullptr;
+	pShader.reset();
 }
 
-std::shared_ptr<Shader> ResourceManager::loadShader(const std::string & pComputeFile)
+void ResourceManager::loadShader(std::shared_ptr<Shader> & pShader, const std::string & pComputeFile)
 {
 	const auto result = mCShaders.find(pComputeFile);
 	
 	if (result != mCShaders.end())
 	{
-		return result->second;
+		pShader = result->second;
 	}
 	
-	auto shader = std::make_shared<Shader>();
+	pShader = std::make_shared<Shader>();
 	
-	if (shader->loadShader(pComputeFile))
+	if (pShader->loadShader(pComputeFile))
 	{
-		mCShaders.insert(std::pair<std::string, std::shared_ptr<Shader>>(pComputeFile, shader));
-		return shader;
+		mCShaders.insert(std::pair<std::string, std::shared_ptr<Shader>>(pComputeFile, pShader));
+		return;
 	}
-	return nullptr;
+	pShader.reset();
 }

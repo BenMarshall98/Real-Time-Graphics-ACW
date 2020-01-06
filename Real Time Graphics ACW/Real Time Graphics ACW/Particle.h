@@ -22,8 +22,8 @@ class Particle
 	float mTime;
 
 	static void integrate(State & pState, float pDt);
-	static Derivative evaluate(const State & pInitial, float pDt, const Derivative & pDerivative);
-	static DirectX::XMVECTOR acceleration(const State & pState);
+	static void evaluate(const State& pInitial, const float pDt, const Derivative& pDerivative, Derivative & pReturnDerivative);
+	static void acceleration(const State & pState, DirectX::XMVECTOR & pAcceleration);
 	
 public:
 	Particle(const DirectX::XMFLOAT3 & pPosition, const DirectX::XMFLOAT3 & pVelocity);
@@ -37,19 +37,19 @@ public:
 	void calculatePhysics(float pDt);
 	void update();
 
-	DirectX::XMFLOAT3 getPreviousPosition() const
+	void getPreviousPosition(DirectX::XMFLOAT3 & pPreviousPosition) const
 	{
-		return mPreviousPosition;
+		pPreviousPosition = mPreviousPosition;
 	}
 
-	DirectX::XMFLOAT3 getCurrentPosition() const
+	void getCurrentPosition(DirectX::XMFLOAT3 & pCurrentPosition) const
 	{
-		return mCurrentPosition;
+		pCurrentPosition = mCurrentPosition;
 	}
 
-	DirectX::XMFLOAT3 getVelocity() const
+	void getVelocity(DirectX::XMFLOAT3 & pVelocity) const
 	{
-		return mVelocity;
+		pVelocity = mVelocity;
 	}
 
 	void setTime(const float pTime)

@@ -14,7 +14,7 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, const s
 	return loadFramebuffer(pColour, pDepth, width, height, pDefaultColour, pType, pNumberOfBuffers);
 }
 
-bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWidth, int pHeight, const std::vector<DirectX::XMVECTORF32> & pDefaultColour, TextureType pType, unsigned int pNumberOfBuffers)
+bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, const int pWidth, const int pHeight, const std::vector<DirectX::XMVECTORF32> & pDefaultColour, const TextureType pType, const unsigned int pNumberOfBuffers)
 {
 	mWidth = pWidth;
 	mHeight = pHeight;
@@ -22,9 +22,10 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 	mDepth = pDepth;
 	mNumberOfBuffer = pNumberOfBuffers;
 
-	mDefaultColours = std::move(pDefaultColour);
-	
-	const auto device = Dx11Render::instance()->getDevice();
+	mDefaultColours = pDefaultColour;
+
+	Microsoft::WRL::ComPtr<ID3D11Device> device;
+	Dx11Render::instance()->getDevice(device);
 
 	if (pColour)
 	{
@@ -347,11 +348,12 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, int pWi
 	return true;
 }
 
-void Framebuffer::useFramebuffer(bool pClearFramebuffer) const
+void Framebuffer::useFramebuffer(const bool pClearFramebuffer) const
 {
 	Dx11Render::instance()->setViewport(mWidth, mHeight);
-	
-	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
+
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
+	Dx11Render::instance()->getDeviceContext(deviceContext);
 
 	if (pClearFramebuffer)
 	{
@@ -368,7 +370,8 @@ void Framebuffer::useFramebuffer(bool pClearFramebuffer) const
 
 void Framebuffer::useTexture(unsigned int pSlot)
 {
-	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
+	Dx11Render::instance()->getDeviceContext(deviceContext);
 
 	deviceContext->OMSetRenderTargets(0, nullptr, nullptr);
 
@@ -388,7 +391,8 @@ void Framebuffer::useTexture(unsigned int pSlot)
 
 void Framebuffer::releaseTexture(unsigned int pSlot) const
 {
-	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
+	Dx11Render::instance()->getDeviceContext(deviceContext);
 
 	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
 	{
@@ -406,7 +410,8 @@ void Framebuffer::releaseTexture(unsigned int pSlot) const
 
 void Framebuffer::useDomainTexture(unsigned int pSlot)
 {
-	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
+	Dx11Render::instance()->getDeviceContext(deviceContext);
 
 	deviceContext->OMSetRenderTargets(0, nullptr, nullptr);
 
@@ -426,7 +431,8 @@ void Framebuffer::useDomainTexture(unsigned int pSlot)
 
 void Framebuffer::releaseDomainTexture(unsigned int pSlot) const
 {
-	const auto deviceContext = Dx11Render::instance()->getDeviceContext();
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
+	Dx11Render::instance()->getDeviceContext(deviceContext);
 
 	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
 	{

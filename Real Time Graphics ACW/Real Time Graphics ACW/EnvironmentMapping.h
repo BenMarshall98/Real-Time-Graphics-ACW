@@ -8,17 +8,17 @@ class EnvironmentMapping final : public Technique
 	
 public:
 	EnvironmentMapping();
-	~EnvironmentMapping() = default;
+	~EnvironmentMapping();
 
 	EnvironmentMapping(const EnvironmentMapping &) = delete;
 	EnvironmentMapping(EnvironmentMapping &&) = delete;
 	EnvironmentMapping & operator= (const EnvironmentMapping &) = delete;
 	EnvironmentMapping & operator= (EnvironmentMapping &&) = delete;
 
-	void render(const std::shared_ptr<Shape> & pShape, bool pDeffered, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
+	void render(const std::shared_ptr<Shape> & pShape, bool pDeffered, const std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
 	void renderDirectionalShadow(const std::shared_ptr<Shape>& pShape) override;
 	void renderOmniDirectionalShadow(const std::shared_ptr<Shape>& pShape) override;
-	bool renderPostprocessing(std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
-	void renderTransparent(std::shared_ptr<Shape> & pShape, std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
+	bool renderPostprocessing(const std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
+	void renderTransparent(const std::shared_ptr<Shape> & pShape, const std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
 };
 

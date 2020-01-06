@@ -3,17 +3,7 @@
 
 LightingManager * LightingManager::mInstance = nullptr;
 
-void LightingManager::addDirectionalLight(std::shared_ptr<DirectionalLight> & pDirectionalLight)
-{
-	mDirectionalLight = pDirectionalLight;
-}
-
-void LightingManager::addPointLight(std::shared_ptr<PointLight> & pPointLight)
-{
-	mPointLight = pPointLight;
-}
-
-void LightingManager::addSpotLight(std::shared_ptr<SpotLight> & pSpotLight)
+void LightingManager::addSpotLight(const std::shared_ptr<SpotLight> & pSpotLight)
 {
 	if (mSpotLights.size() == 4)
 	{
@@ -23,7 +13,7 @@ void LightingManager::addSpotLight(std::shared_ptr<SpotLight> & pSpotLight)
 	mSpotLights.push_back(pSpotLight);
 }
 
-void LightingManager::removeDirectionalLight(std::shared_ptr<DirectionalLight>& pDirectionalLight)
+void LightingManager::removeDirectionalLight(const std::shared_ptr<DirectionalLight>& pDirectionalLight)
 {
 	if (mDirectionalLight == pDirectionalLight)
 	{
@@ -31,7 +21,7 @@ void LightingManager::removeDirectionalLight(std::shared_ptr<DirectionalLight>& 
 	}
 }
 
-void LightingManager::removePointLight(std::shared_ptr<PointLight>& pPointLight)
+void LightingManager::removePointLight(const std::shared_ptr<PointLight>& pPointLight)
 {
 	if (mPointLight == pPointLight)
 	{
@@ -39,7 +29,7 @@ void LightingManager::removePointLight(std::shared_ptr<PointLight>& pPointLight)
 	}
 }
 
-void LightingManager::removeSpotLight(std::shared_ptr<SpotLight>& pSpotLight)
+void LightingManager::removeSpotLight(const std::shared_ptr<SpotLight>& pSpotLight)
 {
 	const auto it = std::find(mSpotLights.begin(), mSpotLights.end(), pSpotLight);
 

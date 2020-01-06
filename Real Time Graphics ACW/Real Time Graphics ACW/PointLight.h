@@ -18,10 +18,11 @@ class PointLight
 {
 	DirectX::XMFLOAT3 mColor;
 	DirectX::XMFLOAT3 mPosition;
+	std::unique_ptr<Framebuffer> mFramebuffer;
 	float mAttenuationConstant;
 	float mAttenuationLinear;
 	float mAttenuationQuad;
-	std::unique_ptr<Framebuffer> mFramebuffer;
+	
 	
 public:
 	PointLight(DirectX::XMFLOAT3 pColor, DirectX::XMFLOAT3 pPosition, float pAttenuationConstant, float pAttenuationLinear, float pAttenuationQuad);

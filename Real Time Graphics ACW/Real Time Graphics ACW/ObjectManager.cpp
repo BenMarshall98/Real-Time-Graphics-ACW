@@ -16,7 +16,7 @@ void ObjectManager::addShape(const std::shared_ptr<Shape>& pShape)
 	}
 }
 
-void ObjectManager::explode(unsigned pKey)
+void ObjectManager::explode(const unsigned int pKey)
 {
 	const auto eIt = mExplodingShapes.find(pKey);
 

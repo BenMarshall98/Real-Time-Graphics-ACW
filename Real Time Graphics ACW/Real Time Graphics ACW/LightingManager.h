@@ -36,13 +36,21 @@ public:
 	LightingManager & operator= (const LightingManager &) = delete;
 	LightingManager & operator= (LightingManager &&) = delete;
 
-	void addDirectionalLight(std::shared_ptr<DirectionalLight> & pDirectionalLight);
-	void addPointLight(std::shared_ptr<PointLight> & pPointLight);
-	void addSpotLight(std::shared_ptr<SpotLight> & pSpotLight);
+	void addDirectionalLight(const std::shared_ptr<DirectionalLight> & pDirectionalLight)
+	{
+		mDirectionalLight = pDirectionalLight;
+	}
+	
+	void addPointLight(const std::shared_ptr<PointLight> & pPointLight)
+	{
+		mPointLight = pPointLight;
+	}
+	
+	void addSpotLight(const std::shared_ptr<SpotLight> & pSpotLight);
 
-	void removeDirectionalLight(std::shared_ptr<DirectionalLight> & pDirectionalLight);
-	void removePointLight(std::shared_ptr<PointLight> & pPointLight);
-	void removeSpotLight(std::shared_ptr<SpotLight> & pSpotLight);
+	void removeDirectionalLight(const std::shared_ptr<DirectionalLight> & pDirectionalLight);
+	void removePointLight(const std::shared_ptr<PointLight> & pPointLight);
+	void removeSpotLight(const std::shared_ptr<SpotLight> & pSpotLight);
 
 	bool updateDirectionalLightShadow() const;
 	bool updatePointLightShadow() const;

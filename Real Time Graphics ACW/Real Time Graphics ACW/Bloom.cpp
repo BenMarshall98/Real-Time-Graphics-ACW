@@ -2,13 +2,15 @@
 #include "ResourceManager.h"
 
 Bloom::Bloom() :
-	mHorzBloomShader(ResourceManager::instance()->loadShader("HorzBloomVertexShader.hlsl", "HorzBloomFragmentShader.hlsl")),
-	mVertBloomShader(ResourceManager::instance()->loadShader("VertBloomVertexShader.hlsl", "VertBloomFragmentShader.hlsl")),
-	mBloomExtractShader(ResourceManager::instance()->loadShader("BloomExtractVertexShader.hlsl", "BloomExtractFragmentShader.hlsl")),
+	
 	mHorzBloomFramebuffer(std::make_unique<Framebuffer>()),
-	mVertBloomFramebuffer(std::make_unique<Framebuffer>()),
-	mRenderModel(ResourceManager::instance()->loadModel("Plane.obj"))
+	mVertBloomFramebuffer(std::make_unique<Framebuffer>())
 {
+	ResourceManager::instance()->loadShader(mHorzBloomShader, "HorzBloomVertexShader.hlsl", "HorzBloomFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(mVertBloomShader, "VertBloomVertexShader.hlsl", "VertBloomFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(mBloomExtractShader, "BloomExtractVertexShader.hlsl", "BloomExtractFragmentShader.hlsl");
+	ResourceManager::instance()->loadModel(mRenderModel, "Plane.obj");
+	
 	if (!mHorzBloomFramebuffer->loadFramebuffer(true, false, { {0.0f, 0.0f, 0.0f, 0.0f} }))
 	{
 		mHorzBloomFramebuffer.reset();
@@ -18,10 +20,6 @@ Bloom::Bloom() :
 	{
 		mVertBloomFramebuffer.reset();
 	}
-}
-
-Bloom::~Bloom()
-{
 }
 
 //TODO: Source: LearnOpenGL

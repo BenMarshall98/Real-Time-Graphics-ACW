@@ -1,17 +1,32 @@
 #include "PhongShading.h"
 #include "ResourceManager.h"
 
-PhongShading::PhongShading() :
-	Technique(
-		ResourceManager::instance()->loadShader("PhongVertexShader.hlsl", "PhongFragmentShader.hlsl"),
-		ResourceManager::instance()->loadShader("PhongDeferredVertexShader.hlsl", "PhongDeferredFragmentShader.hlsl"),
-		ResourceManager::instance()->loadShader("NormalDirectionalShadowVertexShader.hlsl", "NormalDirectionalShadowFragmentShader.hlsl"),
-		ResourceManager::instance()->loadShader("NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl")
-	)
+PhongShading::PhongShading()
 {
+	std::shared_ptr<Shader> normalShader;
+	std::shared_ptr<Shader> deferredShader;
+	std::shared_ptr<Shader> directionalShader;
+	std::shared_ptr<Shader> omniDirectionalShader;
+
+	getNormalShader(normalShader);
+	getDeferredShader(deferredShader);
+	getDirectionalShader(directionalShader);
+	getOmniDirectionalShader(omniDirectionalShader);
+
+	ResourceManager::instance()->loadShader(normalShader, "PhongVertexShader.hlsl", "PhongFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(deferredShader, "PhongDeferredVertexShader.hlsl", "PhongDeferredFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(directionalShader, "NormalDirectionalShadowVertexShader.hlsl", "NormalDirectionalShadowFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(omniDirectionalShader, "NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl");
+
+	setNormalShader(normalShader);
+	setDeferredShader(deferredShader);
+	setDirectionalShader(directionalShader);
+	setOmniDirectionalShader(omniDirectionalShader);
 }
 
-void PhongShading::render(const std::shared_ptr<Shape>& pShape, bool pDeferred, std::unique_ptr<Framebuffer> &)
+PhongShading::~PhongShading() = default;
+
+void PhongShading::render(const std::shared_ptr<Shape>& pShape, const bool pDeferred, const std::unique_ptr<Framebuffer> &)
 {
 	if (pDeferred)
 	{
@@ -37,12 +52,12 @@ void PhongShading::renderOmniDirectionalShadow(const std::shared_ptr<Shape>& pSh
 	pShape->render();
 }
 
-bool PhongShading::renderPostprocessing(std::unique_ptr<Framebuffer> &)
+bool PhongShading::renderPostprocessing(const std::unique_ptr<Framebuffer> &)
 {
 	return false;
 }
 
-void PhongShading::renderTransparent(std::shared_ptr<Shape> &, std::unique_ptr<Framebuffer> &)
+void PhongShading::renderTransparent(const std::shared_ptr<Shape> &, const std::unique_ptr<Framebuffer> &)
 {
 	//Do Nothing
 }

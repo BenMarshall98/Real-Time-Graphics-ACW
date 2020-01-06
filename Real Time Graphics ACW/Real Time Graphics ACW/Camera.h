@@ -91,9 +91,9 @@ public:
 
 	void update(CameraBuffer & pCameraBuffer);
 
-	DirectX::XMFLOAT3 getViewPosition() const
+	void getViewPosition(DirectX::XMFLOAT3 & pViewPosition) const
 	{
-		return mEyePosition;
+		pViewPosition = mEyePosition;
 	}
 };
 

@@ -9,6 +9,6 @@ class ModelLoader
 	~ModelLoader() = default;
 	
 public:
-	static std::shared_ptr<Model> loadModelFromFile(const std::string & pModelFile);
+	static void loadModelFromFile(const std::string& pModelFile, std::shared_ptr<Model> & pModel);
 };
 

@@ -4,7 +4,9 @@
 
 bool ParticleRender::loadParticles()
 {
-	auto device = Dx11Render::instance()->getDevice();
+	Microsoft::WRL::ComPtr<ID3D11Device> device;
+	Dx11Render::instance()->getDevice(device);
+
 
 	//None changing data for Vertex Buffers;
 	D3D11_BUFFER_DESC bufferDesc;
@@ -122,7 +124,8 @@ bool ParticleRender::loadParticles()
 
 void ParticleRender::render(const std::vector<DirectX::XMFLOAT3>& pParticlePositions, const std::vector<float>& pParticleTimes) const
 {
-	auto deviceContext = Dx11Render::instance()->getDeviceContext();
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
+	Dx11Render::instance()->getDeviceContext(deviceContext);
 
 	D3D11_MAPPED_SUBRESOURCE mappedData;
 

@@ -2,10 +2,8 @@
 
 #include <DirectXMath.h>
 #include <d3d11_1.h>
-#include "Camera.h"
 #include "SceneGraphNode.h"
 #include "Texture.h"
-#include "Framebuffer.h"
 #include "InkRender.h"
 
 class Game
@@ -35,5 +33,6 @@ public:
 	static double mDt;
 
 	void run();
+	void clear();
 };
 

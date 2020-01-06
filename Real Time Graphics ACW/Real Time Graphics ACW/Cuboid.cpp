@@ -5,20 +5,29 @@
 #include <algorithm>
 
 Cuboid::Cuboid(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Material> & pMaterial) :
-	Shape(ResourceManager::instance()->loadModel("cube.obj"), std::move(pTexturePack), std::move(pMaterial))
+	Shape(std::move(pTexturePack), std::move(pMaterial))
 {
+	std::shared_ptr<Model> model;
+	getModel(model);
+	ResourceManager::instance()->loadModel(model, "cube.obj");
+	setModel(model);
 }
 
 Cuboid::Cuboid() :
-	Shape(ResourceManager::instance()->loadModel("cube.obj"), nullptr, nullptr)
+	Shape()
 {
+	std::shared_ptr<Model> model;
+	getModel(model);
+	ResourceManager::instance()->loadModel(model, "cube.obj");
+	setModel(model);
 }
 
 Cuboid::~Cuboid() = default;
 
 void Cuboid::explode()
 {
-	const auto currentMatrix = getCurrentMatrix();
+	auto currentMatrix = DirectX::XMFLOAT4X4();
+	getCurrentMatrix(currentMatrix);
 	const auto matrix = DirectX::XMLoadFloat4x4(&currentMatrix);
 
 	auto center = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
@@ -33,14 +42,13 @@ void Cuboid::explode()
 
 	std::vector<DirectX::XMFLOAT3> positions;
 
-	std::vector<DirectX::XMFLOAT3> directions({
-		DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f),
-		DirectX::XMFLOAT3(0.0f, 0.0f, -1.0f),
-		DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f),
-		DirectX::XMFLOAT3(0.0f, -1.0f, 0.0f),
-		DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f),
-		DirectX::XMFLOAT3(-1.0f, 0.0f, 0.0f)
-		});
+	std::vector<DirectX::XMFLOAT3> directions;
+	directions.emplace_back(0.0f, 0.0f, 1.0f);
+	directions.emplace_back(0.0f, 0.0f, -1.0f);
+	directions.emplace_back(0.0f, 1.0f, 0.0f);
+	directions.emplace_back(0.0f, -1.0f, 0.0f);
+	directions.emplace_back(1.0f, 0.0f, 0.0f);
+	directions.emplace_back(-1.0f, 0.0f, 0.0f);
 
 	for (auto i = 0; i < directions.size(); i++)
 	{
@@ -110,8 +118,10 @@ void Cuboid::explode()
 
 void Cuboid::collideWith(const Particle & pParticle)
 {
-	const auto currentMatrix = getCurrentMatrix();
-	const auto previousMatrix = getPreviousMatrix();
+	auto currentMatrix = DirectX::XMFLOAT4X4();
+	auto previousMatrix = DirectX::XMFLOAT4X4();
+	getCurrentMatrix(currentMatrix);
+	getPreviousMatrix(previousMatrix);
 	const auto matrix = DirectX::XMLoadFloat4x4(&currentMatrix);
 
 	auto center = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
@@ -124,8 +134,10 @@ void Cuboid::collideWith(const Particle & pParticle)
 	const auto yLength = DirectX::XMVectorGetX(DirectX::XMVector3Length(DirectX::XMVectorSubtract(DirectX::XMVector3Transform(yDir, matrix), center)));
 	const auto zLength = DirectX::XMVectorGetX(DirectX::XMVector3Length(DirectX::XMVectorSubtract(DirectX::XMVector3Transform(zDir, matrix), center)));
 
-	const auto currentRotation = getCurrentRotationMatrix();
-	const auto previousRotation = getPreviousRotationMatrix();
+	auto currentRotation = DirectX::XMFLOAT4X4();
+	auto previousRotation = DirectX::XMFLOAT4X4();
+	getCurrentRotationMatrix(currentRotation);
+	getPreviousRotationMatrix(previousRotation);
 
 	const auto quat0 = DirectX::XMQuaternionRotationMatrix(DirectX::XMLoadFloat4x4(&previousRotation));
 	const auto quat1 = DirectX::XMQuaternionRotationMatrix(DirectX::XMLoadFloat4x4(&currentRotation));
@@ -136,10 +148,11 @@ void Cuboid::collideWith(const Particle & pParticle)
 
 	const auto cubePos0 = DirectX::XMVector3Transform(center, preMatrix);
 
-	auto tempPos = pParticle.getPreviousPosition();
+	auto tempPos = DirectX::XMFLOAT3();
+	pParticle.getPreviousPosition(tempPos);
 	const auto partPos0 = DirectX::XMLoadFloat3(&tempPos);
 
-	tempPos = pParticle.getCurrentPosition();
+	pParticle.getCurrentPosition(tempPos);
 	const auto partPos1 = DirectX::XMLoadFloat3(&tempPos);
 
 	auto currentTime = 0.0f;

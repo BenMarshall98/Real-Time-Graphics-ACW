@@ -27,23 +27,23 @@ void AnimationNode::read(std::istream& pIn)
 	mAnimation->read(pIn);
 }
 
-void AnimationNode::update(const DirectX::XMFLOAT4X4 & pMatrix, DirectX::XMFLOAT4X4 & pRotationMatrix)
+void AnimationNode::update(const DirectX::XMFLOAT4X4 & pMatrix, const DirectX::XMFLOAT4X4 & pRotationMatrix)
 {
 	//TODO: update needs to pass in time
-	const auto outMatrix = mAnimation->animate(0.016f);
 
-	setMatrix(outMatrix);
+	auto fullMatrix = DirectX::XMFLOAT4X4();
+	auto rotationMatrix = DirectX::XMFLOAT4X4(1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f);
+	
+	mAnimation->animate(0.016f, fullMatrix, rotationMatrix);
 
-	if (dynamic_cast<QuaternionAnimation *>(mAnimation.get()))
-	{
-		auto matrix = DirectX::XMFLOAT4X4();
+	setMatrix(fullMatrix);
 
-		DirectX::XMStoreFloat4x4(&matrix, DirectX::XMMatrixMultiply(DirectX::XMLoadFloat4x4(&pRotationMatrix), DirectX::XMLoadFloat4x4(&outMatrix)));
+	auto matrix = DirectX::XMFLOAT4X4();
 
-		SceneGraphNode::update(pMatrix, matrix);
-	}
-	else
-	{
-		SceneGraphNode::update(pMatrix, pRotationMatrix);
-	}
+	DirectX::XMStoreFloat4x4(&matrix, DirectX::XMMatrixMultiply(DirectX::XMLoadFloat4x4(&pRotationMatrix), DirectX::XMLoadFloat4x4(&rotationMatrix)));
+
+	SceneGraphNode::update(pMatrix, matrix);
 }

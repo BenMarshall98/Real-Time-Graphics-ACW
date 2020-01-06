@@ -4,7 +4,7 @@
 
 // ReSharper disable CppParameterNamesMismatch
 // ReSharper disable CppParameterMayBeConst
-int WINAPI wWinMain(HINSTANCE pHInstance, HINSTANCE, LPWSTR, int pCmdShow)
+int WINAPI wWinMain(const HINSTANCE pHInstance, HINSTANCE, LPWSTR, const int pCmdShow)
 // ReSharper restore CppParameterMayBeConst
 // ReSharper restore CppParameterNamesMismatch
 {
@@ -12,10 +12,10 @@ int WINAPI wWinMain(HINSTANCE pHInstance, HINSTANCE, LPWSTR, int pCmdShow)
 	window->run();
 	const auto render = Dx11Render::instance();
 	
-	auto game = new Game();
+	const auto game = std::make_unique<Game>();
 	game->run();
 
-	delete game;
+	game->clear();
 	delete render;
 	delete window;
 

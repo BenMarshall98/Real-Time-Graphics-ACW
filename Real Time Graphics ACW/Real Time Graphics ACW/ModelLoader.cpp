@@ -9,7 +9,7 @@
 #include "assimp/Importer.hpp"
 #include "assimp/postprocess.h"
 
-class std::shared_ptr<Model> ModelLoader::loadModelFromFile(const std::string& pModelFile)
+void ModelLoader::loadModelFromFile(const std::string& pModelFile, std::shared_ptr<Model> & pModel)
 {
 	Assimp::Importer importer;
 	const auto scene = importer.ReadFile(pModelFile,
@@ -18,7 +18,7 @@ class std::shared_ptr<Model> ModelLoader::loadModelFromFile(const std::string& p
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		//TODO: Log error
-		return nullptr;
+		return;
 	}
 
 	const auto mesh = scene->mMeshes[0];
@@ -78,12 +78,10 @@ class std::shared_ptr<Model> ModelLoader::loadModelFromFile(const std::string& p
 		}
 	}
 
-	auto model = std::make_shared<Model>();
+	pModel = std::make_shared<Model>();
 
-	if (!model->loadModel(vertex, normals, texCoords, tangent, biTangent, indices))
+	if (!pModel->loadModel(vertex, normals, texCoords, tangent, biTangent, indices))
 	{
-		model.reset();
+		pModel.reset();
 	}
-
-	return model;
 }

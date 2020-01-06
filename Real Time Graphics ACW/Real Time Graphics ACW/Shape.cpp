@@ -1,21 +1,18 @@
 #include "Shape.h"
 #include "DX11Render.h"
 
-Shape::Shape(std::shared_ptr<Model> pModel, std::unique_ptr<TexturePack> pTexturePack,
+Shape::Shape(std::unique_ptr<TexturePack> pTexturePack,
 	std::unique_ptr<Material> pMaterial) :
-	mModel(std::move(pModel)), mTexturePack(std::move(pTexturePack)),
+	mTexturePack(std::move(pTexturePack)),
 	mMaterial(std::move(pMaterial)), mCurrentMatrix(), mPreviousMatrix()
 {
 }
 
-Shape::Shape() : mCurrentMatrix(), mPreviousMatrix()
+Shape::Shape() : mCurrentMatrix(), mPreviousMatrix(), mCurrentRotation(), mPreviousRotation()
 {
 }
 
-Shape::~Shape()
-{
-	int i = 0;
-}
+Shape::~Shape() = default;
 
 
 void Shape::render(const bool pTesselated) const
@@ -45,7 +42,7 @@ void Shape::render(const bool pTesselated) const
 	}
 }
 
-std::istream& operator>>(std::istream& pIn, std::shared_ptr<Shape>& pShape)
+std::istream& operator>>(std::istream& pIn, const std::shared_ptr<Shape>& pShape)
 {
 	char c;
 	std::string s;

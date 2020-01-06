@@ -2,21 +2,32 @@
 #include "ResourceManager.h"
 
 Plane::Plane(std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial) :
-	Shape(ResourceManager::instance()->loadModel("plane.obj"), std::move(pTexturePack), std::move(pMaterial))
+	Shape(std::move(pTexturePack), std::move(pMaterial))
 {
+	std::shared_ptr<Model> model;
+	getModel(model);
+	ResourceManager::instance()->loadModel(model, "plane.obj");
+	setModel(model);
 }
 
 Plane::Plane() :
-	Shape(ResourceManager::instance()->loadModel("plane.obj"), nullptr, nullptr)
+	Shape()
 {
+	std::shared_ptr<Model> model;
+	getModel(model);
+	ResourceManager::instance()->loadModel(model, "plane.obj");
+	setModel(model);
 }
+
+Plane::~Plane() = default;
 
 //TODO: Source: http://www.r-5.org/files/books/computers/algo-list/realtime-3d/Christer_Ericson-Real-Time_Collision_Detection-EN.pdf
 
-void Plane::collideWith(Particle pParticle)
+void Plane::collideWith(const Particle & pParticle)
 {
 	//Assuming that the planes do not move
-	const auto currentMatrix = getCurrentMatrix();
+	auto currentMatrix = DirectX::XMFLOAT4X4();
+	getCurrentMatrix(currentMatrix);
 	const auto matrix = DirectX::XMLoadFloat4x4(&currentMatrix);
 
 	auto planeCenter = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
@@ -25,8 +36,10 @@ void Plane::collideWith(Particle pParticle)
 	planeCenter = DirectX::XMVector3Transform(planeCenter, matrix);
 	planeNormal = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(DirectX::XMVector3Transform(planeNormal, matrix), planeCenter));
 
-	const auto tempStart = pParticle.getPreviousPosition();
-	const auto tempEnd = pParticle.getCurrentPosition();
+	auto tempStart = DirectX::XMFLOAT3();
+	pParticle.getPreviousPosition(tempStart);
+	auto tempEnd = DirectX::XMFLOAT3();
+	pParticle.getCurrentPosition(tempEnd);
 	
 	const auto particleStart = DirectX::XMLoadFloat3(&tempStart);
 	const auto particleEnd = DirectX::XMLoadFloat3(&tempEnd);

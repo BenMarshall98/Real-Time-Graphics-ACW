@@ -6,9 +6,9 @@
 #include "Plane.h"
 #include "RenderManager.h"
 
-ShapeNode::ShapeNode(Shape * pShape, const ObjectType pType) : mShape(pShape)
+ShapeNode::ShapeNode(Shape * const pShape, const ObjectType pType) : mShape(pShape)
 {
-	if (pType == STATIC)
+	if (pType == ObjectType::STATIC)
 	{
 		RenderManager::instance()->addStaticShape(mShape);
 	}
@@ -18,6 +18,8 @@ ShapeNode::ShapeNode(Shape * pShape, const ObjectType pType) : mShape(pShape)
 	}
 	
 }
+
+ShapeNode::~ShapeNode() = default;
 
 void ShapeNode::read(std::istream& pIn)
 {
@@ -54,7 +56,7 @@ void ShapeNode::read(std::istream& pIn)
 	}
 }
 
-void ShapeNode::update(const DirectX::XMFLOAT4X4 & pFullMatrix, DirectX::XMFLOAT4X4 & pRotationMatrix)
+void ShapeNode::update(const DirectX::XMFLOAT4X4 & pFullMatrix, const DirectX::XMFLOAT4X4 & pRotationMatrix)
 {
 	mShape->setMatrix(pFullMatrix, pRotationMatrix);
 }

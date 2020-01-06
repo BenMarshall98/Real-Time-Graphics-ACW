@@ -67,14 +67,14 @@ public:
 		mSwapChain->Present(1, 0);
 	}
 
-	Microsoft::WRL::ComPtr<ID3D11Device> getDevice() const
+	void getDevice(Microsoft::WRL::ComPtr<ID3D11Device> & pDevice) const
 	{
-		return mDevice;
+		pDevice = mDevice;
 	}
 
-	Microsoft::WRL::ComPtr<ID3D11DeviceContext> getDeviceContext() const
+	void getDeviceContext(Microsoft::WRL::ComPtr<ID3D11DeviceContext> & pDeviceContext) const
 	{
-		return mDeviceContext;
+		pDeviceContext = mDeviceContext;
 	}
 
 	void setViewport(const unsigned int pWidth, const unsigned int pHeight)

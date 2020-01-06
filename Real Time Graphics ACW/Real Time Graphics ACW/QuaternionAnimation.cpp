@@ -2,10 +2,12 @@
 #include <string>
 #include <Windows.h>
 
-QuaternionAnimation::QuaternionAnimation(std::vector<QuaternionNode> pNodes, float pEndTime) :
+QuaternionAnimation::QuaternionAnimation(const std::vector<QuaternionNode> & pNodes, const float pEndTime) :
 	Animation(pEndTime), mNodes(pNodes)
 {
 }
+
+QuaternionAnimation::~QuaternionAnimation() = default;
 
 //https://docs.microsoft.com/en-us/previous-versions/windows/desktop/bb281657(v=vs.85)?redirectedfrom=MSDN
 
@@ -56,14 +58,16 @@ void QuaternionAnimation::calculateTangents()
 	}
 }
 
-DirectX::XMFLOAT4X4 QuaternionAnimation::animate(float pDeltaTime)
+void QuaternionAnimation::animate(const float pDeltaTime, DirectX::XMFLOAT4X4 & pFullMatrix, DirectX::XMFLOAT4X4 & pRotationMatrix)
 {
 	if (mNodes.empty())
 	{
-		return { 1, 0, 0, 0,
+		pFullMatrix = DirectX::XMFLOAT4X4(1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		0, 0, 0, 1 };
+		0, 0, 0, 1);
+
+		pRotationMatrix = pFullMatrix;
 	}
 
 	if (mNodes.size() == 1)
@@ -72,13 +76,14 @@ DirectX::XMFLOAT4X4 QuaternionAnimation::animate(float pDeltaTime)
 		DirectX::XMFLOAT4X4 result;
 		XMStoreFloat4x4(&result, DirectX::XMMatrixRotationQuaternion(rotation));
 
-		return result;
+		pFullMatrix = result;
+		pRotationMatrix = result;
 	}
 
 	if (mNodes.size() == 2)
 	{
 		auto currentTime = getCurrentTime();
-		auto endTime = getEndTime();
+		const auto endTime = getEndTime();
 		auto currentNode = getCurrentNode();
 		
 		currentTime += pDeltaTime;
@@ -106,7 +111,8 @@ DirectX::XMFLOAT4X4 QuaternionAnimation::animate(float pDeltaTime)
 			setCurrentTime(currentTime);
 			setCurrentNode(currentNode);
 
-			return result;
+			pFullMatrix = result;
+			pRotationMatrix = result;
 		}
 
 		currentNode = 0;
@@ -124,11 +130,12 @@ DirectX::XMFLOAT4X4 QuaternionAnimation::animate(float pDeltaTime)
 		setCurrentTime(currentTime);
 		setCurrentNode(currentNode);
 		
-		return result;
+		pFullMatrix = result;
+		pRotationMatrix = result;
 	}
 
 	auto currentTime = getCurrentTime();
-	auto endTime = getEndTime();
+	const auto endTime = getEndTime();
 	auto currentNode = getCurrentNode();
 
 	currentTime += pDeltaTime;
@@ -174,7 +181,8 @@ DirectX::XMFLOAT4X4 QuaternionAnimation::animate(float pDeltaTime)
 	setCurrentTime(currentTime);
 	setCurrentNode(currentNode);
 
-	return result;
+	pFullMatrix = result;
+	pRotationMatrix = result;
 }
 
 void QuaternionAnimation::read(std::istream& pIn)
@@ -196,7 +204,7 @@ void QuaternionAnimation::read(std::istream& pIn)
 			float time;
 			pIn >> s >> time;
 
-			DirectX::XMFLOAT3 dir(x, y, z);
+			const DirectX::XMFLOAT3 dir(x, y, z);
 
 			auto direction = DirectX::XMLoadFloat3(&dir);
 

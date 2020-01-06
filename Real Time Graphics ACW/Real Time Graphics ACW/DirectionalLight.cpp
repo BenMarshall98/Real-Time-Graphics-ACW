@@ -34,7 +34,8 @@ void DirectionalLight::use(DirectionalLightBuffer& pLightBuffer) const
 	pLightBuffer.mColor = mColor;
 	pLightBuffer.mDirection = mDirection;
 	pLightBuffer.mIsUsed = true;
-	const auto pos = CameraManager::instance()->getViewPosition();
+	auto pos = DirectX::XMFLOAT3();
+	CameraManager::instance()->getViewPosition(pos);
 	const auto eye = DirectX::XMLoadFloat3(&pos);
 	const auto target = DirectX::XMVectorAdd(eye, DirectX::XMLoadFloat3(&mDirection));
 	const auto up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
@@ -65,12 +66,12 @@ void DirectionalLight::updateShadow()
 	mFramebuffer->useFramebuffer();
 }
 
-void DirectionalLight::useShadow(unsigned int pTextureSlot)
+void DirectionalLight::useShadow(const unsigned int pTextureSlot)
 {
 	mFramebuffer->useTexture(pTextureSlot);
 }
 
-void DirectionalLight::releaseShadow(unsigned int pTextureSlot)
+void DirectionalLight::releaseShadow(const unsigned int pTextureSlot)
 {
 	mFramebuffer->releaseTexture(pTextureSlot);
 }

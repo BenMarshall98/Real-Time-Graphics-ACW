@@ -105,14 +105,14 @@ public:
 
 	void enableBlend()
 	{
-		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-		mDeviceContext->OMSetBlendState(mBlendState.Get(), blendFactor, 0xffffffff);
+		std::vector<float> blendFactor{ 0.0f, 0.0f, 0.0f, 0.0f };
+		mDeviceContext->OMSetBlendState(mBlendState.Get(), blendFactor.data(), 0xffffffff);
 	}
-
+	 
 	void disableBlend()
 	{
-		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-		mDeviceContext->OMSetBlendState(mNoBlendState.Get(), blendFactor, 0xffffffff);
+		std::vector<float> blendFactor{ 0.0f, 0.0f, 0.0f, 0.0f };
+		mDeviceContext->OMSetBlendState(mNoBlendState.Get(), blendFactor.data(), 0xffffffff);
 	}
 
 	void addFramebuffer(Framebuffer * const pFramebuffer)

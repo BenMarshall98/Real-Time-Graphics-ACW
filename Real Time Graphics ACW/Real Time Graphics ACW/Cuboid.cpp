@@ -13,8 +13,7 @@ Cuboid::Cuboid(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Mate
 	setModel(model);
 }
 
-Cuboid::Cuboid() :
-	Shape()
+Cuboid::Cuboid()
 {
 	std::shared_ptr<Model> model;
 	getModel(model);

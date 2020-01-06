@@ -110,22 +110,22 @@ void Model::render(const bool pTessellated)
 
 	if (this != lastModel)
 	{
-		ID3D11Buffer * bufferArray[numberBuffers] =
+		std::vector<ID3D11Buffer *> bufferArray
 		{
 			mPositionBuffer.Get(), mNormalBuffer.Get(), mTexCoordBuffer.Get(), mTangentBuffer.Get(), mBiTangentBuffer.Get()
 		};
 
-		UINT strideArray[numberBuffers] =
+		std::vector<UINT> strideArray
 		{
 			sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT2), sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT3)
 		};
 
-		UINT offsetArray[numberBuffers] =
+		std::vector<UINT> offsetArray
 		{
 			0, 0, 0, 0, 0
 		};
 
-		deviceContext->IASetVertexBuffers(0, numberBuffers, bufferArray, strideArray, offsetArray);
+		deviceContext->IASetVertexBuffers(0, numberBuffers, bufferArray.data(), strideArray.data(), offsetArray.data());
 		deviceContext->IASetIndexBuffer(mIndicesBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 		lastModel = this;
 	}

@@ -20,7 +20,7 @@ bool ParticleRender::loadParticles()
 	ZeroMemory(&initData, sizeof initData);
 
 	//Create Position Buffer
-	DirectX::XMFLOAT2 vertices[] =
+	std::vector<DirectX::XMFLOAT2> vertices
 	{
 		DirectX::XMFLOAT2(-1.0f, -1.0f),
 		DirectX::XMFLOAT2(1.0f, -1.0f),
@@ -28,10 +28,10 @@ bool ParticleRender::loadParticles()
 		DirectX::XMFLOAT2(-1.0f, 1.0f)
 	};
 
-	const auto vertexSize = ARRAYSIZE(vertices);
+	const auto vertexSize = vertices.size();
 	
 	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT2) * vertexSize;
-	initData.pSysMem = vertices;
+	initData.pSysMem = vertices.data();
 
 	auto result = device->CreateBuffer(&bufferDesc, &initData, &mPositionBuffer);
 
@@ -42,7 +42,7 @@ bool ParticleRender::loadParticles()
 	}
 
 	//Create TexCoord Buffer
-	DirectX::XMFLOAT2 texCoords[] =
+	std::vector<DirectX::XMFLOAT2> texCoords =
 	{
 		DirectX::XMFLOAT2(0.0f, 0.0f),
 		DirectX::XMFLOAT2(1.0f, 0.0f),
@@ -50,10 +50,10 @@ bool ParticleRender::loadParticles()
 		DirectX::XMFLOAT2(0.0f, 1.0f)
 	};
 
-	const auto texSize = ARRAYSIZE(texCoords);
+	const auto texSize = texCoords.size();
 
 	bufferDesc.ByteWidth = sizeof(DirectX::XMFLOAT2) * texSize;
-	initData.pSysMem = texCoords;
+	initData.pSysMem = texCoords.data();
 
 	result = device->CreateBuffer(&bufferDesc, &initData, &mTexCoordBuffer);
 
@@ -92,13 +92,13 @@ bool ParticleRender::loadParticles()
 	}
 
 	//Create Index Buffer
-	WORD index [] =
+	std::vector<WORD> index =
 	{
 		2, 1, 0,
 		0, 3, 2
 	};
 
-	mIndicesSize = ARRAYSIZE(index);
+	mIndicesSize = index.size();
 	
 	ZeroMemory(&bufferDesc, sizeof bufferDesc);
 
@@ -109,7 +109,7 @@ bool ParticleRender::loadParticles()
 	bufferDesc.ByteWidth = sizeof(WORD) * mIndicesSize;
 	
 	ZeroMemory(&initData, sizeof initData);
-	initData.pSysMem = index;
+	initData.pSysMem = index.data();
 
 	result = device->CreateBuffer(&bufferDesc, &initData, &mIndicesBuffer);
 
@@ -149,9 +149,14 @@ void ParticleRender::render(const std::vector<DirectX::XMFLOAT3>& pParticlePosit
 
 	//Get current model data
 
-	ID3D11Buffer * bufferArray[5];
-	UINT strideArray[5];
-	UINT offsetArray[5];
+	//TODO: Check data output
+
+	std::vector<ID3D11Buffer *> bufferArray;
+	bufferArray.resize(5);
+	std::vector<UINT> strideArray;
+	strideArray.resize(5);
+	std::vector<UINT> offsetArray;
+	offsetArray.resize(5);
 
 	ID3D11Buffer * indexBuffer;
 	DXGI_FORMAT format;
@@ -159,7 +164,7 @@ void ParticleRender::render(const std::vector<DirectX::XMFLOAT3>& pParticlePosit
 
 	D3D11_PRIMITIVE_TOPOLOGY topology;
 
-	deviceContext->IAGetVertexBuffers(0, 5, bufferArray, strideArray, offsetArray);
+	deviceContext->IAGetVertexBuffers(0, 5, bufferArray.data(), strideArray.data(), offsetArray.data());
 	deviceContext->IAGetIndexBuffer(&indexBuffer, &format, &offset);
 	deviceContext->IAGetPrimitiveTopology(&topology);
 
@@ -167,22 +172,22 @@ void ParticleRender::render(const std::vector<DirectX::XMFLOAT3>& pParticlePosit
 
 	const auto numberBuffers = 4u;
 	
-	ID3D11Buffer * particleBufferArray[numberBuffers] =
+	std::vector<ID3D11Buffer *> particleBufferArray
 	{
 		mPositionBuffer.Get(), mTexCoordBuffer.Get(), mParticlePositionBuffer.Get(), mParticleTimeBuffer.Get()
 	};
 
-	UINT particleStrideArray[numberBuffers] =
+	std::vector<UINT> particleStrideArray
 	{
 		sizeof(DirectX::XMFLOAT2), sizeof(DirectX::XMFLOAT2), sizeof(DirectX::XMFLOAT3), sizeof(float)
 	};
 
-	UINT particleOffsetArray[numberBuffers] =
+	std::vector<UINT> particleOffsetArray
 	{
 		0, 0, 0, 0
 	};
 	
-	deviceContext->IASetVertexBuffers(0, numberBuffers, particleBufferArray, particleStrideArray, particleOffsetArray);
+	deviceContext->IASetVertexBuffers(0, numberBuffers, particleBufferArray.data(), particleStrideArray.data(), particleOffsetArray.data());
 	deviceContext->IASetIndexBuffer(mIndicesBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -190,7 +195,7 @@ void ParticleRender::render(const std::vector<DirectX::XMFLOAT3>& pParticlePosit
 
 	//Set previous model data
 
-	deviceContext->IASetVertexBuffers(0, 5, bufferArray, strideArray, offsetArray);
+	deviceContext->IASetVertexBuffers(0, 5, bufferArray.data(), strideArray.data(), offsetArray.data());
 	deviceContext->IASetIndexBuffer(indexBuffer, format, offset);
 	deviceContext->IASetPrimitiveTopology(topology);
 }

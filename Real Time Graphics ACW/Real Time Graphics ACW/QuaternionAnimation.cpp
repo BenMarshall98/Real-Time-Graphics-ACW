@@ -21,7 +21,7 @@ void QuaternionAnimation::calculateTangents()
 
 	for (auto i = 0u; i < mNodes.size(); i++)
 	{
-		DirectX::XMFLOAT4 quaternions[4];
+		std::vector<DirectX::XMFLOAT4> quaternions;
 
 		int node = i - 1;
 
@@ -37,7 +37,7 @@ void QuaternionAnimation::calculateTangents()
 				node = mNodes.size() - 1;
 			}
 
-			quaternions[j] = mNodes[node].mQuaternion0;
+			quaternions.push_back(mNodes[node].mQuaternion0);
 			node++;
 		}
 

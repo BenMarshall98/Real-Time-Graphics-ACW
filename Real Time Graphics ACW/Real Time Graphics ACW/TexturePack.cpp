@@ -14,7 +14,7 @@ void TexturePack::use() const
 	mHeightTexture->useDomain(0);
 }
 
-std::istream & operator>>(std::istream & pIn, std::unique_ptr<TexturePack> & pTexturePack)
+std::istream & operator>>(std::istream & pIn, const std::unique_ptr<TexturePack> & pTexturePack)
 {
 	//TODO: Implement
 	return pIn;

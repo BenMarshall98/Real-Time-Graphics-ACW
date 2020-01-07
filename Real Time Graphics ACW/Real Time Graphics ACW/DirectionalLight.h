@@ -39,9 +39,9 @@ public:
 	
 	void use(DirectionalLightBuffer & pLightBuffer) const;
 	void update(const DirectX::XMFLOAT4X4 & pMatrix);
-	void updateShadow();
-	void useShadow(unsigned int pTextureSlot);
-	void releaseShadow(unsigned int pTextureSlot);
+	void updateShadow() const;
+	void useShadow(unsigned int pTextureSlot) const;
+	void releaseShadow(unsigned int pTextureSlot) const;
 };
 
 std::istream& operator>>(std::istream & pIn, DirectionalLight & pLight);

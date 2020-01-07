@@ -19,6 +19,9 @@ cbuffer GlobalBuffer : register(b10)
     float InkHeight;
 }
 
+Texture2D heightTexture : register(t0);
+SamplerState heightSampler : register(s0);
+
 struct PatchTess
 {
     float EdgeTess[3] : SV_TessFactor;
@@ -30,23 +33,32 @@ struct HS_OUTPUT
     float3 Pos : POSITION0;
     float3 Normal : NORMAL0;
     float2 TexCoord : TEXCOORD0;
+    float3 Tangent : TANGENT0;
+    float3 BiTangent : BITANGENT0;
 };
 
 struct DS_OUTPUT
 {
     float4 Pos : SV_POSITION;
+    float3 FragmentPos : POSITION0;
+    float3 ViewPosition : POSITION1;
+    float2 TexCoord : TEXCOORD0;
+    float3x3 TBN : POSITION2;
 };
-
-float SinWave(float pPos);
 
 [domain("tri")]
 DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatch<HS_OUTPUT, 3> tri)
 {
     DS_OUTPUT output = (DS_OUTPUT) 0;
     
-    float2 texCoord = uvw[0] * tri[0].TexCoord;
-    texCoord += uvw[1] * tri[1].TexCoord;
-    texCoord += uvw[2] * tri[2].TexCoord;
+    output.TexCoord = uvw[0] * tri[0].TexCoord;
+    output.TexCoord += uvw[1] * tri[1].TexCoord;
+    output.TexCoord += uvw[2] * tri[2].TexCoord;
+    
+    output.TexCoord.x += Time * 0.05f;
+    output.TexCoord.y += Time * 0.05f;
+    
+    float height = heightTexture.SampleLevel(heightSampler, output.TexCoord, 0).x * 0.03f;
     
     //Position
     float3 pos = uvw[0] * tri[0].Pos;
@@ -58,20 +70,32 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     normal += uvw[1] * tri[1].Normal;
     normal += uvw[2] * tri[2].Normal;
     
-    normal = normalize(normal);
+    pos += normalize(normal) * height;
     
-    //TODO: Wave function
-    float3 heightPos = pos + (normal * SinWave(texCoord.x) * SinWave(texCoord.y) * 0.025f);
-    //heightPos = pos + (normal * 0.1f);
+    //FragmentPosition
+    output.Pos = mul(float4(pos, 1.0f), World);
     
-    output.Pos = mul(float4(heightPos, 1.0f), World);
+    output.FragmentPos = output.Pos.xyz;
+    
     output.Pos = mul(output.Pos, View);
     output.Pos = mul(output.Pos, Projection);
     
+    //Tangent
+    float3 tangent = uvw[0] * tri[0].Tangent;
+    tangent += uvw[1] * tri[1].Tangent;
+    tangent += uvw[2] * tri[2].Tangent;
+    
+    //BiTangent
+    float3 biTangent = uvw[0] * tri[0].BiTangent;
+    biTangent += uvw[1] * tri[1].BiTangent;
+    biTangent += uvw[2] * tri[2].BiTangent;
+    
+    output.TBN = float3x3(normalize(mul(World, float4(tangent, 1.0f)).xyz),
+                        normalize(mul(World, float4(biTangent, 1.0f)).xyz),
+                        normalize(mul(World, float4(normal, 1.0f)).xyz));
+    
+    //ViewPosition
+    output.ViewPosition = ViewPosition;
+    
     return output;
-}
-
-float SinWave(float pPos)
-{
-    return sin((pPos * 50.0f) + Time);
 }

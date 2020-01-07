@@ -2,19 +2,20 @@
 #include <directxmath.h>
 #include <iostream>
 #include "Framebuffer.h"
+#include <array>
 
 struct SpotLightBuffer
 {
-	DirectX::XMFLOAT4 mColor[4];
-	DirectX::XMFLOAT4 mPosition[4];
-	DirectX::XMFLOAT4 mDirection[4];
-	float mInnerAngle[4];
-	float mOuterAngle[4];
-	float mAttenuationConstant[4];
-	float mAttenuationLinear[4];
-	float mAttenuationQuad[4];
-	int mIsUsed[4];
-	float mFarPlane[4];
+	std::array<DirectX::XMFLOAT4, 4> mColor;
+	std::array<DirectX::XMFLOAT4, 4> mPosition;
+	std::array<DirectX::XMFLOAT4, 4> mDirection;
+	std::array<float, 4> mInnerAngle;
+	std::array<float, 4> mOuterAngle;
+	std::array<float, 4> mAttenuationConstant;
+	std::array<float, 4> mAttenuationLinear;
+	std::array<float, 4> mAttenuationQuad;
+	std::array<int, 4> mIsUsed;
+	std::array<float, 4> mFarPlane;
 };
 
 class SpotLight
@@ -40,17 +41,17 @@ public:
 	SpotLight & operator= (const SpotLight &) = delete;
 	SpotLight & operator= (SpotLight &&) = delete;
 
-	void setColor(const DirectX::XMFLOAT3 pColor)
+	void setColor(const DirectX::XMFLOAT3 & pColor)
 	{
 		mColor = pColor;
 	}
 
-	void setPosition(const DirectX::XMFLOAT3 pPosition)
+	void setPosition(const DirectX::XMFLOAT3 & pPosition)
 	{
 		mPosition = pPosition;
 	}
 
-	void setDirection(const DirectX::XMFLOAT3 pDirection)
+	void setDirection(const DirectX::XMFLOAT3 & pDirection)
 	{
 		mDirection = pDirection;
 	}
@@ -70,9 +71,9 @@ public:
 
 	void use(SpotLightBuffer & pLightBuffer, unsigned int pIndex) const;
 	void update(const DirectX::XMFLOAT4X4 & pMatrix);
-	void updateShadow();
-	void useShadow(unsigned int pTextureSlot);
-	void releaseShadow(unsigned int pTextureSlot);
+	void updateShadow() const;
+	void useShadow(unsigned int pTextureSlot) const;
+	void releaseShadow(unsigned int pTextureSlot) const;
 };
 
 std::istream& operator>>(std::istream & pIn, SpotLight & pLight);

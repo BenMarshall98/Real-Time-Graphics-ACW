@@ -1,7 +1,7 @@
 #include "DirectionalLightNode.h"
 #include "LightingManager.h"
 
-DirectionalLightNode::DirectionalLightNode(DirectionalLight * const pDirectionalLight) :
+DirectionalLightNode::DirectionalLightNode(const std::shared_ptr<DirectionalLight> & pDirectionalLight) :
 	mDirectionalLight(pDirectionalLight)
 {
 	LightingManager::instance()->addDirectionalLight(mDirectionalLight);

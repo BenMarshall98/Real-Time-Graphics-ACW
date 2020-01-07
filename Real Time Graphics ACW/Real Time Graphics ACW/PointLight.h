@@ -25,7 +25,7 @@ class PointLight
 	
 	
 public:
-	PointLight(DirectX::XMFLOAT3 pColor, DirectX::XMFLOAT3 pPosition, float pAttenuationConstant, float pAttenuationLinear, float pAttenuationQuad);
+	PointLight(const DirectX::XMFLOAT3 & pColor, const DirectX::XMFLOAT3 & pPosition, float pAttenuationConstant, float pAttenuationLinear, float pAttenuationQuad);
 	PointLight();
 	~PointLight() = default;
 
@@ -34,12 +34,12 @@ public:
 	PointLight & operator= (const PointLight &) = delete;
 	PointLight & operator= (PointLight &&) = delete;
 
-	void setColor(const DirectX::XMFLOAT3 pColor)
+	void setColor(const DirectX::XMFLOAT3 & pColor)
 	{
 		mColor = pColor;
 	}
 
-	void setPosition(const DirectX::XMFLOAT3 pPosition)
+	void setPosition(const DirectX::XMFLOAT3 & pPosition)
 	{
 		mPosition = pPosition;
 	}
@@ -53,9 +53,9 @@ public:
 
 	void use(PointLightBuffer & pLightBuffer) const;
 	void update(const DirectX::XMFLOAT4X4 & pMatrix);
-	void updateShadow();
-	void useShadow(unsigned int pTextureSlot);
-	void releaseShadow(unsigned int pTextureSlot);
+	void updateShadow() const;
+	void useShadow(unsigned int pTextureSlot) const;
+	void releaseShadow(unsigned int pTextureSlot) const;
 };
 
 std::istream& operator>>(std::istream & pIn, PointLight & pLight);

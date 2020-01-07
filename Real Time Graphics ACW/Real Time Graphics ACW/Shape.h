@@ -27,13 +27,13 @@ class Shape
 	
 protected:
 	
-	void getModel(std::shared_ptr<Model> & pModel)
+	void getModel(std::shared_ptr<Model> & pModel) const
 	{
 		pModel = mModel;
 	}
 	
 public:
-	Shape(std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial);
+	Shape(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Material> & pMaterial);
 	Shape();
 	virtual ~Shape();
 
@@ -47,12 +47,12 @@ public:
 		mModel = pModel;
 	}
 
-	void setTexturePack(std::unique_ptr<TexturePack> pTexturePack)
+	void setTexturePack(std::unique_ptr<TexturePack> & pTexturePack)
 	{
 		mTexturePack = std::move(pTexturePack);
 	}
 
-	void setMaterial(std::unique_ptr<Material> pMaterial)
+	void setMaterial(std::unique_ptr<Material> & pMaterial)
 	{
 		mMaterial = std::move(pMaterial);
 	}
@@ -68,22 +68,22 @@ public:
 
 	void render(bool pTesselated = false) const;
 
-	void getCurrentMatrix(DirectX::XMFLOAT4X4 & pCurrentMatrix)
+	void getCurrentMatrix(DirectX::XMFLOAT4X4 & pCurrentMatrix) const
 	{
 		pCurrentMatrix = mCurrentMatrix;
 	}
 
-	void getPreviousMatrix(DirectX::XMFLOAT4X4 & pPreviousMatrix)
+	void getPreviousMatrix(DirectX::XMFLOAT4X4 & pPreviousMatrix) const
 	{
 		pPreviousMatrix = mPreviousMatrix;
 	}
 
-	void getCurrentRotationMatrix(DirectX::XMFLOAT4X4 & pCurrentRotation)
+	void getCurrentRotationMatrix(DirectX::XMFLOAT4X4 & pCurrentRotation) const
 	{
 		pCurrentRotation = mCurrentRotation;
 	}
 
-	void getPreviousRotationMatrix(DirectX::XMFLOAT4X4 & pPreviousRotation)
+	void getPreviousRotationMatrix(DirectX::XMFLOAT4X4 & pPreviousRotation) const
 	{
 		pPreviousRotation = mPreviousRotation;
 	}

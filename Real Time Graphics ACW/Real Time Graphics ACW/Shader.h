@@ -3,11 +3,12 @@
 #include <string>
 #include <d3d11_1.h>
 #include <WRL/client.h>
+#include <vector>
 
 class Shader
 {
-	static const D3D11_INPUT_ELEMENT_DESC layout[];
-	static const D3D11_INPUT_ELEMENT_DESC particle_layout[];
+	static const std::vector<D3D11_INPUT_ELEMENT_DESC> layout;
+	static const std::vector<D3D11_INPUT_ELEMENT_DESC> particle_layout;
 	
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> mVertexShader = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> mPixelShader = nullptr;
@@ -35,6 +36,6 @@ public:
 	bool loadShader(const std::string & pComputeFile);
 	bool loadParticleShader(const std::string & pVertexFile, const std::string & pFragmentFile);
 
-	void useShader();
+	void useShader() const;
 };
 

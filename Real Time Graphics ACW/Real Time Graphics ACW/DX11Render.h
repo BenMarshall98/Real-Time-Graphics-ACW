@@ -105,13 +105,23 @@ public:
 
 	void enableBlend()
 	{
-		std::vector<float> blendFactor{ 0.0f, 0.0f, 0.0f, 0.0f };
+		std::vector<float> blendFactor;
+		blendFactor.emplace_back(0.0f);
+		blendFactor.emplace_back(0.0f);
+		blendFactor.emplace_back(0.0f);
+		blendFactor.emplace_back(0.0f);
+		
 		mDeviceContext->OMSetBlendState(mBlendState.Get(), blendFactor.data(), 0xffffffff);
 	}
 	 
 	void disableBlend()
 	{
-		std::vector<float> blendFactor{ 0.0f, 0.0f, 0.0f, 0.0f };
+		std::vector<float> blendFactor;
+		blendFactor.emplace_back(0.0f);
+		blendFactor.emplace_back(0.0f);
+		blendFactor.emplace_back(0.0f);
+		blendFactor.emplace_back(0.0f);
+		
 		mDeviceContext->OMSetBlendState(mNoBlendState.Get(), blendFactor.data(), 0xffffffff);
 	}
 

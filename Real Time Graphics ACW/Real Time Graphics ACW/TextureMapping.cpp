@@ -26,7 +26,7 @@ TextureMapping::TextureMapping()
 
 TextureMapping::~TextureMapping() = default;
 
-void TextureMapping::render(const std::shared_ptr<Shape>& pShape, bool pDeferred, const std::unique_ptr<Framebuffer> &)
+void TextureMapping::render(const std::shared_ptr<Shape>& pShape, const bool pDeferred, const std::unique_ptr<Framebuffer> &)
 {
 	if (pDeferred)
 	{

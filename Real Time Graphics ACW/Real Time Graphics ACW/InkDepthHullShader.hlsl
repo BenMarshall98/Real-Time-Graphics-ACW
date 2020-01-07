@@ -11,6 +11,8 @@ struct VS_OUTPUT
     float3 Pos : POSITION0;
     float3 Normal : NORMAL0;
     float2 TexCoord : TEXCOORD0;
+    float3 Tangent : TANGENT0;
+    float3 BiTangent : BITANGENT0;
 };
 
 //TODO: Look at the distance from the camera
@@ -18,10 +20,10 @@ struct VS_OUTPUT
 PatchTess ConstantHS(InputPatch<VS_OUTPUT, 3> inPatch, uint patchID : SV_PrimitiveID)
 {
     PatchTess outPatch;
-    outPatch.EdgeTess[0] = 10;
-    outPatch.EdgeTess[1] = 10;
-    outPatch.EdgeTess[2] = 10;
-    outPatch.InsideTess = 10;
+    outPatch.EdgeTess[0] = 64;
+    outPatch.EdgeTess[1] = 64;
+    outPatch.EdgeTess[2] = 64;
+    outPatch.InsideTess = 64;
     
     return outPatch;
 }
@@ -31,6 +33,8 @@ struct HS_OUTPUT
     float3 Pos : POSITION0;
     float3 Normal : NORMAL0;
     float2 TexCoord : TEXCOORD0;
+    float3 Tangent : TANGENT0;
+    float3 BiTangent : BITANGENT0;
 };
 
 [domain("tri")]
@@ -47,6 +51,8 @@ HS_OUTPUT main(InputPatch<VS_OUTPUT, 3> patch, uint i : SV_OutputControlPointID,
     output.Pos = patch[i].Pos;
     output.Normal = patch[i].Normal;
     output.TexCoord = patch[i].TexCoord;
+    output.Tangent = patch[i].Tangent;
+    output.BiTangent = patch[i].BiTangent;
     
     return output;
 }

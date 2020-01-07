@@ -8,7 +8,7 @@ class PointLightNode final : public SceneGraphNode
 	std::shared_ptr<PointLight> mPointLight;
 	
 public:
-	explicit PointLightNode(PointLight * pPointLight);
+	explicit PointLightNode(const std::shared_ptr<PointLight> & pPointLight);
 	PointLightNode();
 	~PointLightNode();
 

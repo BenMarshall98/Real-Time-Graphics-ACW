@@ -5,7 +5,7 @@
 class Plane final : public Shape
 {
 public:
-	Plane(std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial);
+	Plane(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Material> & pMaterial);
 	Plane();
 	~Plane();
 

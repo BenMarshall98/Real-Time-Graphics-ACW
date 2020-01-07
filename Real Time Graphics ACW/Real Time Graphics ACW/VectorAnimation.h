@@ -15,13 +15,13 @@ class VectorAnimation final : public Animation
 {
 	std::vector<VectorNode> mNodes;
 
-	void addNode(const VectorNode pNode)
+	void addNode(const VectorNode & pNode)
 	{
 		mNodes.push_back(pNode);
 	}
 	
 public:
-	VectorAnimation(std::vector<VectorNode> pNodes, float pEndTime);
+	VectorAnimation(std::vector<VectorNode> & pNodes, float pEndTime);
 	VectorAnimation() = default;
 	~VectorAnimation();
 

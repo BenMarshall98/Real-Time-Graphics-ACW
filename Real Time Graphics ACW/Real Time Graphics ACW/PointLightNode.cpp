@@ -1,7 +1,7 @@
 #include "PointLightNode.h"
 #include "LightingManager.h"
 
-PointLightNode::PointLightNode(PointLight * const pPointLight) : mPointLight(pPointLight)
+PointLightNode::PointLightNode(const std::shared_ptr<PointLight> & pPointLight) : mPointLight(pPointLight)
 {
 	LightingManager::instance()->addPointLight(mPointLight);
 }

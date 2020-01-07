@@ -63,7 +63,7 @@ void SpotLight::update(const DirectX::XMFLOAT4X4& pMatrix)
 	XMStoreFloat3(&mDirection, direction);
 }
 
-void SpotLight::updateShadow()
+void SpotLight::updateShadow() const
 {
 	ShadowMatrixBuffer mb;
 
@@ -87,12 +87,12 @@ void SpotLight::updateShadow()
 	mFramebuffer->useFramebuffer();
 }
 
-void SpotLight::useShadow(unsigned pTextureSlot)
+void SpotLight::useShadow(const unsigned int pTextureSlot) const
 {
 	mFramebuffer->useTexture(pTextureSlot);
 }
 
-void SpotLight::releaseShadow(unsigned int pTextureSlot)
+void SpotLight::releaseShadow(const unsigned int pTextureSlot) const
 {
 	mFramebuffer->releaseTexture(pTextureSlot);
 }

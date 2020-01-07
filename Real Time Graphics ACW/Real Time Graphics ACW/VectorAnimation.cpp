@@ -2,7 +2,7 @@
 #include <utility>
 #include <string>
 
-VectorAnimation::VectorAnimation(std::vector<VectorNode> pNodes, const float pEndTime)
+VectorAnimation::VectorAnimation(std::vector<VectorNode> & pNodes, const float pEndTime)
 	: Animation(pEndTime), mNodes(std::move(pNodes))
 {
 }
@@ -79,7 +79,7 @@ void VectorAnimation::animate(const float pDeltaTime, DirectX::XMFLOAT4X4 & pFul
 	if (mNodes.size() == 2)
 	{
 		auto currentTime = getCurrentTime();
-		auto endTime = getEndTime();
+		const auto endTime = getEndTime();
 		auto currentNode = getCurrentNode();
 		
 		currentTime += pDeltaTime;
@@ -129,7 +129,7 @@ void VectorAnimation::animate(const float pDeltaTime, DirectX::XMFLOAT4X4 & pFul
 	}
 
 	auto currentTime = getCurrentTime();
-	auto endTime = getEndTime();
+	const auto endTime = getEndTime();
 	auto currentNode = getCurrentNode();
 
 	currentTime += pDeltaTime;
@@ -221,9 +221,9 @@ void VectorAnimation::read(std::istream& pIn)
 			float time;
 			pIn >> s >> time;
 
-			DirectX::XMFLOAT3 pos(x, y, z);
+			const DirectX::XMFLOAT3 pos(x, y, z);
 
-			VectorNode node =
+			const VectorNode node =
 			{
 				pos,
 				DirectX::XMFLOAT3(),

@@ -41,7 +41,7 @@ void CameraManager::useCamera2()
 	mCamera1->panBackward(false);
 }
 
-void CameraManager::update()
+void CameraManager::update() const
 {
 	CameraBuffer cb;
 	DirectX::XMStoreFloat4x4(&cb.mPerspective, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&mPerspective)));

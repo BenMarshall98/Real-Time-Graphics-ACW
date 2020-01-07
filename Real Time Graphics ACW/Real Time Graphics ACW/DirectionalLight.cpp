@@ -4,10 +4,8 @@
 #include "CameraManager.h"
 
 DirectionalLight::DirectionalLight(const DirectX::XMFLOAT4 & pColor, const DirectX::XMFLOAT3 & pDirection) :
-	mColor(pColor), mDirection(pDirection)
+	mColor(pColor), mDirection(pDirection), mFramebuffer(std::make_unique<Framebuffer>())
 {
-	mFramebuffer = std::make_unique<Framebuffer>();
-
 	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }))
@@ -16,9 +14,8 @@ DirectionalLight::DirectionalLight(const DirectX::XMFLOAT4 & pColor, const Direc
 	}
 }
 
-DirectionalLight::DirectionalLight() : mColor(), mDirection()
+DirectionalLight::DirectionalLight() : mColor(), mDirection(), mFramebuffer(std::make_unique<Framebuffer>())
 {
-	mFramebuffer = std::make_unique<Framebuffer>();
 
 	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
@@ -61,17 +58,17 @@ void DirectionalLight::update(const DirectX::XMFLOAT4X4& pMatrix)
 	XMStoreFloat3(&mDirection, direction);
 }
 
-void DirectionalLight::updateShadow()
+void DirectionalLight::updateShadow() const
 {
 	mFramebuffer->useFramebuffer();
 }
 
-void DirectionalLight::useShadow(const unsigned int pTextureSlot)
+void DirectionalLight::useShadow(const unsigned int pTextureSlot) const
 {
 	mFramebuffer->useTexture(pTextureSlot);
 }
 
-void DirectionalLight::releaseShadow(const unsigned int pTextureSlot)
+void DirectionalLight::releaseShadow(const unsigned int pTextureSlot) const
 {
 	mFramebuffer->releaseTexture(pTextureSlot);
 }

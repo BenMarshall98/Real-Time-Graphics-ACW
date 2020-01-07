@@ -172,9 +172,9 @@ public:
 		}
 	}
 
-	void update();
+	void update() const;
 
-	void getViewPosition(DirectX::XMFLOAT3 & pViewPosition)
+	void getViewPosition(DirectX::XMFLOAT3 & pViewPosition) const
 	{
 		if (mCurrentCamera == 1)
 		{

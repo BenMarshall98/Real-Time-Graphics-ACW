@@ -33,6 +33,6 @@ public:
 	static double mDt;
 
 	void run();
-	void clear();
+	static void clear();
 };
 

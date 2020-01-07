@@ -10,6 +10,8 @@ InkRender::InkRender()
 {
 	ResourceManager::instance()->loadShader(mDepthShader, "InkDepthVertexShader.hlsl", "InkDepthFragmentShader.hlsl", "InkDepthHullShader.hlsl", "InkDepthDomainShader.hlsl");
 	ResourceManager::instance()->loadModel(mModel, "plane.obj");
+	ResourceManager::instance()->loadTexture(mDisp, "water_height.dds");
+	ResourceManager::instance()->loadTexture(mNorm, "water_normal.dds");
 }
 
 void InkRender::RenderInk()
@@ -44,11 +46,14 @@ void InkRender::RenderInk()
 
 	Dx11Render::instance()->useModelBuffer(mb);
 
-	//Dx11Render::instance()->enableBlend();
+	Dx11Render::instance()->enableBlend();
 	
 	mDepthShader->useShader();
 
+	
+	mNorm->useFragment(8);
+	mDisp->useDomain(0);
 	mModel->render(true);
 
-	//Dx11Render::instance()->disableBlend();
+	Dx11Render::instance()->disableBlend();
 }

@@ -6,7 +6,7 @@
 #include "Plane.h"
 #include "RenderManager.h"
 
-ShapeNode::ShapeNode(Shape * const pShape, const ObjectType pType) : mShape(pShape)
+ShapeNode::ShapeNode(const std::shared_ptr<Shape> & pShape, const ObjectType pType) : mShape(pShape)
 {
 	if (pType == ObjectType::STATIC)
 	{

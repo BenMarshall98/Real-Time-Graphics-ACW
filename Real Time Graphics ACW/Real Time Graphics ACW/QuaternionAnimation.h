@@ -16,7 +16,7 @@ class QuaternionAnimation final : public Animation
 {
 	std::vector<QuaternionNode> mNodes;
 
-	void addNode(const QuaternionNode pNode)
+	void addNode(const QuaternionNode & pNode)
 	{
 		mNodes.push_back(pNode);
 	}

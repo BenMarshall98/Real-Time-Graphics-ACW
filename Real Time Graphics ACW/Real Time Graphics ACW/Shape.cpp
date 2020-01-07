@@ -1,8 +1,8 @@
 #include "Shape.h"
 #include "DX11Render.h"
 
-Shape::Shape(std::unique_ptr<TexturePack> pTexturePack,
-	std::unique_ptr<Material> pMaterial) :
+Shape::Shape(std::unique_ptr<TexturePack> & pTexturePack,
+	std::unique_ptr<Material> & pMaterial) :
 	mTexturePack(std::move(pTexturePack)),
 	mMaterial(std::move(pMaterial)), mCurrentMatrix(), mPreviousMatrix()
 {
@@ -56,7 +56,7 @@ std::istream& operator>>(std::istream& pIn, const std::shared_ptr<Shape>& pShape
 		auto material = std::make_unique<Material>();
 		pIn >> material;
 
-		pShape->setMaterial(std::move(material));
+		pShape->setMaterial(material);
 	}
 
 	pIn >> s;
@@ -66,7 +66,7 @@ std::istream& operator>>(std::istream& pIn, const std::shared_ptr<Shape>& pShape
 		auto texture = std::make_unique<TexturePack>();
 		pIn >> texture;
 
-		pShape->setTexturePack(std::move(texture));
+		pShape->setTexturePack(texture);
 	}
 
 	pIn >> c;

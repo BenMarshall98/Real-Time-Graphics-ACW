@@ -110,20 +110,26 @@ void Model::render(const bool pTessellated)
 
 	if (this != lastModel)
 	{
-		std::vector<ID3D11Buffer *> bufferArray
-		{
-			mPositionBuffer.Get(), mNormalBuffer.Get(), mTexCoordBuffer.Get(), mTangentBuffer.Get(), mBiTangentBuffer.Get()
-		};
+		std::vector<ID3D11Buffer *> bufferArray;
+		bufferArray.emplace_back(mPositionBuffer.Get());
+		bufferArray.emplace_back(mNormalBuffer.Get());
+		bufferArray.emplace_back(mTexCoordBuffer.Get());
+		bufferArray.emplace_back(mTangentBuffer.Get());
+		bufferArray.emplace_back(mBiTangentBuffer.Get());
 
-		std::vector<UINT> strideArray
-		{
-			sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT2), sizeof(DirectX::XMFLOAT3), sizeof(DirectX::XMFLOAT3)
-		};
+		std::vector<UINT> strideArray;
+		strideArray.emplace_back(sizeof(DirectX::XMFLOAT3));
+		strideArray.emplace_back(sizeof(DirectX::XMFLOAT3));
+		strideArray.emplace_back(sizeof(DirectX::XMFLOAT2));
+		strideArray.emplace_back(sizeof(DirectX::XMFLOAT3));
+		strideArray.emplace_back(sizeof(DirectX::XMFLOAT3));
 
-		std::vector<UINT> offsetArray
-		{
-			0, 0, 0, 0, 0
-		};
+		std::vector<UINT> offsetArray;
+		offsetArray.emplace_back(0);
+		offsetArray.emplace_back(0);
+		offsetArray.emplace_back(0);
+		offsetArray.emplace_back(0);
+		offsetArray.emplace_back(0);
 
 		deviceContext->IASetVertexBuffers(0, numberBuffers, bufferArray.data(), strideArray.data(), offsetArray.data());
 		deviceContext->IASetIndexBuffer(mIndicesBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);

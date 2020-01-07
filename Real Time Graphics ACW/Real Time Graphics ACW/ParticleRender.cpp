@@ -20,13 +20,11 @@ bool ParticleRender::loadParticles()
 	ZeroMemory(&initData, sizeof initData);
 
 	//Create Position Buffer
-	std::vector<DirectX::XMFLOAT2> vertices
-	{
-		DirectX::XMFLOAT2(-1.0f, -1.0f),
-		DirectX::XMFLOAT2(1.0f, -1.0f),
-		DirectX::XMFLOAT2(1.0f, 1.0f),
-		DirectX::XMFLOAT2(-1.0f, 1.0f)
-	};
+	std::vector<DirectX::XMFLOAT2> vertices;
+	vertices.emplace_back(DirectX::XMFLOAT2(-1.0f, -1.0f));
+	vertices.emplace_back(DirectX::XMFLOAT2(1.0f, -1.0f));
+	vertices.emplace_back(DirectX::XMFLOAT2(1.0f, 1.0f));
+	vertices.emplace_back(DirectX::XMFLOAT2(-1.0f, 1.0f));
 
 	const auto vertexSize = vertices.size();
 	
@@ -42,13 +40,11 @@ bool ParticleRender::loadParticles()
 	}
 
 	//Create TexCoord Buffer
-	std::vector<DirectX::XMFLOAT2> texCoords =
-	{
-		DirectX::XMFLOAT2(0.0f, 0.0f),
-		DirectX::XMFLOAT2(1.0f, 0.0f),
-		DirectX::XMFLOAT2(1.0f, 1.0f),
-		DirectX::XMFLOAT2(0.0f, 1.0f)
-	};
+	std::vector<DirectX::XMFLOAT2> texCoords;
+	texCoords.emplace_back(DirectX::XMFLOAT2(0.0f, 0.0f));
+	texCoords.emplace_back(DirectX::XMFLOAT2(1.0f, 0.0f));
+	texCoords.emplace_back(DirectX::XMFLOAT2(1.0f, 1.0f));
+	texCoords.emplace_back(DirectX::XMFLOAT2(0.0f, 1.0f));
 
 	const auto texSize = texCoords.size();
 
@@ -92,11 +88,13 @@ bool ParticleRender::loadParticles()
 	}
 
 	//Create Index Buffer
-	std::vector<WORD> index =
-	{
-		2, 1, 0,
-		0, 3, 2
-	};
+	std::vector<WORD> index;
+	index.emplace_back(2);
+	index.emplace_back(1);
+	index.emplace_back(0);
+	index.emplace_back(0);
+	index.emplace_back(3);
+	index.emplace_back(2);
 
 	mIndicesSize = index.size();
 	
@@ -172,20 +170,23 @@ void ParticleRender::render(const std::vector<DirectX::XMFLOAT3>& pParticlePosit
 
 	const auto numberBuffers = 4u;
 	
-	std::vector<ID3D11Buffer *> particleBufferArray
-	{
-		mPositionBuffer.Get(), mTexCoordBuffer.Get(), mParticlePositionBuffer.Get(), mParticleTimeBuffer.Get()
-	};
+	std::vector<ID3D11Buffer *> particleBufferArray;
+	particleBufferArray.emplace_back(mPositionBuffer.Get());
+	particleBufferArray.emplace_back(mTexCoordBuffer.Get());
+	particleBufferArray.emplace_back(mParticlePositionBuffer.Get());
+	particleBufferArray.emplace_back(mParticleTimeBuffer.Get());
 
-	std::vector<UINT> particleStrideArray
-	{
-		sizeof(DirectX::XMFLOAT2), sizeof(DirectX::XMFLOAT2), sizeof(DirectX::XMFLOAT3), sizeof(float)
-	};
+	std::vector<UINT> particleStrideArray;
+	particleStrideArray.emplace_back(sizeof(DirectX::XMFLOAT2));
+	particleStrideArray.emplace_back(sizeof(DirectX::XMFLOAT2));
+	particleStrideArray.emplace_back(sizeof(DirectX::XMFLOAT3));
+	particleStrideArray.emplace_back(sizeof(float));
 
-	std::vector<UINT> particleOffsetArray
-	{
-		0, 0, 0, 0
-	};
+	std::vector<UINT> particleOffsetArray;
+	particleOffsetArray.emplace_back(0);
+	particleOffsetArray.emplace_back(0);
+	particleOffsetArray.emplace_back(0);
+	particleOffsetArray.emplace_back(0);
 	
 	deviceContext->IASetVertexBuffers(0, numberBuffers, particleBufferArray.data(), particleStrideArray.data(), particleOffsetArray.data());
 	deviceContext->IASetIndexBuffer(mIndicesBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);

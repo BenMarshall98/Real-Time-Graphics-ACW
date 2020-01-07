@@ -1,7 +1,7 @@
 #include "SpotLightNode.h"
 #include "LightingManager.h"
 
-SpotLightNode::SpotLightNode(SpotLight* pSpotLight) : mSpotLight(pSpotLight)
+SpotLightNode::SpotLightNode(const std::shared_ptr<SpotLight> & pSpotLight) : mSpotLight(pSpotLight)
 {
 	LightingManager::instance()->addSpotLight(mSpotLight);
 }

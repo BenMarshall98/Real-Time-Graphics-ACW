@@ -3,7 +3,7 @@
 #include "Shadow.h"
 #include "DX11Render.h"
 
-PointLight::PointLight(const DirectX::XMFLOAT3 pColor, const DirectX::XMFLOAT3 pPosition,
+PointLight::PointLight(const DirectX::XMFLOAT3 & pColor, const DirectX::XMFLOAT3 & pPosition,
 	const float pAttenuationConstant, const float pAttenuationLinear, const float pAttenuationQuad) :
 	mColor(pColor), mPosition(pPosition), mAttenuationConstant(pAttenuationConstant),
 	mAttenuationLinear(pAttenuationLinear), mAttenuationQuad(pAttenuationQuad)
@@ -51,7 +51,7 @@ void PointLight::update(const DirectX::XMFLOAT4X4& pMatrix)
 	XMStoreFloat3(&mPosition, center);
 }
 
-void PointLight::updateShadow()
+void PointLight::updateShadow() const
 {
 	ShadowMatrixBuffer mb;
 
@@ -75,12 +75,12 @@ void PointLight::updateShadow()
 	mFramebuffer->useFramebuffer();
 }
 
-void PointLight::useShadow(const unsigned int pTextureSlot)
+void PointLight::useShadow(const unsigned int pTextureSlot) const
 {
 	mFramebuffer->useTexture(pTextureSlot);
 }
 
-void PointLight::releaseShadow(const unsigned int pTextureSlot)
+void PointLight::releaseShadow(const unsigned int pTextureSlot) const
 {
 	mFramebuffer->releaseTexture(pTextureSlot);
 }

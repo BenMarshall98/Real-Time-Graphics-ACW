@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include "Model.h"
 #include <DirectXMath.h>
+#include "Texture.h"
 
 struct InkBuffer
 {
@@ -19,6 +20,8 @@ class InkRender
 
 	std::shared_ptr<Shader> mDepthShader;
 	std::shared_ptr<Model> mModel;
+	std::shared_ptr<Texture> mDisp;
+	std::shared_ptr<Texture> mNorm;
 	
 	float mHeight = 0.0f;
 

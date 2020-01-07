@@ -6,7 +6,7 @@
 class Sphere final : public Shape, public IExplode
 {
 public:
-	Sphere(std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial);
+	Sphere(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Material> & pMaterial);
 	Sphere();
 	~Sphere();
 

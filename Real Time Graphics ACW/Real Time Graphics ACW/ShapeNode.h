@@ -14,7 +14,7 @@ class ShapeNode final : public SceneGraphNode
 	std::shared_ptr<Shape> mShape = nullptr;
 	
 public:
-	explicit ShapeNode(Shape * pShape, ObjectType pType);
+	explicit ShapeNode(const std::shared_ptr<Shape> & pShape, ObjectType pType);
 	ShapeNode() = default;
 	~ShapeNode();
 

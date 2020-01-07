@@ -1,11 +1,12 @@
 #pragma once
 
 #include <DirectXMath.h>
+#include <array>
 
 struct ShadowMatrixBuffer
 {
 	DirectX::XMFLOAT4X4 mShadowPerspective;
-	DirectX::XMFLOAT4X4 mShadowView[6];
+	std::array<DirectX::XMFLOAT4X4, 6> mShadowView;
 };
 
 struct ShadowLightBuffer

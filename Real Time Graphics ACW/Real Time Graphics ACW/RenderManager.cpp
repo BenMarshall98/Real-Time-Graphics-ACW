@@ -65,7 +65,7 @@ RenderManager::RenderManager() : mBloom(std::make_unique<Bloom>())
 	//mDynamicTechniques.emplace_back(std::make_unique<ToonShading>());
 }
 
-void RenderManager::setup(const float pCurrentTime)
+void RenderManager::setup(const float pCurrentTime) const
 {
 	const GlobalBuffer gb =
 	{
@@ -123,9 +123,7 @@ void RenderManager::renderShapes()
 void RenderManager::renderShadows()
 {
 	//Directional Light
-	const auto lightManager = LightingManager::instance();
-
-	if (lightManager->updateDirectionalLightShadow())
+	if (LightingManager::instance()->updateDirectionalLightShadow())
 	{
 		for (auto i = 0u; i < mDynamicShapes.size(); i++)
 		{
@@ -134,7 +132,7 @@ void RenderManager::renderShadows()
 	}
 
 	//Point Light
-	if (lightManager->updatePointLightShadow())
+	if (LightingManager::instance()->updatePointLightShadow())
 	{
 		for (auto i = 0u; i < mDynamicShapes.size(); i++)
 		{
@@ -143,9 +141,9 @@ void RenderManager::renderShadows()
 	}
 
 	//SpotLight
-	for (auto i = 0u; i < lightManager->getNumberOfSpotLights(); i++)
+	for (auto i = 0u; i < LightingManager::instance()->getNumberOfSpotLights(); i++)
 	{
-		lightManager->updateSpotLightShadow(i);
+		LightingManager::instance()->updateSpotLightShadow(i);
 
 		for (auto j = 0u; j < mDynamicShapes.size(); j++)
 		{
@@ -153,7 +151,7 @@ void RenderManager::renderShadows()
 		}
 	}
 
-	lightManager->useShadowTextures();
+	LightingManager::instance()->useShadowTextures();
 }
 
 void RenderManager::renderToScreen()
@@ -299,16 +297,6 @@ void RenderManager::renderToScreen()
 
 		mBloom->releaseBloomTexture(7);
 	}
-}
-
-void RenderManager::addStaticShape(const std::shared_ptr<Shape>& pShape)
-{
-	mStaticShapes.push_back(pShape);
-}
-
-void RenderManager::addDynamicShape(const std::shared_ptr<Shape>& pShape)
-{
-	mDynamicShapes.push_back(pShape);
 }
 
 void RenderManager::removeShape(const std::shared_ptr<Shape>& pShape)

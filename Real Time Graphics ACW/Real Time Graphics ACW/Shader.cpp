@@ -5,7 +5,7 @@
 #include <codecvt>
 #include <wrl/client.h>
 
-const D3D11_INPUT_ELEMENT_DESC Shader::layout[] =
+const std::vector<D3D11_INPUT_ELEMENT_DESC> Shader::layout =
 {
 	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -14,7 +14,7 @@ const D3D11_INPUT_ELEMENT_DESC Shader::layout[] =
 	{ "BITANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 4, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
 };
 
-const D3D11_INPUT_ELEMENT_DESC Shader::particle_layout[] =
+const std::vector<D3D11_INPUT_ELEMENT_DESC> Shader::particle_layout =
 {
 	{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 1, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
@@ -44,9 +44,9 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 			return false;
 		}
 		
-		const UINT numElements = ARRAYSIZE(layout);
+		const UINT numElements = layout.size();
 
-		result = device->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), mInputLayout.ReleaseAndGetAddressOf());
+		result = device->CreateInputLayout(layout.data(), numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), mInputLayout.ReleaseAndGetAddressOf());
 		if (FAILED(result))
 		{
 			return false;
@@ -91,11 +91,11 @@ bool Shader::loadShader(const std::string & pVertexFile, const std::string & pFr
 			return false;
 		}
 		
-		const UINT numElements = ARRAYSIZE(layout);
+		const UINT numElements = layout.size();
 
 		//Look at the warning code and see if the layout can be made to match exactly
 
-		result = device->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
+		result = device->CreateInputLayout(layout.data(), numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
 		if (FAILED(result))
 		{
 			return false;
@@ -155,9 +155,9 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 			return false;
 		}
 		
-		const UINT numElements = ARRAYSIZE(layout);
+		const UINT numElements = layout.size();
 
-		result = device->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
+		result = device->CreateInputLayout(layout.data(), numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
 		if (FAILED(result))
 		{
 			return false;
@@ -232,9 +232,9 @@ bool Shader::loadShader(const std::string& pVertexFile, const std::string& pFrag
 			return false;
 		}
 
-		const UINT numElements = ARRAYSIZE(layout);
+		const UINT numElements = layout.size();
 
-		result = device->CreateInputLayout(layout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
+		result = device->CreateInputLayout(layout.data(), numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &mInputLayout);
 		if (FAILED(result))
 		{
 			return false;
@@ -348,9 +348,9 @@ bool Shader::loadParticleShader(const std::string& pVertexFile, const std::strin
 			return false;
 		}
 
-		const UINT numElements = ARRAYSIZE(particle_layout);
+		const UINT numElements = particle_layout.size();
 
-		result = device->CreateInputLayout(particle_layout, numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), mInputLayout.ReleaseAndGetAddressOf());
+		result = device->CreateInputLayout(particle_layout.data(), numElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), mInputLayout.ReleaseAndGetAddressOf());
 		if (FAILED(result))
 		{
 			return false;
@@ -394,7 +394,7 @@ HRESULT Shader::compileShaderFromFile(const std::wstring & pFileName, const char
 	return result;
 }
 
-void Shader::useShader()
+void Shader::useShader() const
 {
 	static Shader * const shader = nullptr;
 

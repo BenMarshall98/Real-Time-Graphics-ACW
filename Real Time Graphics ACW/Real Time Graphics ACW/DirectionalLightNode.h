@@ -8,7 +8,7 @@ class DirectionalLightNode final : public SceneGraphNode
 	std::shared_ptr<DirectionalLight> mDirectionalLight;
 	
 public:
-	explicit DirectionalLightNode(DirectionalLight * pDirectionalLight);
+	explicit DirectionalLightNode(const std::shared_ptr<DirectionalLight> & pDirectionalLight);
 	DirectionalLightNode() = default;
 	~DirectionalLightNode();
 

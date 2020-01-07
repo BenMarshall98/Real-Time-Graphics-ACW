@@ -1,8 +1,8 @@
 #include "Plane.h"
 #include "ResourceManager.h"
 
-Plane::Plane(std::unique_ptr<TexturePack> pTexturePack, std::unique_ptr<Material> pMaterial) :
-	Shape(std::move(pTexturePack), std::move(pMaterial))
+Plane::Plane(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Material> & pMaterial) :
+	Shape(pTexturePack, pMaterial)
 {
 	std::shared_ptr<Model> model;
 	getModel(model);

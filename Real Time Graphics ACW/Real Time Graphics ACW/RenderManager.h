@@ -64,11 +64,18 @@ public:
 		return mInstance;
 	}
 
-	void setup(float pCurrentTime);
+	void setup(float pCurrentTime) const;
 	void render();
 
-	void addStaticShape(const std::shared_ptr<Shape>& pShape);
-	void addDynamicShape(const std::shared_ptr<Shape>& pShape);
+	void addStaticShape(const std::shared_ptr<Shape>& pShape)
+	{
+		mStaticShapes.push_back(pShape);
+	}
+	
+	void addDynamicShape(const std::shared_ptr<Shape>& pShape)
+	{
+		mDynamicShapes.push_back(pShape);
+	}
 
 	void removeShape(const std::shared_ptr<Shape> & pShape);
 

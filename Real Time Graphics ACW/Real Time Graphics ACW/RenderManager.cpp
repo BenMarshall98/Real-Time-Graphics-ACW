@@ -11,7 +11,9 @@
 #include "TransparencyShading.h"
 #include "ResourceManager.h"
 #include "DX11Render.h"
+#include "ParticleManager.h"
 #include <string>
+#include "Game.h"
 
 RenderManager * RenderManager::mInstance = nullptr;
 
@@ -87,6 +89,7 @@ void RenderManager::render()
 
 void RenderManager::renderShapes()
 {
+	mFramebuffer = 0u;
 	auto deferred = true;
 	
 	if (mMode <= 7)
@@ -213,6 +216,8 @@ void RenderManager::renderToScreen()
 			}
 		}
 
+		ParticleManager::instance()->update(Game::mDt);
+
 		//Transparent
 		if (mFramebuffer == 1)
 		{
@@ -228,8 +233,13 @@ void RenderManager::renderToScreen()
 				mDynamicTechniques[i]->renderTransparent(mDynamicShapes[i], mScreenFramebufferTwo);
 			}
 
+			//Particles
+			ParticleManager::instance()->render();
+
 			//Ink
 			InkRender::instance()->RenderInk();
+
+			
 		}
 		else
 		{
@@ -245,13 +255,12 @@ void RenderManager::renderToScreen()
 				mDynamicTechniques[i]->renderTransparent(mDynamicShapes[i], mScreenFramebufferOne);
 			}
 
+			//Particles
+			ParticleManager::instance()->render();
+
 			//Ink
 			InkRender::instance()->RenderInk();
 		}
-
-		//TODO: ink
-
-		//TODO: explosion
 	}
 
 	if (mMode == 9)
@@ -271,7 +280,10 @@ void RenderManager::renderToScreen()
 	{
 		mScreenFramebufferOne->useTexture(6);
 
-		mBloom->useBloomTexture(7);
+		if (mMode == 9)
+		{
+			mBloom->useBloomTexture(7);
+		}
 
 		Dx11Render::instance()->bindDefaultFramebuffer();
 
@@ -280,13 +292,19 @@ void RenderManager::renderToScreen()
 		mOutputModel->render();
 		mScreenFramebufferOne->releaseTexture(6);
 
-		mBloom->releaseBloomTexture(7);
+		if (mMode == 9)
+		{
+			mBloom->releaseBloomTexture(7);
+		}
 	}
 	else
 	{
 		mScreenFramebufferTwo->useTexture(6);
 
-		mBloom->useBloomTexture(7);
+		if (mMode == 9)
+		{
+			mBloom->useBloomTexture(7);
+		}
 
 		Dx11Render::instance()->bindDefaultFramebuffer();
 
@@ -294,8 +312,6 @@ void RenderManager::renderToScreen()
 
 		mOutputModel->render();
 		mScreenFramebufferTwo->releaseTexture(6);
-
-		mBloom->releaseBloomTexture(7);
 	}
 }
 

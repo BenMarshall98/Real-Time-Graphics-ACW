@@ -65,6 +65,7 @@ void VectorAnimation::animate(const float pDeltaTime, DirectX::XMFLOAT4X4 & pFul
 			0, 1, 0, 0,
 			0, 0, 1, 0,
 			0, 0, 0, 1 );
+		return;
 	}
 
 	if (mNodes.size() == 1)
@@ -74,6 +75,7 @@ void VectorAnimation::animate(const float pDeltaTime, DirectX::XMFLOAT4X4 & pFul
 		XMStoreFloat4x4(&result, DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z));
 
 		pFullMatrix = result;
+		return;
 	}
 
 	if (mNodes.size() == 2)
@@ -108,6 +110,7 @@ void VectorAnimation::animate(const float pDeltaTime, DirectX::XMFLOAT4X4 & pFul
 			setCurrentNode(currentNode);
 			
 			pFullMatrix = result;
+			return;
 		}
 
 		currentNode = 0;
@@ -126,6 +129,7 @@ void VectorAnimation::animate(const float pDeltaTime, DirectX::XMFLOAT4X4 & pFul
 		setCurrentNode(currentNode);
 		
 		pFullMatrix = result;
+		return;
 	}
 
 	auto currentTime = getCurrentTime();
@@ -176,6 +180,7 @@ void VectorAnimation::animate(const float pDeltaTime, DirectX::XMFLOAT4X4 & pFul
 		setCurrentNode(currentNode);
 
 		pFullMatrix = result;
+		return;
 	}
 
 	const auto pos0 = DirectX::XMLoadFloat3(&mNodes[currentNode].mPosition);

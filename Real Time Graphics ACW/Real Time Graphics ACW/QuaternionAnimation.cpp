@@ -68,6 +68,7 @@ void QuaternionAnimation::animate(const float pDeltaTime, DirectX::XMFLOAT4X4 & 
 		0, 0, 0, 1);
 
 		pRotationMatrix = pFullMatrix;
+		return;
 	}
 
 	if (mNodes.size() == 1)
@@ -78,6 +79,7 @@ void QuaternionAnimation::animate(const float pDeltaTime, DirectX::XMFLOAT4X4 & 
 
 		pFullMatrix = result;
 		pRotationMatrix = result;
+		return;
 	}
 
 	if (mNodes.size() == 2)
@@ -113,6 +115,7 @@ void QuaternionAnimation::animate(const float pDeltaTime, DirectX::XMFLOAT4X4 & 
 
 			pFullMatrix = result;
 			pRotationMatrix = result;
+			return;
 		}
 
 		currentNode = 0;
@@ -132,6 +135,7 @@ void QuaternionAnimation::animate(const float pDeltaTime, DirectX::XMFLOAT4X4 & 
 		
 		pFullMatrix = result;
 		pRotationMatrix = result;
+		return;
 	}
 
 	auto currentTime = getCurrentTime();
@@ -155,10 +159,10 @@ void QuaternionAnimation::animate(const float pDeltaTime, DirectX::XMFLOAT4X4 & 
 		}
 	}
 
-	const auto quaternion0 = DirectX::XMLoadFloat4(&mNodes[currentNode].mQuaternion0);
-	const auto quaternion1 = DirectX::XMLoadFloat4(&mNodes[currentNode].mQuaternion1);
-	const auto quaternion2 = DirectX::XMLoadFloat4(&mNodes[currentNode].mQuaternion2);
-	const auto quaternion3 = DirectX::XMLoadFloat4(&mNodes[currentNode].mQuaternion3);
+	const auto quaternion0 = XMLoadFloat4(&mNodes[currentNode].mQuaternion0);
+	const auto quaternion1 = XMLoadFloat4(&mNodes[currentNode].mQuaternion1);
+	const auto quaternion2 = XMLoadFloat4(&mNodes[currentNode].mQuaternion2);
+	const auto quaternion3 = XMLoadFloat4(&mNodes[currentNode].mQuaternion3);
 
 	const auto time0 = mNodes[currentNode].mTime;
 
@@ -176,7 +180,7 @@ void QuaternionAnimation::animate(const float pDeltaTime, DirectX::XMFLOAT4X4 & 
 	const auto rot = DirectX::XMQuaternionSquad(quaternion0, quaternion1, quaternion2, quaternion3, (currentTime - time0) / (time1 - time0));
 
 	DirectX::XMFLOAT4X4 result;
-	DirectX::XMStoreFloat4x4(&result, DirectX::XMMatrixRotationQuaternion(rot));
+	XMStoreFloat4x4(&result, DirectX::XMMatrixRotationQuaternion(rot));
 
 	setCurrentTime(currentTime);
 	setCurrentNode(currentNode);

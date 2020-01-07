@@ -31,4 +31,9 @@ public:
 
 	void addShape(const std::shared_ptr<Shape> & pShape);
 	void explode(unsigned int pKey);
+
+	void getStaticObjects(std::vector<std::shared_ptr<Shape> & pShapes)
+	{
+		
+	}
 };

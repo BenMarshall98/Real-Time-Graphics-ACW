@@ -1,5 +1,61 @@
 Scene
 {
+	Animation
+	{
+		Type: Vector
+		{
+			Pos: -4.0, 4.0, -4.0
+			Time: 0.0
+		}
+		{
+			Pos: -4.0, -4.0, 4.0
+			Time: 5.0
+		}
+		{
+			Pos: -4.0, 4.0, 4.0
+			Time: 10.0
+		}
+		{
+			Pos: 4.0, -4.0, 4.0
+			Time: 15.0
+		}
+		{
+			Pos: 4.0, 4.0, 4.0
+			Time: 20.0
+		}
+		{
+			Pos: 4.0, -4.0, -4.0
+			Time: 25.0
+		}
+		{
+			Pos: 4.0, 4.0, -4.0
+			Time: 30.0
+		}
+		{
+			Pos: -4.0, -4.0, -4.0
+			Time: 35.0
+		}
+		EndTime: 40.0
+		Scale
+		{
+			Size: 0.5, 0.5, 0.5
+			Shape
+			{
+				Type: Dynamic
+				Cube
+				{
+					Material
+					{
+						Ambient: 0.1, 0.1, 0.1
+						Diffuse: 1.0, 0.0, 0.0
+						Specular: 1.0, 1.0, 1.0
+						Shininess: 32.0
+					}
+					NoTexture
+				}
+			}
+		}
+	}
 	Shape
 	{
 		Type: Dynamic

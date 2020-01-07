@@ -1,5 +1,6 @@
 #include "ParticleManager.h"
 #include "ResourceManager.h"
+#include "Shape.h"
 
 ParticleManager * ParticleManager::mInstance = nullptr;
 
@@ -41,6 +42,11 @@ void ParticleManager::update(const float pDt)
 	{
 		particle.calculatePhysics(pDt);
 	}
+
+	std::vector<std::shared_ptr<Shape>> staticObjects;
+	std::vector<std::shared_ptr<Shape>> dynamicObjects;
+
+	
 }
 
 void ParticleManager::render()

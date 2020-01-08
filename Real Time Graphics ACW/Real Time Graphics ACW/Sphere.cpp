@@ -51,7 +51,7 @@ void Sphere::explode()
 	const auto matrix = XMLoadFloat4x4(&currentMatrix);
 	const auto center = XMVector3Transform(DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f), matrix);
 	
-	std::vector<Particle> particles;
+	std::vector<std::shared_ptr<Particle>> particles;
 	particles.reserve(positions.size());
 
 	for (int i = 0; i < positions.size(); i++)
@@ -66,9 +66,11 @@ void Sphere::explode()
 
 		XMStoreFloat3(&position, tempPosition);
 		XMStoreFloat3(&velocity, tempVelocity);
+
+		const auto particle = std::make_shared<Particle>(position, velocity);
 		
 		particles.emplace_back(
-			position, velocity
+			particle
 		);
 	}
 
@@ -77,7 +79,7 @@ void Sphere::explode()
 
 //TODO: Source: http://www.r-5.org/files/books/computers/algo-list/realtime-3d/Christer_Ericson-Real-Time_Collision_Detection-EN.pdf
 
-void Sphere::collideWith(const Particle & pParticle)
+void Sphere::collideWith(const std::shared_ptr<Particle> & pParticle)
 {
 	//Assume sphere moves in a straight line between time 0 and 1
 	auto previousMatrix = DirectX::XMFLOAT4X4();
@@ -99,15 +101,17 @@ void Sphere::collideWith(const Particle & pParticle)
 	const auto radius = DirectX::XMVectorGetX(DirectX::XMVector3Length(sphereNormal));
 
 	auto tempStart = DirectX::XMFLOAT3();
-	pParticle.getPreviousPosition(tempStart);
+	pParticle->getPreviousPosition(tempStart);
 	
 	auto tempEnd = DirectX::XMFLOAT3();
-	pParticle.getCurrentPosition(tempEnd);
+	pParticle->getCurrentPosition(tempEnd);
 
 	const auto particleStart = DirectX::XMLoadFloat3(&tempStart);
 	const auto particleEnd = DirectX::XMLoadFloat3(&tempEnd);
 
-	auto particleDirection = DirectX::XMVectorSubtract(DirectX::XMVectorSubtract(particleEnd, particleEnd), DirectX::XMVectorSubtract(sphereEnd, sphereStart));
+	auto particleDirection = DirectX::XMVectorSubtract(particleEnd, particleStart);
+	auto temp = particleDirection;
+	particleDirection = DirectX::XMVectorSubtract(particleDirection, DirectX::XMVectorSubtract(sphereEnd, sphereStart));
 
 	const auto particleDirectionLength = DirectX::XMVectorGetX(DirectX::XMVector3Length(particleDirection));
 
@@ -138,6 +142,14 @@ void Sphere::collideWith(const Particle & pParticle)
 	}
 
 	const auto tempPosition = DirectX::XMVectorAdd(particleStart, DirectX::XMVectorScale(particleDirection, time));
+	const auto tempSpherePosition = DirectX::XMVectorLerp(sphereStart, sphereEnd, time / particleDirectionLength);
 
-	//TODO: Add to manifold
+	const auto tempNormal = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(tempPosition, tempSpherePosition));
+
+	Collision col;
+	col.mParticle = pParticle;
+	DirectX::XMStoreFloat3(&col.mNormal, tempNormal);
+	col.mTime = time;
+
+	ParticleManager::instance()->addCollision(col);
 }

@@ -6,13 +6,21 @@
 #include <memory>
 #include "Shader.h"
 
+struct Collision
+{
+	std::shared_ptr<Particle> mParticle;
+	DirectX::XMFLOAT3 mNormal;
+	float mTime;
+};
+
 class ParticleManager final
 {
 	static ParticleManager * mInstance;
 	
-	std::vector<Particle> mParticles;
+	std::vector<std::shared_ptr<Particle>> mParticles;
 	std::vector<std::unique_ptr<ParticleRender>> mParticleRenders;
 	std::shared_ptr<Shader> mParticleShader;
+	std::vector<Collision> mCollisions;
 
 	ParticleManager();
 	
@@ -34,8 +42,13 @@ public:
 		return mInstance;
 	}
 
-	void addParticles(std::vector<Particle> & pParticles);
+	void addParticles(std::vector<std::shared_ptr<Particle>> & pParticles);
 	void update(float pDt);
 	void render();
+
+	void addCollision(const Collision & pCollision)
+	{
+		mCollisions.push_back(pCollision);
+	}
 };
 

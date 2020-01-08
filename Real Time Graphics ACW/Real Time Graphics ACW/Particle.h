@@ -47,9 +47,14 @@ public:
 		pCurrentPosition = mCurrentPosition;
 	}
 
-	void getVelocity(DirectX::XMFLOAT3 & pVelocity) const
+	void setVelocity(const DirectX::XMFLOAT3 & pVelocity)
 	{
-		pVelocity = mVelocity;
+		mVelocity = pVelocity;
+	}
+
+	void setPosition(const DirectX::XMFLOAT3 & pPosition)
+	{
+		mCurrentPosition = pPosition;
 	}
 
 	void setTime(const float pTime)

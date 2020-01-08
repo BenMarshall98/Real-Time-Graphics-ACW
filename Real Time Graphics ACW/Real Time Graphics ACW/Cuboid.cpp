@@ -95,7 +95,7 @@ void Cuboid::explode()
 		}
 	}
 
-	std::vector<Particle> particles;
+	std::vector<std::shared_ptr<Particle>> particles;
 	particles.reserve(positions.size());
 
 	for (int i = 0; i < positions.size(); i++)
@@ -109,13 +109,17 @@ void Cuboid::explode()
 
 		XMStoreFloat3(&velocity, tempVelocity);
 
-		particles.emplace_back(positions[i], velocity);
+		const auto particle = std::make_shared<Particle>(positions[i], velocity);
+
+		particles.emplace_back(
+			particle
+		);
 	}
 
 	ParticleManager::instance()->addParticles(particles);
 }
 
-void Cuboid::collideWith(const Particle & pParticle)
+void Cuboid::collideWith(const std::shared_ptr<Particle> & pParticle)
 {
 	auto currentMatrix = DirectX::XMFLOAT4X4();
 	auto previousMatrix = DirectX::XMFLOAT4X4();
@@ -148,10 +152,10 @@ void Cuboid::collideWith(const Particle & pParticle)
 	const auto cubePos0 = DirectX::XMVector3Transform(center, preMatrix);
 
 	auto tempPos = DirectX::XMFLOAT3();
-	pParticle.getPreviousPosition(tempPos);
+	pParticle->getPreviousPosition(tempPos);
 	const auto partPos0 = DirectX::XMLoadFloat3(&tempPos);
 
-	pParticle.getCurrentPosition(tempPos);
+	pParticle->getCurrentPosition(tempPos);
 	const auto partPos1 = DirectX::XMLoadFloat3(&tempPos);
 
 	auto currentTime = 0.0f;
@@ -183,7 +187,14 @@ void Cuboid::collideWith(const Particle & pParticle)
 
 				if (detectCollision(normal, tangent, biTangent, DirectX::XMFLOAT3(xLength, yLength, zLength), tempPos, tempParticlePos, collisionPos))
 				{
-					//TODO: Collision 
+					DirectX::XMVECTOR tempNormal;
+					calculateNormal(normal, tangent, biTangent, DirectX::XMFLOAT3(xLength, yLength, zLength), tempPos, collisionPos, tempNormal);
+					Collision col;
+					col.mParticle = pParticle;
+					DirectX::XMStoreFloat3(&col.mNormal, DirectX::XMVector3Normalize(tempNormal));
+					col.mTime = currentTime;
+
+					ParticleManager::instance()->addCollision(col);
 				}
 			}
 
@@ -232,7 +243,14 @@ void Cuboid::collideWith(const Particle & pParticle)
 
 			if (dist < 0.05f)
 			{
-				//TODO: Collision
+				DirectX::XMVECTOR tempNormal;
+				calculateNormal(normal, tangent, biTangent, DirectX::XMFLOAT3(xLength, yLength, zLength), tempPos, collisionPos, tempNormal);
+				Collision col;
+				col.mParticle = pParticle;
+				DirectX::XMStoreFloat3(&col.mNormal, DirectX::XMVector3Normalize(tempNormal));
+				col.mTime = currentTime;
+
+				ParticleManager::instance()->addCollision(col);
 			}
 
 			timeStart = currentTime;

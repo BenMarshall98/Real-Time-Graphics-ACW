@@ -16,6 +16,6 @@ public:
 	Sphere & operator= (Sphere &&) = delete;
 
 	void explode() override;
-	void collideWith(const Particle & pParticle) override;
+	void collideWith(const std::shared_ptr<Particle> & pParticle) override;
 };
 

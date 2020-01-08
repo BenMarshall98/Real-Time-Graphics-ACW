@@ -88,7 +88,7 @@ public:
 		pPreviousRotation = mPreviousRotation;
 	}
 
-	virtual void collideWith(const Particle & pParticle) = 0;
+	virtual void collideWith(const std::shared_ptr<Particle> & pParticle) = 0;
 };
 
 std::istream & operator>>(std::istream & pIn, const std::shared_ptr<Shape> & pShape);

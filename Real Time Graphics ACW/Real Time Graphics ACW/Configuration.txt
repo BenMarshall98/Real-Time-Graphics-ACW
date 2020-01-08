@@ -353,8 +353,8 @@ Scene
 		SpotLight
 		{
 			Color: 1.0, 1.0, 1.0
-			Position: 0.0, 0.0, 0.0
-			Direction: -1.0, 0.0, 0.0
+			Position: 1.0, 1.0, 1.0
+			Direction: 1.0, 1.0, 1.0
 			InnerAngle: 5.0
 			OuterAngle: 15.0
 			AttenuationConstant: 1.0

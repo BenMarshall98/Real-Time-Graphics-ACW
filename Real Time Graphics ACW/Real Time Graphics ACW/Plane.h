@@ -14,5 +14,5 @@ public:
 	Plane & operator= (const Plane &) = delete;
 	Plane & operator= (Plane &&) = delete;
 
-	void collideWith(const Particle & pParticle) override;
+	void collideWith(const std::shared_ptr<Particle> & pParticle) override;
 };

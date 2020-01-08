@@ -1,5 +1,6 @@
 #include "Plane.h"
 #include "ResourceManager.h"
+#include "ParticleManager.h"
 
 Plane::Plane(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Material> & pMaterial) :
 	Shape(pTexturePack, pMaterial)
@@ -23,7 +24,7 @@ Plane::~Plane() = default;
 
 //TODO: Source: http://www.r-5.org/files/books/computers/algo-list/realtime-3d/Christer_Ericson-Real-Time_Collision_Detection-EN.pdf
 
-void Plane::collideWith(const Particle & pParticle)
+void Plane::collideWith(const std::shared_ptr<Particle> & pParticle)
 {
 	//Assuming that the planes do not move
 	auto currentMatrix = DirectX::XMFLOAT4X4();
@@ -37,9 +38,9 @@ void Plane::collideWith(const Particle & pParticle)
 	planeNormal = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(DirectX::XMVector3Transform(planeNormal, matrix), planeCenter));
 
 	auto tempStart = DirectX::XMFLOAT3();
-	pParticle.getPreviousPosition(tempStart);
+	pParticle->getPreviousPosition(tempStart);
 	auto tempEnd = DirectX::XMFLOAT3();
-	pParticle.getCurrentPosition(tempEnd);
+	pParticle->getCurrentPosition(tempEnd);
 	
 	const auto particleStart = DirectX::XMLoadFloat3(&tempStart);
 	const auto particleEnd = DirectX::XMLoadFloat3(&tempEnd);
@@ -71,10 +72,12 @@ void Plane::collideWith(const Particle & pParticle)
 
 		if (abs(tangentDot) <= tangentLength && abs(biTangentDot) <= biTangentLength)
 		{
-			//TODO: Add to manifold
-			//tempPosition
-			//time
-			//
+			Collision col;
+			col.mParticle = pParticle;
+			DirectX::XMStoreFloat3(&col.mNormal, planeNormal);
+			col.mTime = time;
+
+			ParticleManager::instance()->addCollision(col);
 		}
 	}
 }

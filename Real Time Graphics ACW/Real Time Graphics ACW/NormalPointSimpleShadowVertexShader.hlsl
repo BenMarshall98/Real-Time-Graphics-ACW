@@ -26,6 +26,8 @@ struct VS_OUTPUT
 {
     float4 Pos : SV_Position;
     float3 FragPos : POSITION0;
+    float3 PosFrag : POSITION1;
+    float3 LightPos : POSITION2;
 };
 
 //TODO: Source: ericson
@@ -36,11 +38,14 @@ VS_OUTPUT main(VS_INPUT input)
     
     float3 fragmentPos = mul(input.Pos, World).xyz;
     
+    output.PosFrag = fragmentPos;
+    output.LightPos = LightPosition;
+    
     float3 lightDir = fragmentPos - LightPosition;
     
     float3 planeNormal = float3(0.0f, 1.0f, 0.0f);
     
-    float d = dot(planeNormal, float3(0.0f, -4.9f, 0.0f));
+    float d = dot(planeNormal, float3(0.0f, -4.95f, 0.0f));
     
     float t = (d - dot(planeNormal, LightPosition)) / dot(planeNormal, lightDir);
     

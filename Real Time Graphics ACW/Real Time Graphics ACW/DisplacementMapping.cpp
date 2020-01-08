@@ -64,13 +64,13 @@ void DisplacementMapping::renderOmniDirectionalShadow(const std::shared_ptr<Shap
 void DisplacementMapping::renderDirectionalSimpleShadow(const std::shared_ptr<Shape> & pShape)
 {
 	useDirectionalSimpleShader();
-	pShape->render();
+	pShape->render(true);
 }
 
 void DisplacementMapping::renderPointSimpleShadow(const std::shared_ptr<Shape> & pShape)
 {
 	usePointSimpleShader();
-	pShape->render();
+	pShape->render(true);
 }
 
 bool DisplacementMapping::renderPostprocessing(const std::unique_ptr<Framebuffer> &)

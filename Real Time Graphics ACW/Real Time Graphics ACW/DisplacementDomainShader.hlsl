@@ -12,6 +12,15 @@ cbuffer modelBuffer : register(b1)
     matrix InverseWorld;
 }
 
+cbuffer directionalBuffer : register(b3)
+{
+    float4 DirectionalColor;
+    float3 DirectionalDirection;
+    int DirectionalUsed;
+    matrix DirectionalView;
+    matrix DirectionalProjection;
+}
+
 Texture2D heightTexture : register(t0);
 SamplerState Sampler : register(s0);
 
@@ -36,7 +45,8 @@ struct DS_OUTPUT
     float3 FragmentPos : POSITION0;
     float3 ViewPosition : POSITION1;
     float2 TexCoord : TEXCOORD0;
-    float3x3 TBN : POSITION2;
+    float4 LightFragmentPos : POSITION2;
+    float3x3 TBN : POSITION3;
 };
 
 [domain("tri")]
@@ -66,6 +76,8 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     output.Pos = mul(float4(pos, 1.0f), World);
     
     output.FragmentPos = output.Pos.xyz;
+    output.LightFragmentPos = mul(output.Pos, DirectionalView);
+    output.LightFragmentPos = mul(output.LightFragmentPos, DirectionalProjection);
     
     output.Pos = mul(output.Pos, View);
     output.Pos = mul(output.Pos, Projection);
@@ -80,9 +92,9 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     biTangent += uvw[1] * tri[1].BiTangent;
     biTangent += uvw[2] * tri[2].BiTangent;
     
-    output.TBN = float3x3(normalize(mul(World, float4(tangent, 1.0f)).xyz),
-                        normalize(mul(World, float4(biTangent, 1.0f)).xyz),
-                        normalize(mul(World, float4(normal, 1.0f)).xyz));
+    output.TBN = float3x3(normalize(mul(float4(normalize(tangent), 1.0f), InverseWorld).xyz),
+                        normalize(mul(float4(normalize(biTangent), 1.0f), InverseWorld).xyz),
+                        normalize(mul(float4(normalize(normal), 1.0f), InverseWorld).xyz));
     
     //ViewPosition
     output.ViewPosition = ViewPosition;

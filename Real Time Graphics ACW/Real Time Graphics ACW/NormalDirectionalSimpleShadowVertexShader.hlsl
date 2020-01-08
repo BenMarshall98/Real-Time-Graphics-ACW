@@ -43,7 +43,7 @@ VS_OUTPUT main(VS_INPUT input)
     
     float3 planeNormal = float3(0.0f, 1.0f, 0.0f);
     
-    float d = dot(planeNormal, float3(0.0f, -5.0f, 0.0f));
+    float d = dot(planeNormal, float3(0.0f, -4.95f, 0.0f));
     
     float t = (d - dot(planeNormal, fragmentPos)) / dot(planeNormal, lightDir);
     

@@ -1,9 +1,9 @@
-Texture2D baseTexture : register(t6);
+Texture2D baseTexture : register(t20);
 SamplerState Sampler : register(s0);
 
-Texture2D specTexture : register(t7);
+Texture2D specTexture : register(t21);
 
-Texture2D normTexture : register(t8);
+Texture2D normTexture : register(t22);
 
 struct VS_OUTPUT
 {
@@ -37,7 +37,7 @@ PS_OUTPUT main(VS_OUTPUT input)
     
     float3 normal = normalize(mul(norm, input.TBN));
     
-    float3 baseColor = specTexture.Sample(Sampler, input.TexCoord).xyz;
+    float3 baseColor = baseTexture.Sample(Sampler, input.TexCoord).xyz;
     float spec = specTexture.Sample(Sampler, input.TexCoord).x * 256;
     
     PS_OUTPUT output = (PS_OUTPUT) 0;

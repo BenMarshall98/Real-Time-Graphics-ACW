@@ -40,6 +40,11 @@ public:
 		mDecrease = pIsTrue;
 	}
 
+	float getHeight() const
+	{
+		return mHeight;
+	}
+
 	void RenderInk();
 
 	static InkRender * instance()

@@ -6,10 +6,10 @@ cbuffer GlobalBuffer : register(b10)
     float InkHeight;
 }
 
-Texture2D normalTexture : register(t6);
+Texture2D normalTexture : register(t12);
 SamplerState Sampler : register(s0);
 
-Texture2D bloomTexture : register(t7);
+Texture2D bloomTexture : register(t13);
 
 struct VS_OUTPUT
 {

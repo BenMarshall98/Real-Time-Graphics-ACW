@@ -75,7 +75,7 @@ void GourandShading::renderPointSimpleShadow(const std::shared_ptr<Shape> & pSha
 
 bool GourandShading::renderPostprocessing(const std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
 {
-	mFramebuffer->useTexture(8);
+	mFramebuffer->useTexture(14);
 
 	if (pCurrentFramebuffer == nullptr)
 	{
@@ -90,7 +90,7 @@ bool GourandShading::renderPostprocessing(const std::unique_ptr<Framebuffer> & p
 
 	mRenderPlane->render();
 
-	mFramebuffer->releaseTexture(8);
+	mFramebuffer->releaseTexture(14);
 
 	return true;
 }

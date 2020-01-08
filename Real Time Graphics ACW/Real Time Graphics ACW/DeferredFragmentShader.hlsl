@@ -45,7 +45,6 @@ SamplerState Sampler : register(s0);
 Texture2D directionalShadowTexture : register(t0);
 
 TextureCube pointShadowTexture : register(t1);
-
 TextureCube spot1ShadowTexture : register(t2);
 TextureCube spot2ShadowTexture : register(t3);
 TextureCube spot3ShadowTexture : register(t4);
@@ -85,8 +84,8 @@ struct PS_OUTPUT
 float InkDirectionalFactorCalculation(float3 pFragPos, float3 pViewPosition);
 float InkPointFactorCalculation(float3 pFragPos, float3 pLightPos, float3 pViewPosition);
 
-float DirectionalShadowCalculation(float4 Pos, float4 lightPos, float3 lightDir, float3 normal);
-float PointShadowCalculation(float4 Pos, float3 pFragPos, float3 pLightPos, float pFarPlane, TextureCube pTexture1, Texture2D pTexture2);
+float DirectionalShadowCalculation(float2 texCoord, float4 lightPos, float3 lightDir, float3 normal);
+float PointShadowCalculation(float2 texCoord, float3 pFragPos, float3 pLightPos, float pFarPlane, TextureCube pTexture1, Texture2D pTexture2);
 
 PS_OUTPUT main(VS_OUTPUT input)
 {
@@ -160,7 +159,7 @@ PS_OUTPUT main(VS_OUTPUT input)
 		
             float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), shininess);
         
-            float shadow = DirectionalShadowCalculation(input.Pos, lightPos, lightDirection, lightNorm);
+            float shadow = DirectionalShadowCalculation(input.TexCoord, lightPos, lightDirection, lightNorm);
             
             float inkFactor = InkDirectionalFactorCalculation(fragPos, input.ViewPosition);
 
@@ -183,7 +182,7 @@ PS_OUTPUT main(VS_OUTPUT input)
             float distance = length(PointPosition.xyz - fragPos.xyz);
             float attenuation = 1.0f / (PointAttenuationConstant + PointAttenuationLinear * distance + PointAttenuationQuad * distance * distance);
         
-            float shadow = PointShadowCalculation(input.Pos, fragPos.xyz, PointPosition.xyz, PointFarPlane, pointShadowTexture, pointSimpleShadowTexture);
+            float shadow = PointShadowCalculation(input.TexCoord, fragPos.xyz, PointPosition.xyz, PointFarPlane, pointShadowTexture, pointSimpleShadowTexture);
             
             float inkFactor = InkPointFactorCalculation(fragPos, PointPosition.xyz, input.ViewPosition);
 
@@ -216,19 +215,19 @@ PS_OUTPUT main(VS_OUTPUT input)
             
                 if (i == 0)
                 {
-                    shadow = PointShadowCalculation(input.Pos, fragPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot1ShadowTexture, spot1SimpleShadowTexture);
+                    shadow = PointShadowCalculation(input.TexCoord, fragPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot1ShadowTexture, spot1SimpleShadowTexture);
                 }
                 else if (i == 1)
                 {
-                    shadow = PointShadowCalculation(input.Pos, fragPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot2ShadowTexture, spot2SimpleShadowTexture);
+                    shadow = PointShadowCalculation(input.TexCoord, fragPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot2ShadowTexture, spot2SimpleShadowTexture);
                 }
                 else if (i == 2)
                 {
-                    shadow = PointShadowCalculation(input.Pos, fragPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot3ShadowTexture, spot3SimpleShadowTexture);
+                    shadow = PointShadowCalculation(input.TexCoord, fragPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot3ShadowTexture, spot3SimpleShadowTexture);
                 }
                 else if (i == 3)
                 {
-                    shadow = PointShadowCalculation(input.Pos, fragPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot4ShadowTexture, spot4SimpleShadowTexture);
+                    shadow = PointShadowCalculation(input.TexCoord, fragPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot4ShadowTexture, spot4SimpleShadowTexture);
                 }
                 
                 float inkFactor = InkPointFactorCalculation(fragPos, SpotPosition[i].xyz, input.ViewPosition);
@@ -251,7 +250,7 @@ float InkDirectionalFactorCalculation(float3 pFragPos, float3 pViewPosition)
 {
     float fogInk = 1.0f;
     
-    if (pFragPos.y > 0.0f)
+    if (pFragPos.y > InkHeight)
     {
         return 0.0f;
     }
@@ -269,7 +268,7 @@ float InkPointFactorCalculation(float3 pFragPos, float3 pLightPos, float3 pViewP
 {
     float fogInk = 1.0f;
     
-    if (pFragPos.y > 0.0f)
+    if (pFragPos.y > InkHeight)
     {
         return 0.0f;
     }
@@ -283,33 +282,17 @@ float InkPointFactorCalculation(float3 pFragPos, float3 pLightPos, float3 pViewP
     return fogInk * fogCamera;
 }
 
-float DirectionalShadowCalculation(float4 pPos, float4 lightPos, float3 lightDir, float3 normal)
+float DirectionalShadowCalculation(float2 texCoord, float4 lightPos, float3 lightDir, float3 normal)
 {
     float shadow = 0.0f;
     
     if (ShadowMode == 0)
     {
-        float3 projCoords = pPos.xyz / pPos.w;
-        projCoords.y = -projCoords.y;
-    
-        projCoords.xy = projCoords.xy * 0.5f + 0.5f;
-    
-        if (projCoords.x < 0.0f || projCoords.y < 0.0f || projCoords.x > 1.0f || projCoords.y > 1.0f)
-        {
-            return 1.0f;
-        }
-    
-        if (projCoords.z > 1.0)
-        {
-            return 1.0f;
-        }
+        float currentDepth = depthTexture.Sample(Sampler, texCoord).r;
         
-        float bias = max(0.05f * (1.0f - dot(normal, lightDir)), 0.005);
-        float currentDepth = projCoords.z;
+        float closestDepth = directionalSimpleShadowTexture.Sample(Sampler, texCoord).r;
         
-        float closestDepth = directionalSimpleShadowTexture.Sample(Sampler, projCoords.xy).r;
-        
-        shadow = currentDepth - bias > closestDepth ? 1.0f : 0.0f;
+        shadow = currentDepth > closestDepth ? 1.0f : 0.0f;
     }
     else
     {
@@ -385,15 +368,25 @@ float DirectionalShadowCalculation(float4 pPos, float4 lightPos, float3 lightDir
     return (1.0f - shadow);
 }
 
-float PointShadowCalculation(float4 pPos, float3 pFragPos, float3 pLightPos, float pFarPlane, TextureCube pTexture1, Texture2D pTexture2)
+float PointShadowCalculation(float2 texCoord, float3 pFragPos, float3 pLightPos, float pFarPlane, TextureCube pTexture1, Texture2D pTexture2)
 {
+    float shadow = 0.0f;
+    
+    if (ShadowMode == 0)
+    {
+        float currentDepth = depthTexture.Sample(Sampler, texCoord).r;
+        
+        float closestDepth = pTexture2.Sample(Sampler, texCoord).r;
+        
+        shadow = currentDepth > closestDepth ? 1.0f : 0.0f;
+        return (1.0 - shadow);
+    }
+
     float3 vec = pFragPos - pLightPos;
     
     float currentDepth = length(vec);
     
     float bias = 0.05f;
-    
-    float shadow = 0.0f;
     
     if (ShadowMode == 1) //No PCF or VSM
     {
@@ -435,7 +428,7 @@ float PointShadowCalculation(float4 pPos, float3 pFragPos, float3 pLightPos, flo
             {
                 for (float z = -offset; z < offset; z += offset / (samples * 0.5))
                 {
-                //TODO: Source: http://developer.download.nvidia.com/SDK/10/direct3d/Source/VarianceShadowMapping/Doc/VarianceShadowMapping.pdf
+            //TODO: Source: http://developer.download.nvidia.com/SDK/10/direct3d/Source/VarianceShadowMapping/Doc/VarianceShadowMapping.pdf
                     float2 moments = pTexture1.Sample(Sampler, vec + float3(x, y, z)).rg;
         
                     float variance = moments.y - (moments.x * moments.x);

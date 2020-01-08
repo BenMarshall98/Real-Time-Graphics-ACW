@@ -31,7 +31,7 @@ cbuffer spotBuffer : register(b4)
     int4 SpotUsed;
 }
 
-Texture2D normTexture : register(t8);
+Texture2D normTexture : register(t12);
 SamplerState Sampler : register(s0);
 
 struct DS_OUTPUT

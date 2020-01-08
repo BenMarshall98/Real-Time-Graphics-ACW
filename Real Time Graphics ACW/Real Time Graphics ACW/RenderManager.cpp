@@ -58,11 +58,13 @@ RenderManager::RenderManager() : mBloom(std::make_unique<Bloom>())
 	
 	mStaticTechnique = std::make_unique<PhongShading>();
 	mDynamicTechniques.emplace_back(std::make_unique<PhongShading>());
+	mDynamicTechniques.emplace_back(std::make_unique<BumpMapping>());
+	mDynamicTechniques.emplace_back(std::make_unique<DisplacementMapping>());
 	mDynamicTechniques.emplace_back(std::make_unique<TransparencyShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<GourandShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<TextureMapping>());
 	mDynamicTechniques.emplace_back(std::make_unique<BumpMapping>());
-	mDynamicTechniques.emplace_back(std::make_unique<DisplacementMapping>());
+	
 	//mDynamicTechniques.emplace_back(std::make_unique<EnvironmentMapping>());
 	//mDynamicTechniques.emplace_back(std::make_unique<ToonShading>());
 }
@@ -74,7 +76,7 @@ void RenderManager::setup(const float pCurrentTime) const
 		pCurrentTime,
 		mMode,
 		LightingManager::instance()->getShadowMode(),
-		0.0f
+		InkRender::instance()->getHeight()
 	};
 
 	Dx11Render::instance()->useGlobalBuffer(gb);
@@ -202,44 +204,44 @@ void RenderManager::renderToScreen()
 		//Post Processing
 		if (mFramebuffer == 0)
 		{
-			mScreenFramebufferOne->useTexture(6);
+			mScreenFramebufferOne->useTexture(12);
 			if (mStaticTechnique->renderPostprocessing(mScreenFramebufferTwo))
 			{
 				mFramebuffer = 1;
 			}
-			mScreenFramebufferOne->releaseTexture(6);
+			mScreenFramebufferOne->releaseTexture(12);
 			
 		}
 		else
 		{
-			mScreenFramebufferTwo->useTexture(6);
+			mScreenFramebufferTwo->useTexture(12);
 			if (mStaticTechnique->renderPostprocessing(mScreenFramebufferOne))
 			{
 				mFramebuffer = 0;
 			}
-			mScreenFramebufferTwo->releaseTexture(6);
+			mScreenFramebufferTwo->releaseTexture(12);
 		}
 
 		for (auto i = 0u; i < mDynamicShapes.size(); i++)
 		{
 			if (mFramebuffer == 0)
 			{
-				mScreenFramebufferOne->useTexture(6);
+				mScreenFramebufferOne->useTexture(12);
 				if (mDynamicTechniques[i]->renderPostprocessing(mScreenFramebufferTwo))
 				{
 					mFramebuffer = 1;
 				}
-				mScreenFramebufferOne->releaseTexture(6);
+				mScreenFramebufferOne->releaseTexture(12);
 
 			}
 			else
 			{
-				mScreenFramebufferTwo->useTexture(6);
+				mScreenFramebufferTwo->useTexture(12);
 				if (mDynamicTechniques[i]->renderPostprocessing(mScreenFramebufferOne))
 				{
 					mFramebuffer = 0;
 				}
-				mScreenFramebufferTwo->releaseTexture(6);
+				mScreenFramebufferTwo->releaseTexture(12);
 			}
 		}
 
@@ -305,11 +307,11 @@ void RenderManager::renderToScreen()
 
 	if (mFramebuffer == 0)
 	{
-		mScreenFramebufferOne->useTexture(6);
+		mScreenFramebufferOne->useTexture(12);
 
 		if (mMode == 9)
 		{
-			mBloom->useBloomTexture(7);
+			mBloom->useBloomTexture(13);
 		}
 
 		Dx11Render::instance()->bindDefaultFramebuffer();
@@ -321,16 +323,16 @@ void RenderManager::renderToScreen()
 
 		if (mMode == 9)
 		{
-			mBloom->releaseBloomTexture(7);
+			mBloom->releaseBloomTexture(13);
 		}
 	}
 	else
 	{
-		mScreenFramebufferTwo->useTexture(6);
+		mScreenFramebufferTwo->useTexture(12);
 
 		if (mMode == 9)
 		{
-			mBloom->useBloomTexture(7);
+			mBloom->useBloomTexture(13);
 		}
 
 		Dx11Render::instance()->bindDefaultFramebuffer();
@@ -338,7 +340,7 @@ void RenderManager::renderToScreen()
 		mHDRShader->useShader();
 
 		mOutputModel->render();
-		mScreenFramebufferTwo->releaseTexture(6);
+		mScreenFramebufferTwo->releaseTexture(13);
 	}
 }
 

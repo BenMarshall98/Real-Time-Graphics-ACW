@@ -1,11 +1,11 @@
-Texture2D normalTexture : register(t6);
+Texture2D normalTexture : register(t12);
 SamplerState Sampler : register(s0);
 
-Texture2D depthTexture : register(t7);
+Texture2D depthTexture : register(t13);
 
-Texture2D normalTexture2 : register(t8);
+Texture2D normalTexture2 : register(t14);
 
-Texture2D depthTexture2 : register(t9);
+Texture2D depthTexture2 : register(t15);
 
 struct VS_OUTPUT
 {

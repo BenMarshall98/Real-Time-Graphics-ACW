@@ -52,7 +52,7 @@ void InkRender::RenderInk()
 	mDepthShader->useShader();
 
 	
-	mNorm->useFragment(8);
+	mNorm->useFragment(12);
 	mDisp->useDomain(0);
 	mModel->render(true);
 

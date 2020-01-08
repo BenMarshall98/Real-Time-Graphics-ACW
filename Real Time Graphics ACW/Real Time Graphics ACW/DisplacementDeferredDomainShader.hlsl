@@ -93,9 +93,9 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     biTangent += uvw[1] * tri[1].BiTangent;
     biTangent += uvw[2] * tri[2].BiTangent;
     
-    output.TBN = float3x3(normalize(mul(World, float4(tangent, 1.0f)).xyz),
-                        normalize(mul(World, float4(biTangent, 1.0f)).xyz),
-                        normalize(mul(World, float4(output.Normal, 1.0f)).xyz));
+    output.TBN = float3x3(normalize(mul(float4(normalize(tangent), 1.0f), InverseWorld).xyz),
+                        normalize(mul(float4(normalize(biTangent), 1.0f), InverseWorld).xyz),
+                        normalize(mul(float4(normalize(output.Normal), 1.0f), InverseWorld).xyz));
     
     return output;
 }

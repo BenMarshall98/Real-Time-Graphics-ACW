@@ -73,7 +73,7 @@ void RenderManager::setup(const float pCurrentTime) const
 	{
 		pCurrentTime,
 		mMode,
-		0,
+		LightingManager::instance()->getShadowMode(),
 		0.0f
 	};
 
@@ -125,12 +125,21 @@ void RenderManager::renderShapes()
 
 void RenderManager::renderShadows()
 {
+
+	const auto shadowMode = LightingManager::instance()->getShadowMode();
 	//Directional Light
 	if (LightingManager::instance()->updateDirectionalLightShadow())
 	{
 		for (auto i = 0u; i < mDynamicShapes.size(); i++)
 		{
-			mDynamicTechniques[i]->renderDirectionalShadow(mDynamicShapes[i]);
+			if (shadowMode == 0)
+			{
+				mDynamicTechniques[i]->renderDirectionalSimpleShadow(mDynamicShapes[i]);
+			}
+			else
+			{
+				mDynamicTechniques[i]->renderDirectionalShadow(mDynamicShapes[i]);
+			}
 		}
 	}
 
@@ -139,7 +148,14 @@ void RenderManager::renderShadows()
 	{
 		for (auto i = 0u; i < mDynamicShapes.size(); i++)
 		{
-			mDynamicTechniques[i]->renderOmniDirectionalShadow(mDynamicShapes[i]);
+			if (shadowMode == 0)
+			{
+				mDynamicTechniques[i]->renderPointSimpleShadow(mDynamicShapes[i]);
+			}
+			else
+			{
+				mDynamicTechniques[i]->renderOmniDirectionalShadow(mDynamicShapes[i]);
+			}
 		}
 	}
 
@@ -150,7 +166,14 @@ void RenderManager::renderShadows()
 
 		for (auto j = 0u; j < mDynamicShapes.size(); j++)
 		{
-			mDynamicTechniques[j]->renderOmniDirectionalShadow(mDynamicShapes[j]);
+			if (shadowMode == 0)
+			{
+				mDynamicTechniques[i]->renderPointSimpleShadow(mDynamicShapes[j]);
+			}
+			else
+			{
+				mDynamicTechniques[j]->renderOmniDirectionalShadow(mDynamicShapes[j]);
+			}
 		}
 	}
 
@@ -162,12 +185,12 @@ void RenderManager::renderToScreen()
 	if (mMode <= 7)
 	{
 		mDeferredShader->useShader();
-		mDeferredBuffer->useTexture(6);
+		mDeferredBuffer->useTexture(12);
 
 		mScreenFramebufferOne->useFramebuffer();
 		
 		mOutputModel->render();
-		mDeferredBuffer->releaseTexture(6);
+		mDeferredBuffer->releaseTexture(12);
 	}
 
 	if (mMode == 0 || mMode == 8 || mMode == 9)

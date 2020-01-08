@@ -4,24 +4,33 @@
 #include "CameraManager.h"
 
 DirectionalLight::DirectionalLight(const DirectX::XMFLOAT4 & pColor, const DirectX::XMFLOAT3 & pDirection) :
-	mColor(pColor), mDirection(pDirection), mFramebuffer(std::make_unique<Framebuffer>())
+	mColor(pColor), mDirection(pDirection), mMappingFramebuffer(std::make_unique<Framebuffer>()), mSimpleFramebuffer(std::make_unique<Framebuffer>())
 {
 	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }))
+	if (!mMappingFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }))
 	{
-		mFramebuffer.reset();
+		mMappingFramebuffer.reset();
+	}
+
+	if (!mSimpleFramebuffer->loadFramebuffer(false, true, 1024, 1024, { colour }))
+	{
+		mSimpleFramebuffer.reset();
 	}
 }
 
-DirectionalLight::DirectionalLight() : mColor(), mDirection(), mFramebuffer(std::make_unique<Framebuffer>())
+DirectionalLight::DirectionalLight() : mColor(), mDirection(), mMappingFramebuffer(std::make_unique<Framebuffer>()), mSimpleFramebuffer(std::make_unique<Framebuffer>())
 {
-
 	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }))
+	if (!mMappingFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }))
 	{
-		mFramebuffer.reset();
+		mMappingFramebuffer.reset();
+	}
+
+	if (!mSimpleFramebuffer->loadFramebuffer(false, true, 1024, 1024, { colour }))
+	{
+		mSimpleFramebuffer.reset();
 	}
 }
 
@@ -58,19 +67,34 @@ void DirectionalLight::update(const DirectX::XMFLOAT4X4& pMatrix)
 	XMStoreFloat3(&mDirection, direction);
 }
 
-void DirectionalLight::updateShadow() const
+void DirectionalLight::updateMappingShadow() const
 {
-	mFramebuffer->useFramebuffer();
+	mMappingFramebuffer->useFramebuffer();
 }
 
-void DirectionalLight::useShadow(const unsigned int pTextureSlot) const
+void DirectionalLight::useMappingShadow(const unsigned int pTextureSlot) const
 {
-	mFramebuffer->useTexture(pTextureSlot);
+	mMappingFramebuffer->useTexture(pTextureSlot);
 }
 
-void DirectionalLight::releaseShadow(const unsigned int pTextureSlot) const
+void DirectionalLight::releaseMappingShadow(const unsigned int pTextureSlot) const
 {
-	mFramebuffer->releaseTexture(pTextureSlot);
+	mMappingFramebuffer->releaseTexture(pTextureSlot);
+}
+
+void DirectionalLight::updateSimpleShadow() const
+{
+	mSimpleFramebuffer->useFramebuffer();
+}
+
+void DirectionalLight::useSimpleShadow(const unsigned int pTextureSlot) const
+{
+	mSimpleFramebuffer->useTexture(pTextureSlot);
+}
+
+void DirectionalLight::releaseSimpleShadow(const unsigned int pTextureSlot) const
+{
+	mSimpleFramebuffer->releaseTexture(pTextureSlot);
 }
 
 std::istream& operator>>(std::istream& pIn, DirectionalLight& pLight)

@@ -10,6 +10,8 @@ class Technique
 	std::shared_ptr<Shader> mDeferredShader;
 	std::shared_ptr<Shader> mDirectionalShader;
 	std::shared_ptr<Shader> mOmniDirectionalShader;
+	std::shared_ptr<Shader> mDirectionalSimpleShader;
+	std::shared_ptr<Shader> mPointSimpleShader;
 
 protected:
 	void getNormalShader(std::shared_ptr<Shader> & pNormalShader) const
@@ -52,6 +54,26 @@ protected:
 		mOmniDirectionalShader = pOmniDirectionalShader;
 	}
 
+	void getDirectionalSimpleShader(std::shared_ptr<Shader> & pDirectionalSimpleShader) const
+	{
+		pDirectionalSimpleShader = mDirectionalSimpleShader;
+	}
+
+	void setDirectionalSimpleShader(const std::shared_ptr<Shader> & pDirectionalSimpleShader)
+	{
+		mDirectionalSimpleShader = pDirectionalSimpleShader;
+	}
+
+	void getPointSimpleShader(std::shared_ptr<Shader> & pPointSimpleShader) const
+	{
+		pPointSimpleShader = mPointSimpleShader;
+	}
+
+	void setPointSimpleShader(const std::shared_ptr<Shader> & pPointSimpleShader)
+	{
+		mPointSimpleShader = pPointSimpleShader;
+	}
+
 	void useNormalShader() const
 	{
 		mNormalShader->useShader();
@@ -71,6 +93,16 @@ protected:
 	{
 		mOmniDirectionalShader->useShader();
 	}
+
+	void useDirectionalSimpleShader() const
+	{
+		mDirectionalSimpleShader->useShader();
+	}
+
+	void usePointSimpleShader() const
+	{
+		mPointSimpleShader->useShader();
+	}
 	
 public:
 	Technique() = default;
@@ -84,6 +116,8 @@ public:
 	virtual void render(const std::shared_ptr<Shape> & pShape, bool pDeferred, const std::unique_ptr<Framebuffer> & pCurrentFramebuffer) = 0;
 	virtual void renderDirectionalShadow(const std::shared_ptr<Shape> & pShape) = 0;
 	virtual void renderOmniDirectionalShadow(const std::shared_ptr<Shape> & pShape) = 0;
+	virtual void renderDirectionalSimpleShadow(const std::shared_ptr<Shape> & pShape) = 0;
+	virtual void renderPointSimpleShadow(const std::shared_ptr<Shape> & pShape) = 0;
 	virtual bool renderPostprocessing(const std::unique_ptr<Framebuffer> & pCurrentFramebuffer) = 0;
 	virtual void renderTransparent(const std::shared_ptr<Shape> & pShape, const std::unique_ptr<Framebuffer> & pCurrentFramebuffer) = 0;
 };

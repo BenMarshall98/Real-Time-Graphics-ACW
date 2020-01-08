@@ -8,25 +8,37 @@ PointLight::PointLight(const DirectX::XMFLOAT3 & pColor, const DirectX::XMFLOAT3
 	mColor(pColor), mPosition(pPosition), mAttenuationConstant(pAttenuationConstant),
 	mAttenuationLinear(pAttenuationLinear), mAttenuationQuad(pAttenuationQuad)
 {
-	mFramebuffer = std::make_unique<Framebuffer>();
+	mMappingFramebuffer = std::make_unique<Framebuffer>();
+	mSimpleFramebuffer = std::make_unique<Framebuffer>();
 
 	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }, TextureType::TEXTURE_CUBE))
+	if (!mMappingFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }, TextureType::TEXTURE_CUBE))
 	{
-		mFramebuffer.reset();
+		mMappingFramebuffer.reset();
+	}
+
+	if(!mSimpleFramebuffer->loadFramebuffer(false, true, 1024, 1024, { colour }))
+	{
+		mSimpleFramebuffer.reset();
 	}
 }
 
 PointLight::PointLight() : mAttenuationConstant(1.0f), mAttenuationLinear(0.0f), mAttenuationQuad(0.0f)
 {
-	mFramebuffer = std::make_unique<Framebuffer>();
+	mMappingFramebuffer = std::make_unique<Framebuffer>();
+	mSimpleFramebuffer = std::make_unique<Framebuffer>();
 
 	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }, TextureType::TEXTURE_CUBE))
+	if (!mMappingFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }, TextureType::TEXTURE_CUBE))
 	{
-		mFramebuffer.reset();
+		mMappingFramebuffer.reset();
+	}
+
+	if(!mSimpleFramebuffer->loadFramebuffer(false, true, 1024, 1024, { colour }))
+	{
+		mSimpleFramebuffer.reset();
 	}
 }
 
@@ -51,11 +63,11 @@ void PointLight::update(const DirectX::XMFLOAT4X4& pMatrix)
 	XMStoreFloat3(&mPosition, center);
 }
 
-void PointLight::updateShadow() const
+void PointLight::updateMappingShadow() const
 {
 	ShadowMatrixBuffer mb;
 
-	XMStoreFloat4x4(&mb.mShadowPerspective, XMMatrixTranspose(DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, static_cast<float>(mFramebuffer->getWidth()) / static_cast<float>(mFramebuffer->getHeight()), 0.01f, 20.0f)));
+	XMStoreFloat4x4(&mb.mShadowPerspective, XMMatrixTranspose(DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, static_cast<float>(mMappingFramebuffer->getWidth()) / static_cast<float>(mMappingFramebuffer->getHeight()), 0.01f, 20.0f)));
 	XMStoreFloat4x4(&mb.mShadowView[0], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 1.0f, mPosition.y + 0.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))));
 	XMStoreFloat4x4(&mb.mShadowView[1], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x - 1.0f, mPosition.y + 0.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))));
 	XMStoreFloat4x4(&mb.mShadowView[2], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 0.0f, mPosition.y + 1.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f))));
@@ -72,17 +84,32 @@ void PointLight::updateShadow() const
 
 	Dx11Render::instance()->useShadowLightBuffer(lb);
 	
-	mFramebuffer->useFramebuffer();
+	mMappingFramebuffer->useFramebuffer();
 }
 
-void PointLight::useShadow(const unsigned int pTextureSlot) const
+void PointLight::useMappingShadow(const unsigned int pTextureSlot) const
 {
-	mFramebuffer->useTexture(pTextureSlot);
+	mMappingFramebuffer->useTexture(pTextureSlot);
 }
 
-void PointLight::releaseShadow(const unsigned int pTextureSlot) const
+void PointLight::releaseMappingShadow(const unsigned int pTextureSlot) const
 {
-	mFramebuffer->releaseTexture(pTextureSlot);
+	mMappingFramebuffer->releaseTexture(pTextureSlot);
+}
+
+void PointLight::updateSimpleShadow() const
+{
+	mSimpleFramebuffer->useFramebuffer();
+}
+
+void PointLight::useSimpleShadow(const unsigned int pTextureSlot) const
+{
+	mSimpleFramebuffer->useTexture(pTextureSlot);
+}
+
+void PointLight::releaseSimpleShadow(const unsigned int pTextureSlot) const
+{
+	mSimpleFramebuffer->releaseTexture(pTextureSlot);
 }
 
 std::istream& operator>>(std::istream& pIn, PointLight& pLight)

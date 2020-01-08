@@ -18,7 +18,8 @@ class PointLight
 {
 	DirectX::XMFLOAT3 mColor;
 	DirectX::XMFLOAT3 mPosition;
-	std::unique_ptr<Framebuffer> mFramebuffer;
+	std::unique_ptr<Framebuffer> mMappingFramebuffer;
+	std::unique_ptr<Framebuffer> mSimpleFramebuffer;
 	float mAttenuationConstant;
 	float mAttenuationLinear;
 	float mAttenuationQuad;
@@ -53,9 +54,12 @@ public:
 
 	void use(PointLightBuffer & pLightBuffer) const;
 	void update(const DirectX::XMFLOAT4X4 & pMatrix);
-	void updateShadow() const;
-	void useShadow(unsigned int pTextureSlot) const;
-	void releaseShadow(unsigned int pTextureSlot) const;
+	void updateMappingShadow() const;
+	void useMappingShadow(unsigned int pTextureSlot) const;
+	void releaseMappingShadow(unsigned int pTextureSlot) const;
+	void updateSimpleShadow() const;
+	void useSimpleShadow(unsigned int pTextureSlot) const;
+	void releaseSimpleShadow(unsigned int pTextureSlot) const;
 };
 
 std::istream& operator>>(std::istream & pIn, PointLight & pLight);

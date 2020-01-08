@@ -16,7 +16,8 @@ class DirectionalLight
 {
 	DirectX::XMFLOAT4 mColor;
 	DirectX::XMFLOAT3 mDirection;
-	std::unique_ptr<Framebuffer> mFramebuffer;
+	std::unique_ptr<Framebuffer> mMappingFramebuffer;
+	std::unique_ptr<Framebuffer> mSimpleFramebuffer;
 	
 public:
 	DirectionalLight(const DirectX::XMFLOAT4 & pColor, const DirectX::XMFLOAT3 & pDirection);
@@ -39,9 +40,12 @@ public:
 	
 	void use(DirectionalLightBuffer & pLightBuffer) const;
 	void update(const DirectX::XMFLOAT4X4 & pMatrix);
-	void updateShadow() const;
-	void useShadow(unsigned int pTextureSlot) const;
-	void releaseShadow(unsigned int pTextureSlot) const;
+	void updateMappingShadow() const;
+	void useMappingShadow(unsigned int pTextureSlot) const;
+	void releaseMappingShadow(unsigned int pTextureSlot) const;
+	void updateSimpleShadow() const;
+	void useSimpleShadow(unsigned int pTextureSlot) const;
+	void releaseSimpleShadow(unsigned int pTextureSlot) const;
 };
 
 std::istream& operator>>(std::istream & pIn, DirectionalLight & pLight);

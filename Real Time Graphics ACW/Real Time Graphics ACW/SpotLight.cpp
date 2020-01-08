@@ -10,25 +10,37 @@ SpotLight::SpotLight(const DirectX::XMFLOAT3& pColor, const DirectX::XMFLOAT3 & 
 	mInnerAngle(pInnerAngle), mOuterAngle(pOuterAngle), mAttenuationConstant(pAttenuationConstant),
 	mAttenuationLinear(pAttenuationLinear), mAttenuationQuad(pAttenuationQuad)
 {
-	mFramebuffer = std::make_unique<Framebuffer>();
+	mMappingFramebuffer = std::make_unique<Framebuffer>();
+	mSimpleFramebuffer = std::make_unique<Framebuffer>();
 
 	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	if (mFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }, TextureType::TEXTURE_CUBE))
+	if (mMappingFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }, TextureType::TEXTURE_CUBE))
 	{
-		mFramebuffer.reset();
+		mMappingFramebuffer.reset();
+	}
+
+	if (!mSimpleFramebuffer->loadFramebuffer(false, true, 1024, 1024, { colour }))
+	{
+		mSimpleFramebuffer.reset();
 	}
 }
 
 SpotLight::SpotLight() : mAttenuationConstant(1.0f), mAttenuationLinear(0.0f), mAttenuationQuad(0.0f), mInnerAngle(5.0f), mOuterAngle(15.0f)
 {
-	mFramebuffer = std::make_unique<Framebuffer>();
+	mMappingFramebuffer = std::make_unique<Framebuffer>();
+	mSimpleFramebuffer = std::make_unique<Framebuffer>();
 
 	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	if (!mFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }, TextureType::TEXTURE_CUBE))
+	if (!mMappingFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }, TextureType::TEXTURE_CUBE))
 	{
-		mFramebuffer.reset();
+		mMappingFramebuffer.reset();
+	}
+
+	if (!mSimpleFramebuffer->loadFramebuffer(false, true, 1024, 1024, { colour }))
+	{
+		mSimpleFramebuffer.reset();
 	}
 }
 
@@ -63,11 +75,11 @@ void SpotLight::update(const DirectX::XMFLOAT4X4& pMatrix)
 	XMStoreFloat3(&mDirection, direction);
 }
 
-void SpotLight::updateShadow() const
+void SpotLight::updateMappingShadow() const
 {
 	ShadowMatrixBuffer mb;
 
-	XMStoreFloat4x4(&mb.mShadowPerspective, XMMatrixTranspose(DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, static_cast<float>(mFramebuffer->getWidth()) / static_cast<float>(mFramebuffer->getHeight()), 0.01f, 20.0f)));
+	XMStoreFloat4x4(&mb.mShadowPerspective, XMMatrixTranspose(DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, static_cast<float>(mMappingFramebuffer->getWidth()) / static_cast<float>(mMappingFramebuffer->getHeight()), 0.01f, 20.0f)));
 	XMStoreFloat4x4(&mb.mShadowView[0], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 1.0f, mPosition.y + 0.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))));
 	XMStoreFloat4x4(&mb.mShadowView[1], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x - 1.0f, mPosition.y + 0.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))));
 	XMStoreFloat4x4(&mb.mShadowView[2], XMMatrixTranspose(DirectX::XMMatrixLookAtLH(DirectX::XMVectorSet(mPosition.x, mPosition.y, mPosition.z, 0.0f), DirectX::XMVectorSet(mPosition.x + 0.0f, mPosition.y + 1.0f, mPosition.z + 0.0f, 0.0f), DirectX::XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f))));
@@ -84,17 +96,32 @@ void SpotLight::updateShadow() const
 
 	Dx11Render::instance()->useShadowLightBuffer(lb);
 
-	mFramebuffer->useFramebuffer();
+	mMappingFramebuffer->useFramebuffer();
 }
 
-void SpotLight::useShadow(const unsigned int pTextureSlot) const
+void SpotLight::useMappingShadow(const unsigned int pTextureSlot) const
 {
-	mFramebuffer->useTexture(pTextureSlot);
+	mMappingFramebuffer->useTexture(pTextureSlot);
 }
 
-void SpotLight::releaseShadow(const unsigned int pTextureSlot) const
+void SpotLight::releaseMappingShadow(const unsigned int pTextureSlot) const
 {
-	mFramebuffer->releaseTexture(pTextureSlot);
+	mMappingFramebuffer->releaseTexture(pTextureSlot);
+}
+
+void SpotLight::updateSimpleShadow() const
+{
+	mSimpleFramebuffer->useFramebuffer();
+}
+
+void SpotLight::useSimpleShadow(const unsigned int pTextureSlot) const
+{
+	mSimpleFramebuffer->useTexture(pTextureSlot);
+}
+
+void SpotLight::releaseSimpleShadow(const unsigned int pTextureSlot) const
+{
+	mSimpleFramebuffer->releaseTexture(pTextureSlot);
 }
 
 std::istream& operator>>(std::istream& pIn, SpotLight& pLight)

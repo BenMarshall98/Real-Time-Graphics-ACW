@@ -12,6 +12,8 @@ class LightingManager
 	std::shared_ptr<DirectionalLight> mDirectionalLight = nullptr;
 	std::shared_ptr<PointLight> mPointLight = nullptr;
 	std::vector<std::shared_ptr<SpotLight>> mSpotLights;
+	unsigned int mShadowMode = 0u;
+	unsigned int mLightingMode = 0u;
 
 	static LightingManager * mInstance;
 	
@@ -60,7 +62,40 @@ public:
 	
 	unsigned int getNumberOfSpotLights() const
 	{
+		if (mLightingMode != 2u)
+		{
+			return 0u;
+		}
 		return mSpotLights.size();
+	}
+
+	void changeShadowMode()
+	{
+		if (mShadowMode == 3u)
+		{
+			mShadowMode = 0u;
+		}
+		else
+		{
+			mShadowMode++;
+		}
+	}
+
+	void changeLightingMode()
+	{
+		if (mLightingMode == 2u)
+		{
+			mLightingMode = 0u;
+		}
+		else
+		{
+			mLightingMode++;
+		}
+	}
+
+	unsigned int getShadowMode()
+	{
+		return mShadowMode;
 	}
 
 	void update() const;

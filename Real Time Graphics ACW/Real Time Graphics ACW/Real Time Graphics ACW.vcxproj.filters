@@ -136,6 +136,24 @@
     <Filter Include="Resource Files\Shaders\PostProcessing">
       <UniqueIdentifier>{eeed4c42-309a-4a5c-9325-7cfe5244ee80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders\DirectionalSimpleShadowShading">
+      <UniqueIdentifier>{00b3a692-9b0a-42bf-9494-2bdca8bdae7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\PointSimpleShadowShading">
+      <UniqueIdentifier>{245e7584-2ee5-44b7-9694-43ff7ca0e9be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\DirectionalSimpleShadowShading\Displacement">
+      <UniqueIdentifier>{3bbfd931-d3f2-42b5-856a-2bb53b61fbd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\DirectionalSimpleShadowShading\Normal">
+      <UniqueIdentifier>{86c705b3-fbd3-4833-afe1-f0bafb5aa8e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\PointSimpleShadowShading\Displacement">
+      <UniqueIdentifier>{9bbddc10-2a5c-455c-b054-f7d53abb617e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\PointSimpleShadowShading\Normal">
+      <UniqueIdentifier>{7902a2f5-53d6-48a2-9cef-37133b400691}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -660,6 +678,8 @@
     <CopyFileToFolders Include="HorzBloomVertexShader.hlsl" />
     <CopyFileToFolders Include="VertBloomFragmentShader.hlsl" />
     <CopyFileToFolders Include="VertBloomVertexShader.hlsl" />
+    <CopyFileToFolders Include="water_height.dds" />
+    <CopyFileToFolders Include="water_normal.dds" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />
@@ -681,7 +701,43 @@
     <Image Include="tyre_spec.dds">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="water_normal.dds" />
-    <Image Include="water_height.dds" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="DisplacementDirectionalSimpleShadowVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\DirectionalSimpleShadowShading\Displacement</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementDirectionalSimpleShadowFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\DirectionalSimpleShadowShading\Displacement</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementDirectionalSimpleShadowHullShader.hlsl">
+      <Filter>Resource Files\Shaders\DirectionalSimpleShadowShading\Displacement</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementDirectionalSimpleShadowDomainShader.hlsl">
+      <Filter>Resource Files\Shaders\DirectionalSimpleShadowShading\Displacement</Filter>
+    </FxCompile>
+    <FxCompile Include="NormalDirectionalSimpleShadowVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\DirectionalSimpleShadowShading\Normal</Filter>
+    </FxCompile>
+    <FxCompile Include="NormalDirectionalSimpleShadowFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\DirectionalSimpleShadowShading\Normal</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementPointSimpleShadowDomainShader.hlsl">
+      <Filter>Resource Files\Shaders\PointSimpleShadowShading\Displacement</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementPointSimpleShadowFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\PointSimpleShadowShading\Displacement</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementPointSimpleShadowHullShader.hlsl">
+      <Filter>Resource Files\Shaders\PointSimpleShadowShading\Displacement</Filter>
+    </FxCompile>
+    <FxCompile Include="DisplacementPointSimpleShadowVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\PointSimpleShadowShading\Displacement</Filter>
+    </FxCompile>
+    <FxCompile Include="NormalPointSimpleShadowFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\PointSimpleShadowShading\Normal</Filter>
+    </FxCompile>
+    <FxCompile Include="NormalPointSimpleShadowVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\PointSimpleShadowShading\Normal</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

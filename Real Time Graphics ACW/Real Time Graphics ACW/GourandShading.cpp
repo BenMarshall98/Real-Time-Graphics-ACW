@@ -8,18 +8,26 @@ GourandShading::GourandShading() :
 	std::shared_ptr<Shader> normalShader;
 	std::shared_ptr<Shader> directionalShader;
 	std::shared_ptr<Shader> omniDirectionalShader;
+	std::shared_ptr<Shader> directionalSimpleShader;
+	std::shared_ptr<Shader> pointSimpleShader;
 
 	getNormalShader(normalShader);
 	getDirectionalShader(directionalShader);
 	getOmniDirectionalShader(omniDirectionalShader);
+	getDirectionalSimpleShader(directionalSimpleShader);
+	getPointSimpleShader(pointSimpleShader);
 
 	ResourceManager::instance()->loadShader(normalShader, "GourandVertexShader.hlsl", "GourandFragmentShader.hlsl");
 	ResourceManager::instance()->loadShader(directionalShader, "NormalDirectionalShadowVertexShader.hlsl", "NormalDirectionalShadowFragmentShader.hlsl");
 	ResourceManager::instance()->loadShader(omniDirectionalShader, "NormalOmniShadowVertexShader.hlsl", "NormalOmniShadowFragmentShader.hlsl", "NormalOmniShadowGeometryShader.hlsl");
+	ResourceManager::instance()->loadShader(directionalSimpleShader, "NormalDirectionalSimpleShadowVertexShader.hlsl", "NormalDirectionalSimpleShadowFragmentShader.hlsl");
+	ResourceManager::instance()->loadShader(pointSimpleShader, "NormalPointSimpleShadowVertexShader.hlsl", "NormalPointSimpleShadowFragmentShader.hlsl");
 
 	setNormalShader(normalShader);
 	setDirectionalShader(directionalShader);
 	setOmniDirectionalShader(omniDirectionalShader);
+	setDirectionalSimpleShader(directionalSimpleShader);
+	setPointSimpleShader(pointSimpleShader);
 	
 	ResourceManager::instance()->loadModel(mRenderPlane, "plane.obj");
 	ResourceManager::instance()->loadShader(mPostShader, "PostVertexShader.hlsl", "PostFragmentShader.hlsl");
@@ -50,6 +58,18 @@ void GourandShading::renderDirectionalShadow(const std::shared_ptr<Shape>& pShap
 void GourandShading::renderOmniDirectionalShadow(const std::shared_ptr<Shape>& pShape)
 {
 	useOmniDirectionalShader();
+	pShape->render();
+}
+
+void GourandShading::renderDirectionalSimpleShadow(const std::shared_ptr<Shape> & pShape)
+{
+	useDirectionalSimpleShader();
+	pShape->render();
+}
+
+void GourandShading::renderPointSimpleShadow(const std::shared_ptr<Shape> & pShape)
+{
+	usePointSimpleShader();
 	pShape->render();
 }
 

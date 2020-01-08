@@ -4,6 +4,7 @@
 #include <string>
 #include "ObjectManager.h"
 #include "RenderManager.h"
+#include "LightingManager.h"
 
 Win32Window * Win32Window::mInstance = nullptr;
 
@@ -177,6 +178,12 @@ LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMess
 			break;
 		case VK_F2:
 			CameraManager::instance()->useCamera2();
+			break;
+		case VK_F6:
+			LightingManager::instance()->changeLightingMode();
+			break;
+		case VK_F7:
+			LightingManager::instance()->changeShadowMode();
 			break;
 		default:
 			break;

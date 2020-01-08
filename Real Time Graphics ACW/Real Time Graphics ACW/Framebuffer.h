@@ -22,8 +22,6 @@ class Framebuffer
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> mDepthTextureTargetView = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mDepthTextureResourceView = nullptr;
 
-	Microsoft::WRL::ComPtr<ID3D11SamplerState> mSampler = nullptr;
-
 	TextureType mType = TextureType::TEXTURE_2D;
 	std::vector<DirectX::XMVECTORF32> mDefaultColours;
 	unsigned int mWidth;

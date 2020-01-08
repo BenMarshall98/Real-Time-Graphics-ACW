@@ -330,21 +330,6 @@ bool Framebuffer::loadFramebuffer(const bool pColour, const bool pDepth, const i
 		}
 	}
 
-	D3D11_SAMPLER_DESC samplerDesc;
-	ZeroMemory(&samplerDesc, sizeof D3D11_SAMPLER_DESC);
-	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-
-	result = device->CreateSamplerState(&samplerDesc, &mSampler);
-
-	if (FAILED(result))
-	{
-		return false;
-	}
-
 	return true;
 }
 
@@ -378,14 +363,12 @@ void Framebuffer::useTexture(unsigned int pSlot)
 	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
 	{
 		deviceContext->PSSetShaderResources(pSlot, 1, &mColorTextureResourceViews[i]);
-		deviceContext->PSSetSamplers(pSlot, 1, mSampler.GetAddressOf());
 		pSlot++;
 	}
 
 	if (mDepthTextureResourceView)
 	{
 		deviceContext->PSSetShaderResources(pSlot, 1, mDepthTextureResourceView.GetAddressOf());
-		deviceContext->PSSetSamplers(pSlot, 1, mSampler.GetAddressOf());
 	}
 }
 
@@ -418,14 +401,12 @@ void Framebuffer::useDomainTexture(unsigned int pSlot)
 	for (auto i = 0u; i < mColorTextureResourceViews.size(); i++)
 	{
 		deviceContext->DSSetShaderResources(pSlot, 1, &mColorTextureResourceViews[i]);
-		deviceContext->DSSetSamplers(pSlot, 1, mSampler.GetAddressOf());
 		pSlot++;
 	}
 
 	if (mDepthTextureResourceView)
 	{
 		deviceContext->DSSetShaderResources(pSlot, 1, mDepthTextureResourceView.GetAddressOf());
-		deviceContext->DSSetSamplers(pSlot, 1, mSampler.GetAddressOf());
 	}
 }
 
@@ -495,7 +476,6 @@ bool Framebuffer::resize(const int pWidth, const int pHeight)
 	mDepthState.Reset();
 	mDepthTextureTargetView.Reset();
 	mDepthTextureResourceView.Reset();
-	mSampler.Reset();
 
 	return loadFramebuffer(mColour, mDepth, pWidth, pHeight, mDefaultColours, mType, mNumberOfBuffer);
 }

@@ -32,6 +32,7 @@ Game::Game()
 	if (in.good())
 	{
 		ConfigLoader::readScene(in, mNode);
+		ConfigLoader::readCameras(in);
 	}
 
 	in.close();
@@ -39,24 +40,6 @@ Game::Game()
 	// Initialize the world matrix
 	mWorld = DirectX::XMMatrixIdentity();
 
-	// Initialize the view matrix
-	{
-		const auto eye = DirectX::XMFLOAT3(0.0f, 0.0f, -5.0f);
-		const auto at = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
-		const auto up = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
-
-		auto camera = std::make_unique<Camera>(eye, up, at);
-		CameraManager::instance()->setCamera1(camera);
-	}
-
-	{
-		const auto eye = DirectX::XMFLOAT3(0.0f, 5.0f, 0.0f);
-		const auto at = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
-		const auto up = DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f);
-
-		auto camera = std::make_unique<Camera>(eye, up, at);
-		CameraManager::instance()->setCamera2(camera);
-	}
 
 	ResourceManager::instance()->loadTexture(mBase, "tyre_base.dds");
 	ResourceManager::instance()->loadTexture(mSpec, "tyre_spec.dds");

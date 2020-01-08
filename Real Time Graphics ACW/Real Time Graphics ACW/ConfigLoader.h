@@ -8,5 +8,6 @@ class ConfigLoader
 	~ConfigLoader() = default;
 public:
 	static void readScene(std::istream & pIn, const std::unique_ptr<SceneGraphNode> & pNode);
+	static void readCameras(std::istream & pIn);
 };
 

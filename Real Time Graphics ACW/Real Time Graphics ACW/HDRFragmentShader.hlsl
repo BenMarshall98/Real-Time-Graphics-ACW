@@ -7,10 +7,9 @@ cbuffer GlobalBuffer : register(b10)
 }
 
 Texture2D normalTexture : register(t6);
-SamplerState normalSampler : register(s6);
+SamplerState Sampler : register(s0);
 
 Texture2D bloomTexture : register(t7);
-SamplerState bloomSampler : register(s7);
 
 struct VS_OUTPUT
 {
@@ -22,13 +21,13 @@ struct VS_OUTPUT
 
 float4 main(VS_OUTPUT input) : SV_Target
 {
-    float3 color = normalTexture.Sample(normalSampler, input.TexCoord).rgb;
+    float3 color = normalTexture.Sample(Sampler, input.TexCoord).rgb;
     
     if (ScreenMode > 7) //HDR or Bloom else deferred
     {
         if (ScreenMode == 9)
         {
-            color += bloomTexture.Sample(bloomSampler, input.TexCoord).rgb;
+            color += bloomTexture.Sample(Sampler, input.TexCoord).rgb;
         }
         color = color / (color + float3(1.0f, 1.0f, 1.0f));
     }

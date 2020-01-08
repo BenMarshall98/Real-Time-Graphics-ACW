@@ -17,16 +17,6 @@ bool Texture::loadTexture(const std::string & pTextureFile)
 		return false;
 	}
 
-	D3D11_SAMPLER_DESC desc;
-	ZeroMemory(&desc, sizeof desc);
-	desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-
-	result = device->CreateSamplerState(&desc, &mSampler);
-
 	if (FAILED(result))
 	{
 		return false;
@@ -45,7 +35,6 @@ void Texture::useFragment(const unsigned int pIndex) const
 	Dx11Render::instance()->getDeviceContext(deviceContext);
 
 	deviceContext->PSSetShaderResources(pIndex, 1, mTexture.GetAddressOf());
-	deviceContext->PSSetSamplers(pIndex, 1, mSampler.GetAddressOf());
 }
 
 void Texture::useDomain(const unsigned int pIndex) const
@@ -54,5 +43,4 @@ void Texture::useDomain(const unsigned int pIndex) const
 	Dx11Render::instance()->getDeviceContext(deviceContext);
 
 	deviceContext->DSSetShaderResources(pIndex, 1, mTexture.GetAddressOf());
-	deviceContext->DSSetSamplers(pIndex, 1, mSampler.GetAddressOf());
 }

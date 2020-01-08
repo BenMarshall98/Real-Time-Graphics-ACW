@@ -37,7 +37,7 @@ void InkRender::RenderInk()
 
 	const auto trans = DirectX::XMMatrixTranslation(0.0f, mHeight, 0.0f);
 	const auto scale = DirectX::XMMatrixScaling(5.0f, 5.0f, 5.0f);
-	const auto matrix = DirectX::XMMatrixMultiply(trans, scale);
+	const auto matrix = DirectX::XMMatrixMultiply(scale, trans);
 
 	const ModelBuffer mb = {
 		DirectX::XMMatrixTranspose(matrix),
@@ -47,6 +47,7 @@ void InkRender::RenderInk()
 	Dx11Render::instance()->useModelBuffer(mb);
 
 	Dx11Render::instance()->enableBlend();
+	Dx11Render::instance()->cullNone();
 	
 	mDepthShader->useShader();
 
@@ -55,5 +56,6 @@ void InkRender::RenderInk()
 	mDisp->useDomain(0);
 	mModel->render(true);
 
+	Dx11Render::instance()->cullFront();
 	Dx11Render::instance()->disableBlend();
 }

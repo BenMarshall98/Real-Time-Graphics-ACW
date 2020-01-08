@@ -11,9 +11,10 @@ cbuffer modelBuffer : register(b1)
     matrix InverseWorld;
 }
 
-cbuffer SimpleShadowBuffer : register(b11)
+cbuffer ShadowLightBuffer : register(b11)
 {
-    float3 lightPos;
+	float3 LightPosition;
+	float FarPlane;
 };
 
 struct VS_INPUT
@@ -39,7 +40,7 @@ VS_OUTPUT main(VS_INPUT input)
     
     float3 planeNormal = float3(0.0f, 1.0f, 0.0f);
     
-    float d = dot(planeNormal, float3(0.0f, -5.0f, 0.0f));
+    float d = dot(planeNormal, float3(0.0f, -4.9f, 0.0f));
     
     float t = (d - dot(planeNormal, lightPos)) / dot(planeNormal, lightDir);
     

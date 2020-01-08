@@ -20,7 +20,7 @@ cbuffer GlobalBuffer : register(b10)
 }
 
 Texture2D heightTexture : register(t0);
-SamplerState heightSampler : register(s0);
+SamplerState Sampler : register(s0);
 
 struct PatchTess
 {
@@ -58,7 +58,7 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     output.TexCoord.x += Time * 0.05f;
     output.TexCoord.y += Time * 0.05f;
     
-    float height = heightTexture.SampleLevel(heightSampler, output.TexCoord, 0).x * 0.03f;
+    float height = heightTexture.SampleLevel(Sampler, output.TexCoord, 0).x * 0.03f;
     
     //Position
     float3 pos = uvw[0] * tri[0].Pos;

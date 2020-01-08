@@ -138,7 +138,7 @@ void LightingManager::updateSpotLightShadow(const unsigned int pLight) const
 	if (mShadowMode == 0u)
 	{
 		mSpotLights[pLight]->releaseSimpleShadow(pLight + 8);
-		mSpotLights[pLight]->updateMappingShadow();
+		mSpotLights[pLight]->updateSimpleShadow();
 	}
 	else
 	{

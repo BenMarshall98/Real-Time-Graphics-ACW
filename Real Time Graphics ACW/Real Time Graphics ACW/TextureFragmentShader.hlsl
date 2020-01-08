@@ -30,10 +30,9 @@ cbuffer spotBuffer : register(b4)
 }
 
 Texture2D baseTexture : register(t6);
-SamplerState baseSampler : register(s6);
+SamplerState Sampler : register(s0);
 
 Texture2D specTexture : register(t7);
-SamplerState specSampler : register(s7);
 
 struct VS_OUTPUT
 {
@@ -50,8 +49,8 @@ float4 main(VS_OUTPUT input) : SV_Target
     float3 normal = normalize(input.Normal.xyz);
     float3 viewDirection = normalize(input.ViewPosition - input.FragmentPos.xyz);
     
-    float3 baseColor = baseTexture.Sample(baseSampler, input.TexCoord).xyz;
-    float spec = specTexture.Sample(specSampler, input.TexCoord).x * 256;
+    float3 baseColor = baseTexture.Sample(Sampler, input.TexCoord).xyz;
+    float spec = specTexture.Sample(Sampler, input.TexCoord).x * 256;
 
     float3 color = float3(0.0f, 0.0f, 0.0f);
 

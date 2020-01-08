@@ -1,8 +1,7 @@
 Texture2D baseTexture : register(t6);
-SamplerState baseSampler : register(s6);
+SamplerState Sampler : register(s0);
 
 Texture2D specTexture : register(t7);
-SamplerState specSampler : register(s7);
 
 struct VS_OUTPUT
 {
@@ -33,8 +32,8 @@ PS_OUTPUT main(VS_OUTPUT input)
     output.LightNorm = input.Normal;
     output.Normal = input.Normal;
     
-    float3 color = baseTexture.Sample(baseSampler, input.TexCoord).rgb;
-    float spec = specTexture.Sample(specSampler, input.TexCoord).r * 256;
+    float3 color = baseTexture.Sample(Sampler, input.TexCoord).rgb;
+    float spec = specTexture.Sample(Sampler, input.TexCoord).r * 256;
     
     output.Ambient = float4(color * 0.1f, 1.0f);
     output.Diffuse = float4(color, 1.0f);

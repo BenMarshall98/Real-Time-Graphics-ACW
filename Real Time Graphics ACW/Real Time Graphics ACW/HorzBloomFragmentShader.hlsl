@@ -1,7 +1,7 @@
 //TODO: Source: LearnOpenGL
 
 Texture2D colorTexture : register(t0);
-SamplerState colorSampler : register(s0);
+SamplerState Sampler : register(s0);
 
 struct VS_OUTPUT
 {
@@ -22,13 +22,13 @@ float4 main(VS_OUTPUT input) : SV_Target
         0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216
     };
     
-    float3 color = colorTexture.Sample(colorSampler, input.TexCoord).rgb * weight[0];
+    float3 color = colorTexture.Sample(Sampler, input.TexCoord).rgb * weight[0];
     
     
     for (int i = 1; i < 5; ++i)
     {
-        color += colorTexture.Sample(colorSampler, input.TexCoord + float2(texOffset.x * i, 0.0)).rgb * weight[i];
-        color += colorTexture.Sample(colorSampler, input.TexCoord - float2(texOffset.x * i, 0.0)).rgb * weight[i];
+        color += colorTexture.Sample(Sampler, input.TexCoord + float2(texOffset.x * i, 0.0)).rgb * weight[i];
+        color += colorTexture.Sample(Sampler, input.TexCoord - float2(texOffset.x * i, 0.0)).rgb * weight[i];
     }
 
     return float4(color, 1.0f);

@@ -6,7 +6,6 @@
 class Texture
 {
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mTexture = nullptr;
-	Microsoft::WRL::ComPtr<ID3D11SamplerState> mSampler = nullptr;
 	
 public:
 	Texture() = default;

@@ -111,6 +111,13 @@ void SpotLight::releaseMappingShadow(const unsigned int pTextureSlot) const
 
 void SpotLight::updateSimpleShadow() const
 {
+	ShadowLightBuffer lb;
+
+	lb.mLightPosition = mPosition;
+	lb.mFarPlane = 20.0f;
+
+	Dx11Render::instance()->useShadowLightBuffer(lb);
+
 	mSimpleFramebuffer->useFramebuffer();
 }
 

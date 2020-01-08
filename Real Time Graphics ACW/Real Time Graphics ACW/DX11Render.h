@@ -28,10 +28,13 @@ class Dx11Render
 	Microsoft::WRL::ComPtr<IDXGISwapChain1> mSwapChain1;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mRenderTargetView;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> mDepthView;
-	Microsoft::WRL::ComPtr<ID3D11RasterizerState> mRasterizerState;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> mBackRasterizerState;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> mFrontRasterizerState;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> mNoneRasterizerState;
 	Microsoft::WRL::ComPtr<ID3D11Debug> mDebug;
 	Microsoft::WRL::ComPtr<ID3D11BlendState> mBlendState;
 	Microsoft::WRL::ComPtr<ID3D11BlendState> mNoBlendState;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> mSampler;
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mModelBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mCameraBuffer = nullptr;
@@ -42,6 +45,7 @@ class Dx11Render
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mShadowMatrixBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mShadowLightBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mGlobalBuffer = nullptr;
+	
 	
 	Dx11Render();
 	bool loadRender();
@@ -138,6 +142,21 @@ public:
 		{
 			mResizeableFramebuffer.erase(it);
 		}
+	}
+
+	void cullNone()
+	{
+		mDeviceContext->RSSetState(mNoneRasterizerState.Get());
+	}
+
+	void cullBack()
+	{
+		mDeviceContext->RSSetState(mBackRasterizerState.Get());
+	}
+
+	void cullFront()
+	{
+		mDeviceContext->RSSetState(mFrontRasterizerState.Get());
 	}
 
 	void useGlobalBuffer(const GlobalBuffer & pGlobalBuffer) const;

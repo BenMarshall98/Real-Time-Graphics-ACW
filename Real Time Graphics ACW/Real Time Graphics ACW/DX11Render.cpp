@@ -13,7 +13,7 @@ Dx11Render * Dx11Render::mInstance = nullptr;
 
 Dx11Render::Dx11Render() : mDriverType(D3D_DRIVER_TYPE_HARDWARE), mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullptr), mDeviceContext(nullptr),
 	mSwapChain(nullptr), mSwapChain1(nullptr), mRenderTargetView(nullptr), mDepthView(nullptr),
-	mRasterizerState(nullptr)
+	mNoneRasterizerState(nullptr), mFrontRasterizerState(nullptr), mBackRasterizerState(nullptr)
 {
 }
 
@@ -200,14 +200,45 @@ bool Dx11Render::loadRender()
 	rasterizerDesc.AntialiasedLineEnable = true;
 	rasterizerDesc.FrontCounterClockwise = true;
 
-	result = mDevice->CreateRasterizerState(&rasterizerDesc, mRasterizerState.ReleaseAndGetAddressOf());
+	result = mDevice->CreateRasterizerState(&rasterizerDesc, mFrontRasterizerState.ReleaseAndGetAddressOf());
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	rasterizerDesc.CullMode = D3D11_CULL_BACK;
+
+	result = mDevice->CreateRasterizerState(&rasterizerDesc, mBackRasterizerState.ReleaseAndGetAddressOf());
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	rasterizerDesc.CullMode = D3D11_CULL_NONE;
+
+	result = mDevice->CreateRasterizerState(&rasterizerDesc, mNoneRasterizerState.ReleaseAndGetAddressOf());
 
 	if (FAILED(result))
 	{
 		return false;
 	}
 	
-	mDeviceContext->RSSetState(mRasterizerState.Get());
+	mDeviceContext->RSSetState(mFrontRasterizerState.Get());
+
+	D3D11_SAMPLER_DESC desc;
+	ZeroMemory(&desc, sizeof desc);
+	desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+
+	result = mDevice->CreateSamplerState(&desc, &mSampler);
+
+	mDeviceContext->PSSetSamplers(0, 1, mSampler.GetAddressOf());
+	mDeviceContext->DSSetSamplers(0, 1, mSampler.GetAddressOf());
 
 	D3D11_BLEND_DESC blendDesc;
 	ZeroMemory(&blendDesc, sizeof(blendDesc));
@@ -391,6 +422,7 @@ void Dx11Render::useShadowLightBuffer(const ShadowLightBuffer& pShadowLightBuffe
 {
 	mDeviceContext->UpdateSubresource(mShadowLightBuffer.Get(), 0, nullptr, &pShadowLightBuffer, 0, 0);
 	mDeviceContext->PSSetConstantBuffers(5, 1, mShadowLightBuffer.GetAddressOf());
+	mDeviceContext->VSSetConstantBuffers(11, 1, mShadowLightBuffer.GetAddressOf());
 }
 
 bool Dx11Render::resize(const int pWidth, const int pHeight)

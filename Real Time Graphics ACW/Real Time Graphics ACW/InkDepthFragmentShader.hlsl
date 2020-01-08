@@ -32,7 +32,7 @@ cbuffer spotBuffer : register(b4)
 }
 
 Texture2D normTexture : register(t8);
-SamplerState normSampler : register(s8);
+SamplerState Sampler : register(s0);
 
 struct DS_OUTPUT
 {
@@ -45,7 +45,7 @@ struct DS_OUTPUT
 
 float4 main(DS_OUTPUT input) : SV_Target
 {
-    float3 norm = normTexture.Sample(normSampler, input.TexCoord).xyz;
+    float3 norm = normTexture.Sample(Sampler, input.TexCoord).xyz;
     
     norm = 2.0f * norm - 1.0f;
     

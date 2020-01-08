@@ -127,6 +127,8 @@ void RenderManager::renderShadows()
 {
 
 	const auto shadowMode = LightingManager::instance()->getShadowMode();
+	Dx11Render::instance()->cullNone();
+
 	//Directional Light
 	if (LightingManager::instance()->updateDirectionalLightShadow())
 	{
@@ -178,6 +180,8 @@ void RenderManager::renderShadows()
 	}
 
 	LightingManager::instance()->useShadowTextures();
+
+	Dx11Render::instance()->cullFront();
 }
 
 void RenderManager::renderToScreen()

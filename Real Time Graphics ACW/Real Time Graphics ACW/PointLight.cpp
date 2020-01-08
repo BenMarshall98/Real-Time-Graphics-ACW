@@ -99,6 +99,13 @@ void PointLight::releaseMappingShadow(const unsigned int pTextureSlot) const
 
 void PointLight::updateSimpleShadow() const
 {
+	ShadowLightBuffer lb;
+
+	lb.mLightPosition = mPosition;
+	lb.mFarPlane = 20.0f;
+
+	Dx11Render::instance()->useShadowLightBuffer(lb);
+
 	mSimpleFramebuffer->useFramebuffer();
 }
 

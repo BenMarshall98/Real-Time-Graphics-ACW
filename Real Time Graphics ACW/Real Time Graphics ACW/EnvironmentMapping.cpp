@@ -3,7 +3,7 @@
 #include "RenderManager.h"
 #include "DX11Render.h"
 
-EnvironmentMapping::EnvironmentMapping() : mFramebuffer(std::make_shared<Framebuffer>())
+EnvironmentMapping::EnvironmentMapping() : mFramebuffer(std::make_unique<Framebuffer>())
 {
 	std::shared_ptr<Shader> normalShader;
 	std::shared_ptr<Shader> deferredShader;

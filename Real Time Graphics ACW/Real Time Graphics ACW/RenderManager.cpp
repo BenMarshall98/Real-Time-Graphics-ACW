@@ -57,8 +57,8 @@ RenderManager::RenderManager() : mBloom(std::make_unique<Bloom>())
 	ResourceManager::instance()->loadModel(mOutputModel, "plane.obj");
 	
 	mStaticTechnique = std::make_unique<PhongShading>();
-	
 	mDynamicTechniques.emplace_back(std::make_unique<PhongShading>());
+	mDynamicTechniques.emplace_back(std::make_unique<ToonShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<EnvironmentMapping>());
 	mDynamicTechniques.emplace_back(std::make_unique<BumpMapping>());
 	
@@ -67,9 +67,6 @@ RenderManager::RenderManager() : mBloom(std::make_unique<Bloom>())
 	mDynamicTechniques.emplace_back(std::make_unique<GourandShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<TextureMapping>());
 	mDynamicTechniques.emplace_back(std::make_unique<BumpMapping>());
-	
-	//mDynamicTechniques.emplace_back(std::make_unique<EnvironmentMapping>());
-	//mDynamicTechniques.emplace_back(std::make_unique<ToonShading>());
 }
 
 void RenderManager::setup(const float pCurrentTime) const

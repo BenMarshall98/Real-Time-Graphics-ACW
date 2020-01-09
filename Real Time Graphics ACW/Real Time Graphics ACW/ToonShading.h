@@ -3,6 +3,10 @@
 
 class ToonShading final : public Technique
 {
+	std::unique_ptr<Framebuffer> mFramebuffer;
+	std::shared_ptr<Shader> mPostShader;
+	std::shared_ptr<Model> mRenderPlane;
+	
 public:
 	ToonShading();
 	~ToonShading();

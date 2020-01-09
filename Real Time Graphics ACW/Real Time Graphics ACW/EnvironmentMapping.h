@@ -13,7 +13,7 @@ struct EnvironmentMatrixBuffer
 class EnvironmentMapping final : public Technique
 {
 	std::shared_ptr<Shader> mSetupShader;
-	std::shared_ptr<Framebuffer> mFramebuffer;
+	std::unique_ptr<Framebuffer> mFramebuffer;
 	
 public:
 	EnvironmentMapping();
@@ -24,7 +24,7 @@ public:
 	EnvironmentMapping & operator= (const EnvironmentMapping &) = delete;
 	EnvironmentMapping & operator= (EnvironmentMapping &&) = delete;
 
-	void render(const std::shared_ptr<Shape> & pShape, bool pDeffered, const std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
+	void render(const std::shared_ptr<Shape> & pShape, bool pDeferred, const std::unique_ptr<Framebuffer> & pCurrentFramebuffer) override;
 	void renderDirectionalShadow(const std::shared_ptr<Shape>& pShape) override;
 	void renderOmniDirectionalShadow(const std::shared_ptr<Shape>& pShape) override;
 	void renderDirectionalSimpleShadow(const std::shared_ptr<Shape> & pShape) override;

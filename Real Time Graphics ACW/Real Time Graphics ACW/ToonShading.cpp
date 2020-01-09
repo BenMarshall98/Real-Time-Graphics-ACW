@@ -1,7 +1,8 @@
 #include "ToonShading.h"
 #include "ResourceManager.h"
+#include "DX11Render.h"
 
-ToonShading::ToonShading()
+ToonShading::ToonShading() : mFramebuffer(std::make_unique<Framebuffer>())
 {
 	std::shared_ptr<Shader> normalShader;
 	std::shared_ptr<Shader> directionalShader;
@@ -26,14 +27,26 @@ ToonShading::ToonShading()
 	setOmniDirectionalShader(omniDirectionalShader);
 	setDirectionalSimpleShader(directionalSimpleShader);
 	setPointSimpleShader(pointSimpleShader);
+
+	ResourceManager::instance()->loadModel(mRenderPlane, "plane.obj");
+	ResourceManager::instance()->loadShader(mPostShader, "PostVertexShader.hlsl", "PostFragmentShader.hlsl");
+
+	if (!mFramebuffer->loadFramebuffer(true, true, 1024, 1024, {{0.0f, 0.0f, 0.0f, 0.0f}}))
+	{
+		mFramebuffer.reset();
+	}
 }
 
 ToonShading::~ToonShading() = default;
 
 void ToonShading::render(const std::shared_ptr<Shape>& pShape, bool, const std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
 {
-	//mNormalShader->useShader();
-	//pShape->render();
+	mFramebuffer->useFramebuffer();
+	
+	useNormalShader();
+	pShape->render();
+
+	pCurrentFramebuffer->useFramebuffer(false);
 }
 
 void ToonShading::renderDirectionalShadow(const std::shared_ptr<Shape>& pShape)
@@ -62,7 +75,24 @@ void ToonShading::renderPointSimpleShadow(const std::shared_ptr<Shape> & pShape)
 
 bool ToonShading::renderPostprocessing(const std::unique_ptr<Framebuffer> & pCurrentFramebuffer)
 {
-	return false; //TODO: Implement
+	mFramebuffer->useTexture(14);
+
+	if (pCurrentFramebuffer == nullptr)
+	{
+		Dx11Render::instance()->bindDefaultFramebuffer();
+	}
+	else
+	{
+		pCurrentFramebuffer->useFramebuffer();
+	}
+
+	mPostShader->useShader();
+
+	mRenderPlane->render();
+
+	mFramebuffer->releaseTexture(14);
+
+	return true;
 }
 
 void ToonShading::renderTransparent(const std::shared_ptr<Shape> &, const std::unique_ptr<Framebuffer> &)

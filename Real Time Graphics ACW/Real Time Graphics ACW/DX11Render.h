@@ -15,6 +15,7 @@ struct SpotLightBuffer;
 struct ShadowMatrixBuffer;
 struct ShadowLightBuffer;
 struct GlobalBuffer;
+struct EnvironmentMatrixBuffer;
 
 class Dx11Render
 {
@@ -45,6 +46,7 @@ class Dx11Render
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mShadowMatrixBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mShadowLightBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> mGlobalBuffer = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> mEnvironmentMappingBuffer = nullptr;
 	
 	
 	Dx11Render();
@@ -168,6 +170,7 @@ public:
 	void useSpotLightBuffer(const SpotLightBuffer & pSpotLightBuffer) const;
 	void useShadowMatrixBuffer(const ShadowMatrixBuffer & pShadowMatrixBuffer) const;
 	void useShadowLightBuffer(const ShadowLightBuffer & pShadowLightBuffer) const;
+	void useEnvironmentMappingBuffer(const EnvironmentMatrixBuffer & pEnvironmentMatrixBuffer) const;
 	
 	bool resize(int pWidth, int pHeight);
 	

@@ -77,6 +77,11 @@ public:
 		mDynamicShapes.push_back(pShape);
 	}
 
+	void getStaticShape(std::vector<std::shared_ptr<Shape>> & pShapes)
+	{
+		pShapes = mStaticShapes;
+	}
+
 	void removeShape(const std::shared_ptr<Shape> & pShape);
 
 	void changeMode();

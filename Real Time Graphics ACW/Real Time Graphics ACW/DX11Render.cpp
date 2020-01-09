@@ -8,6 +8,7 @@
 #include "DirectionalLight.h"
 #include "Shadow.h"
 #include "RenderManager.h"
+#include "EnvironmentMapping.h"
 
 Dx11Render * Dx11Render::mInstance = nullptr;
 
@@ -357,6 +358,15 @@ bool Dx11Render::loadRender()
 		return false;
 	}
 
+	bd.ByteWidth = sizeof(EnvironmentMatrixBuffer);
+
+	result = mDevice->CreateBuffer(&bd, nullptr, mEnvironmentMappingBuffer.ReleaseAndGetAddressOf());
+
+	if (FAILED(result))
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -424,6 +434,12 @@ void Dx11Render::useShadowLightBuffer(const ShadowLightBuffer& pShadowLightBuffe
 	mDeviceContext->PSSetConstantBuffers(5, 1, mShadowLightBuffer.GetAddressOf());
 	mDeviceContext->VSSetConstantBuffers(11, 1, mShadowLightBuffer.GetAddressOf());
 	mDeviceContext->DSSetConstantBuffers(11, 1, mShadowLightBuffer.GetAddressOf());
+}
+
+void Dx11Render::useEnvironmentMappingBuffer(const EnvironmentMatrixBuffer& pEnvironmentMatrixBuffer) const
+{
+	mDeviceContext->UpdateSubresource(mEnvironmentMappingBuffer.Get(), 0, nullptr, &pEnvironmentMatrixBuffer, 0, 0);
+	mDeviceContext->GSSetConstantBuffers(4, 1, mEnvironmentMappingBuffer.GetAddressOf());
 }
 
 bool Dx11Render::resize(const int pWidth, const int pHeight)

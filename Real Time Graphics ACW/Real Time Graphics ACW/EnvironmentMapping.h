@@ -1,10 +1,19 @@
 #pragma once
 
 #include "Technique.h"
+#include "Framebuffer.h"
+#include <array>
+
+struct EnvironmentMatrixBuffer
+{
+	std::array<DirectX::XMFLOAT4X4, 6> mView;
+	DirectX::XMFLOAT4X4 mPerspective;
+};
 
 class EnvironmentMapping final : public Technique
 {
 	std::shared_ptr<Shader> mSetupShader;
+	std::shared_ptr<Framebuffer> mFramebuffer;
 	
 public:
 	EnvironmentMapping();

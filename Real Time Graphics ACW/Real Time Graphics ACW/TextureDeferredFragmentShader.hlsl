@@ -1,7 +1,7 @@
-Texture2D baseTexture : register(t6);
+Texture2D baseTexture : register(t20);
 SamplerState Sampler : register(s0);
 
-Texture2D specTexture : register(t7);
+Texture2D specTexture : register(t21);
 
 struct VS_OUTPUT
 {

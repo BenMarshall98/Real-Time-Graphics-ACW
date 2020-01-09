@@ -1,9 +1,9 @@
 //TODO: Source
 
-cbuffer environmentMatrixBuffer : register(b1)
+cbuffer environmentMatrixBuffer : register(b4)
 {
-    matrix EnvironmentPerspective;
     matrix EnvironmentView[6];
+    matrix EnvironmentPerspective;
 }
 
 struct VS_OUTPUT
@@ -12,6 +12,7 @@ struct VS_OUTPUT
     float4 Normal : NORMAL0;
     float4 LightFragmentPos : POSITION1;
     float3 ViewPosition : POSITION2;
+    float4 Position : POSITION3;
 };
 
 struct GS_OUTPUT
@@ -21,6 +22,7 @@ struct GS_OUTPUT
     float4 Normal : NORMAL0;
     float4 LightFragmentPos : POSITION1;
     float3 ViewPosition : POSITION2;
+    float4 Position : POSITION3;
     uint Layer : SV_RenderTargetArrayIndex;
 };
 
@@ -37,6 +39,7 @@ void main(triangle VS_OUTPUT input[3], inout TriangleStream<GS_OUTPUT> output)
             temp.FragPos = input[j].Pos.xyz;
             temp.Pos = mul(input[j].Pos, EnvironmentView[i]);
             temp.Pos = mul(temp.Pos, EnvironmentPerspective);
+            temp.Position = input[j].Position;
             temp.Normal = input[j].Normal;
             temp.ViewPosition = input[j].ViewPosition;
             output.Append(temp);

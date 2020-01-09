@@ -99,14 +99,15 @@ bool LightingManager::updateDirectionalLightShadow() const
 {
 	if (mDirectionalLight)
 	{
+		mDirectionalLight->releaseSimpleShadow(6);
+		mDirectionalLight->releaseMappingShadow(0);
+		
 		if (mShadowMode == 0u)
 		{
-			mDirectionalLight->releaseSimpleShadow(6);
 			mDirectionalLight->updateSimpleShadow();
 		}
 		else
 		{
-			mDirectionalLight->releaseMappingShadow(0);
 			mDirectionalLight->updateMappingShadow();
 		}
 		return true;
@@ -118,14 +119,15 @@ bool LightingManager::updatePointLightShadow() const
 {
 	if (mPointLight && mLightingMode != 2)
 	{
+		mPointLight->releaseSimpleShadow(7);
+		mPointLight->releaseMappingShadow(1);
+		
 		if (mShadowMode == 0u)
 		{
-			mPointLight->releaseSimpleShadow(7);
 			mPointLight->updateSimpleShadow();
 		}
 		else
 		{
-			mPointLight->releaseMappingShadow(1);
 			mPointLight->updateMappingShadow();
 		}
 		return true;
@@ -135,14 +137,16 @@ bool LightingManager::updatePointLightShadow() const
 
 void LightingManager::updateSpotLightShadow(const unsigned int pLight) const
 {
+	mSpotLights[pLight]->releaseSimpleShadow(pLight + 8);
+	mSpotLights[pLight]->releaseMappingShadow(pLight + 2);
 	if (mShadowMode == 0u)
 	{
-		mSpotLights[pLight]->releaseSimpleShadow(pLight + 8);
+		
 		mSpotLights[pLight]->updateSimpleShadow();
 	}
 	else
 	{
-		mSpotLights[pLight]->releaseMappingShadow(pLight + 2);
+		
 		mSpotLights[pLight]->updateMappingShadow();
 	}
 }

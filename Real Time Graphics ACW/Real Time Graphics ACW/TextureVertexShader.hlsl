@@ -11,6 +11,15 @@ cbuffer modelBuffer : register(b1)
     matrix InverseWorld;
 }
 
+cbuffer directionalBuffer : register(b3)
+{
+    float4 DirectionalColor;
+    float3 DirectionalDirection;
+    int DirectionalUsed;
+    matrix DirectionalView;
+    matrix DirectionalProjection;
+}
+
 struct VS_INPUT
 {
     float4 Pos : POSITION;
@@ -25,6 +34,8 @@ struct VS_OUTPUT
     float4 Normal : NORMAL0;
     float3 ViewPosition : POSITION1;
     float2 TexCoord : TEXCOORD0;
+    float4 LightFragmentPos : POSITION2;
+    float4 Position : POSITION3;
 };
 
 VS_OUTPUT main(VS_INPUT input)
@@ -34,8 +45,11 @@ VS_OUTPUT main(VS_INPUT input)
     output.Pos = mul(output.Pos, View);
     output.Pos = mul(output.Pos, Projection);
     output.FragmentPos = mul(input.Pos, World);
+    output.LightFragmentPos = mul(output.FragmentPos, DirectionalView);
+    output.LightFragmentPos = mul(output.LightFragmentPos, DirectionalProjection);
     output.Normal = mul(input.Normal, InverseWorld);
     output.ViewPosition = ViewPosition;
     output.TexCoord = input.TexCoord;
+    output.Position = output.Pos;
     return output;
 }

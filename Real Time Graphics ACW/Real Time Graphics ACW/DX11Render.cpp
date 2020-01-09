@@ -423,6 +423,7 @@ void Dx11Render::useShadowLightBuffer(const ShadowLightBuffer& pShadowLightBuffe
 	mDeviceContext->UpdateSubresource(mShadowLightBuffer.Get(), 0, nullptr, &pShadowLightBuffer, 0, 0);
 	mDeviceContext->PSSetConstantBuffers(5, 1, mShadowLightBuffer.GetAddressOf());
 	mDeviceContext->VSSetConstantBuffers(11, 1, mShadowLightBuffer.GetAddressOf());
+	mDeviceContext->DSSetConstantBuffers(11, 1, mShadowLightBuffer.GetAddressOf());
 }
 
 bool Dx11Render::resize(const int pWidth, const int pHeight)

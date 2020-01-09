@@ -172,7 +172,7 @@ void RenderManager::renderShadows()
 		{
 			if (shadowMode == 0)
 			{
-				mDynamicTechniques[i]->renderPointSimpleShadow(mDynamicShapes[j]);
+				mDynamicTechniques[j]->renderPointSimpleShadow(mDynamicShapes[j]);
 			}
 			else
 			{
@@ -319,7 +319,7 @@ void RenderManager::renderToScreen()
 		mHDRShader->useShader();
 
 		mOutputModel->render();
-		mScreenFramebufferOne->releaseTexture(6);
+		mScreenFramebufferOne->releaseTexture(12);
 
 		if (mMode == 9)
 		{
@@ -340,7 +340,12 @@ void RenderManager::renderToScreen()
 		mHDRShader->useShader();
 
 		mOutputModel->render();
-		mScreenFramebufferTwo->releaseTexture(13);
+		mScreenFramebufferTwo->releaseTexture(12);
+
+		if (mMode == 9)
+		{
+			mBloom->releaseBloomTexture(13);
+		}
 	}
 }
 

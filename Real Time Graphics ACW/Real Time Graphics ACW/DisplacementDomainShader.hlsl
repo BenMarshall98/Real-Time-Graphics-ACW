@@ -46,7 +46,8 @@ struct DS_OUTPUT
     float3 ViewPosition : POSITION1;
     float2 TexCoord : TEXCOORD0;
     float4 LightFragmentPos : POSITION2;
-    float3x3 TBN : POSITION3;
+    float4 Position : POSITION3;
+    float3x3 TBN : POSITION4;
 };
 
 [domain("tri")]
@@ -98,6 +99,8 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     
     //ViewPosition
     output.ViewPosition = ViewPosition;
+    
+    output.Position = output.Pos;
     
     return output;
 }

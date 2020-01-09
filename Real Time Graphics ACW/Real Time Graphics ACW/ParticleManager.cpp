@@ -2,6 +2,7 @@
 #include "ResourceManager.h"
 #include "Shape.h"
 #include "ObjectManager.h"
+#include <algorithm>
 
 ParticleManager * ParticleManager::mInstance = nullptr;
 
@@ -83,6 +84,18 @@ void ParticleManager::update(const float pDt)
 		const auto newDirection = DirectX::XMVectorSubtract(particleDirection, DirectX::XMVectorScale(normal, (1.0f + 0.8f) * DirectX::XMVectorGetX(DirectX::XMVector3Dot(particleDirection, normal))));
 
 		const auto newPosition = DirectX::XMVectorAdd(DirectX::XMVectorLerp(particleStart, particleEnd, mCollisions[i].mTime), DirectX::XMVectorScale(newDirection, 1.0f - mCollisions[i].mTime));
+
+		const auto speed = DirectX::XMVectorGetX(DirectX::XMVector3Length(newDirection));
+
+		if (speed < 0.01f)
+		{
+			const auto it = std::find(mParticles.begin(), mParticles.end(), mCollisions[i].mParticle);
+
+			if (it != mParticles.end())
+			{
+				mParticles.erase(it);
+			}
+		}
 
 		auto newVelocity = DirectX::XMFLOAT3();
 		auto newPos = DirectX::XMFLOAT3();

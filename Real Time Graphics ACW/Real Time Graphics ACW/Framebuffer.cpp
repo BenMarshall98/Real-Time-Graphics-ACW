@@ -355,7 +355,7 @@ void Framebuffer::useFramebuffer(const bool pClearFramebuffer) const
 
 void Framebuffer::useTexture(unsigned int pSlot)
 {
-	if (pSlot == 1)
+	if (pSlot == 12)
 	{
 		int i = 0;
 	}
@@ -378,10 +378,6 @@ void Framebuffer::useTexture(unsigned int pSlot)
 
 void Framebuffer::releaseTexture(unsigned int pSlot) const
 {
-	if (pSlot < 6)
-	{
-		int i = 0;
-	}
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
 	Dx11Render::instance()->getDeviceContext(deviceContext);
 

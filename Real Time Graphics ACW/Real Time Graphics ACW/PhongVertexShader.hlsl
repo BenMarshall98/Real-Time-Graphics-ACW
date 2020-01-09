@@ -33,6 +33,7 @@ struct VS_OUTPUT
     float4 Normal : NORMAL0;
     float3 ViewPosition : POSITION1;
     float4 LightFragmentPos : POSITION2;
+    float4 Position : POSITION3;
 };
 
 VS_OUTPUT main(VS_INPUT input)
@@ -43,6 +44,7 @@ VS_OUTPUT main(VS_INPUT input)
     output.LightFragmentPos = mul(output.LightFragmentPos, DirectionalProjection);
     output.Pos = mul(output.FragmentPos, View);
     output.Pos = mul(output.Pos, Projection);
+    output.Position = output.Pos;
     output.Normal = mul(input.Normal, InverseWorld);
     output.ViewPosition = ViewPosition;
     return output;

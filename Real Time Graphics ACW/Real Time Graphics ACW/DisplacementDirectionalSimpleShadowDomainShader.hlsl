@@ -12,7 +12,7 @@ cbuffer modelBuffer : register(b1)
     matrix InverseWorld;
 }
 
-cbuffer directionalBuffer : register(b3)
+cbuffer directionalBuffer : register(b2)
 {
     float4 DirectionalColor;
     float3 DirectionalDirection;
@@ -67,8 +67,7 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     pos += normalize(normal) * height;
     
     //FragmentPosition
-    float3 fragmentPos = mul(float4(pos, 1.0f), World).
-    xyz;
+    float3 fragmentPos = mul(float4(pos, 1.0f), World).xyz;
     
     float3 lightDir = DirectionalDirection;
     
@@ -81,11 +80,6 @@ DS_OUTPUT main(PatchTess patch, float3 uvw : SV_DomainLocation, const OutputPatc
     output.FragPos = fragmentPos + t * lightDir;
     
     output.Pos = mul(float4(output.FragPos, 1.0f), View);
-    output.Pos = mul(output.Pos, Projection);
-    
-    output.FragPos = output.Pos.xyz;
-    
-    output.Pos = mul(output.Pos, View);
     output.Pos = mul(output.Pos, Projection);
     
     return output;

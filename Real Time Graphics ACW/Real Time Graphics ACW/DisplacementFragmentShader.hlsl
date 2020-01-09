@@ -76,7 +76,8 @@ struct DS_OUTPUT
     float3 ViewPosition : POSITION1;
     float2 TexCoord : TEXCOORD0;
     float4 LightFragmentPos : POSITION2;
-    float3x3 TBN : POSITION3;
+    float4 Position : POSITION3;
+    float3x3 TBN : POSITION4;
 };
 
 float4 main(DS_OUTPUT input) : SV_Target
@@ -105,7 +106,7 @@ float4 main(DS_OUTPUT input) : SV_Target
 		
         float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), spec);
         
-        float shadow = DirectionalShadowCalculation(input.Pos, input.LightFragmentPos, lightDirection, normal);
+        float shadow = DirectionalShadowCalculation(input.Position, input.LightFragmentPos, lightDirection, normal);
         
         float inkFactor = InkDirectionalFactorCalculation(input.FragmentPos, input.ViewPosition);
 
@@ -128,7 +129,7 @@ float4 main(DS_OUTPUT input) : SV_Target
         float distance = length(PointPosition.xyz - input.FragmentPos.xyz);
         float attenuation = 1.0f / (PointAttenuationConstant + PointAttenuationLinear * distance + PointAttenuationQuad * distance * distance);
 
-        float shadow = PointShadowCalculation(input.Pos, input.FragmentPos, PointPosition, PointFarPlane, pointShadowTexture, pointSimpleShadowTexture);
+        float shadow = PointShadowCalculation(input.Position, input.FragmentPos, PointPosition, PointFarPlane, pointShadowTexture, pointSimpleShadowTexture);
         
         float inkFactor = InkPointFactorCalculation(input.FragmentPos, PointPosition.xyz, input.ViewPosition);
         
@@ -160,19 +161,19 @@ float4 main(DS_OUTPUT input) : SV_Target
             
             if (i == 0)
             {
-                shadow = PointShadowCalculation(input.Pos, input.FragmentPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot1ShadowTexture, spot1SimpleShadowTexture);
+                shadow = PointShadowCalculation(input.Position, input.FragmentPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot1ShadowTexture, spot1SimpleShadowTexture);
             }
             else if (i == 1)
             {
-                shadow = PointShadowCalculation(input.Pos, input.FragmentPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot2ShadowTexture, spot2SimpleShadowTexture);
+                shadow = PointShadowCalculation(input.Position, input.FragmentPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot2ShadowTexture, spot2SimpleShadowTexture);
             }
             else if (i == 2)
             {
-                shadow = PointShadowCalculation(input.Pos, input.FragmentPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot3ShadowTexture, spot3SimpleShadowTexture);
+                shadow = PointShadowCalculation(input.Position, input.FragmentPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot3ShadowTexture, spot3SimpleShadowTexture);
             }
             else if (i == 3)
             {
-                shadow = PointShadowCalculation(input.Pos, input.FragmentPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot4ShadowTexture, spot4SimpleShadowTexture);
+                shadow = PointShadowCalculation(input.Position, input.FragmentPos.xyz, SpotPosition[i].xyz, SpotFarPlane[i], spot4ShadowTexture, spot4SimpleShadowTexture);
             }
             
             float inkFactor = InkPointFactorCalculation(input.FragmentPos, SpotPosition[i].xyz, input.ViewPosition);
@@ -228,7 +229,7 @@ float DirectionalShadowCalculation(float4 pPos, float4 lightPos, float3 lightDir
     
     if (ShadowMode == 0)
     {
-        float3 projCoords = lightPos.xyz / lightPos.w;
+        float3 projCoords = pPos.xyz / pPos.w;
     
         projCoords.y = -projCoords.y;
     
@@ -238,14 +239,9 @@ float DirectionalShadowCalculation(float4 pPos, float4 lightPos, float3 lightDir
         {
             return 1.0f;
         }
-    
-        if (projCoords.z > 1.0)
-        {
-            return 1.0f;
-        }
         
         float currentDepth = projCoords.z;
-        float closestDepth = directionalSimpleShadowTexture.Sample(Sampler, currentDepth).r;
+        float closestDepth = directionalSimpleShadowTexture.Sample(Sampler, projCoords.xy).r;
         
         shadow = currentDepth > closestDepth ? 1.0f : 0.0f;
         return (1.0 - shadow);

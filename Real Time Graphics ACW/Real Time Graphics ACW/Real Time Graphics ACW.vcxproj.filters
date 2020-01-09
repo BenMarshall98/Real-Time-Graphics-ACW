@@ -670,8 +670,6 @@
     <CopyFileToFolders Include="PostVertexShader.hlsl">
       <Filter>Resource Files\Shaders\PostProcessing</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="TransparencyFragmentShader.hlsl" />
-    <CopyFileToFolders Include="TransparencyVertexShader.hlsl" />
     <CopyFileToFolders Include="BloomExtractFragmentShader.hlsl" />
     <CopyFileToFolders Include="BloomExtractVertexShader.hlsl" />
     <CopyFileToFolders Include="HorzBloomFragmentShader.hlsl" />
@@ -680,18 +678,48 @@
     <CopyFileToFolders Include="VertBloomVertexShader.hlsl" />
     <CopyFileToFolders Include="water_height.dds" />
     <CopyFileToFolders Include="water_normal.dds" />
-    <CopyFileToFolders Include="DisplacementDirectionalSimpleShadowDomainShader.hlsl" />
-    <CopyFileToFolders Include="DisplacementDirectionalSimpleShadowFragmentShader.hlsl" />
-    <CopyFileToFolders Include="DisplacementDirectionalSimpleShadowHullShader.hlsl" />
-    <CopyFileToFolders Include="DisplacementDirectionalSimpleShadowVertexShader.hlsl" />
-    <CopyFileToFolders Include="DisplacementPointSimpleShadowDomainShader.hlsl" />
-    <CopyFileToFolders Include="DisplacementPointSimpleShadowFragmentShader.hlsl" />
-    <CopyFileToFolders Include="DisplacementPointSimpleShadowHullShader.hlsl" />
-    <CopyFileToFolders Include="DisplacementPointSimpleShadowVertexShader.hlsl" />
-    <CopyFileToFolders Include="NormalDirectionalSimpleShadowFragmentShader.hlsl" />
-    <CopyFileToFolders Include="NormalDirectionalSimpleShadowVertexShader.hlsl" />
-    <CopyFileToFolders Include="NormalPointSimpleShadowFragmentShader.hlsl" />
-    <CopyFileToFolders Include="NormalPointSimpleShadowVertexShader.hlsl" />
+    <CopyFileToFolders Include="DisplacementDirectionalSimpleShadowDomainShader.hlsl">
+      <Filter>Resource Files\Shaders\DirectionalSimpleShadowShading\Displacement</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DisplacementDirectionalSimpleShadowVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\DirectionalSimpleShadowShading\Displacement</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DisplacementDirectionalSimpleShadowHullShader.hlsl">
+      <Filter>Resource Files\Shaders\DirectionalSimpleShadowShading\Displacement</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DisplacementPointSimpleShadowDomainShader.hlsl">
+      <Filter>Resource Files\Shaders\PointSimpleShadowShading\Displacement</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DisplacementPointSimpleShadowFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\PointSimpleShadowShading\Displacement</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DisplacementPointSimpleShadowHullShader.hlsl">
+      <Filter>Resource Files\Shaders\PointSimpleShadowShading\Displacement</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DisplacementPointSimpleShadowVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\PointSimpleShadowShading\Displacement</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="DisplacementDirectionalSimpleShadowFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\DirectionalSimpleShadowShading\Displacement</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="NormalPointSimpleShadowFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\PointSimpleShadowShading\Normal</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="NormalPointSimpleShadowVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\PointSimpleShadowShading\Normal</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="NormalDirectionalSimpleShadowVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\DirectionalSimpleShadowShading\Normal</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="NormalDirectionalSimpleShadowFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\DirectionalSimpleShadowShading\Normal</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TransparencyFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\TransparencyShading</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TransparencyVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\TransparencyShading</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />

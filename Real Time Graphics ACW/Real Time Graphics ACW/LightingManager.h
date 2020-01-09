@@ -93,7 +93,7 @@ public:
 		}
 	}
 
-	unsigned int getShadowMode()
+	unsigned int getShadowMode() const
 	{
 		return mShadowMode;
 	}

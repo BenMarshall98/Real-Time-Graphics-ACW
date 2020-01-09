@@ -154,6 +154,18 @@
     <Filter Include="Resource Files\Shaders\PointSimpleShadowShading\Normal">
       <UniqueIdentifier>{7902a2f5-53d6-48a2-9cef-37133b400691}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders\GlowingShading\Horz">
+      <UniqueIdentifier>{848102a1-a7e2-471e-9840-c526d86b8f83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\GlowingShading\Vert">
+      <UniqueIdentifier>{ba7e7405-bcb5-4d3c-88dc-02baaec7663d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\GlowingShading\Glow">
+      <UniqueIdentifier>{27492a76-b903-43ea-be81-674cd5dee59c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\GlowingShading\Final">
+      <UniqueIdentifier>{e03412a9-eb66-4229-b0a2-c4542980f311}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModelLoader.h">
@@ -741,5 +753,31 @@
     <Image Include="tyre_spec.dds">
       <Filter>Resource Files\Textures</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="GlowHorzVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\GlowingShading\Horz</Filter>
+    </FxCompile>
+    <FxCompile Include="GlowHorzFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\GlowingShading\Horz</Filter>
+    </FxCompile>
+    <FxCompile Include="GlowVertFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\GlowingShading\Vert</Filter>
+    </FxCompile>
+    <FxCompile Include="GlowVertVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\GlowingShading\Vert</Filter>
+    </FxCompile>
+    <FxCompile Include="GlowVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\GlowingShading\Glow</Filter>
+    </FxCompile>
+    <FxCompile Include="GlowFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\GlowingShading\Glow</Filter>
+    </FxCompile>
+    <FxCompile Include="FinalVertexShader.hlsl">
+      <Filter>Resource Files\Shaders\GlowingShading\Final</Filter>
+    </FxCompile>
+    <FxCompile Include="FinalFragmentShader.hlsl">
+      <Filter>Resource Files\Shaders\GlowingShading\Final</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

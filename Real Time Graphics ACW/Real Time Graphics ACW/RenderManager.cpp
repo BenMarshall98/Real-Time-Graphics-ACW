@@ -12,6 +12,7 @@
 #include "ResourceManager.h"
 #include "DX11Render.h"
 #include "ParticleManager.h"
+#include "GlowingShading.h"
 #include <string>
 #include "Game.h"
 
@@ -58,6 +59,7 @@ RenderManager::RenderManager() : mBloom(std::make_unique<Bloom>())
 	
 	mStaticTechnique = std::make_unique<PhongShading>();
 	mDynamicTechniques.emplace_back(std::make_unique<PhongShading>());
+	mDynamicTechniques.emplace_back(std::make_unique<GlowingShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<ToonShading>());
 	mDynamicTechniques.emplace_back(std::make_unique<EnvironmentMapping>());
 	mDynamicTechniques.emplace_back(std::make_unique<BumpMapping>());

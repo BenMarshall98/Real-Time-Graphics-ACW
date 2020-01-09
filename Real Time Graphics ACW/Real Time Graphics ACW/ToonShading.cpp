@@ -31,7 +31,7 @@ ToonShading::ToonShading() : mFramebuffer(std::make_unique<Framebuffer>())
 	ResourceManager::instance()->loadModel(mRenderPlane, "plane.obj");
 	ResourceManager::instance()->loadShader(mPostShader, "PostVertexShader.hlsl", "PostFragmentShader.hlsl");
 
-	if (!mFramebuffer->loadFramebuffer(true, true, 1024, 1024, {{0.0f, 0.0f, 0.0f, 0.0f}}))
+	if (!mFramebuffer->loadFramebuffer(true, true, {{0.0f, 0.0f, 0.0f, 0.0f}}))
 	{
 		mFramebuffer.reset();
 	}

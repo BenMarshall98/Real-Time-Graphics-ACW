@@ -24,7 +24,6 @@ float4 main(VS_OUTPUT input) : SV_Target
     
     float3 color = colorTexture.Sample(Sampler, input.TexCoord).rgb * weight[0];
     
-    
     for (int i = 1; i < 5; ++i)
     {
         color += colorTexture.Sample(Sampler, input.TexCoord + float2(texOffset.x * i, 0.0)).rgb * weight[i];

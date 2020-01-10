@@ -37,7 +37,7 @@ void AnimationNode::update(const DirectX::XMFLOAT4X4 & pMatrix, const DirectX::X
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f);
 	
-	mAnimation->animate(Game::mDt, fullMatrix, rotationMatrix);
+	mAnimation->animate(Game::getTime(), fullMatrix, rotationMatrix);
 
 	setMatrix(fullMatrix);
 

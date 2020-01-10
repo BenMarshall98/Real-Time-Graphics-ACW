@@ -66,7 +66,7 @@ void PointLight::update(const DirectX::XMFLOAT4X4& pMatrix)
 	{
 		auto fullMatrix = DirectX::XMFLOAT4X4();
 
-		mAnimation->animate(Game::mDt, fullMatrix, mRotationMatrix);
+		mAnimation->animate(Game::getTime(), fullMatrix, mRotationMatrix);
 	}
 
 	center = DirectX::XMVector3Transform(center, DirectX::XMLoadFloat4x4(&mRotationMatrix));

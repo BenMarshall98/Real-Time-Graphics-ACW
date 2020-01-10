@@ -167,6 +167,16 @@ LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMess
 				InkRender::instance()->IncreaseHeight(false);
 			}
 			break;
+		case 'T':
+			if (GetKeyState(VK_SHIFT) < 0)
+			{
+				Game::increaseTimeFactor();
+			}
+			else
+			{
+				Game::decreaseTimeFactor();
+			}
+			break;
 		case VK_SHIFT:
 			if (GetKeyState('F') < 0)
 			{

@@ -28,6 +28,8 @@ __int64 Game::mStart = 0;
 __int64 Game::mStop = 0;
 std::unique_ptr<SceneGraphNode> Game::mNode = nullptr;
 LARGE_INTEGER Game::mTimer = { 0 };
+float Game::mTimeFactor = 1.0f;
+
 Game::Game()
 {
 
@@ -85,7 +87,7 @@ void Game::run()
 
 		LightingManager::instance()->update();
 
-		RenderManager::instance()->setup(mDt2);
+		RenderManager::instance()->setup(mDt2 * mTimeFactor);
 		//ObjectManager::instance()->render();
 
 		Dx11Render::instance()->defaultViewport();
@@ -145,5 +147,7 @@ void Game::reset()
 
 	QueryPerformanceCounter(&mTimer);
 	mStart = mTimer.QuadPart;
+
+	mTimeFactor = 1.0f;
 }
 

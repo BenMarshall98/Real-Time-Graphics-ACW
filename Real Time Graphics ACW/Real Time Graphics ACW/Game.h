@@ -15,6 +15,8 @@ class Game
 	static double mDt2;
 	static __int64 mStart;
 	static __int64 mStop;
+	static float mTimeFactor;
+	static double mDt;
 
 	static std::unique_ptr<SceneGraphNode> mNode;
 	
@@ -26,10 +28,36 @@ public:
 	Game & operator= (const Game &) = delete;
 	Game & operator= (Game &&) = delete;
 
-	static double mDt;
+	
 
 	void run();
 	static void clear();
 	static void reset();
+
+	static void increaseTimeFactor()
+	{
+		mTimeFactor += 0.1f;
+	}
+
+
+	static void decreaseTimeFactor()
+	{
+		mTimeFactor -= 0.1f;
+
+		if (mTimeFactor < 0.0f)
+		{
+			mTimeFactor = 0.0f;
+		}
+	}
+
+	static float getTime()
+	{
+		return mDt * mTimeFactor;
+	}
+
+	static float getNormalTime()
+	{
+		return mDt;
+	}
 };
 

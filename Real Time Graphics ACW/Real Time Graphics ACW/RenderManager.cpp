@@ -271,7 +271,7 @@ void RenderManager::renderToScreen()
 			}
 		}
 
-		ParticleManager::instance()->update(Game::mDt);
+		ParticleManager::instance()->update(Game::getTime());
 
 		//Transparent
 		if (mFramebuffer == 1)

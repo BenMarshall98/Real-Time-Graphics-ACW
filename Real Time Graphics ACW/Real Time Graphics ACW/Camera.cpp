@@ -10,7 +10,7 @@ Camera::Camera(const DirectX::XMFLOAT3 & pEyePosition, const DirectX::XMFLOAT3 &
 
 void Camera::rotateLeftRight(const bool pLeft)
 {
-	auto angleChange = mAngleSpeed * Game::mDt;
+	auto angleChange = mAngleSpeed * Game::getNormalTime();
 
 	if (!pLeft)
 	{
@@ -32,7 +32,7 @@ void Camera::rotateLeftRight(const bool pLeft)
 
 void Camera::rotateUpDown(const bool pUp)
 {
-	auto angleChange = mAngleSpeed * Game::mDt;
+	auto angleChange = mAngleSpeed * Game::getNormalTime();
 
 	if (!pUp)
 	{
@@ -54,7 +54,7 @@ void Camera::rotateUpDown(const bool pUp)
 
 void Camera::panLeftRight(const bool pLeft)
 {
-	auto movementChange = mMovementSpeed * Game::mDt;
+	auto movementChange = mMovementSpeed * Game::getNormalTime();
 
 	if (!pLeft)
 	{
@@ -76,7 +76,7 @@ void Camera::panLeftRight(const bool pLeft)
 
 void Camera::panForwardBackward(const bool pForward)
 {
-	auto movementChange = mMovementSpeed * Game::mDt;
+	auto movementChange = mMovementSpeed * Game::getNormalTime();
 
 	if (!pForward)
 	{
@@ -96,7 +96,7 @@ void Camera::panForwardBackward(const bool pForward)
 
 void Camera::panUpDown(const bool pUp)
 {
-	auto movementChange = mMovementSpeed * Game::mDt;
+	auto movementChange = mMovementSpeed * Game::getNormalTime();
 
 	if (!pUp)
 	{

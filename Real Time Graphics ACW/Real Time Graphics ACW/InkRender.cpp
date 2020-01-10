@@ -18,7 +18,7 @@ void InkRender::RenderInk()
 {
 	if (mIncrease && !mDecrease)
 	{
-		mHeight += Game::mDt * 0.5f;
+		mHeight += Game::getNormalTime() * 0.5f;
 
 		if (mHeight > 5.0f)
 		{
@@ -27,7 +27,7 @@ void InkRender::RenderInk()
 	}
 	else if (!mIncrease && mDecrease)
 	{
-		mHeight -= Game::mDt * 0.5f;
+		mHeight -= Game::getNormalTime() * 0.5f;
 
 		if (mHeight < -5.0f)
 		{

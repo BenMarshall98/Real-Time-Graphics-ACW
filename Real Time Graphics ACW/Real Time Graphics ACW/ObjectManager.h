@@ -14,7 +14,10 @@ class ObjectManager final
 	std::map<unsigned int, std::shared_ptr<Shape>> mExplodingShapes;
 
 public:
-	~ObjectManager() = default;
+	~ObjectManager()
+	{
+		mInstance = nullptr;
+	}
 	ObjectManager(const ObjectManager &) = delete;
 	ObjectManager(ObjectManager &&) = delete;
 	ObjectManager & operator= (const ObjectManager &) = delete;

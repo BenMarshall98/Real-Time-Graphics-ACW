@@ -8,19 +8,19 @@
 
 class Game
 {
-	LARGE_INTEGER mTimer;
+	static LARGE_INTEGER mTimer;
 
-	DirectX::XMMATRIX mWorld;
-	double mFreq;
-	double mDt2 = 0.0;
-	__int64 mStart = 0.0;
-	__int64 mStop = 0.0;
+	static DirectX::XMMATRIX mWorld;
+	static double mFreq;
+	static double mDt2;
+	static __int64 mStart;
+	static __int64 mStop;
 
-	std::unique_ptr<SceneGraphNode> mNode;
+	static std::unique_ptr<SceneGraphNode> mNode;
 	
 public:
 	Game();
-	~Game();
+	~Game() = default;
 	Game(const Game &) = delete;
 	Game(Game &&) = delete;
 	Game & operator= (const Game &) = delete;
@@ -30,5 +30,6 @@ public:
 
 	void run();
 	static void clear();
+	static void reset();
 };
 

@@ -2,6 +2,8 @@
 #include <string>
 #include "Shadow.h"
 #include "DX11Render.h"
+#include "QuaternionAnimation.h"
+#include "Game.h"
 
 PointLight::PointLight(const DirectX::XMFLOAT3 & pColor, const DirectX::XMFLOAT3 & pPosition,
 	const float pAttenuationConstant, const float pAttenuationLinear, const float pAttenuationQuad) :
@@ -59,6 +61,15 @@ void PointLight::update(const DirectX::XMFLOAT4X4& pMatrix)
 	const auto matrix = XMLoadFloat4x4(&pMatrix);
 
 	center = XMVector3Transform(center, matrix);
+
+	if (mAnimate)
+	{
+		auto fullMatrix = DirectX::XMFLOAT4X4();
+
+		mAnimation->animate(Game::mDt, fullMatrix, mRotationMatrix);
+	}
+
+	center = DirectX::XMVector3Transform(center, DirectX::XMLoadFloat4x4(&mRotationMatrix));
 
 	XMStoreFloat3(&mPosition, center);
 }
@@ -133,6 +144,11 @@ std::istream& operator>>(std::istream& pIn, PointLight& pLight)
 
 	pIn >> s >> x >> s >> y >> s >> z;
 	pLight.setAttenuation(x, y, z);
+
+	std::unique_ptr<QuaternionAnimation> animation = std::make_unique<QuaternionAnimation>();
+	animation->read(pIn);
+
+	pLight.setAnimaiton(animation);
 
 	return pIn;
 }

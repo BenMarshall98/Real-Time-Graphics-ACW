@@ -5,10 +5,12 @@ CameraManager * CameraManager::mInstance = nullptr;
 
 CameraManager::CameraManager()
 {
+	DirectX::XMStoreFloat4x4(&mPerspective, DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PIDIV2, static_cast<float>(Win32Window::instance()->getWidth()) / static_cast<float>(Win32Window::instance()->getWidth()), 0.01f, 20.0f));
 }
 
 CameraManager::~CameraManager()
 {
+	mInstance = nullptr;
 }
 
 void CameraManager::useCamera1()

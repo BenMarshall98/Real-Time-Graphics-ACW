@@ -2,6 +2,8 @@
 #include <directxmath.h>
 #include <istream>
 #include "Framebuffer.h"
+#include "Animation.h"
+#include "QuaternionAnimation.h"
 
 struct PointLightBuffer
 {
@@ -16,14 +18,19 @@ struct PointLightBuffer
 
 class PointLight
 {
+	DirectX::XMFLOAT4X4 mRotationMatrix = DirectX::XMFLOAT4X4(1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f);
 	DirectX::XMFLOAT3 mColor;
 	DirectX::XMFLOAT3 mPosition;
 	std::unique_ptr<Framebuffer> mMappingFramebuffer;
 	std::unique_ptr<Framebuffer> mSimpleFramebuffer;
+	std::unique_ptr<Animation> mAnimation;
 	float mAttenuationConstant;
 	float mAttenuationLinear;
 	float mAttenuationQuad;
-	
+	bool mAnimate;
 	
 public:
 	PointLight(const DirectX::XMFLOAT3 & pColor, const DirectX::XMFLOAT3 & pPosition, float pAttenuationConstant, float pAttenuationLinear, float pAttenuationQuad);
@@ -50,6 +57,21 @@ public:
 		mAttenuationConstant = pConstant;
 		mAttenuationLinear = pLinear;
 		mAttenuationQuad = pQuad;
+	}
+
+	void setAnimaiton(std::unique_ptr<QuaternionAnimation> & pAnimation)
+	{
+		mAnimation = std::move(pAnimation);
+	}
+
+	void enableAnimation()
+	{
+		mAnimate = true;
+	}
+
+	void disableAnimation()
+	{
+		mAnimate = false;
 	}
 
 	void use(PointLightBuffer & pLightBuffer) const;

@@ -31,7 +31,10 @@ public:
 		return mInstance;
 	}
 	
-	~LightingManager() = default;
+	~LightingManager()
+	{
+		mInstance = nullptr;
+	}
 
 	LightingManager(const LightingManager&) = delete;
 	LightingManager(LightingManager &&) = delete;
@@ -90,6 +93,19 @@ public:
 		else
 		{
 			mLightingMode++;
+		}
+
+		if (mPointLight)
+		{
+			if (mLightingMode == 1u)
+			{
+				
+				mPointLight->enableAnimation();
+			}
+			else
+			{
+				mPointLight->disableAnimation();
+			}
 		}
 	}
 

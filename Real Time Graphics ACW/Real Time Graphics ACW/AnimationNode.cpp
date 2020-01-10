@@ -2,6 +2,7 @@
 #include <string>
 #include "QuaternionAnimation.h"
 #include "VectorAnimation.h"
+#include "Game.h"
 
 AnimationNode::~AnimationNode() = default;
 
@@ -29,7 +30,6 @@ void AnimationNode::read(std::istream& pIn)
 
 void AnimationNode::update(const DirectX::XMFLOAT4X4 & pMatrix, const DirectX::XMFLOAT4X4 & pRotationMatrix)
 {
-	//TODO: update needs to pass in time
 
 	auto fullMatrix = DirectX::XMFLOAT4X4();
 	auto rotationMatrix = DirectX::XMFLOAT4X4(1.0f, 0.0f, 0.0f, 0.0f,
@@ -37,7 +37,7 @@ void AnimationNode::update(const DirectX::XMFLOAT4X4 & pMatrix, const DirectX::X
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f);
 	
-	mAnimation->animate(0.016f, fullMatrix, rotationMatrix);
+	mAnimation->animate(Game::mDt, fullMatrix, rotationMatrix);
 
 	setMatrix(fullMatrix);
 

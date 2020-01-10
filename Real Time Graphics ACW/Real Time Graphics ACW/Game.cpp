@@ -21,7 +21,13 @@
 #include "CameraManager.h"
 
 double Game::mDt = 0.0f;
-
+DirectX::XMMATRIX Game::mWorld = DirectX::XMMatrixIdentity();
+double Game::mFreq = 0.0f;
+double Game::mDt2 = 0.0f;
+__int64 Game::mStart = 0;
+__int64 Game::mStop = 0;
+std::unique_ptr<SceneGraphNode> Game::mNode = nullptr;
+LARGE_INTEGER Game::mTimer = { 0 };
 Game::Game()
 {
 
@@ -38,7 +44,6 @@ Game::Game()
 	in.close();
 
 	// Initialize the world matrix
-	mWorld = DirectX::XMMatrixIdentity();
 	
 	QueryPerformanceFrequency(&mTimer);
 	mFreq = static_cast<double>(mTimer.QuadPart);
@@ -111,6 +116,34 @@ void Game::clear()
 	delete CameraManager::instance();
 }
 
-Game::~Game()
+void Game::reset()
 {
+	mNode.reset();
+	
+	delete LightingManager::instance();
+	delete RenderManager::instance();
+	delete ObjectManager::instance();
+	delete CameraManager::instance();
+
+	mNode = std::make_unique<IdentityNode>();
+
+	std::ifstream in("Configuration.txt");
+
+	if (in.good())
+	{
+		ConfigLoader::readScene(in, mNode);
+		ConfigLoader::readCameras(in);
+	}
+
+	in.close();
+
+	// Initialize the world matrix
+	mWorld = DirectX::XMMatrixIdentity();
+
+	QueryPerformanceFrequency(&mTimer);
+	mFreq = static_cast<double>(mTimer.QuadPart);
+
+	QueryPerformanceCounter(&mTimer);
+	mStart = mTimer.QuadPart;
 }
+

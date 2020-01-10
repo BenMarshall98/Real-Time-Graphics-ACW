@@ -5,6 +5,7 @@
 #include "ObjectManager.h"
 #include "RenderManager.h"
 #include "LightingManager.h"
+#include "Game.h"
 
 Win32Window * Win32Window::mInstance = nullptr;
 
@@ -187,6 +188,11 @@ LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMess
 			break;
 		case VK_F7:
 			LightingManager::instance()->changeShadowMode();
+			break;
+		case VK_ESCAPE:
+			PostQuitMessage(0);
+		case 'R':
+			Game::reset();
 			break;
 		default:
 			break;

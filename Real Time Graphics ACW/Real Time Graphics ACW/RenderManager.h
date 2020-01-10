@@ -54,7 +54,10 @@ class RenderManager final
 	unsigned int mFramebuffer = 0u;
 
 public:
-	~RenderManager() = default;
+	~RenderManager()
+	{
+		mInstance = nullptr;
+	}
 	RenderManager(const RenderManager&) = delete;
 	RenderManager(RenderManager &&) = delete;
 	RenderManager & operator= (const RenderManager &) = delete;

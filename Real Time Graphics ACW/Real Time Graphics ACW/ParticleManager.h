@@ -5,6 +5,7 @@
 #include "ParticleRender.h"
 #include <memory>
 #include "Shader.h"
+#include "Texture.h"
 
 struct Collision
 {
@@ -21,6 +22,7 @@ class ParticleManager final
 	std::vector<std::unique_ptr<ParticleRender>> mParticleRenders;
 	std::shared_ptr<Shader> mParticleShader;
 	std::vector<Collision> mCollisions;
+	std::shared_ptr<Texture> mTexture;
 
 	ParticleManager();
 	

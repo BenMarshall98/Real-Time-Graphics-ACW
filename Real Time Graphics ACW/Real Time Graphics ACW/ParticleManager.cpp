@@ -3,6 +3,7 @@
 #include "Shape.h"
 #include "ObjectManager.h"
 #include <algorithm>
+#include "DX11Render.h"
 
 ParticleManager * ParticleManager::mInstance = nullptr;
 
@@ -16,6 +17,9 @@ ParticleManager::ParticleManager()
 	}
 
 	ResourceManager::instance()->loadParticleShader(mParticleShader, "ParticleVertexShader.hlsl", "ParticleFragmentShader.hlsl");
+	ResourceManager::instance()->loadTexture(mTexture, "noise.dds");
+
+	mTexture->useFragment(25);
 }
 
 void ParticleManager::addParticles(std::vector<std::shared_ptr<Particle>>& pParticles)
@@ -52,11 +56,6 @@ void ParticleManager::update(const float pDt)
 	std::vector<std::shared_ptr<Shape>> objects;
 
 	ObjectManager::instance()->getAllShapes(objects);
-
-	if (mParticles.size())
-	{
-		int i = 0;
-	}
 
 	for (auto i = 0u; i < objects.size(); i++)
 	{
@@ -110,6 +109,7 @@ void ParticleManager::update(const float pDt)
 
 void ParticleManager::render()
 {
+	
 	mParticleShader->useShader();
 
 	std::vector<DirectX::XMFLOAT3> positions;
@@ -117,6 +117,8 @@ void ParticleManager::render()
 
 	positions.reserve(1000);
 	times.reserve(1000);
+
+	Dx11Render::instance()->enableBlend();
 
 	for (auto i = 0u; i < mParticleRenders.size(); i ++)
 	{
@@ -134,4 +136,6 @@ void ParticleManager::render()
 
 		mParticleRenders[i]->render(positions, times);
 	}
+
+	Dx11Render::instance()->disableBlend();
 }

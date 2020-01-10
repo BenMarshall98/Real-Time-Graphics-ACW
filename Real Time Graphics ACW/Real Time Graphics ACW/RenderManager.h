@@ -7,6 +7,8 @@
 #include <map>
 #include <vector>
 #include "Bloom.h"
+#include <random>
+#include <functional>
 
 struct GlobalBuffer
 {
@@ -31,7 +33,7 @@ class RenderManager final
 	std::shared_ptr<Model> mOutputModel;
 
 	std::unique_ptr<Technique> mStaticTechnique;
-	std::vector<std::unique_ptr<Technique>> mDynamicTechniques;
+	std::vector<std::shared_ptr<Technique>> mDynamicTechniques;
 
 	std::vector<std::shared_ptr<Shape>> mStaticShapes;
 	std::vector<std::shared_ptr<Shape>> mDynamicShapes;
@@ -42,8 +44,11 @@ class RenderManager final
 	std::unique_ptr<Framebuffer> mScreenFramebufferOne;
 	std::unique_ptr<Framebuffer> mScreenFramebufferTwo;
 
-	std::map<std::unique_ptr<Technique>, std::shared_ptr<Shape>> mRenderTechnique;
+	std::map<std::shared_ptr<Technique>, std::shared_ptr<Shape>> mRenderTechnique;
 	std::unique_ptr<Bloom> mBloom;
+
+	std::mt19937 mEngine;
+	std::uniform_int_distribution<int> mNumber;
 
 	unsigned int mMode = 0u;
 	unsigned int mFramebuffer = 0u;
@@ -72,12 +77,9 @@ public:
 		mStaticShapes.push_back(pShape);
 	}
 	
-	void addDynamicShape(const std::shared_ptr<Shape>& pShape)
-	{
-		mDynamicShapes.push_back(pShape);
-	}
-
-	void getStaticShape(std::vector<std::shared_ptr<Shape>> & pShapes)
+	void addDynamicShape(const std::shared_ptr<Shape>& pShape);
+	
+	void getStaticShape(std::vector<std::shared_ptr<Shape>> & pShapes) const
 	{
 		pShapes = mStaticShapes;
 	}
@@ -85,4 +87,6 @@ public:
 	void removeShape(const std::shared_ptr<Shape> & pShape);
 
 	void changeMode();
+
+	void changeTechniques();
 };

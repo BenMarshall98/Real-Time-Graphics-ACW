@@ -179,6 +179,9 @@ LRESULT CALLBACK Win32Window::windowProcedure(const HWND pHwnd, const UINT pMess
 		case VK_F2:
 			CameraManager::instance()->useCamera2();
 			break;
+		case VK_F5:
+			RenderManager::instance()->changeTechniques();
+			break;
 		case VK_F6:
 			LightingManager::instance()->changeLightingMode();
 			break;

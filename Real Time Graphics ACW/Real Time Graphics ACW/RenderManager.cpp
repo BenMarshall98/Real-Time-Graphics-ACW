@@ -15,10 +15,11 @@
 #include "GlowingShading.h"
 #include <string>
 #include "Game.h"
+#include <ctime>
 
 RenderManager * RenderManager::mInstance = nullptr;
 
-RenderManager::RenderManager() : mBloom(std::make_unique<Bloom>())
+RenderManager::RenderManager() : mEngine(time(0)),  mBloom(std::make_unique<Bloom>())
 {
 	mHdrFramebuffer = std::make_unique<Framebuffer>();
 	mDeferredBuffer = std::make_unique<Framebuffer>();
@@ -58,17 +59,22 @@ RenderManager::RenderManager() : mBloom(std::make_unique<Bloom>())
 	ResourceManager::instance()->loadModel(mOutputModel, "plane.obj");
 	
 	mStaticTechnique = std::make_unique<PhongShading>();
-	mDynamicTechniques.emplace_back(std::make_unique<PhongShading>());
-	mDynamicTechniques.emplace_back(std::make_unique<GlowingShading>());
-	mDynamicTechniques.emplace_back(std::make_unique<ToonShading>());
-	mDynamicTechniques.emplace_back(std::make_unique<EnvironmentMapping>());
-	mDynamicTechniques.emplace_back(std::make_unique<BumpMapping>());
-	
-	mDynamicTechniques.emplace_back(std::make_unique<DisplacementMapping>());
-	mDynamicTechniques.emplace_back(std::make_unique<TransparencyShading>());
-	mDynamicTechniques.emplace_back(std::make_unique<GourandShading>());
-	mDynamicTechniques.emplace_back(std::make_unique<TextureMapping>());
-	mDynamicTechniques.emplace_back(std::make_unique<BumpMapping>());
+	mDynamicTechniques.emplace_back(std::make_shared<PhongShading>());
+	mDynamicTechniques.emplace_back(std::make_shared<GlowingShading>());
+	mDynamicTechniques.emplace_back(std::make_shared<ToonShading>());
+	mDynamicTechniques.emplace_back(std::make_shared<EnvironmentMapping>());
+	mDynamicTechniques.emplace_back(std::make_shared<BumpMapping>());
+	mDynamicTechniques.emplace_back(std::make_shared<DisplacementMapping>());
+	mDynamicTechniques.emplace_back(std::make_shared<TransparencyShading>());
+	mDynamicTechniques.emplace_back(std::make_shared<GourandShading>());
+	mDynamicTechniques.emplace_back(std::make_shared<TextureMapping>());
+
+	mNumber = std::uniform_int_distribution<int>(0, 8);
+
+	for(auto i = 0u; i < mDynamicTechniques.size(); i++)
+	{
+		mRenderTechnique[mDynamicTechniques[i]] = nullptr;
+	}
 }
 
 void RenderManager::setup(const float pCurrentTime) const
@@ -105,9 +111,12 @@ void RenderManager::renderShapes()
 			mStaticTechnique->render(staticShape, deferred, mDeferredBuffer);
 		}
 
-		for (auto i = 0u; i < mDynamicShapes.size(); i++)
+		for (auto it = mRenderTechnique.begin(); it != mRenderTechnique.end(); ++it)
 		{
-			mDynamicTechniques[i]->render(mDynamicShapes[i], deferred, mDeferredBuffer);
+			if (it->second)
+			{
+				it->first->render(it->second, deferred, mDeferredBuffer);
+			}
 		}
 	}
 	else
@@ -120,9 +129,12 @@ void RenderManager::renderShapes()
 			mStaticTechnique->render(staticShape, deferred, mScreenFramebufferOne);
 		}
 
-		for (auto i = 0u; i < mDynamicShapes.size(); i++)
+		for (auto it = mRenderTechnique.begin(); it != mRenderTechnique.end(); ++it)
 		{
-			mDynamicTechniques[i]->render(mDynamicShapes[i], deferred, mScreenFramebufferOne);
+			if (it->second)
+			{
+				it->first->render(it->second, deferred, mScreenFramebufferOne);
+			}
 		}
 	}
 }
@@ -136,15 +148,18 @@ void RenderManager::renderShadows()
 	//Directional Light
 	if (LightingManager::instance()->updateDirectionalLightShadow())
 	{
-		for (auto i = 0u; i < mDynamicShapes.size(); i++)
+		for (auto it = mRenderTechnique.begin(); it != mRenderTechnique.end(); ++it)
 		{
-			if (shadowMode == 0)
+			if (it->second)
 			{
-				mDynamicTechniques[i]->renderDirectionalSimpleShadow(mDynamicShapes[i]);
-			}
-			else
-			{
-				mDynamicTechniques[i]->renderDirectionalShadow(mDynamicShapes[i]);
+				if (shadowMode == 0)
+				{
+					it->first->renderDirectionalSimpleShadow(it->second);
+				}
+				else
+				{
+					it->first->renderDirectionalShadow(it->second);
+				}
 			}
 		}
 	}
@@ -152,15 +167,18 @@ void RenderManager::renderShadows()
 	//Point Light
 	if (LightingManager::instance()->updatePointLightShadow())
 	{
-		for (auto i = 0u; i < mDynamicShapes.size(); i++)
+		for (auto it = mRenderTechnique.begin(); it != mRenderTechnique.end(); ++it)
 		{
-			if (shadowMode == 0)
+			if (it->second)
 			{
-				mDynamicTechniques[i]->renderPointSimpleShadow(mDynamicShapes[i]);
-			}
-			else
-			{
-				mDynamicTechniques[i]->renderOmniDirectionalShadow(mDynamicShapes[i]);
+				if (shadowMode == 0)
+				{
+					it->first->renderPointSimpleShadow(it->second);
+				}
+				else
+				{
+					it->first->renderOmniDirectionalShadow(it->second);
+				}
 			}
 		}
 	}
@@ -170,15 +188,18 @@ void RenderManager::renderShadows()
 	{
 		LightingManager::instance()->updateSpotLightShadow(i);
 
-		for (auto j = 0u; j < mDynamicShapes.size(); j++)
+		for (auto it = mRenderTechnique.begin(); it != mRenderTechnique.end(); ++it)
 		{
-			if (shadowMode == 0)
+			if (it->second)
 			{
-				mDynamicTechniques[j]->renderPointSimpleShadow(mDynamicShapes[j]);
-			}
-			else
-			{
-				mDynamicTechniques[j]->renderOmniDirectionalShadow(mDynamicShapes[j]);
+				if (shadowMode == 0)
+				{
+					it->first->renderPointSimpleShadow(it->second);
+				}
+				else
+				{
+					it->first->renderOmniDirectionalShadow(it->second);
+				}
 			}
 		}
 	}
@@ -224,26 +245,29 @@ void RenderManager::renderToScreen()
 			mScreenFramebufferTwo->releaseTexture(12);
 		}
 
-		for (auto i = 0u; i < mDynamicShapes.size(); i++)
+		for (auto it = mRenderTechnique.begin(); it != mRenderTechnique.end(); ++it)
 		{
-			if (mFramebuffer == 0)
+			if (it->second)
 			{
-				mScreenFramebufferOne->useTexture(12);
-				if (mDynamicTechniques[i]->renderPostprocessing(mScreenFramebufferTwo))
+				if (mFramebuffer == 0)
 				{
-					mFramebuffer = 1;
-				}
-				mScreenFramebufferOne->releaseTexture(12);
+					mScreenFramebufferOne->useTexture(12);
+					if (it->first->renderPostprocessing(mScreenFramebufferTwo))
+					{
+						mFramebuffer = 1;
+					}
+					mScreenFramebufferOne->releaseTexture(12);
 
-			}
-			else
-			{
-				mScreenFramebufferTwo->useTexture(12);
-				if (mDynamicTechniques[i]->renderPostprocessing(mScreenFramebufferOne))
-				{
-					mFramebuffer = 0;
 				}
-				mScreenFramebufferTwo->releaseTexture(12);
+				else
+				{
+					mScreenFramebufferTwo->useTexture(12);
+					if (it->first->renderPostprocessing(mScreenFramebufferOne))
+					{
+						mFramebuffer = 0;
+					}
+					mScreenFramebufferTwo->releaseTexture(12);
+				}
 			}
 		}
 
@@ -259,9 +283,12 @@ void RenderManager::renderToScreen()
 				mStaticTechnique->renderTransparent(staticShape, mScreenFramebufferTwo);
 			}
 
-			for (auto i = 0u; i < mDynamicShapes.size(); i++)
+			for (auto it = mRenderTechnique.begin(); it != mRenderTechnique.end(); ++it)
 			{
-				mDynamicTechniques[i]->renderTransparent(mDynamicShapes[i], mScreenFramebufferTwo);
+				if (it->second)
+				{
+					it->first->renderTransparent(it->second, mScreenFramebufferTwo);
+				}
 			}
 
 			//Particles
@@ -281,9 +308,12 @@ void RenderManager::renderToScreen()
 				mStaticTechnique->renderTransparent(staticShape, mScreenFramebufferOne);
 			}
 
-			for (auto i = 0u; i < mDynamicShapes.size(); i++)
+			for (auto it = mRenderTechnique.begin(); it != mRenderTechnique.end(); ++it)
 			{
-				mDynamicTechniques[i]->renderTransparent(mDynamicShapes[i], mScreenFramebufferOne);
+				if (it->second)
+				{
+					it->first->renderTransparent(it->second, mScreenFramebufferOne);
+				}
 			}
 
 			//Particles
@@ -367,7 +397,13 @@ void RenderManager::removeShape(const std::shared_ptr<Shape>& pShape)
 		mDynamicShapes.erase(it);
 	}
 
-	//TODO: Deal with dynamic technique map
+	for (auto it = mRenderTechnique.begin(); it != mRenderTechnique.end(); ++it)
+	{
+		if (it->second == pShape)
+		{
+			it->second = nullptr;
+		}
+	}
 }
 
 void RenderManager::changeMode()
@@ -377,5 +413,47 @@ void RenderManager::changeMode()
 	if (mMode > 9)
 	{
 		mMode = 0;
+	}
+}
+
+void RenderManager::addDynamicShape(const std::shared_ptr<Shape>& pShape)
+{
+	while(true)
+	{
+		const auto technique = mDynamicTechniques[mNumber(mEngine)];
+
+		const auto it = mRenderTechnique.find(technique);
+
+		if (it != mRenderTechnique.end() && it->second == nullptr)
+		{
+			mRenderTechnique[technique] = pShape;
+			break;
+		}
+	}
+	
+	mDynamicShapes.push_back(pShape);
+}
+
+void RenderManager::changeTechniques()
+{
+	for (auto it = mRenderTechnique.begin(); it != mRenderTechnique.end(); ++it)
+	{
+		it->second = nullptr;
+	}
+
+	for (auto i = 0u; i < mDynamicShapes.size(); i++)
+	{
+		while (true)
+		{
+			const auto technique = mDynamicTechniques[mNumber(mEngine)];
+
+			const auto it = mRenderTechnique.find(technique);
+
+			if (it != mRenderTechnique.end() && it->second == nullptr)
+			{
+				mRenderTechnique[technique] = mDynamicShapes[i];
+				break;
+			}
+		}
 	}
 }

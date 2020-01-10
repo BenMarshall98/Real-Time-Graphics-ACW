@@ -51,7 +51,13 @@ Scene
 						Specular: 1.0, 1.0, 1.0
 						Shininess: 32.0
 					}
-					NoTexture
+					Texture
+					{
+						Base: tyre_spec.dds
+						Spec: tyre_spec.dds
+						Norm: tyre_normal.dds
+						Disp: tyre_height.dds
+					}
 				}
 			}
 		}
@@ -68,7 +74,13 @@ Scene
 				Specular: 1.0, 1.0, 1.0
 				Shininess: 32.0
 			}
-			NoTexture
+			Texture
+			{
+				Base: tyre_spec.dds
+				Spec: tyre_spec.dds
+				Norm: tyre_normal.dds
+				Disp: tyre_height.dds
+			}
 		}
 	}
 	Animation
@@ -113,7 +125,13 @@ Scene
 							Specular: 1.0, 1.0, 1.0
 							Shininess: 32.0
 						}
-						NoTexture
+						Texture
+						{
+							Base: tyre_spec.dds
+							Spec: tyre_spec.dds
+							Norm: tyre_normal.dds
+							Disp: tyre_height.dds
+						}
 					}
 				}
 			}
@@ -159,7 +177,13 @@ Scene
 									Specular: 1.0, 1.0, 1.0
 									Shininess: 32.0
 								}
-								NoTexture
+								Texture
+								{
+									Base: tyre_spec.dds
+									Spec: tyre_spec.dds
+									Norm: tyre_normal.dds
+									Disp: tyre_height.dds
+								}
 							}
 						}
 					}

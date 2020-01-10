@@ -39,12 +39,6 @@ Game::Game()
 
 	// Initialize the world matrix
 	mWorld = DirectX::XMMatrixIdentity();
-
-
-	ResourceManager::instance()->loadTexture(mBase, "tyre_base.dds");
-	ResourceManager::instance()->loadTexture(mSpec, "tyre_spec.dds");
-	ResourceManager::instance()->loadTexture(mDisp, "tyre_height.dds");
-	ResourceManager::instance()->loadTexture(mNorm, "tyre_normal.dds");
 	
 	QueryPerformanceFrequency(&mTimer);
 	mFreq = static_cast<double>(mTimer.QuadPart);
@@ -85,11 +79,6 @@ void Game::run()
 		mNode->update(world, world);
 
 		LightingManager::instance()->update();
-
-		mBase->useFragment(20);
-		mSpec->useFragment(21);
-		mNorm->useFragment(22);
-		mDisp->useDomain(0);
 
 		RenderManager::instance()->setup(mDt2);
 		//ObjectManager::instance()->render();

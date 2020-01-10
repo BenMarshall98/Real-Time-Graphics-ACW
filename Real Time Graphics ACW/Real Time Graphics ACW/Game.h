@@ -17,10 +17,6 @@ class Game
 	__int64 mStop = 0.0;
 
 	std::unique_ptr<SceneGraphNode> mNode;
-	std::shared_ptr<Texture> mBase;
-	std::shared_ptr<Texture> mSpec;
-	std::shared_ptr<Texture> mDisp;
-	std::shared_ptr<Texture> mNorm;
 	
 public:
 	Game();

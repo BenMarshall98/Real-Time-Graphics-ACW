@@ -26,7 +26,7 @@ class PointLight
 	DirectX::XMFLOAT3 mPosition;
 	std::unique_ptr<Framebuffer> mMappingFramebuffer;
 	std::unique_ptr<Framebuffer> mSimpleFramebuffer;
-	std::unique_ptr<Animation> mAnimation;
+	std::unique_ptr<QuaternionAnimation> mAnimation;
 	float mAttenuationConstant;
 	float mAttenuationLinear;
 	float mAttenuationQuad;

@@ -14,7 +14,7 @@ Dx11Render * Dx11Render::mInstance = nullptr;
 
 Dx11Render::Dx11Render() : mDriverType(D3D_DRIVER_TYPE_HARDWARE), mFeatureLevel(D3D_FEATURE_LEVEL_10_0), mDevice(nullptr), mDeviceContext(nullptr),
 	mSwapChain(nullptr), mSwapChain1(nullptr), mRenderTargetView(nullptr), mDepthView(nullptr),
-	mNoneRasterizerState(nullptr), mFrontRasterizerState(nullptr), mBackRasterizerState(nullptr)
+	  mBackRasterizerState(nullptr), mFrontRasterizerState(nullptr), mNoneRasterizerState(nullptr)
 {
 }
 

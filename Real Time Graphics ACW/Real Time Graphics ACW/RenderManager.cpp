@@ -19,13 +19,10 @@
 
 RenderManager * RenderManager::mInstance = nullptr;
 
-RenderManager::RenderManager() : mEngine(time(0)),  mBloom(std::make_unique<Bloom>())
+RenderManager::RenderManager() : mStaticTechnique(std::make_unique<PhongShading>()), mHdrFramebuffer(std::make_unique<Framebuffer>()), mDeferredBuffer(std::make_unique<Framebuffer>()),
+	mScreenFramebufferOne(std::make_unique<Framebuffer>()), mScreenFramebufferTwo(std::make_unique<Framebuffer>()),
+	mBloom(std::make_unique<Bloom>()), mEngine(time(nullptr)), mNumber(std::uniform_int_distribution<int>(0, 8))
 {
-	mHdrFramebuffer = std::make_unique<Framebuffer>();
-	mDeferredBuffer = std::make_unique<Framebuffer>();
-	mScreenFramebufferOne = std::make_unique<Framebuffer>();
-	mScreenFramebufferTwo = std::make_unique<Framebuffer>();
-
 	if (!mHdrFramebuffer->loadFramebuffer(true, true, { {0.0f, 0.0f, 0.0f, 0.0f } }, TextureType::TEXTURE_2D))
 	{
 		mHdrFramebuffer.reset();
@@ -68,8 +65,6 @@ RenderManager::RenderManager() : mEngine(time(0)),  mBloom(std::make_unique<Bloo
 	mDynamicTechniques.emplace_back(std::make_shared<TransparencyShading>());
 	mDynamicTechniques.emplace_back(std::make_shared<GourandShading>());
 	mDynamicTechniques.emplace_back(std::make_shared<TextureMapping>());
-
-	mNumber = std::uniform_int_distribution<int>(0, 8);
 
 	for(auto i = 0u; i < mDynamicTechniques.size(); i++)
 	{

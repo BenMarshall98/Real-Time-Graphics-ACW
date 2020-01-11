@@ -54,7 +54,7 @@ Game::Game()
 	mStart = mTimer.QuadPart;
 }
 
-void Game::run()
+void Game::run() const
 {
 	while(Win32Window::windowEvents())
 	{

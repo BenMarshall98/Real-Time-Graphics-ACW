@@ -2,13 +2,13 @@
 #include "DX11Render.h"
 
 Shape::Shape(std::unique_ptr<TexturePack> & pTexturePack,
-	std::unique_ptr<Material> & pMaterial) :
+	std::unique_ptr<Material> & pMaterial, const Type pType) :
 	mTexturePack(std::move(pTexturePack)),
-	mMaterial(std::move(pMaterial)), mCurrentMatrix(), mPreviousMatrix()
+	mMaterial(std::move(pMaterial)), mCurrentMatrix(), mPreviousMatrix(), mType(pType)
 {
 }
 
-Shape::Shape() : mCurrentMatrix(), mPreviousMatrix(), mCurrentRotation(), mPreviousRotation()
+Shape::Shape() : mCurrentMatrix(), mPreviousMatrix(), mCurrentRotation(), mPreviousRotation(), mType(Type::NONE)
 {
 }
 

@@ -7,8 +7,8 @@
 
 class Shader
 {
-	static const std::vector<D3D11_INPUT_ELEMENT_DESC> layout;
-	static const std::vector<D3D11_INPUT_ELEMENT_DESC> particle_layout;
+	static std::vector<D3D11_INPUT_ELEMENT_DESC> layout;
+	static std::vector<D3D11_INPUT_ELEMENT_DESC> particle_layout;
 	
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> mVertexShader = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> mPixelShader = nullptr;
@@ -21,7 +21,7 @@ class Shader
 	static HRESULT compileShaderFromFile(const std::wstring & pFileName, const char * pTarget, ID3DBlob** pShaderBlob);
 	
 public:
-	Shader() = default;
+	Shader();
 	~Shader() = default;
 
 	Shader(const Shader&) = delete;

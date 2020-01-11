@@ -5,12 +5,11 @@
 
 bool Texture::loadTexture(const std::string & pTextureFile)
 {
-	//TODO: Check if there is a better way
 	const auto temp = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(pTextureFile);
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Dx11Render::instance()->getDevice(device);
 	
-	auto result = DirectX::CreateDDSTextureFromFile(device.Get(), temp.c_str(), nullptr, mTexture.ReleaseAndGetAddressOf());
+	const auto result = DirectX::CreateDDSTextureFromFile(device.Get(), temp.c_str(), nullptr, mTexture.ReleaseAndGetAddressOf());
 
 	if (FAILED(result))
 	{

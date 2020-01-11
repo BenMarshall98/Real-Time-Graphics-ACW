@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Shape.h"
-#include "IExplode.h"
 
-class Sphere final : public Shape, public IExplode
+class Sphere final : public Shape
 {
 public:
 	Sphere(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Material> & pMaterial);

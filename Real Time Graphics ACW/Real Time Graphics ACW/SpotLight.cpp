@@ -6,13 +6,11 @@
 SpotLight::SpotLight(const DirectX::XMFLOAT3& pColor, const DirectX::XMFLOAT3 & pPosition,
 	const DirectX::XMFLOAT3 & pDirection, const float pInnerAngle, const float pOuterAngle,
 	const float pAttenuationConstant, const float pAttenuationLinear, const float pAttenuationQuad) :
-	mColor(pColor), mPosition(pPosition), mDirection(pDirection),
+	mColor(pColor), mPosition(pPosition), mDirection(pDirection), mMappingFramebuffer(std::make_unique<Framebuffer>()),
+	mSimpleFramebuffer(std::make_unique<Framebuffer>()),
 	mInnerAngle(pInnerAngle), mOuterAngle(pOuterAngle), mAttenuationConstant(pAttenuationConstant),
 	mAttenuationLinear(pAttenuationLinear), mAttenuationQuad(pAttenuationQuad)
 {
-	mMappingFramebuffer = std::make_unique<Framebuffer>();
-	mSimpleFramebuffer = std::make_unique<Framebuffer>();
-
 	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	if (mMappingFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }, TextureType::TEXTURE_CUBE))
@@ -26,11 +24,9 @@ SpotLight::SpotLight(const DirectX::XMFLOAT3& pColor, const DirectX::XMFLOAT3 & 
 	}
 }
 
-SpotLight::SpotLight() : mAttenuationConstant(1.0f), mAttenuationLinear(0.0f), mAttenuationQuad(0.0f), mInnerAngle(5.0f), mOuterAngle(15.0f)
+SpotLight::SpotLight() : mColor(), mPosition(), mDirection(), mMappingFramebuffer(std::make_unique<Framebuffer>()), mSimpleFramebuffer(std::make_unique<Framebuffer>()),
+	mInnerAngle(5.0f), mOuterAngle(15.0f), mAttenuationConstant(1.0f), mAttenuationLinear(0.0f), mAttenuationQuad(0.0f)
 {
-	mMappingFramebuffer = std::make_unique<Framebuffer>();
-	mSimpleFramebuffer = std::make_unique<Framebuffer>();
-
 	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	if (!mMappingFramebuffer->loadFramebuffer(true, false, 1024, 1024, { colour }, TextureType::TEXTURE_CUBE))

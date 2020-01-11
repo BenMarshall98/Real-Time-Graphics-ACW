@@ -148,7 +148,6 @@
     <ClInclude Include="GlowingShading.h" />
     <ClInclude Include="GourandShading.h" />
     <ClInclude Include="IdentityNode.h" />
-    <ClInclude Include="IExplode.h" />
     <ClInclude Include="InkRender.h" />
     <ClInclude Include="LightingManager.h" />
     <ClInclude Include="Material.h" />
@@ -205,7 +204,6 @@
     <ClCompile Include="GlowingShading.cpp" />
     <ClCompile Include="GourandShading.cpp" />
     <ClCompile Include="IdentityNode.cpp" />
-    <ClCompile Include="IExplode.cpp" />
     <ClCompile Include="InkRender.cpp" />
     <ClCompile Include="LightingManager.cpp" />
     <ClCompile Include="main.cpp" />

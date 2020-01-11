@@ -24,7 +24,7 @@ ParticleManager::ParticleManager()
 
 void ParticleManager::addParticles(std::vector<std::shared_ptr<Particle>>& pParticles)
 {
-	for (auto& particle : pParticles)
+	for (const auto& particle : pParticles)
 	{
 		particle->setTime(1.0f);
 	}
@@ -47,7 +47,7 @@ void ParticleManager::update(const float pDt)
 	mCollisions.clear();
 	mCollisions.shrink_to_fit();
 
-	for (auto & particle : mParticles)
+	for (const auto & particle : mParticles)
 	{
 		particle->update();
 		particle->calculatePhysics(pDt);
@@ -59,7 +59,7 @@ void ParticleManager::update(const float pDt)
 
 	for (auto i = 0u; i < objects.size(); i++)
 	{
-		for (auto & particle : mParticles)
+		for (const auto & particle : mParticles)
 		{
 			objects[i]->collideWith(particle);
 		}

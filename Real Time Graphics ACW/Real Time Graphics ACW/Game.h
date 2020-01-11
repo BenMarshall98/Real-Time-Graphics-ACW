@@ -30,7 +30,7 @@ public:
 
 	
 
-	void run();
+	void run() const;
 	static void clear();
 	static void reset();
 

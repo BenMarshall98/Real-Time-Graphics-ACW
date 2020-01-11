@@ -3,7 +3,7 @@
 #include "ParticleManager.h"
 
 Plane::Plane(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Material> & pMaterial) :
-	Shape(pTexturePack, pMaterial)
+	Shape(pTexturePack, pMaterial, Type::NONE)
 {
 	std::shared_ptr<Model> model;
 	getModel(model);
@@ -14,6 +14,7 @@ Plane::Plane(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Materi
 Plane::Plane() :
 	Shape()
 {
+	setType(Type::NONE);
 	std::shared_ptr<Model> model;
 	getModel(model);
 	ResourceManager::instance()->loadModel(model, "plane.obj");
@@ -21,6 +22,11 @@ Plane::Plane() :
 }
 
 Plane::~Plane() = default;
+
+void Plane::explode()
+{
+
+}
 
 //TODO: Source: http://www.r-5.org/files/books/computers/algo-list/realtime-3d/Christer_Ericson-Real-Time_Collision_Detection-EN.pdf
 

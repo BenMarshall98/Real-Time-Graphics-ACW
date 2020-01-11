@@ -5,7 +5,7 @@
 #include <algorithm>
 
 Cuboid::Cuboid(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Material> & pMaterial) :
-	Shape(pTexturePack, pMaterial)
+	Shape(pTexturePack, pMaterial, Type::EXPLODE)
 {
 	std::shared_ptr<Model> model;
 	getModel(model);
@@ -15,6 +15,7 @@ Cuboid::Cuboid(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Mate
 
 Cuboid::Cuboid()
 {
+	setType(Type::EXPLODE);
 	std::shared_ptr<Model> model;
 	getModel(model);
 	ResourceManager::instance()->loadModel(model, "cube.obj");

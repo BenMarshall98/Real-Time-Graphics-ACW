@@ -13,6 +13,12 @@ struct ModelBuffer
 	DirectX::XMMATRIX mModelInverse;
 };
 
+enum class Type
+{
+	EXPLODE,
+	NONE
+};
+
 class Shape
 {
 	std::shared_ptr<Model> mModel;
@@ -24,6 +30,7 @@ class Shape
 
 	DirectX::XMFLOAT4X4 mCurrentRotation;
 	DirectX::XMFLOAT4X4 mPreviousRotation;
+	Type mType;
 	
 protected:
 	
@@ -33,7 +40,7 @@ protected:
 	}
 	
 public:
-	Shape(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Material> & pMaterial);
+	Shape(std::unique_ptr<TexturePack> & pTexturePack, std::unique_ptr<Material> & pMaterial, Type pType);
 	Shape();
 	virtual ~Shape();
 
@@ -45,6 +52,16 @@ public:
 	void setModel(const std::shared_ptr<Model> & pModel)
 	{
 		mModel = pModel;
+	}
+
+	void setType(const Type pType)
+	{
+		mType = pType;
+	}
+
+	Type getType() const
+	{
+		return mType;
 	}
 
 	void setTexturePack(std::unique_ptr<TexturePack> & pTexturePack)
@@ -89,6 +106,7 @@ public:
 	}
 
 	virtual void collideWith(const std::shared_ptr<Particle> & pParticle) = 0;
+	virtual void explode() = 0;
 };
 
 std::istream & operator>>(std::istream & pIn, const std::shared_ptr<Shape> & pShape);

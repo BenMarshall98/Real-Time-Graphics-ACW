@@ -67,6 +67,6 @@ void Particle::evaluate(const State& pInitial, const float pDt, const Derivative
 
 void Particle::acceleration(const State & pState, DirectX::XMVECTOR & pAcceleration)
 {
-	//TODO: Drag
-	pAcceleration = DirectX::XMVectorSet(0.0f, -9.81f, 0.0f, 0.0f);
+	const auto drag = DirectX::XMVectorScale(DirectX::XMVectorScale(pState.mVelocity, -1.0f), 0.05f * DirectX::XMVectorGetX(DirectX::XMVector3Length(pState.mVelocity)) + 0.05f * static_cast<float>(pow(DirectX::XMVectorGetX(DirectX::XMVector3Length(pState.mVelocity)), 2)));
+	pAcceleration = DirectX::XMVectorAdd(DirectX::XMVectorSet(0.0f, -9.81f, 0.0f, 0.0f), drag);
 }

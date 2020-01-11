@@ -24,6 +24,11 @@ class CameraManager
 public:
 	~CameraManager();
 
+	CameraManager(const CameraManager&) = delete;
+	CameraManager(CameraManager &&) = delete;
+	CameraManager & operator= (const CameraManager &) = delete;
+	CameraManager & operator= (CameraManager &&) = delete;
+
 	static CameraManager * instance()
 	{
 		if (!mInstance)

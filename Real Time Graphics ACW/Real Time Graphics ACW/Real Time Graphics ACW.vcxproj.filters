@@ -288,9 +288,6 @@
     <ClInclude Include="Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IExplode.h">
-      <Filter>Particles</Filter>
-    </ClInclude>
     <ClInclude Include="Particle.h">
       <Filter>Particles</Filter>
     </ClInclude>
@@ -496,9 +493,6 @@
     </ClCompile>
     <ClCompile Include="Bloom.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="IExplode.cpp">
-      <Filter>Particles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -732,6 +726,14 @@
     <CopyFileToFolders Include="TransparencyVertexShader.hlsl">
       <Filter>Resource Files\Shaders\TransparencyShading</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="GlowHorzFragmentShader.hlsl" />
+    <CopyFileToFolders Include="GlowHorzVertexShader.hlsl" />
+    <CopyFileToFolders Include="GlowVertFragmentShader.hlsl" />
+    <CopyFileToFolders Include="GlowVertVertexShader.hlsl" />
+    <CopyFileToFolders Include="GlowFragmentShader.hlsl" />
+    <CopyFileToFolders Include="GlowVertexShader.hlsl" />
+    <CopyFileToFolders Include="FinalFragmentShader.hlsl" />
+    <CopyFileToFolders Include="FinalVertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Configuration.txt" />
@@ -753,31 +755,5 @@
     <Image Include="tyre_spec.dds">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="GlowHorzVertexShader.hlsl">
-      <Filter>Resource Files\Shaders\GlowingShading\Horz</Filter>
-    </FxCompile>
-    <FxCompile Include="GlowHorzFragmentShader.hlsl">
-      <Filter>Resource Files\Shaders\GlowingShading\Horz</Filter>
-    </FxCompile>
-    <FxCompile Include="GlowVertFragmentShader.hlsl">
-      <Filter>Resource Files\Shaders\GlowingShading\Vert</Filter>
-    </FxCompile>
-    <FxCompile Include="GlowVertVertexShader.hlsl">
-      <Filter>Resource Files\Shaders\GlowingShading\Vert</Filter>
-    </FxCompile>
-    <FxCompile Include="GlowVertexShader.hlsl">
-      <Filter>Resource Files\Shaders\GlowingShading\Glow</Filter>
-    </FxCompile>
-    <FxCompile Include="GlowFragmentShader.hlsl">
-      <Filter>Resource Files\Shaders\GlowingShading\Glow</Filter>
-    </FxCompile>
-    <FxCompile Include="FinalVertexShader.hlsl">
-      <Filter>Resource Files\Shaders\GlowingShading\Final</Filter>
-    </FxCompile>
-    <FxCompile Include="FinalFragmentShader.hlsl">
-      <Filter>Resource Files\Shaders\GlowingShading\Final</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>

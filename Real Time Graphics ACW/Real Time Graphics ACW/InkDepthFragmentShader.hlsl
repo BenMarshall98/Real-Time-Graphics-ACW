@@ -1,5 +1,3 @@
-//TODO: Note based on frank luna book
-
 cbuffer directionalBuffer : register(b2)
 {
     float4 DirectionalColor;

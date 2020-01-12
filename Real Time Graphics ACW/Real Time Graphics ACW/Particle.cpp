@@ -11,7 +11,7 @@ void Particle::update()
 }
 
 //The below uses Runge-Kutta 4th Order Method to calculate the new position and velocity
-//TODO: sources
+//Based on the module Simulation and Artificial Intelligence - 700110
 
 void Particle::calculatePhysics(const float pDt)
 {

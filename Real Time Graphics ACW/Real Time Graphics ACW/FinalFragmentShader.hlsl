@@ -1,5 +1,3 @@
-//TODO: Source: LearnOpenGL
-
 Texture2D colorTexture : register(t26);
 SamplerState Sampler : register(s0);
 

@@ -7,7 +7,7 @@ float4 main(DS_OUTPUT input) : SV_Target
 {
     float depth = input.Pos.z / input.Pos.w;
     
-    //TODO: Source: https://fabiensanglard.net/shadowmappingVSM/
+    //Based on Source: https://fabiensanglard.net/shadowmappingVSM/
     float moment1 = depth;
     float moment2 = depth * depth;
     

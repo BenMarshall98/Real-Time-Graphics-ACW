@@ -65,6 +65,8 @@ void ParticleManager::update(const float pDt)
 		}
 	}
 
+	//Based on the module Simulation and Artificial Intelligence - 700110 for collision response
+
 	for (auto i = 0u; i < mCollisions.size(); i++)
 	{
 		auto tempStart = DirectX::XMFLOAT3();

@@ -370,7 +370,7 @@ float DirectionalShadowCalculation(float4 pPos, float4 lightPos, float3 lightDir
             for (int y = -2; y <= 2; ++y)
             {
         
-    //TODO: Source: http://developer.download.nvidia.com/SDK/10/direct3d/Source/VarianceShadowMapping/Doc/VarianceShadowMapping.pdf
+    //Based on Source: http://developer.download.nvidia.com/SDK/10/direct3d/Source/VarianceShadowMapping/Doc/VarianceShadowMapping.pdf
                 float2 moments = directionalShadowTexture.Sample(Sampler, projCoords.xy + float2(x, y) * texSize).rg;
         
                 float variance = moments.y - (moments.x * moments.x);
@@ -468,7 +468,7 @@ float PointShadowCalculation(float4 pPos, float3 pFragPos, float3 pLightPos, flo
             {
                 for (float z = -offset; z < offset; z += offset / (samples * 0.5))
                 {
-            //TODO: Source: http://developer.download.nvidia.com/SDK/10/direct3d/Source/VarianceShadowMapping/Doc/VarianceShadowMapping.pdf
+            //Based on Source: http://developer.download.nvidia.com/SDK/10/direct3d/Source/VarianceShadowMapping/Doc/VarianceShadowMapping.pdf
                     float2 moments = pTexture1.Sample(Sampler, vec + float3(x, y, z)).rg;
         
                     float variance = moments.y - (moments.x * moments.x);

@@ -28,9 +28,7 @@ struct PS_OUTPUT
 };
 
 PS_OUTPUT main(VS_OUTPUT input)
-{
-    //TODO: Parallax
-    
+{    
     float3 norm = normTexture.Sample(Sampler, input.TexCoord).xyz;
     
     norm = 2.0f * norm - 1.0f;

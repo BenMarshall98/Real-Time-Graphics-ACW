@@ -9,6 +9,7 @@ QuaternionAnimation::QuaternionAnimation(const std::vector<QuaternionNode> & pNo
 
 QuaternionAnimation::~QuaternionAnimation() = default;
 
+//Using the Squad Function in DirectX Math deal with multiple nodes
 //https://docs.microsoft.com/en-us/previous-versions/windows/desktop/bb281657(v=vs.85)?redirectedfrom=MSDN
 
 void QuaternionAnimation::calculateTangents()

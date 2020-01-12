@@ -1,4 +1,4 @@
-//TODO: Source: LearnOpenGL
+//Based on https://learnopengl.com/Advanced-Lighting/Bloom
 
 Texture2D colorTexture : register(t0);
 SamplerState Sampler : register(s0);

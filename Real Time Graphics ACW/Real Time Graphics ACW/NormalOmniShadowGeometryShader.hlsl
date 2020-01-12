@@ -1,4 +1,4 @@
-//TODO: Source
+//Based on https://learnopengl.com/Advanced-Lighting/Shadows/Point-Shadows
 
 cbuffer shadowMatrixBuffer : register(b0)
 {

@@ -1,4 +1,5 @@
-//TODO: Note base on Frank Luna book
+//Based on example in Frank Luna's Introduction to 3D Game Programming with DirectX11
+
 cbuffer cameraBuffer : register(b0)
 {
     matrix View;

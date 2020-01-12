@@ -346,7 +346,7 @@ float DirectionalShadowCalculation(float2 texCoord, float4 lightPos, float3 ligh
                 for (int y = -2; y <= 2; ++y)
                 {
         
-        //TODO: Source: http://developer.download.nvidia.com/SDK/10/direct3d/Source/VarianceShadowMapping/Doc/VarianceShadowMapping.pdf
+        //Based on Source: http://developer.download.nvidia.com/SDK/10/direct3d/Source/VarianceShadowMapping/Doc/VarianceShadowMapping.pdf
                     float2 moments = directionalShadowTexture.Sample(Sampler, projCoords.xy + float2(x, y) * texSize).rg;
         
                     float variance = moments.y - (moments.x * moments.x);

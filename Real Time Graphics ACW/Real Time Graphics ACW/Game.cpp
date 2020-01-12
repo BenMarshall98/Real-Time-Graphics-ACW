@@ -126,6 +126,7 @@ void Game::reset()
 	delete RenderManager::instance();
 	delete ObjectManager::instance();
 	delete CameraManager::instance();
+	delete ParticleManager::instance();
 
 	mNode = std::make_unique<IdentityNode>();
 

@@ -29,7 +29,11 @@ class ParticleManager final
 public:
 	static const unsigned int max_particles = 2000;
 	
-	~ParticleManager() = default;
+	~ParticleManager()
+	{
+		mInstance = nullptr;
+	}
+	
 	ParticleManager(const ParticleManager&) = delete;
 	ParticleManager(ParticleManager &&) = delete;
 	ParticleManager & operator= (const ParticleManager &) = delete;

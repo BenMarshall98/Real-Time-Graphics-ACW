@@ -120,6 +120,8 @@ void Cuboid::explode()
 	ParticleManager::instance()->addParticles(particles);
 }
 
+//Based on Christer Ericson's Real Time Collision Detection
+
 void Cuboid::collideWith(const std::shared_ptr<Particle> & pParticle)
 {
 	auto currentMatrix = DirectX::XMFLOAT4X4();

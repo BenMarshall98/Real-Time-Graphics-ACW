@@ -30,7 +30,7 @@ struct VS_OUTPUT
     float3 LightPos : POSITION2;
 };
 
-//TODO: Source: ericson
+//Based on Christer Ericson's Real Time Collision Detection
 
 VS_OUTPUT main(VS_INPUT input)
 {

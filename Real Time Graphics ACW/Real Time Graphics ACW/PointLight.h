@@ -30,7 +30,7 @@ class PointLight
 	float mAttenuationConstant;
 	float mAttenuationLinear;
 	float mAttenuationQuad;
-	bool mAnimate;
+	bool mAnimate = false;
 	
 public:
 	PointLight(const DirectX::XMFLOAT3 & pColor, const DirectX::XMFLOAT3 & pPosition, float pAttenuationConstant, float pAttenuationLinear, float pAttenuationQuad);

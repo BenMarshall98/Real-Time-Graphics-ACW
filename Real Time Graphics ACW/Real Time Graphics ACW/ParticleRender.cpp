@@ -147,8 +147,6 @@ void ParticleRender::render(const std::vector<DirectX::XMFLOAT3>& pParticlePosit
 
 	//Get current model data
 
-	//TODO: Check data output
-
 	std::vector<ID3D11Buffer *> bufferArray;
 	bufferArray.resize(5);
 	std::vector<UINT> strideArray;

@@ -1,4 +1,4 @@
-//TODO: Note based on Frank Luna book
+//Based on example in Frank Luna's Introduction to 3D Game Programming with DirectX11
 
 struct VS_INPUT
 {

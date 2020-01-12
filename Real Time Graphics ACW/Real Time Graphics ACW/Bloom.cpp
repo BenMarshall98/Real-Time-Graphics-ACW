@@ -22,7 +22,7 @@ Bloom::Bloom() :
 	}
 }
 
-//TODO: Source: LearnOpenGL
+//Based on https://learnopengl.com/Advanced-Lighting/Bloom
 
 void Bloom::applyBloom(const std::unique_ptr<Framebuffer> & pCurrentFramebuffer, const unsigned int pBloomStrength)
 {

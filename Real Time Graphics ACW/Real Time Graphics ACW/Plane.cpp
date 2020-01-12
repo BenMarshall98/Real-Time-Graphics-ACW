@@ -28,7 +28,7 @@ void Plane::explode()
 
 }
 
-//TODO: Source: http://www.r-5.org/files/books/computers/algo-list/realtime-3d/Christer_Ericson-Real-Time_Collision_Detection-EN.pdf
+//Based on Christer Ericson's Real Time Collision Detection
 
 void Plane::collideWith(const std::shared_ptr<Particle> & pParticle)
 {

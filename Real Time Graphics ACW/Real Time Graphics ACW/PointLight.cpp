@@ -8,9 +8,7 @@
 PointLight::PointLight(const DirectX::XMFLOAT3 & pColor, const DirectX::XMFLOAT3 & pPosition,
 	const float pAttenuationConstant, const float pAttenuationLinear, const float pAttenuationQuad) :
 	mColor(pColor), mPosition(pPosition), mMappingFramebuffer(std::make_unique<Framebuffer>()), mSimpleFramebuffer(std::make_unique<Framebuffer>()), mAttenuationConstant(pAttenuationConstant),
-	mAttenuationLinear(pAttenuationLinear), mAttenuationQuad(pAttenuationQuad),
-	
-	mAnimate(std::make_unique<QuaternionAnimation>())
+	mAttenuationLinear(pAttenuationLinear), mAttenuationQuad(pAttenuationQuad)
 {
 
 	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -26,7 +24,7 @@ PointLight::PointLight(const DirectX::XMFLOAT3 & pColor, const DirectX::XMFLOAT3
 	}
 }
 
-PointLight::PointLight() : mMappingFramebuffer(std::make_unique<Framebuffer>()), mSimpleFramebuffer(std::make_unique<Framebuffer>()), mAttenuationConstant(1.0f), mAttenuationLinear(0.0f), mAttenuationQuad(0.0f),  mAnimate(std::make_unique<QuaternionAnimation>())
+PointLight::PointLight() : mMappingFramebuffer(std::make_unique<Framebuffer>()), mSimpleFramebuffer(std::make_unique<Framebuffer>()), mAttenuationConstant(1.0f), mAttenuationLinear(0.0f), mAttenuationQuad(0.0f)
 {
 	const DirectX::XMVECTORF32 colour = { 1.0f, 1.0f, 1.0f, 1.0f };
 

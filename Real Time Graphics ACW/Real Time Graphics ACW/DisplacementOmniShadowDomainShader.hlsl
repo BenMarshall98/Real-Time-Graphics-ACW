@@ -1,4 +1,4 @@
-//TODO: Note based on frank luna book
+//Based on example in Frank Luna's Introduction to 3D Game Programming with DirectX11
 
 cbuffer modelBuffer : register(b1)
 {

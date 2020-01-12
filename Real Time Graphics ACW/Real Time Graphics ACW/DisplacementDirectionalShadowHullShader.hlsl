@@ -1,4 +1,4 @@
-//TODO: Note based on Frank luna book
+//Based on example in Frank Luna's Introduction to 3D Game Programming with DirectX11
 
 struct PatchTess
 {
@@ -12,8 +12,6 @@ struct VS_OUTPUT
     float3 Normal : NORMAL0;
     float2 TexCoord : TEXCOORD0;
 };
-
-//TODO: Look at the distance from the camera
 
 PatchTess ConstantHS(InputPatch<VS_OUTPUT, 3> inPatch, uint patchID : SV_PrimitiveID)
 {

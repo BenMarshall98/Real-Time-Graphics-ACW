@@ -17,7 +17,7 @@ struct VS_OUTPUT
     float2 TexCoord : TEXCOORD0;
 };
 
-//TODO: http://www.cs.utah.edu/~reinhard/cdrom/tonemap.pdf
+//Based on http://www.cs.utah.edu/~reinhard/cdrom/tonemap.pdf
 
 float4 main(VS_OUTPUT input) : SV_Target
 {
